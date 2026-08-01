@@ -1,23 +1,14 @@
-<nz-card [nzTitle]="titleTemplate">
-  <app-table-custom
-    [id]="'branch-table'"
-    [data]="data"
-    [columns]="columns"
-    [loading]="loading"
-    [showIndexList]="true"
-    [stripedRows]="true"
-    [rowActions]="rowActions"
-    [toolbarActions]="toolbarActions"
-    [pagination]="pagination"
-    (pageChange)="onPageChange($event)"
-    (sortChange)="onSortChange($event)"
-    (refresh)="loadData()"
-  ></app-table-custom>
-</nz-card>
-
-<ng-template #titleTemplate>
-  <span style="font-size: 18px; font-weight: 600; color: var(--foreground);">
-    <i nz-icon nzType="apartment" style="margin-right: 8px; color: var(--primary);"></i>
-    Quản Lý Chi Nhánh
-  </span>
-</ng-template>
+<app-table-custom
+  [id]="'branch-table'"
+  [data]="data"
+  [columns]="columns"
+  [loading]="loading"
+  [showIndexList]="true"
+  [stripedRows]="true"
+  [rowActions]="rowActions"
+  [toolbarActions]="toolbarActions"
+  [pagination]="pagination"
+  (pageChange)="onPageChange($event)"
+  (sortChange)="onSortChange($event)"
+  (refresh)="loadData()"
+></app-table-custom>

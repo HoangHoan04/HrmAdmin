@@ -1,7 +1,13 @@
+import {
+  HttpErrorResponse,
+  HttpEvent,
+  HttpHandler,
+  HttpInterceptor,
+  HttpRequest,
+} from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError, BehaviorSubject } from 'rxjs';
-import { catchError, switchMap, filter, take } from 'rxjs/operators';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { catchError, filter, switchMap, take } from 'rxjs/operators';
 import { AuthService } from '../services/auth.service';
 
 @Injectable()
@@ -29,7 +35,7 @@ export class AuthInterceptor implements HttpInterceptor {
           return this.handle401Error(req, next);
         }
         return throwError(() => error);
-      })
+      }),
     );
   }
 
@@ -51,7 +57,7 @@ export class AuthInterceptor implements HttpInterceptor {
             this.authService.logout();
             window.location.reload();
             return throwError(() => err);
-          })
+          }),
         );
       } else {
         this.authService.logout();
@@ -60,15 +66,15 @@ export class AuthInterceptor implements HttpInterceptor {
     }
 
     return this.refreshTokenSubject.pipe(
-      filter(token => token !== null),
+      filter((token) => token !== null),
       take(1),
-      switchMap((token) => next.handle(this.addTokenHeader(request, token)))
+      switchMap((token) => next.handle(this.addTokenHeader(request, token))),
     );
   }
 
   private addTokenHeader(request: HttpRequest<any>, token: string): HttpRequest<any> {
     return request.clone({
-      headers: request.headers.set('Authorization', `Bearer ${token}`)
+      headers: request.headers.set('Authorization', `Bearer ${token}`),
     });
   }
 }

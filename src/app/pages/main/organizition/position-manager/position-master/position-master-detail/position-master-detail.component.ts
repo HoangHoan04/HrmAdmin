@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { ROUTES_CONFIG } from '../../../../../../core/constants/routes.config';
+import { ROUTES_CONFIG } from '../../../../../../core/constants/common/routes.config';
 
 interface PositionMasterDetailMock {
   id: string;
@@ -16,7 +16,7 @@ interface PositionMasterDetailMock {
   standalone: false,
   selector: 'app-position-master-detail',
   templateUrl: './position-master-detail.component.html',
-  styleUrls: []
+  styleUrls: [],
 })
 export class PositionMasterDetailComponent implements OnInit {
   id: string | null = null;
@@ -26,8 +26,8 @@ export class PositionMasterDetailComponent implements OnInit {
   constructor(
     private readonly route: ActivatedRoute,
     private readonly router: Router,
-    private readonly message: NzMessageService
-  ) { }
+    private readonly message: NzMessageService,
+  ) {}
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id');
@@ -43,9 +43,10 @@ export class PositionMasterDetailComponent implements OnInit {
         id,
         code: 'CV-GD',
         name: 'Giám đốc',
-        description: 'Chức danh hoạch định chính sách, phương án kinh doanh cấp cao và chịu trách nhiệm tối cao cho kết quả hoạt động doanh nghiệp.',
+        description:
+          'Chức danh hoạch định chính sách, phương án kinh doanh cấp cao và chịu trách nhiệm tối cao cho kết quả hoạt động doanh nghiệp.',
         createdAt: '2026-01-10T08:00:00Z',
-        status: true
+        status: true,
       };
       this.loading = false;
     }, 200);

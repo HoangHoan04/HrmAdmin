@@ -5,6 +5,16 @@
     "retry": "Thử lại",
     "stt": "STT",
     "actionsHeader": "Thao tác",
+    "filter": {
+      "title": "Tìm kiếm",
+      "search": "Tìm kiếm",
+      "clear": "Xóa bộ lọc",
+      "searchText": "Từ khóa",
+      "searchTextPlaceholder": "Nhập mã hoặc tên...",
+      "fromDate": "Từ ngày",
+      "toDate": "Đến ngày",
+      "noCustomTemplate": "Chưa có template custom"
+    },
     "actions": {
       "create": "Thêm mới",
       "update": "Cập nhật",

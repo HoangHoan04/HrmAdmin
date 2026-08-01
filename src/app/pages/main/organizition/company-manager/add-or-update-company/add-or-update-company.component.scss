@@ -9,4 +9,23 @@ nz-card {
   border-top: 1px solid var(--border);
   display: flex;
   justify-content: flex-end;
+  gap: 12px;
+}
+
+.section-title {
+  margin: 0 0 16px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--foreground);
+
+  i {
+    margin-right: 8px;
+    color: var(--primary);
+  }
 }

@@ -1,7 +1,14 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation, ChangeDetectorRef } from '@angular/core';
-import { Router, NavigationStart, NavigationEnd, NavigationCancel, NavigationError, RouterOutlet } from '@angular/router';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import {
+  NavigationCancel,
+  NavigationEnd,
+  NavigationError,
+  NavigationStart,
+  Router,
+  RouterOutlet,
+} from '@angular/router';
 import { Subscription } from 'rxjs';
-import { DashboardService, DashboardSettings } from '../../core/services/dashboard.service';
+import { DashboardService, DashboardSettings } from 'src/app/core/services';
 
 @Component({
   selector: 'app-admin-layout',
@@ -22,7 +29,7 @@ export class AdminLayoutComponent implements OnInit, OnDestroy {
   constructor(
     private ds: DashboardService,
     private router: Router,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
   ) {
     this.s = ds.snapshot;
   }
@@ -62,7 +69,7 @@ export class AdminLayoutComponent implements OnInit, OnDestroy {
             this.cdr.markForCheck();
           }, 300);
         }
-      })
+      }),
     );
   }
 
@@ -80,4 +87,3 @@ export class AdminLayoutComponent implements OnInit, OnDestroy {
     this.watermarkTiles = Array.from({ length: cols * rows }, (_, i) => i);
   }
 }
-

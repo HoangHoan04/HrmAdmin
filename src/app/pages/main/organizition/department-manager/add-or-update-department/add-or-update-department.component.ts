@@ -2,13 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { ROUTES_CONFIG } from '../../../../../core/constants/routes.config';
+import { ROUTES_CONFIG } from '../../../../../core/constants/common/routes.config';
 
 @Component({
   standalone: false,
   selector: 'app-add-or-update-department',
   templateUrl: './add-or-update-department.component.html',
-  styleUrls: []
+  styleUrls: [],
 })
 export class AddOrUpdateDepartmentComponent implements OnInit {
   id: string | null = null;
@@ -21,7 +21,7 @@ export class AddOrUpdateDepartmentComponent implements OnInit {
     private readonly fb: FormBuilder,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
-    private readonly message: NzMessageService
+    private readonly message: NzMessageService,
   ) {}
 
   ngOnInit(): void {
@@ -40,7 +40,7 @@ export class AddOrUpdateDepartmentComponent implements OnInit {
       code: ['', [Validators.required, Validators.maxLength(50)]],
       name: ['', [Validators.required, Validators.maxLength(250)]],
       branchName: ['', [Validators.required]],
-      description: ['']
+      description: [''],
     });
   }
 
@@ -52,7 +52,7 @@ export class AddOrUpdateDepartmentComponent implements OnInit {
         code: 'PB-HCNS',
         name: 'Phòng Hành chính Nhân sự',
         branchName: 'Trụ sở chính',
-        description: 'Phòng phụ trách công tác nhân sự, tuyển dụng và chế độ chính sách.'
+        description: 'Phòng phụ trách công tác nhân sự, tuyển dụng và chế độ chính sách.',
       });
       this.loading = false;
     }, 200);
@@ -65,7 +65,7 @@ export class AddOrUpdateDepartmentComponent implements OnInit {
 
   submitForm(): void {
     if (this.validateForm.invalid) {
-      Object.values(this.validateForm.controls).forEach(control => {
+      Object.values(this.validateForm.controls).forEach((control) => {
         if (control.invalid) {
           control.markAsDirty();
           control.updateValueAndValidity({ onlySelf: true });
@@ -77,7 +77,7 @@ export class AddOrUpdateDepartmentComponent implements OnInit {
     this.submitting = true;
     setTimeout(() => {
       this.message.success(
-        this.isEdit ? 'Cập nhật phòng ban thành công!' : 'Thêm mới phòng ban thành công!'
+        this.isEdit ? 'Cập nhật phòng ban thành công!' : 'Thêm mới phòng ban thành công!',
       );
       this.submitting = false;
       this.goBack();

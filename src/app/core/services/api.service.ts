@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { EndpointService } from './endpoint.service';
@@ -23,6 +23,19 @@ export class ApiService {
 
   post<T>(url: string, body: any): Observable<T> {
     return this.http.post<T>(url, body);
+  }
+
+  postBlob(url: string, body: any = {}): Observable<HttpResponse<Blob>> {
+    return this.http.post(url, body, {
+      responseType: 'blob',
+      observe: 'response',
+    });
+  }
+
+  uploadFile<T>(url: string, file: File, fieldName = 'file'): Observable<T> {
+    const formData = new FormData();
+    formData.append(fieldName, file);
+    return this.http.post<T>(url, formData);
   }
 
   put<T>(url: string, body: any): Observable<T> {

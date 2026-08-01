@@ -7,10 +7,12 @@ import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzCardModule } from 'ng-zorro-antd/card';
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
@@ -26,10 +28,11 @@ import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzTooltipModule } from 'ng-zorro-antd/tooltip';
 import { ActionLogComponent } from './components/action-log/action-log.component';
+import { FilterCustomComponent } from './components/filter-custom/filter-custom.component';
 import { TableCustomComponent } from './components/table-custom/table-custom.component';
 
 @NgModule({
-  declarations: [TableCustomComponent, ActionLogComponent],
+  declarations: [FilterCustomComponent, TableCustomComponent, ActionLogComponent],
   imports: [
     TranslatePipe,
     CommonModule,
@@ -55,11 +58,14 @@ import { TableCustomComponent } from './components/table-custom/table-custom.com
     NzTableModule,
     NzModalModule,
     NzFormModule,
+    NzGridModule,
+    NzDatePickerModule,
     NzSpinModule,
     NzPaginationModule,
     NzTabsModule,
   ],
   exports: [
+    FilterCustomComponent,
     TableCustomComponent,
     ActionLogComponent,
     CommonModule,
@@ -86,6 +92,8 @@ import { TableCustomComponent } from './components/table-custom/table-custom.com
     NzTableModule,
     NzModalModule,
     NzFormModule,
+    NzGridModule,
+    NzDatePickerModule,
     NzSpinModule,
     NzPaginationModule,
     NzTabsModule,

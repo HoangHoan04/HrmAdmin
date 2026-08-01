@@ -1,11 +1,27 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, OnChanges, SimpleChanges, TemplateRef } from '@angular/core';
-import { TableColumn, RowAction, PaginationConfig, ToolbarConfig, FilterMeta, TableAction } from './table-custom.types';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
+  SimpleChanges,
+  TemplateRef,
+} from '@angular/core';
+import {
+  PaginationConfig,
+  RowAction,
+  TableAction,
+  TableColumn,
+  ToolbarConfig,
+} from './table-custom.types';
 
 @Component({
   selector: 'app-table-custom',
   standalone: false,
   templateUrl: './table-custom.component.html',
-  styleUrls: ['./table-custom.component.scss']
+  styleUrls: ['./table-custom.component.scss'],
 })
 export class TableCustomComponent implements OnInit, OnChanges, OnDestroy {
   @Input() id: string = 'custom-table';
@@ -34,7 +50,10 @@ export class TableCustomComponent implements OnInit, OnChanges, OnDestroy {
   @Input() toolbarRightContent?: TemplateRef<any>;
   @Output() pageChange = new EventEmitter<{ page: number; pageSize: number }>();
   @Output() selectionChange = new EventEmitter<any[]>();
-  @Output() sortChange = new EventEmitter<{ sortField: string | null; sortOrder: 1 | -1 | 0 | null }>();
+  @Output() sortChange = new EventEmitter<{
+    sortField: string | null;
+    sortOrder: 1 | -1 | 0 | null;
+  }>();
   @Output() refresh = new EventEmitter<void>();
   @Output() rowClick = new EventEmitter<any>();
 
@@ -95,19 +114,19 @@ export class TableCustomComponent implements OnInit, OnChanges, OnDestroy {
     if (savedOrder) {
       try {
         this.columnOrder = JSON.parse(savedOrder);
-      } catch (e) { }
+      } catch (e) {}
     } else {
-      this.columnOrder = this.columns.map(c => c.field);
+      this.columnOrder = this.columns.map((c) => c.field);
     }
 
     const savedVisibility = localStorage.getItem(`${this.id}_column_visibility`);
     if (savedVisibility) {
       try {
         this.visibleColumnsMap = JSON.parse(savedVisibility);
-      } catch (e) { }
+      } catch (e) {}
     }
 
-    this.columns.forEach(col => {
+    this.columns.forEach((col) => {
       if (this.visibleColumnsMap[col.field] === undefined) {
         this.visibleColumnsMap[col.field] = col.hidden !== true;
       }
@@ -115,13 +134,13 @@ export class TableCustomComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private syncColumnSettings(): void {
-    const currentFields = this.columns.map(c => c.field);
-    const filteredOrder = this.columnOrder.filter(f => currentFields.includes(f));
-    const added = currentFields.filter(f => !this.columnOrder.includes(f));
+    const currentFields = this.columns.map((c) => c.field);
+    const filteredOrder = this.columnOrder.filter((f) => currentFields.includes(f));
+    const added = currentFields.filter((f) => !this.columnOrder.includes(f));
     this.columnOrder = [...filteredOrder, ...added];
     localStorage.setItem(`${this.id}_column_order`, JSON.stringify(this.columnOrder));
 
-    this.columns.forEach(col => {
+    this.columns.forEach((col) => {
       if (this.visibleColumnsMap[col.field] === undefined) {
         this.visibleColumnsMap[col.field] = col.hidden !== true;
       }
@@ -130,12 +149,12 @@ export class TableCustomComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   get visibleColumns(): TableColumn[] {
-    const colMap = new Map(this.columns.map(c => [c.field, c]));
+    const colMap = new Map(this.columns.map((c) => [c.field, c]));
     const ordered = this.columnOrder
-      .map(field => colMap.get(field))
+      .map((field) => colMap.get(field))
       .filter((col): col is TableColumn => !!col && this.visibleColumnsMap[col.field]);
 
-    this.columns.forEach(col => {
+    this.columns.forEach((col) => {
       if (!this.columnOrder.includes(col.field) && this.visibleColumnsMap[col.field]) {
         ordered.push(col);
       }
@@ -187,7 +206,7 @@ export class TableCustomComponent implements OnInit, OnChanges, OnDestroy {
     this.resizeRef = {
       field,
       startX: e.clientX,
-      startWidth: initialWidth
+      startWidth: initialWidth,
     };
     document.addEventListener('mousemove', this.onResizeActive);
     document.addEventListener('mouseup', this.onResizeEnd);
@@ -231,7 +250,7 @@ export class TableCustomComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   isRowSelected(rowData: any): boolean {
-    return this.selectedRows.some(r => r[this.dataKey] === rowData[this.dataKey]);
+    return this.selectedRows.some((r) => r[this.dataKey] === rowData[this.dataKey]);
   }
 
   onSelectAll(checked: boolean): void {
@@ -250,7 +269,9 @@ export class TableCustomComponent implements OnInit, OnChanges, OnDestroy {
       if (checked) {
         this.selectedRows = [...this.selectedRows, rowData];
       } else {
-        this.selectedRows = this.selectedRows.filter(r => r[this.dataKey] !== rowData[this.dataKey]);
+        this.selectedRows = this.selectedRows.filter(
+          (r) => r[this.dataKey] !== rowData[this.dataKey],
+        );
       }
     }
     this.selectionChange.emit(this.selectedRows);
@@ -267,7 +288,7 @@ export class TableCustomComponent implements OnInit, OnChanges, OnDestroy {
     this.sortOrder = nextOrder === 0 ? null : nextOrder;
     this.sortChange.emit({
       sortField: this.sortField || null,
-      sortOrder: this.sortOrder
+      sortOrder: this.sortOrder,
     });
   }
 

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class EndpointService {
   private readonly baseUrl = environment.apiUrl;
@@ -20,6 +20,9 @@ export class EndpointService {
     ACTIVATE: `${this.baseUrl}/Companies/activate`,
     DEACTIVATE: `${this.baseUrl}/Companies/deactivate`,
     SELECT_BOX: `${this.baseUrl}/Companies/select-box`,
+    EXCEL_TEMPLATE: `${this.baseUrl}/Companies/excel/template`,
+    EXCEL_EXPORT: `${this.baseUrl}/Companies/excel/export`,
+    EXCEL_IMPORT: `${this.baseUrl}/Companies/excel/import`,
   };
 
   BRANCH = {

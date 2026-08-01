@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { ROUTES_CONFIG } from '../../../../../core/constants/routes.config';
+import { ROUTES_CONFIG } from '../../../../../core/constants/common/routes.config';
 
 interface BranchDetailMock {
   id: string;
@@ -18,7 +18,7 @@ interface BranchDetailMock {
   standalone: false,
   selector: 'app-branch-detail',
   templateUrl: './branch-detail.component.html',
-  styleUrls: []
+  styleUrls: [],
 })
 export class BranchDetailComponent implements OnInit {
   id: string | null = null;
@@ -28,8 +28,8 @@ export class BranchDetailComponent implements OnInit {
   constructor(
     private readonly route: ActivatedRoute,
     private readonly router: Router,
-    private readonly message: NzMessageService
-  ) { }
+    private readonly message: NzMessageService,
+  ) {}
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id');
@@ -49,7 +49,7 @@ export class BranchDetailComponent implements OnInit {
         address: 'Số 456 Đường Nguyễn Trãi, Quận Thanh Xuân, Hà Nội',
         hotline: '0123456789',
         createdAt: '2026-01-12T09:30:00Z',
-        status: true
+        status: true,
       };
       this.loading = false;
     }, 200);

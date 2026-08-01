@@ -5,96 +5,292 @@
 <ng-template #formTpl>
   <nz-spin [nzSpinning]="loading">
     <form nz-form [formGroup]="validateForm" nzLayout="vertical" (ngSubmit)="submitForm()">
+      <h3 class="section-title">{{ 'organization.company.sectionBasic' | translate }}</h3>
       <div nz-row [nzGutter]="24">
         <div nz-col nzXs="24" nzMd="12">
           <nz-form-item>
-            <nz-form-label [nzRequired]="true">Mã công ty</nz-form-label>
-            <nz-form-control nzErrorTip="Vui lòng nhập mã công ty!">
-              <input
-                nzSize="large"
-                nz-input
-                formControlName="code"
-                placeholder="Ví dụ: HHT"
-                [disabled]="isEdit"
-              />
+            <nz-form-label [nzRequired]="true">{{ 'organization.company.code' | translate }}</nz-form-label>
+            <nz-form-control [nzErrorTip]="'organization.company.codeRequired' | translate">
+              <input nzSize="large" nz-input formControlName="code" placeholder="Ví dụ: HHT" [disabled]="isEdit" />
             </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col nzXs="24" nzMd="12">
           <nz-form-item>
-            <nz-form-label [nzRequired]="true">Mã số thuế</nz-form-label>
-            <nz-form-control nzErrorTip="Vui lòng nhập mã số thuế!">
-              <input
-                nzSize="large"
-                nz-input
-                formControlName="taxCode"
-                placeholder="MST / Số ĐKKD"
-              />
+            <nz-form-label>{{ 'organization.company.parentCompany' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-select formControlName="parentId" nzAllowClear nzPlaceHolder="Chọn công ty mẹ">
+                @for (c of parentCompanies; track c.id) {
+                  <nz-option [nzValue]="c.id" [nzLabel]="c.name"></nz-option>
+                }
+              </nz-select>
             </nz-form-control>
           </nz-form-item>
         </div>
       </div>
 
       <nz-form-item>
-        <nz-form-label [nzRequired]="true">Tên công ty</nz-form-label>
-        <nz-form-control nzErrorTip="Vui lòng nhập tên công ty!">
-          <input
-            nzSize="large"
-            nz-input
-            formControlName="name"
-            placeholder="Ví dụ: CÔNG TY TNHH CÔNG NGHỆ HOÀNG HOAN"
-          />
+        <nz-form-label [nzRequired]="true">{{ 'organization.company.name' | translate }}</nz-form-label>
+        <nz-form-control [nzErrorTip]="'organization.company.nameRequired' | translate">
+          <input nzSize="large" nz-input formControlName="name" placeholder="Tên đầy đủ công ty" />
         </nz-form-control>
       </nz-form-item>
 
       <nz-form-item>
-        <nz-form-label>Địa chỉ trụ sở chính</nz-form-label>
+        <nz-form-label>{{ 'organization.company.description' | translate }}</nz-form-label>
         <nz-form-control>
-          <input
-            nzSize="large"
-            nz-input
-            formControlName="address"
-            placeholder="Địa chỉ đăng ký doanh nghiệp"
-          />
+          <textarea nzSize="large" nz-input formControlName="description" rows="3"></textarea>
         </nz-form-control>
       </nz-form-item>
 
-      <nz-form-item>
-        <nz-form-label>Điện thoại / Hotline</nz-form-label>
-        <nz-form-control>
-          <input
-            nzSize="large"
-            nz-input
-            formControlName="hotline"
-            placeholder="Ví dụ: 024.7300.2424"
-          />
-        </nz-form-control>
-      </nz-form-item>
+      <nz-divider></nz-divider>
+      <h3 class="section-title">{{ 'organization.company.sectionContact' | translate }}</h3>
+      <div nz-row [nzGutter]="24">
+        <div nz-col nzXs="24" nzMd="12">
+          <nz-form-item>
+            <nz-form-label>{{ 'organization.company.address' | translate }}</nz-form-label>
+            <nz-form-control>
+              <input nzSize="large" nz-input formControlName="address" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="12">
+          <nz-form-item>
+            <nz-form-label>{{ 'organization.company.hotline' | translate }}</nz-form-label>
+            <nz-form-control>
+              <input nzSize="large" nz-input formControlName="hotline" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'organization.company.email' | translate }}</nz-form-label>
+            <nz-form-control>
+              <input nzSize="large" nz-input formControlName="email" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'organization.company.website' | translate }}</nz-form-label>
+            <nz-form-control>
+              <input nzSize="large" nz-input formControlName="website" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'organization.company.fax' | translate }}</nz-form-label>
+            <nz-form-control>
+              <input nzSize="large" nz-input formControlName="fax" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
 
-      <nz-form-item>
-        <nz-form-label>Mô tả doanh nghiệp</nz-form-label>
-        <nz-form-control>
-          <textarea
-            nzSize="large"
-            nz-input
-            formControlName="description"
-            rows="4"
-            placeholder="Thông tin giới thiệu về doanh nghiệp..."
-          ></textarea>
-        </nz-form-control>
-      </nz-form-item>
+      <nz-divider></nz-divider>
+      <h3 class="section-title">{{ 'organization.company.sectionAddress' | translate }}</h3>
+      <div nz-row [nzGutter]="24">
+        <div nz-col nzXs="24" nzMd="6">
+          <nz-form-item>
+            <nz-form-label>{{ 'organization.company.country' | translate }}</nz-form-label>
+            <nz-form-control><input nz-input formControlName="country" /></nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="6">
+          <nz-form-item>
+            <nz-form-label>{{ 'organization.company.city' | translate }}</nz-form-label>
+            <nz-form-control><input nz-input formControlName="city" /></nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="6">
+          <nz-form-item>
+            <nz-form-label>{{ 'organization.company.district' | translate }}</nz-form-label>
+            <nz-form-control><input nz-input formControlName="district" /></nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="6">
+          <nz-form-item>
+            <nz-form-label>{{ 'organization.company.ward' | translate }}</nz-form-label>
+            <nz-form-control><input nz-input formControlName="ward" /></nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
 
-      <div class="form-actions" style="margin-top: 24px">
+      <nz-divider></nz-divider>
+      <h3 class="section-title">{{ 'organization.company.sectionLegal' | translate }}</h3>
+      <div nz-row [nzGutter]="24">
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'organization.company.taxCode' | translate }}</nz-form-label>
+            <nz-form-control><input nz-input formControlName="taxCode" /></nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'organization.company.businessRegistrationCode' | translate }}</nz-form-label>
+            <nz-form-control><input nz-input formControlName="businessRegistrationCode" /></nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'organization.company.socialInsuranceCode' | translate }}</nz-form-label>
+            <nz-form-control><input nz-input formControlName="socialInsuranceCode" /></nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'organization.company.foundedDate' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-date-picker formControlName="foundedDate" nzFormat="dd/MM/yyyy" style="width: 100%"></nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'organization.company.operatingStatus' | translate }}</nz-form-label>
+            <nz-form-control><input nz-input formControlName="operatingStatus" /></nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'organization.company.companyType' | translate }}</nz-form-label>
+            <nz-form-control><input nz-input formControlName="companyType" /></nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="12">
+          <nz-form-item>
+            <nz-form-label>{{ 'organization.company.legalRepresentative' | translate }}</nz-form-label>
+            <nz-form-control><input nz-input formControlName="legalRepresentative" /></nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="12">
+          <nz-form-item>
+            <nz-form-label>{{ 'organization.company.legalRepresentativePosition' | translate }}</nz-form-label>
+            <nz-form-control><input nz-input formControlName="legalRepresentativePosition" /></nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="24">
+          <nz-form-item>
+            <nz-form-label>{{ 'organization.company.industry' | translate }}</nz-form-label>
+            <nz-form-control><input nz-input formControlName="industry" /></nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+
+      <nz-divider></nz-divider>
+      <h3 class="section-title">{{ 'organization.company.sectionEmployeeCode' | translate }}</h3>
+      <div nz-row [nzGutter]="24">
+        <div nz-col nzXs="24" nzMd="6">
+          <nz-form-item>
+            <nz-form-label>{{ 'organization.company.prefixMaleCode' | translate }}</nz-form-label>
+            <nz-form-control><input nz-input formControlName="prefixMaleCode" /></nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="6">
+          <nz-form-item>
+            <nz-form-label>{{ 'organization.company.prefixFemaleCode' | translate }}</nz-form-label>
+            <nz-form-control><input nz-input formControlName="prefixFemaleCode" /></nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="6">
+          <nz-form-item>
+            <nz-form-label>{{ 'organization.company.prefixFullTimeCode' | translate }}</nz-form-label>
+            <nz-form-control><input nz-input formControlName="prefixFullTimeCode" /></nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="6">
+          <nz-form-item>
+            <nz-form-label>{{ 'organization.company.prefixPartTimeCode' | translate }}</nz-form-label>
+            <nz-form-control><input nz-input formControlName="prefixPartTimeCode" /></nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+
+      <nz-divider></nz-divider>
+      <h3 class="section-title">{{ 'organization.company.sectionPayroll' | translate }}</h3>
+      <div nz-row [nzGutter]="24">
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'organization.company.dayComputeSalary' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-date-picker formControlName="dayComputeSalary" nzFormat="dd/MM/yyyy" style="width: 100%"></nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'organization.company.isComputePrevMonth' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-switch formControlName="isComputePrevMonth"></nz-switch>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+
+      <nz-divider></nz-divider>
+      <h3 class="section-title">{{ 'organization.company.sectionBank' | translate }}</h3>
+      <div nz-row [nzGutter]="24">
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'organization.company.bankAccountNumber' | translate }}</nz-form-label>
+            <nz-form-control><input nz-input formControlName="bankAccountNumber" /></nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'organization.company.bankName' | translate }}</nz-form-label>
+            <nz-form-control><input nz-input formControlName="bankName" /></nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'organization.company.bankBranch' | translate }}</nz-form-label>
+            <nz-form-control><input nz-input formControlName="bankBranch" /></nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+
+      <nz-divider></nz-divider>
+      <h3 class="section-title">{{ 'organization.company.sectionSystem' | translate }}</h3>
+      <div nz-row [nzGutter]="24">
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'organization.company.timeZone' | translate }}</nz-form-label>
+            <nz-form-control><input nz-input formControlName="timeZone" placeholder="SE Asia Standard Time" /></nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'organization.company.defaultLanguage' | translate }}</nz-form-label>
+            <nz-form-control><input nz-input formControlName="defaultLanguage" placeholder="vi-VN" /></nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'organization.company.isActive' | translate }}</nz-form-label>
+            <nz-form-control><nz-switch formControlName="isActive"></nz-switch></nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="12">
+          <nz-form-item>
+            <nz-form-label>{{ 'organization.company.logoUrl' | translate }}</nz-form-label>
+            <nz-form-control><input nz-input formControlName="logoUrl" /></nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="12">
+          <nz-form-item>
+            <nz-form-label>{{ 'organization.company.timeKeepingStandardId' | translate }}</nz-form-label>
+            <nz-form-control><input nz-input formControlName="timeKeepingStandardId" placeholder="UUID chuẩn chấm công" /></nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+
+      <div class="form-actions">
         <button nz-button nzType="default" type="button" (click)="goBack()" [disabled]="submitting">
           <i nz-icon nzType="arrow-left"></i> Quay lại
         </button>
-        <button
-          nz-button
-          nzType="primary"
-          type="submit"
-          [nzLoading]="submitting"
-          style="margin-left: 12px"
-        >
+        <button nz-button nzType="primary" type="submit" [nzLoading]="submitting">
           <i nz-icon nzType="save"></i> Lưu thông tin
         </button>
       </div>
@@ -103,12 +299,12 @@
 </ng-template>
 
 <ng-template #titleTemplate>
-  <span style="font-size: 18px; font-weight: 600; color: var(--foreground)">
-    <i nz-icon nzType="bank" style="margin-right: 8px; color: var(--primary)"></i>
-    {{ isEdit ? 'Cập Nhật Thông Tin Công Ty' : 'Thêm Công Ty Mới' }}
+  <span class="card-title">
+    <i nz-icon nzType="bank"></i>
+    {{ isEdit ? ('organization.company.editTitle' | translate) : ('organization.company.addTitle' | translate) }}
   </span>
 </ng-template>
 
 <ng-template #extraTemplate>
-  <button nz-button nzType="default" (click)="goBack()">Danh sách công ty</button>
+  <button nz-button nzType="default" (click)="goBack()">{{ 'organization.company.backToList' | translate }}</button>
 </ng-template>

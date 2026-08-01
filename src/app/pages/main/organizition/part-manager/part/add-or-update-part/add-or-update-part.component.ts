@@ -2,13 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { ROUTES_CONFIG } from '../../../../../../core/constants/routes.config';
+import { ROUTES_CONFIG } from '../../../../../../core/constants/common/routes.config';
 
 @Component({
   standalone: false,
   selector: 'app-add-or-update-part',
   templateUrl: './add-or-update-part.component.html',
-  styleUrls: []
+  styleUrls: [],
 })
 export class AddOrUpdatePartComponent implements OnInit {
   id: string | null = null;
@@ -21,7 +21,7 @@ export class AddOrUpdatePartComponent implements OnInit {
     private readonly fb: FormBuilder,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
-    private readonly message: NzMessageService
+    private readonly message: NzMessageService,
   ) {}
 
   ngOnInit(): void {
@@ -40,7 +40,7 @@ export class AddOrUpdatePartComponent implements OnInit {
       code: ['', [Validators.required, Validators.maxLength(50)]],
       name: ['', [Validators.required, Validators.maxLength(250)]],
       departmentName: ['', [Validators.required]],
-      description: ['']
+      description: [''],
     });
   }
 
@@ -52,7 +52,7 @@ export class AddOrUpdatePartComponent implements OnInit {
         code: 'P-WEB-01',
         name: 'Nhóm Frontend Angular',
         departmentName: 'Phòng Kỹ thuật Hà Nội',
-        description: 'Tổ dự án phụ trách phát triển các giao diện người dùng web và mobile hybrid.'
+        description: 'Tổ dự án phụ trách phát triển các giao diện người dùng web và mobile hybrid.',
       });
       this.loading = false;
     }, 200);
@@ -65,7 +65,7 @@ export class AddOrUpdatePartComponent implements OnInit {
 
   submitForm(): void {
     if (this.validateForm.invalid) {
-      Object.values(this.validateForm.controls).forEach(control => {
+      Object.values(this.validateForm.controls).forEach((control) => {
         if (control.invalid) {
           control.markAsDirty();
           control.updateValueAndValidity({ onlySelf: true });
@@ -77,7 +77,7 @@ export class AddOrUpdatePartComponent implements OnInit {
     this.submitting = true;
     setTimeout(() => {
       this.message.success(
-        this.isEdit ? 'Cập nhật bộ phận thành công!' : 'Thêm mới bộ phận thành công!'
+        this.isEdit ? 'Cập nhật bộ phận thành công!' : 'Thêm mới bộ phận thành công!',
       );
       this.submitting = false;
       this.goBack();

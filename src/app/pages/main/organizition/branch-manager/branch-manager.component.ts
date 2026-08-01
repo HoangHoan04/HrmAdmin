@@ -1,17 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { ROUTES_CONFIG } from '../../../../core/constants/common/routes.config';
 import { PagedResult } from '../../../../core/models/common.models';
 import { Branch } from '../../../../core/models/organization.models';
 import { ApiService } from '../../../../core/services/api.service';
 import {
+  CommonActions,
   PaginationConfig,
   RowAction,
-  TableColumn,
   TableAction,
-  CommonActions,
+  TableColumn,
 } from '../../../../shared/components/table-custom/table-custom.types';
-import { ROUTES_CONFIG } from '../../../../core/constants/routes.config';
 
 @Component({
   standalone: false,
@@ -39,7 +39,12 @@ export class BranchManagerComponent implements OnInit {
     { field: 'name', header: 'organization.branch.name', type: 'text', sortable: true },
     { field: 'address', header: 'organization.branch.address', type: 'text', sortable: true },
     { field: 'ipAddress', header: 'organization.branch.ipAddress', type: 'text' },
-    { field: 'companyName', header: 'organization.branch.companyName', type: 'text', sortable: true },
+    {
+      field: 'companyName',
+      header: 'organization.branch.companyName',
+      type: 'text',
+      sortable: true,
+    },
     { field: 'status', header: 'organization.branch.status', type: 'boolean', sortable: true },
     { field: 'createdAt', header: 'organization.branch.createdAt', type: 'date', sortable: true },
   ];
@@ -50,7 +55,11 @@ export class BranchManagerComponent implements OnInit {
       icon: 'edit',
       tooltip: 'Sửa chi nhánh',
       severity: 'info',
-      onClick: (record) => this.router.navigate([ROUTES_CONFIG.ORGANIZATION.children.BRANCH_MANAGER.children.EDIT_BRANCH.path, record.id]),
+      onClick: (record) =>
+        this.router.navigate([
+          ROUTES_CONFIG.ORGANIZATION.children.BRANCH_MANAGER.children.EDIT_BRANCH.path,
+          record.id,
+        ]),
     },
     {
       key: 'toggleStatus',
@@ -63,7 +72,10 @@ export class BranchManagerComponent implements OnInit {
 
   toolbarActions: TableAction[] = [
     CommonActions.create(() => this.openCreateModal()),
-    CommonActions.uploadExcel(() => this.downloadTemplate(), (file) => this.uploadFile(file)),
+    CommonActions.uploadExcel(
+      () => this.downloadTemplate(),
+      (file) => this.uploadFile(file),
+    ),
     CommonActions.exportExcel(() => this.exportExcel()),
   ];
 
@@ -71,7 +83,7 @@ export class BranchManagerComponent implements OnInit {
     private readonly router: Router,
     private readonly message: NzMessageService,
     private readonly apiService: ApiService,
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.loadData();
@@ -145,7 +157,9 @@ export class BranchManagerComponent implements OnInit {
   }
 
   openCreateModal(): void {
-    this.router.navigate([ROUTES_CONFIG.ORGANIZATION.children.BRANCH_MANAGER.children.ADD_BRANCH.path]);
+    this.router.navigate([
+      ROUTES_CONFIG.ORGANIZATION.children.BRANCH_MANAGER.children.ADD_BRANCH.path,
+    ]);
   }
 
   downloadTemplate(): void {

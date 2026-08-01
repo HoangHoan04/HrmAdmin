@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
-import { DashboardService, DashboardSettings } from '../../../core/services/dashboard.service';
+import { DashboardService, DashboardSettings } from 'src/app/core/services';
 
 @Component({
   selector: 'app-config-setting',

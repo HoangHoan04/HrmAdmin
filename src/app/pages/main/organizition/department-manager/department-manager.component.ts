@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { ROUTES_CONFIG } from '../../../../core/constants/routes.config';
+import { ROUTES_CONFIG } from '../../../../core/constants/common/routes.config';
 import {
   PaginationConfig,
   RowAction,

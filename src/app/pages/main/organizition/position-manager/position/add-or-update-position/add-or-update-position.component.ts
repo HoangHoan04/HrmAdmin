@@ -2,13 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { ROUTES_CONFIG } from '../../../../../../core/constants/routes.config';
+import { ROUTES_CONFIG } from '../../../../../../core/constants/common/routes.config';
 
 @Component({
   standalone: false,
   selector: 'app-add-or-update-position',
   templateUrl: './add-or-update-position.component.html',
-  styleUrls: []
+  styleUrls: [],
 })
 export class AddOrUpdatePositionComponent implements OnInit {
   id: string | null = null;
@@ -21,7 +21,7 @@ export class AddOrUpdatePositionComponent implements OnInit {
     private readonly fb: FormBuilder,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
-    private readonly message: NzMessageService
+    private readonly message: NzMessageService,
   ) {}
 
   ngOnInit(): void {
@@ -40,7 +40,7 @@ export class AddOrUpdatePositionComponent implements OnInit {
       code: ['', [Validators.required, Validators.maxLength(50)]],
       name: ['', [Validators.required, Validators.maxLength(250)]],
       departmentName: ['', [Validators.required]],
-      description: ['']
+      description: [''],
     });
   }
 
@@ -52,7 +52,7 @@ export class AddOrUpdatePositionComponent implements OnInit {
         code: 'P-TP-HR',
         name: 'Trưởng phòng Nhân sự',
         departmentName: 'Phòng Hành chính Nhân sự',
-        description: 'Chức vụ phụ trách quản lý toàn bộ nhân viên phòng Hành chính nhân sự.'
+        description: 'Chức vụ phụ trách quản lý toàn bộ nhân viên phòng Hành chính nhân sự.',
       });
       this.loading = false;
     }, 200);
@@ -65,7 +65,7 @@ export class AddOrUpdatePositionComponent implements OnInit {
 
   submitForm(): void {
     if (this.validateForm.invalid) {
-      Object.values(this.validateForm.controls).forEach(control => {
+      Object.values(this.validateForm.controls).forEach((control) => {
         if (control.invalid) {
           control.markAsDirty();
           control.updateValueAndValidity({ onlySelf: true });
@@ -77,7 +77,7 @@ export class AddOrUpdatePositionComponent implements OnInit {
     this.submitting = true;
     setTimeout(() => {
       this.message.success(
-        this.isEdit ? 'Cập nhật chức vụ thành công!' : 'Thêm mới chức vụ thành công!'
+        this.isEdit ? 'Cập nhật chức vụ thành công!' : 'Thêm mới chức vụ thành công!',
       );
       this.submitting = false;
       this.goBack();

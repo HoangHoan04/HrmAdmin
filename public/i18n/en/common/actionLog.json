@@ -1,0 +1,11 @@
+{
+  "actionLog": {
+    "createdAt": "Created At",
+    "createdByName": "Performed By",
+    "actionType": "Action",
+    "createdNote": "Note",
+    "title": "Activity History",
+    "empty": "No activity history",
+    "viewDetail": "View change details"
+  }
+}

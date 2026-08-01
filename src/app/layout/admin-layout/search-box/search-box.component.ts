@@ -2,8 +2,8 @@ import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
-import { ROUTES_CONFIG, RouteConfig } from '../../../core/constants/routes.config';
-import { DashboardService } from '../../../core/services/dashboard.service';
+import { RouteConfig, ROUTES_CONFIG } from 'src/app/core/constants/common';
+import { DashboardService } from 'src/app/core/services';
 
 interface SearchItem {
   label: string;

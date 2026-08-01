@@ -5,6 +5,16 @@
     "retry": "Try Again",
     "stt": "No.",
     "actionsHeader": "Actions",
+    "filter": {
+      "title": "Search",
+      "search": "Search",
+      "clear": "Clear filters",
+      "searchText": "Keyword",
+      "searchTextPlaceholder": "Enter code or name...",
+      "fromDate": "From date",
+      "toDate": "To date",
+      "noCustomTemplate": "No custom template provided"
+    },
     "actions": {
       "create": "Add New",
       "update": "Update",

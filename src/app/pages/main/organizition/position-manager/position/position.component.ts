@@ -1,10 +1,14 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { ROUTES_CONFIG } from '../../../../../core/constants/common/routes.config';
+import {
+  PaginationConfig,
+  RowAction,
+  TableColumn,
+} from '../../../../../shared/components/table-custom/table-custom.types';
 import { SharedModule } from '../../../../../shared/shared.module';
-import { TableColumn, RowAction, PaginationConfig } from '../../../../../shared/components/table-custom/table-custom.types';
-import { ROUTES_CONFIG } from '../../../../../core/constants/routes.config';
 
 interface PositionMock {
   id: string;
@@ -20,7 +24,7 @@ interface PositionMock {
   selector: 'app-position',
   templateUrl: './position.component.html',
   imports: [CommonModule, SharedModule],
-  styleUrls: []
+  styleUrls: [],
 })
 export class PositionComponent implements OnInit {
   data: PositionMock[] = [];
@@ -30,7 +34,7 @@ export class PositionComponent implements OnInit {
     current: 1,
     pageSize: 10,
     total: 0,
-    showTotal: true
+    showTotal: true,
   };
 
   searchText = '';
@@ -42,7 +46,7 @@ export class PositionComponent implements OnInit {
     { field: 'name', header: 'Tên chức vụ', type: 'text', sortable: true },
     { field: 'departmentName', header: 'Bộ phận/Phòng ban', type: 'text', sortable: true },
     { field: 'status', header: 'Trạng thái', type: 'boolean', sortable: true },
-    { field: 'createdAt', header: 'Ngày tạo', type: 'date', sortable: true }
+    { field: 'createdAt', header: 'Ngày tạo', type: 'date', sortable: true },
   ];
 
   rowActions: RowAction[] = [
@@ -51,30 +55,69 @@ export class PositionComponent implements OnInit {
       icon: 'edit',
       tooltip: 'Sửa chức vụ',
       severity: 'info',
-      onClick: (record) => this.router.navigate([ROUTES_CONFIG.ORGANIZATION.children.POSITION_MANAGER.children.EDIT_POSITION.path, record.id])
+      onClick: (record) =>
+        this.router.navigate([
+          ROUTES_CONFIG.ORGANIZATION.children.POSITION_MANAGER.children.EDIT_POSITION.path,
+          record.id,
+        ]),
     },
     {
       key: 'toggleStatus',
       icon: 'sync',
       tooltip: 'Kích hoạt / Khóa',
       severity: 'warning',
-      onClick: (record) => this.toggleStatus(record)
-    }
+      onClick: (record) => this.toggleStatus(record),
+    },
   ];
 
   private allMockData: PositionMock[] = [
-    { id: '1', code: 'P-GD-OB', name: 'Giám đốc vận hành', departmentName: 'Ban Giám đốc', status: true, createdAt: '2026-01-10T08:00:00Z' },
-    { id: '2', code: 'P-TP-HR', name: 'Trưởng phòng Nhân sự', departmentName: 'Phòng Hành chính Nhân sự', status: true, createdAt: '2026-01-12T09:30:00Z' },
-    { id: '3', code: 'P-PP-TECH', name: 'Phó phòng Kỹ thuật', departmentName: 'Phòng Kỹ thuật Hà Nội', status: true, createdAt: '2026-02-15T10:00:00Z' },
-    { id: '4', code: 'P-NV-SALE', name: 'Nhân viên kinh doanh', departmentName: 'Phòng Kinh doanh HCM', status: true, createdAt: '2026-02-20T14:00:00Z' },
-    { id: '5', code: 'P-TTS-MKT', name: 'Thực tập sinh Marketing', departmentName: 'Phòng Marketing', status: false, createdAt: '2026-03-01T11:00:00Z' },
+    {
+      id: '1',
+      code: 'P-GD-OB',
+      name: 'Giám đốc vận hành',
+      departmentName: 'Ban Giám đốc',
+      status: true,
+      createdAt: '2026-01-10T08:00:00Z',
+    },
+    {
+      id: '2',
+      code: 'P-TP-HR',
+      name: 'Trưởng phòng Nhân sự',
+      departmentName: 'Phòng Hành chính Nhân sự',
+      status: true,
+      createdAt: '2026-01-12T09:30:00Z',
+    },
+    {
+      id: '3',
+      code: 'P-PP-TECH',
+      name: 'Phó phòng Kỹ thuật',
+      departmentName: 'Phòng Kỹ thuật Hà Nội',
+      status: true,
+      createdAt: '2026-02-15T10:00:00Z',
+    },
+    {
+      id: '4',
+      code: 'P-NV-SALE',
+      name: 'Nhân viên kinh doanh',
+      departmentName: 'Phòng Kinh doanh HCM',
+      status: true,
+      createdAt: '2026-02-20T14:00:00Z',
+    },
+    {
+      id: '5',
+      code: 'P-TTS-MKT',
+      name: 'Thực tập sinh Marketing',
+      departmentName: 'Phòng Marketing',
+      status: false,
+      createdAt: '2026-03-01T11:00:00Z',
+    },
   ];
 
   constructor(
     private readonly router: Router,
     private readonly message: NzMessageService,
-    private readonly cdr: ChangeDetectorRef
-  ) { }
+    private readonly cdr: ChangeDetectorRef,
+  ) {}
 
   ngOnInit(): void {
     this.loadData();
@@ -88,10 +131,11 @@ export class PositionComponent implements OnInit {
       let filtered = [...this.allMockData];
       if (this.searchText) {
         const query = this.searchText.toLowerCase();
-        filtered = filtered.filter(item => 
-          item.code.toLowerCase().includes(query) || 
-          item.name.toLowerCase().includes(query) ||
-          item.departmentName.toLowerCase().includes(query)
+        filtered = filtered.filter(
+          (item) =>
+            item.code.toLowerCase().includes(query) ||
+            item.name.toLowerCase().includes(query) ||
+            item.departmentName.toLowerCase().includes(query),
         );
       }
 
@@ -129,6 +173,8 @@ export class PositionComponent implements OnInit {
   }
 
   openCreateModal(): void {
-    this.router.navigate([ROUTES_CONFIG.ORGANIZATION.children.POSITION_MANAGER.children.ADD_POSITION.path]);
+    this.router.navigate([
+      ROUTES_CONFIG.ORGANIZATION.children.POSITION_MANAGER.children.ADD_POSITION.path,
+    ]);
   }
 }

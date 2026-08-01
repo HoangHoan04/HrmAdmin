@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { ROUTES_CONFIG } from '../../../../../../core/constants/routes.config';
+import { ROUTES_CONFIG } from '../../../../../../core/constants/common/routes.config';
 
 interface PartMasterDetailMock {
   id: string;
@@ -16,7 +16,7 @@ interface PartMasterDetailMock {
   standalone: false,
   selector: 'app-part-master-detail',
   templateUrl: './part-master-detail.component.html',
-  styleUrls: []
+  styleUrls: [],
 })
 export class PartMasterDetailComponent implements OnInit {
   id: string | null = null;
@@ -26,8 +26,8 @@ export class PartMasterDetailComponent implements OnInit {
   constructor(
     private readonly route: ActivatedRoute,
     private readonly router: Router,
-    private readonly message: NzMessageService
-  ) { }
+    private readonly message: NzMessageService,
+  ) {}
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id');
@@ -43,9 +43,10 @@ export class PartMasterDetailComponent implements OnInit {
         id,
         code: 'PM-WEB',
         name: 'Tổ Phát triển Web',
-        description: 'Tổ chịu trách nhiệm định hướng công nghệ và chuẩn hóa quy trình phát triển ứng dụng Web.',
+        description:
+          'Tổ chịu trách nhiệm định hướng công nghệ và chuẩn hóa quy trình phát triển ứng dụng Web.',
         createdAt: '2026-01-15T08:00:00Z',
-        status: true
+        status: true,
       };
       this.loading = false;
     }, 200);

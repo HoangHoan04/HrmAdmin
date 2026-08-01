@@ -1,28 +1,13 @@
-<nz-card [nzTitle]="titleTemplate" [nzExtra]="extraTemplate">
-  <app-table-custom
-    [id]="'position-table'"
-    [data]="data"
-    [columns]="columns"
-    [loading]="loading"
-    [showIndexList]="true"
-    [stripedRows]="true"
-    [rowActions]="rowActions"
-    [pagination]="pagination"
-    (pageChange)="onPageChange($event)"
-    (sortChange)="onSortChange($event)"
-    (refresh)="loadData()"
-  ></app-table-custom>
-</nz-card>
-
-<ng-template #titleTemplate>
-  <span style="font-size: 18px; font-weight: 600; color: var(--foreground);">
-    <i nz-icon nzType="team" style="margin-right: 8px; color: var(--primary);"></i>
-    Thông Tin Chức Vụ
-  </span>
-</ng-template>
-
-<ng-template #extraTemplate>
-  <button nz-button nzType="primary" (click)="openCreateModal()">
-    <i nz-icon nzType="plus"></i> Thêm Chức Vụ
-  </button>
-</ng-template>
+<app-table-custom
+  [id]="'position-table'"
+  [data]="data"
+  [columns]="columns"
+  [loading]="loading"
+  [showIndexList]="true"
+  [stripedRows]="true"
+  [rowActions]="rowActions"
+  [pagination]="pagination"
+  (pageChange)="onPageChange($event)"
+  (sortChange)="onSortChange($event)"
+  (refresh)="loadData()"
+></app-table-custom>

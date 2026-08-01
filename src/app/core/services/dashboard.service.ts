@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
+import { BehaviorSubject } from 'rxjs';
 
 export interface TabItem {
   id: string;
@@ -226,9 +226,7 @@ export class DashboardService {
   }
 
   clearTabs(): void {
-    this.openTabsSubject.next([
-      { id: 'HOME', path: '/', translationKey: 'routes.home' },
-    ]);
+    this.openTabsSubject.next([{ id: 'HOME', path: '/', translationKey: 'routes.home' }]);
     this.activeTabIdSubject.next('HOME');
   }
 
@@ -249,7 +247,8 @@ export class DashboardService {
     root.setAttribute('data-config-position', s.configPosition);
 
     if (s.grayscale) root.style.setProperty('filter', 'grayscale(100%)');
-    else if (s.colorBlind) root.style.setProperty('filter', 'contrast(120%) saturate(130%) sepia(20%)');
+    else if (s.colorBlind)
+      root.style.setProperty('filter', 'contrast(120%) saturate(130%) sepia(20%)');
     else root.style.removeProperty('filter');
 
     root.style.setProperty('--primary', s.primaryColor);
@@ -270,12 +269,24 @@ export class DashboardService {
       body.style.fontFamily = s.fontFamily;
     }
 
-    const w = s.fontWeight === 'light' ? '300' : s.fontWeight === 'normal' ? '400' : s.fontWeight === 'medium' ? '500' : '600';
+    const w =
+      s.fontWeight === 'light'
+        ? '300'
+        : s.fontWeight === 'normal'
+          ? '400'
+          : s.fontWeight === 'medium'
+            ? '500'
+            : '600';
     const fw = s.boldText ? '700' : w;
     root.style.fontWeight = fw;
     if (body) body.style.fontWeight = fw;
-    if (s.italicText) { root.style.fontStyle = 'italic'; if (body) body.style.fontStyle = 'italic'; }
-    else { root.style.fontStyle = 'normal'; if (body) body.style.fontStyle = 'normal'; }
+    if (s.italicText) {
+      root.style.fontStyle = 'italic';
+      if (body) body.style.fontStyle = 'italic';
+    } else {
+      root.style.fontStyle = 'normal';
+      if (body) body.style.fontStyle = 'normal';
+    }
 
     const navbarColor = isDark ? s.navbarColorDark : s.navbarColorLight;
     const sidebarColor = isDark ? s.sidebarColorDark : s.sidebarColorLight;

@@ -1,8 +1,16 @@
-import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  HostListener,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription, filter } from 'rxjs';
-import { getRouteByPath } from '../../../core/constants/routes.config';
-import { DashboardService, DashboardSettings, TabItem } from '../../../core/services/dashboard.service';
+import { getRouteByPath } from 'src/app/core/constants/common';
+import { DashboardService, DashboardSettings, TabItem } from 'src/app/core/services';
 
 @Component({
   selector: 'app-tabs-bar',
@@ -37,20 +45,32 @@ export class TabsBarComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit(): void {
     const stored = localStorage.getItem('pinned_tabs');
     if (stored) {
-      try { this.pinnedTabs = JSON.parse(stored); } catch { this.pinnedTabs = []; }
+      try {
+        this.pinnedTabs = JSON.parse(stored);
+      } catch {
+        this.pinnedTabs = [];
+      }
     }
 
     this.sub.add(
-      this.ds.openTabs$.subscribe((tabs) => { this.openTabs = tabs; }),
+      this.ds.openTabs$.subscribe((tabs) => {
+        this.openTabs = tabs;
+      }),
     );
     this.sub.add(
-      this.ds.activeTabId$.subscribe((id) => { this.activeTabId = id; }),
+      this.ds.activeTabId$.subscribe((id) => {
+        this.activeTabId = id;
+      }),
     );
     this.sub.add(
-      this.ds.isMaximized$.subscribe((v) => { this.isMaximized = v; }),
+      this.ds.isMaximized$.subscribe((v) => {
+        this.isMaximized = v;
+      }),
     );
     this.sub.add(
-      this.ds.settings$.subscribe((settings) => { this.s = settings; }),
+      this.ds.settings$.subscribe((settings) => {
+        this.s = settings;
+      }),
     );
 
     this.sub.add(
@@ -71,7 +91,6 @@ export class TabsBarComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       }),
     );
-
   }
 
   ngAfterViewInit(): void {
@@ -122,7 +141,9 @@ export class TabsBarComponent implements OnInit, AfterViewInit, OnDestroy {
   closeTabsToLeft(id: string): void {
     const index = this.openTabs.findIndex((t) => t.id === id);
     if (index === -1) return;
-    const keep = this.openTabs.filter((_, idx) => idx >= index || this.pinnedTabs.includes(this.openTabs[idx].id));
+    const keep = this.openTabs.filter(
+      (_, idx) => idx >= index || this.pinnedTabs.includes(this.openTabs[idx].id),
+    );
     this.ds.setOpenTabs(keep);
     if (!keep.some((t) => t.id === this.activeTabId)) {
       this.ds.setActiveTabId(id);
@@ -134,7 +155,9 @@ export class TabsBarComponent implements OnInit, AfterViewInit, OnDestroy {
   closeTabsToRight(id: string): void {
     const index = this.openTabs.findIndex((t) => t.id === id);
     if (index === -1) return;
-    const keep = this.openTabs.filter((_, idx) => idx <= index || this.pinnedTabs.includes(this.openTabs[idx].id));
+    const keep = this.openTabs.filter(
+      (_, idx) => idx <= index || this.pinnedTabs.includes(this.openTabs[idx].id),
+    );
     this.ds.setOpenTabs(keep);
     if (!keep.some((t) => t.id === this.activeTabId)) {
       this.ds.setActiveTabId(id);

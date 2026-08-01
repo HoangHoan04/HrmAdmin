@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ROUTES_CONFIG } from '../../core/constants/routes.config';
+import { ROUTES_CONFIG } from '../../core/constants/common/routes.config';
 import { SharedModule } from '../../shared/shared.module';
 import { HomeComponent } from './home/home.component';
 

@@ -22,7 +22,7 @@ import { PositionMasterDetailComponent } from './position-manager/position-maste
 import { AddOrUpdatePositionComponent } from './position-manager/position/add-or-update-position/add-or-update-position.component';
 import { PositionDetailComponent } from './position-manager/position/position-detail/position-detail.component';
 
-import { ROUTES_CONFIG } from '../../../core/constants/routes.config';
+import { ROUTES_CONFIG } from '../../../core/constants/common/routes.config';
 
 const getRelativePath = (p: string) => {
   const clean = p.startsWith('/') ? p.substring(1) : p;

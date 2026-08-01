@@ -1,0 +1,11 @@
+{
+  "actionLog": {
+    "createdAt": "Ngày tạo",
+    "createdByName": "Người thực hiện",
+    "actionType": "Hành động",
+    "createdNote": "Ghi chú",
+    "title": "Lịch sử thao tác",
+    "empty": "Không có lịch sử thao tác",
+    "viewDetail": "Xem chi tiết thay đổi"
+  }
+}

@@ -1,111 +1,84 @@
-<div class="action-log-container">
-  <nz-spin [nzSpinning]="loading">
-    <div class="action-log-list" *ngIf="logs.length > 0; else noLogsTpl">
-      <div class="log-timeline">
-        <div class="log-item" *ngFor="let log of logs">
-          <div class="log-marker">
-            <span class="badge-action" [ngClass]="log.actionType | lowercase">
-              {{ log.actionType }}
-            </span>
-          </div>
-          <div class="log-card">
-            <div class="log-header">
-              <span class="log-user">
-                <span nz-icon nzType="user" nzTheme="outline" class="user-icon"></span>
-                <strong>{{ log.createdByName }}</strong>
-                <span class="user-code">({{ log.createdByCode }})</span>
-              </span>
-              <span class="log-time">{{ log.createdAt | date: 'dd/MM/yyyy HH:mm:ss' }}</span>
-            </div>
-            <div class="log-body">
-              <p class="log-note">{{ log.createdNote }}</p>
-              <div class="log-meta">
-                <span class="meta-ip" *ngIf="log.ipAddress">IP: {{ log.ipAddress }}</span>
-              </div>
-            </div>
-            <div class="log-footer" *ngIf="log.oldValue || log.newValue">
-              <button nz-button nzType="link" (click)="viewDetails(log)" class="btn-detail">
-                <span nz-icon nzType="diff" nzTheme="outline"></span> So sánh thay đổi
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="log-pagination">
-        <nz-pagination
-          [nzPageIndex]="pageIndex"
-          [nzPageSize]="pageSize"
-          [nzTotal]="total"
-          (nzPageIndexChange)="onPageIndexChange($event)"
-          [nzShowSizeChanger]="false"
-        ></nz-pagination>
-      </div>
-    </div>
-  </nz-spin>
-</div>
-
-<ng-template #noLogsTpl>
-  <div class="empty-logs">
-    <span nz-icon nzType="history" nzTheme="outline" class="empty-icon"></span>
-    <p>Chưa có dữ liệu nhật ký hoạt động nào cho thực thể này.</p>
-  </div>
+<ng-template #actionTypeTpl let-rowData>
+  @if (getActionTypeMeta(rowData.actionType); as action) {
+    <span
+      class="action-type-tag"
+      [style.background-color]="action.color + '20'"
+      [style.color]="action.color"
+      [style.border-color]="action.color + '40'"
+    >
+      {{ action.name }}
+    </span>
+  } @else {
+    <span class="action-type-tag action-type-tag-default">
+      {{ getActionTypeLabel(rowData.actionType) }}
+    </span>
+  }
 </ng-template>
 
-<!-- Modal So sánh chi tiết thay đổi -->
+@if (resolvedEntityId) {
+  <div class="action-log-container">
+    @if (title) {
+      <h3 class="action-log-title">{{ title }}</h3>
+    }
+
+    <app-table-custom
+      [id]="'action-log-' + resolvedEntityName + '-' + resolvedEntityId"
+      [data]="logs"
+      [columns]="columns"
+      [loading]="loading"
+      [pagination]="pagination"
+      [rowActions]="rowActions"
+      [stripedRows]="true"
+      [showGridlines]="true"
+      [toolbar]="{ show: false }"
+      emptyText="actionLog.empty"
+      (pageChange)="onPageChange($event)"
+      (refresh)="loadLogs()"
+    ></app-table-custom>
+  </div>
+}
+
 <nz-modal
   [(nzVisible)]="modalVisible"
   nzTitle="Chi tiết thay đổi dữ liệu"
   (nzOnCancel)="closeModal()"
   [nzFooter]="modalFooter"
-  nzWidth="720px"
+  nzWidth="960px"
   [nzCentered]="true"
   class="action-log-modal"
 >
   <ng-container *nzModalContent>
-    <div class="modal-log-summary" *ngIf="selectedLog">
-      <p>
-        <strong>Người thực hiện:</strong> {{ selectedLog.createdByName }} ({{
-          selectedLog.createdByCode
-        }})
-      </p>
-      <p><strong>Thời gian:</strong> {{ selectedLog.createdAt | date: 'dd/MM/yyyy HH:mm:ss' }}</p>
-      <p>
-        <strong>Hành động:</strong>
-        <span class="badge-action" [ngClass]="selectedLog.actionType | lowercase">{{
-          selectedLog.actionType
-        }}</span>
-      </p>
-      <p><strong>Nội dung:</strong> {{ selectedLog.createdNote }}</p>
-    </div>
+    @if (selectedLog) {
+      <div class="modal-log-summary">
+        <p><strong>Người thực hiện:</strong> {{ selectedLog.createdByName }} ({{ selectedLog.createdByCode }})</p>
+        <p><strong>Thời gian:</strong> {{ selectedLog.createdAt | date: 'dd/MM/yyyy HH:mm:ss' }}</p>
+        <p>
+          <strong>Hành động:</strong>
+          {{ getActionTypeLabel(selectedLog.actionType) }}
+        </p>
+        @if (selectedLog.createdNote) {
+          <p><strong>Ghi chú:</strong> {{ selectedLog.createdNote }}</p>
+        }
+      </div>
 
-    <div class="diff-container">
-      <nz-table
-        #diffTable
-        [nzData]="getAllKeys()"
-        [nzFrontPagination]="false"
-        [nzShowPagination]="false"
-        nzSize="middle"
-        class="table-diff"
-      >
-        <thead>
-          <tr>
-            <th>Trường dữ liệu</th>
-            <th>Giá trị cũ</th>
-            <th>Giá trị mới</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let key of diffTable.data" [class.row-diff]="isDifferent(key)">
-            <td>
-              <strong>{{ key }}</strong>
-            </td>
-            <td class="val-old">{{ formatVal(oldValueObj ? oldValueObj[key] : null) }}</td>
-            <td class="val-new">{{ formatVal(newValueObj ? newValueObj[key] : null) }}</td>
-          </tr>
-        </tbody>
-      </nz-table>
-    </div>
+      <div class="json-diff-grid">
+        <div class="json-panel json-panel-old">
+          <h4>
+            <span nz-icon nzType="history" nzTheme="outline"></span>
+            Dữ liệu cũ (oldValue)
+          </h4>
+          <pre>{{ formatJsonValue(selectedLog.oldValueObj, 'Không có dữ liệu cũ hoặc record được tạo mới.') }}</pre>
+        </div>
+
+        <div class="json-panel json-panel-new">
+          <h4>
+            <span nz-icon nzType="history" nzTheme="outline"></span>
+            Dữ liệu mới (newValue)
+          </h4>
+          <pre>{{ formatJsonValue(selectedLog.newValueObj, 'Không có dữ liệu mới cập nhật.') }}</pre>
+        </div>
+      </div>
+    }
   </ng-container>
 
   <ng-template #modalFooter>

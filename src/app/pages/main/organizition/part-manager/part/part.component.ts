@@ -1,10 +1,14 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { ROUTES_CONFIG } from '../../../../../core/constants/common/routes.config';
+import {
+  PaginationConfig,
+  RowAction,
+  TableColumn,
+} from '../../../../../shared/components/table-custom/table-custom.types';
 import { SharedModule } from '../../../../../shared/shared.module';
-import { TableColumn, RowAction, PaginationConfig } from '../../../../../shared/components/table-custom/table-custom.types';
-import { ROUTES_CONFIG } from '../../../../../core/constants/routes.config';
 
 interface PartMock {
   id: string;
@@ -20,7 +24,7 @@ interface PartMock {
   selector: 'app-part',
   templateUrl: './part.component.html',
   imports: [CommonModule, SharedModule],
-  styleUrls: []
+  styleUrls: [],
 })
 export class PartComponent implements OnInit {
   data: PartMock[] = [];
@@ -30,7 +34,7 @@ export class PartComponent implements OnInit {
     current: 1,
     pageSize: 10,
     total: 0,
-    showTotal: true
+    showTotal: true,
   };
 
   searchText = '';
@@ -42,7 +46,7 @@ export class PartComponent implements OnInit {
     { field: 'name', header: 'Tên bộ phận', type: 'text', sortable: true },
     { field: 'departmentName', header: 'Bộ phận/Phòng ban', type: 'text', sortable: true },
     { field: 'status', header: 'Trạng thái', type: 'boolean', sortable: true },
-    { field: 'createdAt', header: 'Ngày tạo', type: 'date', sortable: true }
+    { field: 'createdAt', header: 'Ngày tạo', type: 'date', sortable: true },
   ];
 
   rowActions: RowAction[] = [
@@ -51,30 +55,69 @@ export class PartComponent implements OnInit {
       icon: 'edit',
       tooltip: 'Sửa bộ phận',
       severity: 'info',
-      onClick: (record) => this.router.navigate([ROUTES_CONFIG.ORGANIZATION.children.PART_MANAGER.children.EDIT_PART.path, record.id])
+      onClick: (record) =>
+        this.router.navigate([
+          ROUTES_CONFIG.ORGANIZATION.children.PART_MANAGER.children.EDIT_PART.path,
+          record.id,
+        ]),
     },
     {
       key: 'toggleStatus',
       icon: 'sync',
       tooltip: 'Kích hoạt / Khóa',
       severity: 'warning',
-      onClick: (record) => this.toggleStatus(record)
-    }
+      onClick: (record) => this.toggleStatus(record),
+    },
   ];
 
   private allMockData: PartMock[] = [
-    { id: '1', code: 'P-WEB-01', name: 'Nhóm Frontend Angular', departmentName: 'Phòng Kỹ thuật Hà Nội', status: true, createdAt: '2026-02-15T08:00:00Z' },
-    { id: '2', code: 'P-API-02', name: 'Nhóm Backend .NET', departmentName: 'Phòng Kỹ thuật Hà Nội', status: true, createdAt: '2026-02-16T09:30:00Z' },
-    { id: '3', code: 'P-MKT-FB', name: 'Nhóm Facebook Ads', departmentName: 'Phòng Marketing', status: true, createdAt: '2026-03-01T10:00:00Z' },
-    { id: '4', code: 'P-MKT-GG', name: 'Nhóm Google Ads', departmentName: 'Phòng Marketing', status: true, createdAt: '2026-03-02T14:00:00Z' },
-    { id: '5', code: 'P-QA-01', name: 'Nhóm Kiểm thử (QA)', departmentName: 'Phòng Kỹ thuật Hà Nội', status: false, createdAt: '2026-03-10T11:00:00Z' },
+    {
+      id: '1',
+      code: 'P-WEB-01',
+      name: 'Nhóm Frontend Angular',
+      departmentName: 'Phòng Kỹ thuật Hà Nội',
+      status: true,
+      createdAt: '2026-02-15T08:00:00Z',
+    },
+    {
+      id: '2',
+      code: 'P-API-02',
+      name: 'Nhóm Backend .NET',
+      departmentName: 'Phòng Kỹ thuật Hà Nội',
+      status: true,
+      createdAt: '2026-02-16T09:30:00Z',
+    },
+    {
+      id: '3',
+      code: 'P-MKT-FB',
+      name: 'Nhóm Facebook Ads',
+      departmentName: 'Phòng Marketing',
+      status: true,
+      createdAt: '2026-03-01T10:00:00Z',
+    },
+    {
+      id: '4',
+      code: 'P-MKT-GG',
+      name: 'Nhóm Google Ads',
+      departmentName: 'Phòng Marketing',
+      status: true,
+      createdAt: '2026-03-02T14:00:00Z',
+    },
+    {
+      id: '5',
+      code: 'P-QA-01',
+      name: 'Nhóm Kiểm thử (QA)',
+      departmentName: 'Phòng Kỹ thuật Hà Nội',
+      status: false,
+      createdAt: '2026-03-10T11:00:00Z',
+    },
   ];
 
   constructor(
     private readonly router: Router,
     private readonly message: NzMessageService,
-    private readonly cdr: ChangeDetectorRef
-  ) { }
+    private readonly cdr: ChangeDetectorRef,
+  ) {}
 
   ngOnInit(): void {
     this.loadData();
@@ -88,10 +131,11 @@ export class PartComponent implements OnInit {
       let filtered = [...this.allMockData];
       if (this.searchText) {
         const query = this.searchText.toLowerCase();
-        filtered = filtered.filter(item => 
-          item.code.toLowerCase().includes(query) || 
-          item.name.toLowerCase().includes(query) ||
-          item.departmentName.toLowerCase().includes(query)
+        filtered = filtered.filter(
+          (item) =>
+            item.code.toLowerCase().includes(query) ||
+            item.name.toLowerCase().includes(query) ||
+            item.departmentName.toLowerCase().includes(query),
         );
       }
 

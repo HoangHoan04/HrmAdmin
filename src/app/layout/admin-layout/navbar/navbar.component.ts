@@ -1,10 +1,13 @@
-import { Component, OnDestroy, OnInit, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { AuthService } from '../../../core/services/auth.service';
-import { DashboardService, DashboardSettings } from '../../../core/services/dashboard.service';
-import { SidebarService } from '../../../core/services/sidebar.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { Subscription } from 'rxjs';
+import {
+  AuthService,
+  DashboardService,
+  DashboardSettings,
+  SidebarService,
+} from 'src/app/core/services';
 
 @Component({
   selector: 'app-navbar',
@@ -36,7 +39,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     private auth: AuthService,
     private router: Router,
     private message: NzMessageService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
   ) {
     this.s = dashboardService.snapshot;
     this.sidebarService.collapsed$.subscribe((v) => (this.collapsed = v));
@@ -66,7 +69,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
         this.email = '';
         this.avatarText = 'US';
         this.cdr.detectChanges();
-      }
+      },
     });
   }
 
@@ -108,22 +111,27 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.changePasswordLoading = true;
     this.cdr.detectChanges();
 
-    this.auth.changePassword({
-      oldPassword: this.oldPassword,
-      newPassword: this.newPassword
-    }).subscribe({
-      next: () => {
-        this.changePasswordLoading = false;
-        this.changePasswordVisible = false;
-        this.message.success('Đổi mật khẩu thành công!');
-        this.cdr.detectChanges();
-      },
-      error: (err) => {
-        this.changePasswordLoading = false;
-        this.changePasswordError = typeof err.error === 'string' ? err.error : (err.error?.message || 'Có lỗi xảy ra khi đổi mật khẩu.');
-        this.cdr.detectChanges();
-      }
-    });
+    this.auth
+      .changePassword({
+        oldPassword: this.oldPassword,
+        newPassword: this.newPassword,
+      })
+      .subscribe({
+        next: () => {
+          this.changePasswordLoading = false;
+          this.changePasswordVisible = false;
+          this.message.success('Đổi mật khẩu thành công!');
+          this.cdr.detectChanges();
+        },
+        error: (err) => {
+          this.changePasswordLoading = false;
+          this.changePasswordError =
+            typeof err.error === 'string'
+              ? err.error
+              : err.error?.message || 'Có lỗi xảy ra khi đổi mật khẩu.';
+          this.cdr.detectChanges();
+        },
+      });
   }
 
   ngOnDestroy(): void {

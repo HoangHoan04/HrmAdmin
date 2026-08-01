@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { ROUTES_CONFIG } from '../../../../../../core/constants/routes.config';
+import { ROUTES_CONFIG } from '../../../../../../core/constants/common/routes.config';
 
 interface PositionDetailMock {
   id: string;
@@ -17,7 +17,7 @@ interface PositionDetailMock {
   standalone: false,
   selector: 'app-position-detail',
   templateUrl: './position-detail.component.html',
-  styleUrls: []
+  styleUrls: [],
 })
 export class PositionDetailComponent implements OnInit {
   id: string | null = null;
@@ -27,8 +27,8 @@ export class PositionDetailComponent implements OnInit {
   constructor(
     private readonly route: ActivatedRoute,
     private readonly router: Router,
-    private readonly message: NzMessageService
-  ) { }
+    private readonly message: NzMessageService,
+  ) {}
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id');
@@ -45,9 +45,10 @@ export class PositionDetailComponent implements OnInit {
         code: 'P-TP-HR',
         name: 'Trưởng phòng Nhân sự',
         departmentName: 'Phòng Hành chính Nhân sự',
-        description: 'Vị trí quản lý trực tiếp điều hành công việc của toàn bộ các chuyên viên và nhân viên bộ phận Hành chính Nhân sự.',
+        description:
+          'Vị trí quản lý trực tiếp điều hành công việc của toàn bộ các chuyên viên và nhân viên bộ phận Hành chính Nhân sự.',
         createdAt: '2026-01-12T09:30:00Z',
-        status: true
+        status: true,
       };
       this.loading = false;
     }, 200);
