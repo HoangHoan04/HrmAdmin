@@ -1,11 +1,11 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
 import {
   convertRoutesToMenuItems,
   ROUTES_CONFIG,
   SidebarMenuItem,
-} from 'src/app/core/constants/common';
-import { DashboardService, DashboardSettings, SidebarService } from 'src/app/core/services';
+} from '@/app/core/constants/common';
+import { DashboardService, DashboardSettings, SidebarService } from '@/app/core/services';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-sidebar',

@@ -1,3 +1,5 @@
+import { getRouteByPath } from '@/app/core/constants/common';
+import { DashboardService, DashboardSettings, TabItem } from '@/app/core/services';
 import {
   AfterViewInit,
   Component,
@@ -9,8 +11,6 @@ import {
 } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription, filter } from 'rxjs';
-import { getRouteByPath } from 'src/app/core/constants/common';
-import { DashboardService, DashboardSettings, TabItem } from 'src/app/core/services';
 
 @Component({
   selector: 'app-tabs-bar',

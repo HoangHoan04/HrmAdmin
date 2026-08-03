@@ -1,7 +1,8 @@
+import { enumData } from '@/app/core/constants/enums/enumData';
+import { ActionConfirmService } from '@/app/shared/services/action-confirm.service';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { enumData } from 'src/app/core/constants/enums/enumData';
 import { ROUTES_CONFIG } from '../../../../core/constants/common/routes.config';
 import { PagedResult } from '../../../../core/models/common.models';
 import { Company, CompanyImportResult } from '../../../../core/models/organization.models';
@@ -21,7 +22,6 @@ import {
   TableColumn,
   ToolbarConfig,
 } from '../../../../shared/components/table-custom/table-custom.types';
-import { ActionConfirmService } from 'src/app/shared/services/action-confirm.service';
 
 @Component({
   standalone: false,

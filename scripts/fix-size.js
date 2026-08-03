@@ -10,7 +10,7 @@ function walkDir(dir, callback) {
     });
 }
 
-walkDir('src/app', function (filePath) {
+walkDir('@/app', function (filePath) {
     if (filePath.endsWith('.html')) {
         let content = fs.readFileSync(filePath, 'utf8');
         let modified = false;

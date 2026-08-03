@@ -1,6 +1,6 @@
+import { DashboardService } from '@/app/core/services';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { DashboardService } from 'src/app/core/services';
 
 @Component({
   selector: 'app-toggle-theme',

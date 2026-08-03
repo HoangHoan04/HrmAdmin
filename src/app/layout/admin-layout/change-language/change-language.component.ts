@@ -1,6 +1,6 @@
+import { DashboardService, DashboardSettings } from '@/app/core/services';
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { DashboardService, DashboardSettings } from 'src/app/core/services';
 
 @Component({
   selector: 'app-change-language',

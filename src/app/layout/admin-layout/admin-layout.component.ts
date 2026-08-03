@@ -1,3 +1,4 @@
+import { DashboardService, DashboardSettings } from '@/app/core/services';
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import {
   NavigationCancel,
@@ -8,7 +9,6 @@ import {
   RouterOutlet,
 } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { DashboardService, DashboardSettings } from 'src/app/core/services';
 
 @Component({
   selector: 'app-admin-layout',
