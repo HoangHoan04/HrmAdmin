@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
@@ -11,15 +12,16 @@ import { AuthService } from '../../../core/services/auth.service';
 export class LoginComponent {
   username = '';
   password = '';
-  showPassword = false;
   loading = false;
   error = '';
   isModalVisible = false;
   rememberMe = false;
+  passwordVisible = false;
 
   constructor(
     private router: Router,
     private auth: AuthService,
+    private readonly translate: TranslateService,
   ) {}
 
   openContactModal(): void {
@@ -33,7 +35,7 @@ export class LoginComponent {
   onLogin(): void {
     this.error = '';
     if (!this.username || !this.password) {
-      this.error = 'Vui lòng nhập tài khoản và mật khẩu';
+      this.error = this.translate.instant('common.messages.loginRequired');
       return;
     }
     this.loading = true;
@@ -49,7 +51,9 @@ export class LoginComponent {
       error: (err) => {
         this.loading = false;
         this.error =
-          typeof err.error === 'string' ? err.error : 'Tài khoản hoặc mật khẩu không đúng';
+          typeof err.error === 'string'
+            ? err.error
+            : this.translate.instant('common.messages.invalidCredentials');
       },
     });
   }

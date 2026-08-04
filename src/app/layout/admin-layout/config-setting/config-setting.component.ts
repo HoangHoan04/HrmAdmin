@@ -1,5 +1,7 @@
 import { DashboardService, DashboardSettings } from '@/app/core/services';
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
+import { NzMessageService } from 'ng-zorro-antd/message';
 import { Observable, Subscription } from 'rxjs';
 
 @Component({
@@ -78,43 +80,52 @@ export class ConfigSettingComponent implements OnInit, OnDestroy {
   ];
 
   layoutModes = [
-    'horizontal',
-    'detached',
-    'modern',
-    'two column',
-    'hovered',
-    'boxed',
-    'horizontal single',
-    'horizontal overlay',
-    'horizontal box',
-    'menu aside',
-    'transparent',
-    'without header',
-    'RTL',
+    { value: 'horizontal', labelKey: 'configSetting.layout.horizontal' },
+    { value: 'detached', labelKey: 'configSetting.layout.detached' },
+    { value: 'modern', labelKey: 'configSetting.layout.modern' },
+    { value: 'two column', labelKey: 'configSetting.layout.twoColumn' },
+    { value: 'hovered', labelKey: 'configSetting.layout.hovered' },
+    { value: 'boxed', labelKey: 'configSetting.layout.boxed' },
+    { value: 'horizontal single', labelKey: 'configSetting.layout.horizontalSingle' },
+    { value: 'horizontal overlay', labelKey: 'configSetting.layout.horizontalOverlay' },
+    { value: 'horizontal box', labelKey: 'configSetting.layout.horizontalBox' },
+    { value: 'menu aside', labelKey: 'configSetting.layout.menuAside' },
+    { value: 'transparent', labelKey: 'configSetting.layout.transparent' },
+    { value: 'without header', labelKey: 'configSetting.layout.withoutHeader' },
+    { value: 'RTL', labelKey: 'configSetting.layout.rtl' },
   ];
 
   transitionEffects = [
-    'fade',
-    'fade-side',
-    'fade-up',
-    'fade-down',
-    'fade-zoom',
-    'slide-left',
-    'slide-right',
-    'zoom-in',
-    'zoom-out',
-    'rotate',
-    'flip-x',
-    'flip-y',
-    'bounce',
-    'slide-up',
-    'slide-down',
+    { value: 'fade', labelKey: 'configSetting.transition.fade' },
+    { value: 'fade-side', labelKey: 'configSetting.transition.fadeSide' },
+    { value: 'fade-up', labelKey: 'configSetting.transition.fadeUp' },
+    { value: 'fade-down', labelKey: 'configSetting.transition.fadeDown' },
+    { value: 'fade-zoom', labelKey: 'configSetting.transition.fadeZoom' },
+    { value: 'slide-left', labelKey: 'configSetting.transition.slideLeft' },
+    { value: 'slide-right', labelKey: 'configSetting.transition.slideRight' },
+    { value: 'zoom-in', labelKey: 'configSetting.transition.zoomIn' },
+    { value: 'zoom-out', labelKey: 'configSetting.transition.zoomOut' },
+    { value: 'rotate', labelKey: 'configSetting.transition.rotate' },
+    { value: 'flip-x', labelKey: 'configSetting.transition.flipX' },
+    { value: 'flip-y', labelKey: 'configSetting.transition.flipY' },
+    { value: 'bounce', labelKey: 'configSetting.transition.bounce' },
+    { value: 'slide-up', labelKey: 'configSetting.transition.slideUp' },
+    { value: 'slide-down', labelKey: 'configSetting.transition.slideDown' },
   ];
 
   fontFamilies = ['Inter', 'Roboto', 'Montserrat', 'Playfair Display', 'Outfit'];
-  tabStyles = ['chrome', 'card', 'icon', 'simple'];
+  tabStyles = [
+    { value: 'chrome', labelKey: 'configSetting.tabStyleChrome' },
+    { value: 'card', labelKey: 'configSetting.tabStyleCard' },
+    { value: 'icon', labelKey: 'configSetting.tabStyleIcon' },
+    { value: 'simple', labelKey: 'configSetting.tabStyleSimple' },
+  ];
 
-  constructor(public ds: DashboardService) {
+  constructor(
+    public ds: DashboardService,
+    private readonly translate: TranslateService,
+    private readonly message: NzMessageService,
+  ) {
     this.s = ds.snapshot;
     this.configOpen$ = ds.configOpen$;
   }
@@ -147,6 +158,11 @@ export class ConfigSettingComponent implements OnInit, OnDestroy {
 
   copyConfig(): void {
     navigator.clipboard.writeText(JSON.stringify(this.s, null, 2));
+    this.message.success(this.translate.instant('configSetting.copiedMessage'));
+  }
+
+  colorLabel(name: string): string {
+    return this.translate.instant(`configSetting.color.${name}`);
   }
 
   clearCacheAndLogout(): void {

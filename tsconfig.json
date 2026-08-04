@@ -21,7 +21,7 @@
     "module": "ES2022",
     "moduleResolution": "bundler",
     "lib": ["ES2022", "dom"],
-    "types": ["vitest/globals"]   // nếu dùng Vitest cho test
+    "types": ["vitest/globals"]   
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
@@ -30,7 +30,7 @@
     "strictTemplates": true
   },
   "include": [
-    "src/**/*.ts"         // tất cả file TS trong src
+    "src/**/*.ts"       
   ],
   "exclude": [
     "node_modules",

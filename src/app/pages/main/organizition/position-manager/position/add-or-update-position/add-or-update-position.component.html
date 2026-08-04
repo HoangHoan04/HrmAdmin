@@ -1,73 +1,159 @@
-<nz-card
-  [nzTitle]="isEdit ? 'Cập Nhật Chức Vụ' : 'Thêm Mới Chức Vụ'"
-  [nzExtra]="extraTemplate"
-  [nzLoading]="loading"
->
+<nz-card [nzTitle]="titleTemplate" [nzExtra]="extraTemplate" [nzLoading]="loading">
   <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()" nzLayout="vertical">
     <div nz-row [nzGutter]="16">
-      <div nz-col [nzSpan]="12">
+      <div nz-col [nzXs]="24" [nzMd]="12">
         <nz-form-item>
-          <nz-form-label nzRequired nzFor="code">Mã chức vụ</nz-form-label>
-          <nz-form-control nzErrorTip="Vui lòng nhập mã chức vụ!">
-            <input
-              nzSize="large"
-              nz-input
-              formControlName="code"
-              id="code"
-              placeholder="Ví dụ: P-TP-HR"
-            />
-          </nz-form-control>
-        </nz-form-item>
-      </div>
-
-      <div nz-col [nzSpan]="12">
-        <nz-form-item>
-          <nz-form-label nzRequired nzFor="name">Tên chức vụ</nz-form-label>
-          <nz-form-control nzErrorTip="Vui lòng nhập tên chức vụ!">
-            <input
-              nzSize="large"
-              nz-input
-              formControlName="name"
-              id="name"
-              placeholder="Ví dụ: Trưởng phòng Nhân sự"
-            />
-          </nz-form-control>
-        </nz-form-item>
-      </div>
-
-      <div nz-col [nzSpan]="24">
-        <nz-form-item>
-          <nz-form-label nzRequired nzFor="departmentName"
-            >Bộ phận/Phòng ban trực thuộc</nz-form-label
-          >
-          <nz-form-control nzErrorTip="Vui lòng chọn bộ phận/phòng ban!">
-            <nz-select formControlName="departmentName" placeholder="Chọn phòng ban">
-              <nz-option
-                nzValue="Phòng Kỹ thuật Hà Nội"
-                nzLabel="Phòng Kỹ thuật Hà Nội"
-              ></nz-option>
-              <nz-option
-                nzValue="Phòng Hành chính Nhân sự"
-                nzLabel="Phòng Hành chính Nhân sự"
-              ></nz-option>
-              <nz-option nzValue="Phòng Marketing" nzLabel="Phòng Marketing"></nz-option>
+          <nz-form-label nzRequired nzFor="positionMasterId">{{
+            'organization.position.positionMasterName' | translate
+          }}</nz-form-label>
+          <nz-form-control [nzErrorTip]="'organization.position.positionMasterRequired' | translate">
+            <nz-select
+              formControlName="positionMasterId"
+              id="positionMasterId"
+              [nzPlaceHolder]="'organization.position.selectPositionMaster' | translate"
+            >
+              @for (item of positionMasters; track item.id) {
+                <nz-option
+                  [nzValue]="item.id"
+                  [nzLabel]="item.code ? item.code + ' - ' + item.name : item.name"
+                ></nz-option>
+              }
             </nz-select>
           </nz-form-control>
         </nz-form-item>
       </div>
 
-      <div nz-col [nzSpan]="24">
+      <div nz-col [nzXs]="24" [nzMd]="12">
         <nz-form-item>
-          <nz-form-label nzFor="description">Mô tả / Ghi chú</nz-form-label>
+          <nz-form-label nzFor="companyId">{{
+            'organization.position.companyName' | translate
+          }}</nz-form-label>
           <nz-form-control>
-            <textarea
-              nzSize="large"
-              nz-input
-              formControlName="description"
-              id="description"
-              [nzAutosize]="{ minRows: 3, maxRows: 6 }"
-              placeholder="Nhập mô tả chức vụ..."
-            ></textarea>
+            <nz-select
+              formControlName="companyId"
+              id="companyId"
+              nzAllowClear
+              [nzPlaceHolder]="'organization.position.filterCompany' | translate"
+            >
+              @for (c of companies; track c.id) {
+                <nz-option
+                  [nzValue]="c.id"
+                  [nzLabel]="c.code ? c.code + ' - ' + c.name : c.name"
+                ></nz-option>
+              }
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <div nz-col [nzXs]="24" [nzMd]="12">
+        <nz-form-item>
+          <nz-form-label nzFor="branchId">{{
+            'organization.position.branchName' | translate
+          }}</nz-form-label>
+          <nz-form-control>
+            <nz-select
+              formControlName="branchId"
+              id="branchId"
+              nzAllowClear
+              [nzPlaceHolder]="'organization.position.filterBranch' | translate"
+            >
+              @for (b of branches; track b.id) {
+                <nz-option
+                  [nzValue]="b.id"
+                  [nzLabel]="b.code ? b.code + ' - ' + b.name : b.name"
+                ></nz-option>
+              }
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <div nz-col [nzXs]="24" [nzMd]="12">
+        <nz-form-item>
+          <nz-form-label nzFor="departmentId">{{
+            'organization.position.departmentName' | translate
+          }}</nz-form-label>
+          <nz-form-control>
+            <nz-select
+              formControlName="departmentId"
+              id="departmentId"
+              nzAllowClear
+              [nzPlaceHolder]="'organization.position.filterDepartment' | translate"
+            >
+              @for (d of departments; track d.id) {
+                <nz-option
+                  [nzValue]="d.id"
+                  [nzLabel]="d.code ? d.code + ' - ' + d.name : d.name"
+                ></nz-option>
+              }
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <div nz-col [nzXs]="24" [nzMd]="12">
+        <nz-form-item>
+          <nz-form-label nzFor="partId">{{ 'organization.position.partName' | translate }}</nz-form-label>
+          <nz-form-control>
+            <nz-select
+              formControlName="partId"
+              id="partId"
+              nzAllowClear
+              [nzPlaceHolder]="'organization.position.filterPart' | translate"
+            >
+              @for (p of parts; track p.id) {
+                <nz-option
+                  [nzValue]="p.id"
+                  [nzLabel]="p.code ? p.code + ' - ' + p.name : p.name"
+                ></nz-option>
+              }
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <div nz-col [nzXs]="24" [nzMd]="12">
+        <nz-form-item>
+          <nz-form-label nzFor="quantityStandard">{{
+            'organization.position.quantityStandard' | translate
+          }}</nz-form-label>
+          <nz-form-control>
+            <nz-input-number
+              formControlName="quantityStandard"
+              id="quantityStandard"
+              [nzMin]="0"
+              [nzStep]="1"
+              style="width: 100%"
+            ></nz-input-number>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <div nz-col [nzXs]="24" [nzMd]="12">
+        <nz-form-item>
+          <nz-form-label nzFor="displayOrder">{{
+            'organization.position.displayOrder' | translate
+          }}</nz-form-label>
+          <nz-form-control>
+            <nz-input-number
+              formControlName="displayOrder"
+              id="displayOrder"
+              [nzMin]="0"
+              [nzStep]="1"
+              style="width: 100%"
+            ></nz-input-number>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <div nz-col [nzXs]="24" [nzMd]="12">
+        <nz-form-item>
+          <nz-form-label nzFor="isActive">{{
+            'organization.position.isActive' | translate
+          }}</nz-form-label>
+          <nz-form-control>
+            <nz-switch formControlName="isActive" id="isActive"></nz-switch>
           </nz-form-control>
         </nz-form-item>
       </div>
@@ -83,14 +169,24 @@
         gap: 8px;
       "
     >
-      <button nz-button nzType="default" type="button" (click)="goBack()">Hủy</button>
-      <button nz-button nzType="primary" [nzLoading]="submitting" type="submit">Lưu Lại</button>
+      <button nz-button nzType="default" type="button" (click)="goBack()">
+        {{ 'common.actions.cancel' | translate }}
+      </button>
+      <button nz-button nzType="primary" [nzLoading]="submitting" type="submit">
+        {{ 'common.actions.save' | translate }}
+      </button>
     </div>
   </form>
 </nz-card>
 
+<ng-template #titleTemplate>
+  {{
+    (isEdit ? 'organization.position.editTitle' : 'organization.position.addTitle') | translate
+  }}
+</ng-template>
+
 <ng-template #extraTemplate>
   <button nz-button nzType="default" (click)="goBack()">
-    <i nz-icon nzType="arrow-left"></i> Quay Lại
+    <i nz-icon nzType="arrow-left"></i> {{ 'organization.position.backToList' | translate }}
   </button>
 </ng-template>

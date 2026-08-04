@@ -1,3 +1,13 @@
+<app-filter-custom
+  [id]="'branch-filter'"
+  [fields]="filterFields"
+  [filters]="filters"
+  [config]="filterConfig"
+  [filterActions]="filterActions"
+  [loading]="loading"
+  (filtersChange)="onFiltersChange($event)"
+></app-filter-custom>
+
 <app-table-custom
   [id]="'branch-table'"
   [data]="data"

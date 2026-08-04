@@ -1,9 +1,5 @@
 <div class="filter-custom-container" *ngIf="config?.show !== false">
-  <div
-    class="filter-header"
-    [class.collapsible]="collapsible"
-    (click)="toggleOpen()"
-  >
+  <div class="filter-header" [class.collapsible]="collapsible" (click)="toggleOpen()">
     <div class="filter-header-left">
       <span nz-icon nzType="filter" nzTheme="outline" class="filter-header-icon"></span>
       <span class="filter-title">{{ title | translate }}</span>
@@ -31,12 +27,7 @@
     <div class="filter-body">
       <div nz-row [nzGutter]="gutter">
         @for (field of visibleFields; track field.key) {
-          <div
-            nz-col
-            [nzSpan]="field.col || 6"
-            [ngClass]="field.colClassName"
-            class="filter-col"
-          >
+          <div nz-col [nzSpan]="field.col || 6" [ngClass]="field.colClassName" class="filter-col">
             <div class="filter-item" [ngStyle]="field.style">
               <label class="filter-label">{{ field.label | translate }}</label>
 
@@ -131,8 +122,8 @@
                     [ngModel]="filters[field.key]"
                     (ngModelChange)="onFilterChange(field.key, $event)"
                     [nzPlaceHolder]="[
-                      (field.placeholder || 'common.filter.fromDate') | translate,
-                      (field.placeholder || 'common.filter.toDate') | translate,
+                      field.placeholder || 'common.filter.fromDate' | translate,
+                      field.placeholder || 'common.filter.toDate' | translate,
                     ]"
                     [disabled]="isFieldDisabled(field)"
                     nzFormat="dd/MM/yyyy"
@@ -146,7 +137,7 @@
                     (click)="field.onClick?.()"
                     [disabled]="isFieldDisabled(field)"
                   >
-                    {{ (field.buttonText || field.label) | translate }}
+                    {{ field.buttonText || field.label | translate }}
                   </button>
                 }
 

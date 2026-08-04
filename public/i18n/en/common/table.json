@@ -1,0 +1,23 @@
+{
+  "table": {
+    "densityCompact": "Compact view",
+    "densityDefault": "Default view",
+    "densityComfortable": "Comfortable view",
+    "columnSettings": "Column display settings",
+    "prevPage": "Previous page",
+    "nextPage": "Next page",
+    "lastPage": "Last page",
+    "languageVi": "Vietnamese",
+    "languageEn": "English",
+    "fontWeightLight": "Light",
+    "fontWeightNormal": "Normal",
+    "fontWeightMedium": "Medium",
+    "fontWeightSemibold": "Semibold",
+    "notAvailable": "N/A",
+    "refresh": "Refresh",
+    "firstPage": "First page",
+    "columnConfigTitle": "Visible columns",
+    "paginationSummary": "Showing {{from}} - {{to}} of {{total}} records",
+    "pageSizeLabel": "Rows:"
+  }
+}

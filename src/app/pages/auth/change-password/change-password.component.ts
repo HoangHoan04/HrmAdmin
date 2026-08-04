@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { AuthService } from '../../../core/services/auth.service';
 
@@ -23,23 +24,24 @@ export class ChangePasswordComponent {
     private readonly router: Router,
     private readonly authService: AuthService,
     private readonly message: NzMessageService,
+    private readonly translate: TranslateService,
   ) {}
 
   onSubmit(): void {
     this.error = '';
 
     if (!this.oldPassword || !this.newPassword || !this.confirmPassword) {
-      this.error = 'Vui lòng nhập đầy đủ thông tin';
+      this.error = this.translate.instant('auth.fillAllFields');
       return;
     }
 
     if (this.newPassword.length < 6) {
-      this.error = 'Mật khẩu mới phải có ít nhất 6 ký tự';
+      this.error = this.translate.instant('auth.newPasswordMinLength');
       return;
     }
 
     if (this.newPassword !== this.confirmPassword) {
-      this.error = 'Mật khẩu xác nhận không khớp';
+      this.error = this.translate.instant('auth.passwordMismatch');
       return;
     }
 
@@ -52,7 +54,7 @@ export class ChangePasswordComponent {
       .subscribe({
         next: () => {
           this.loading = false;
-          this.message.success('Thay đổi mật khẩu thành công!');
+          this.message.success(this.translate.instant('auth.passwordUpdateSuccess'));
           this.router.navigateByUrl('/');
         },
         error: (err) => {
@@ -60,7 +62,7 @@ export class ChangePasswordComponent {
           this.error =
             typeof err.error === 'string'
               ? err.error
-              : err.error?.message || 'Có lỗi xảy ra khi đổi mật khẩu.';
+              : err.error?.message || this.translate.instant('auth.changePasswordFailed');
         },
       });
   }

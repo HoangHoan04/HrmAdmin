@@ -1,3 +1,4 @@
+import { TranslateService } from '@ngx-translate/core';
 import {
   AuthService,
   DashboardService,
@@ -39,6 +40,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     private auth: AuthService,
     private router: Router,
     private message: NzMessageService,
+    private translate: TranslateService,
     private cdr: ChangeDetectorRef,
   ) {
     this.s = dashboardService.snapshot;
@@ -94,17 +96,17 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.changePasswordError = '';
 
     if (!this.oldPassword || !this.newPassword || !this.confirmPassword) {
-      this.changePasswordError = 'Vui lòng nhập đầy đủ thông tin.';
+      this.changePasswordError = this.translate.instant('auth.fillAllFields');
       return;
     }
 
     if (this.newPassword.length < 6) {
-      this.changePasswordError = 'Mật khẩu mới phải có tối thiểu 6 ký tự.';
+      this.changePasswordError = this.translate.instant('auth.newPasswordMinLength');
       return;
     }
 
     if (this.newPassword !== this.confirmPassword) {
-      this.changePasswordError = 'Mật khẩu xác nhận không khớp.';
+      this.changePasswordError = this.translate.instant('auth.passwordMismatch');
       return;
     }
 
@@ -120,7 +122,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
         next: () => {
           this.changePasswordLoading = false;
           this.changePasswordVisible = false;
-          this.message.success('Đổi mật khẩu thành công!');
+          this.message.success(this.translate.instant('auth.changePasswordSuccess'));
           this.cdr.detectChanges();
         },
         error: (err) => {
@@ -128,7 +130,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
           this.changePasswordError =
             typeof err.error === 'string'
               ? err.error
-              : err.error?.message || 'Có lỗi xảy ra khi đổi mật khẩu.';
+              : err.error?.message || this.translate.instant('auth.changePasswordFailed');
           this.cdr.detectChanges();
         },
       });

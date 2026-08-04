@@ -22,7 +22,7 @@
       (click)="openSettings()"
     ></button>
     <div class="user-dropdown" nz-dropdown [nzDropdownMenu]="userMenu">
-      <nz-avatar nzSize="large" [nzText]="avatarText || 'US'" class="user-avatar"></nz-avatar>
+      <nz-avatar [nzText]="avatarText || 'US'" class="user-avatar"></nz-avatar>
     </div>
     <nz-dropdown-menu #userMenu="nzDropdownMenu">
       <ul nz-menu>
@@ -33,7 +33,7 @@
         </li>
         <li nz-menu-divider></li>
         <li nz-menu-item (click)="openChangePasswordModal()">
-          <span nz-icon nzType="key" nzTheme="outline"></span> Đổi mật khẩu
+          <span nz-icon nzType="key" nzTheme="outline"></span> {{ 'navbar.changePassword' | translate }}
         </li>
         <li nz-menu-divider></li>
         <li nz-menu-item class="text-danger" (click)="logout()">
@@ -44,10 +44,9 @@
   </div>
 </nz-header>
 
-<!-- Modal Đổi Mật Khẩu -->
 <nz-modal
   [(nzVisible)]="changePasswordVisible"
-  nzTitle="Đổi mật khẩu tài khoản"
+  [nzTitle]="'navbar.changePasswordTitle' | translate"
   (nzOnCancel)="closeChangePasswordModal()"
   (nzOnOk)="submitChangePassword()"
   [nzOkLoading]="changePasswordLoading"
@@ -66,111 +65,40 @@
 
     <div style="display: flex; flex-direction: column; gap: 16px">
       <div>
-        <label style="font-weight: 600; display: block; margin-bottom: 6px"
-          >Mật khẩu hiện tại</label
-        >
-        <nz-input-group nzSize="large" [nzPrefix]="prefixLock" [nzSuffix]="suffixOldPw">
-          <input nzSize="large"
-            nz-input
-            [type]="showOldPassword ? 'text' : 'password'"
-            [(ngModel)]="oldPassword"
-            placeholder="Nhập mật khẩu hiện tại"
-          />
-        </nz-input-group>
-        <ng-template #suffixOldPw>
-          <button
-            type="button"
-            (click)="showOldPassword = !showOldPassword"
-            style="
-              border: none;
-              background: transparent;
-              cursor: pointer;
-              color: #64748b;
-              padding: 0;
-              display: flex;
-              align-items: center;
-            "
-          >
-            <span
-              nz-icon
-              [nzType]="showOldPassword ? 'eye-invisible' : 'eye'"
-              nzTheme="outline"
-            ></span>
-          </button>
-        </ng-template>
+        <label style="font-weight: 600; display: block; margin-bottom: 6px">{{
+          'auth.oldPassword' | translate
+        }}</label>
+        <input
+          nz-input
+          type="password"
+          [(ngModel)]="oldPassword"
+          [placeholder]="'auth.oldPasswordPlaceholder' | translate"
+        />
       </div>
 
       <div>
-        <label style="font-weight: 600; display: block; margin-bottom: 6px">Mật khẩu mới</label>
-        <nz-input-group nzSize="large" [nzPrefix]="prefixLock" [nzSuffix]="suffixNewPw">
-          <input nzSize="large"
-            nz-input
-            [type]="showNewPassword ? 'text' : 'password'"
-            [(ngModel)]="newPassword"
-            placeholder="Nhập mật khẩu mới (tối thiểu 6 ký tự)"
-          />
-        </nz-input-group>
-        <ng-template #suffixNewPw>
-          <button
-            type="button"
-            (click)="showNewPassword = !showNewPassword"
-            style="
-              border: none;
-              background: transparent;
-              cursor: pointer;
-              color: #64748b;
-              padding: 0;
-              display: flex;
-              align-items: center;
-            "
-          >
-            <span
-              nz-icon
-              [nzType]="showNewPassword ? 'eye-invisible' : 'eye'"
-              nzTheme="outline"
-            ></span>
-          </button>
-        </ng-template>
+        <label style="font-weight: 600; display: block; margin-bottom: 6px">{{
+          'auth.newPassword' | translate
+        }}</label>
+        <input
+          nz-input
+          type="password"
+          [(ngModel)]="newPassword"
+          [placeholder]="'auth.passwordMinLength' | translate"
+        />
       </div>
 
       <div>
-        <label style="font-weight: 600; display: block; margin-bottom: 6px"
-          >Xác nhận mật khẩu mới</label
-        >
-        <nz-input-group nzSize="large" [nzPrefix]="prefixLock" [nzSuffix]="suffixConfirmPw">
-          <input nzSize="large"
-            nz-input
-            [type]="showConfirmPassword ? 'text' : 'password'"
-            [(ngModel)]="confirmPassword"
-            placeholder="Xác nhận lại mật khẩu mới"
-          />
-        </nz-input-group>
-        <ng-template #suffixConfirmPw>
-          <button
-            type="button"
-            (click)="showConfirmPassword = !showConfirmPassword"
-            style="
-              border: none;
-              background: transparent;
-              cursor: pointer;
-              color: #64748b;
-              padding: 0;
-              display: flex;
-              align-items: center;
-            "
-          >
-            <span
-              nz-icon
-              [nzType]="showConfirmPassword ? 'eye-invisible' : 'eye'"
-              nzTheme="outline"
-            ></span>
-          </button>
-        </ng-template>
+        <label style="font-weight: 600; display: block; margin-bottom: 6px">{{
+          'auth.confirmPassword' | translate
+        }}</label>
+        <input
+          nz-input
+          type="password"
+          [(ngModel)]="confirmPassword"
+          [placeholder]="'auth.confirmPasswordPlaceholder' | translate"
+        />
       </div>
-
-      <ng-template #prefixLock>
-        <span nz-icon nzType="lock" nzTheme="outline" style="color: #64748b"></span>
-      </ng-template>
     </div>
   </ng-container>
 </nz-modal>

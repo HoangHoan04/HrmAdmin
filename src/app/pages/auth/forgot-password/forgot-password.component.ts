@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
@@ -25,7 +26,8 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
 
   constructor(
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private readonly translate: TranslateService,
   ) {}
 
   ngOnInit(): void {
@@ -56,7 +58,7 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
   requestOtp(): void {
     this.error = '';
     if (!this.email) {
-      this.error = 'Vui lòng nhập email của bạn';
+      this.error = this.translate.instant('auth.emailRequired');
       return;
     }
     this.loading = true;
@@ -69,8 +71,11 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
       },
       error: (err) => {
         this.loading = false;
-        this.error = typeof err.error === 'string' ? err.error : (err.error?.message || 'Có lỗi xảy ra khi gửi yêu cầu.');
-      }
+        this.error =
+          typeof err.error === 'string'
+            ? err.error
+            : err.error?.message || this.translate.instant('auth.requestFailed');
+      },
     });
   }
 
@@ -111,7 +116,7 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
   verifyOtp(): void {
     this.error = '';
     if (this.otpValue.length < 6) {
-      this.error = 'Vui lòng nhập đủ mã OTP';
+      this.error = this.translate.instant('auth.otpRequired');
       return;
     }
     this.step = 3;
@@ -130,36 +135,42 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
       },
       error: (err) => {
         this.loading = false;
-        this.error = typeof err.error === 'string' ? err.error : 'Không thể gửi lại mã OTP.';
-      }
+        this.error =
+          typeof err.error === 'string' ? err.error : this.translate.instant('auth.resendOtpFailed');
+      },
     });
   }
 
   onResetPassword(): void {
     this.error = '';
     if (!this.newPassword || this.newPassword.length < 6) {
-      this.error = 'Mật khẩu phải có ít nhất 6 ký tự';
+      this.error = this.translate.instant('auth.passwordMinLength');
       return;
     }
     if (this.newPassword !== this.confirmPassword) {
-      this.error = 'Mật khẩu xác nhận không khớp';
+      this.error = this.translate.instant('auth.passwordMismatch');
       return;
     }
     this.loading = true;
-    this.authService.resetPasswordWithOtp({
-      email: this.email,
-      otp: this.otpValue,
-      newPassword: this.newPassword
-    }).subscribe({
-      next: () => {
-        this.loading = false;
-        this.router.navigateByUrl('/auth/login');
-      },
-      error: (err) => {
-        this.loading = false;
-        this.error = typeof err.error === 'string' ? err.error : (err.error?.message || 'Đặt lại mật khẩu thất bại.');
-      }
-    });
+    this.authService
+      .resetPasswordWithOtp({
+        email: this.email,
+        otp: this.otpValue,
+        newPassword: this.newPassword,
+      })
+      .subscribe({
+        next: () => {
+          this.loading = false;
+          this.router.navigateByUrl('/auth/login');
+        },
+        error: (err) => {
+          this.loading = false;
+          this.error =
+            typeof err.error === 'string'
+              ? err.error
+              : err.error?.message || this.translate.instant('auth.resetPasswordFailed');
+        },
+      });
   }
 
   goBack(): void {

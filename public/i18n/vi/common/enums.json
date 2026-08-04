@@ -1,0 +1,45 @@
+{
+  "enums": {
+    "notAvailable": "N/A",
+    "statusFilter": {
+      "active": "Đang hoạt động",
+      "inactive": "Ngưng hoạt động",
+      "all": "Tất cả"
+    },
+    "gender": {
+      "male": "Nam",
+      "female": "Nữ",
+      "other": "Khác"
+    },
+    "daysOfWeek": {
+      "mon": "Thứ 2",
+      "tue": "Thứ 3",
+      "wed": "Thứ 4",
+      "thu": "Thứ 5",
+      "fri": "Thứ 6",
+      "sat": "Thứ 7",
+      "sun": "Chủ nhật"
+    },
+    "actionType": {
+      "create": "Thêm mới",
+      "approve": "Duyệt",
+      "activate": "Kích hoạt",
+      "login": "Đăng nhập",
+      "update": "Cập nhật",
+      "edit": "Chỉnh sửa",
+      "delete": "Xoá bỏ",
+      "reject": "Từ chối",
+      "cancel": "Huỷ",
+      "deactivate": "Ngưng hoạt động",
+      "logout": "Đăng xuất",
+      "sync": "Đồng bộ",
+      "sendApprove": "Gửi duyệt",
+      "restore": "Khôi phục",
+      "register": "Đăng ký",
+      "importExcel": "Nhập excel",
+      "uploadFile": "Tải file lên",
+      "lock": "Khóa",
+      "unlock": "Mở khóa"
+    }
+  }
+}

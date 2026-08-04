@@ -1,11 +1,15 @@
 <div class="table-custom-container">
-  <!-- TOOLBAR -->
   <div
     class="table-custom-toolbar"
-    *ngIf="toolbar?.show || toolbarLeftContent || toolbarRightContent || toolbar?.showRefreshButton || (toolbarActions && toolbarActions.length > 0)"
+    *ngIf="
+      toolbar?.show ||
+      toolbarLeftContent ||
+      toolbarRightContent ||
+      toolbar?.showRefreshButton ||
+      (toolbarActions && toolbarActions.length > 0)
+    "
   >
-    <div class="toolbar-left" style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
-      <!-- Dynamic Toolbar Actions -->
+    <div class="toolbar-left" style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap">
       <ng-container *ngFor="let act of toolbarActions">
         @if (act.visible !== false) {
           @if (act.subActions && act.subActions.length > 0) {
@@ -15,25 +19,42 @@
               [nzDropdownMenu]="menu"
               [nzLoading]="act.loading"
               [disabled]="act.disabled"
+              (nzVisibleChange)="onDropdownVisibleChange($event, act)"
               class="toolbar-btn"
               [ngClass]="'severity-' + (act.severity || 'primary')"
-              style="display: inline-flex; align-items: center; gap: 6px;"
             >
               <span *ngIf="act.icon" nz-icon [nzType]="act.icon"></span>
               <span>{{ act.label | translate }}</span>
-              <span nz-icon nzType="down"></span>
+              <span
+                nz-icon
+                nzType="down"
+                class="toolbar-btn-caret"
+                [class.rotated]="act.__open"
+              ></span>
             </button>
             <nz-dropdown-menu #menu="nzDropdownMenu">
-              <ul nz-menu>
+              <div class="toolbar-dropdown-menu">
                 <ng-container *ngFor="let sub of act.subActions">
                   @if (sub.visible !== false) {
-                    <li nz-menu-item [nzDisabled]="sub.disabled" (click)="handleActionClick(sub, act)">
-                      <span *ngIf="sub.icon" nz-icon [nzType]="sub.icon"></span>
-                      <span>{{ sub.label | translate }}</span>
-                    </li>
+                    <button
+                      type="button"
+                      class="toolbar-dropdown-item"
+                      [class.disabled]="sub.disabled"
+                      [disabled]="sub.disabled"
+                      (click)="handleActionClick(sub, act)"
+                    >
+                      <span
+                        *ngIf="sub.icon"
+                        nz-icon
+                        [nzType]="sub.icon"
+                        class="toolbar-dropdown-item-icon"
+                        [ngClass]="'severity-' + (sub.severity || act.severity || 'primary')"
+                      ></span>
+                      <span class="toolbar-dropdown-item-label">{{ sub.label | translate }}</span>
+                    </button>
                   }
                 </ng-container>
-              </ul>
+              </div>
             </nz-dropdown-menu>
           } @else {
             <button
@@ -43,7 +64,6 @@
               (click)="handleActionClick(act)"
               class="toolbar-btn"
               [ngClass]="'severity-' + (act.severity || 'primary')"
-              style="display: inline-flex; align-items: center; gap: 6px;"
             >
               <span *ngIf="act.icon" nz-icon [nzType]="act.icon"></span>
               <span>{{ act.label | translate }}</span>
@@ -62,7 +82,6 @@
         <ng-container *ngTemplateOutlet="toolbarRightContent"></ng-container>
       </ng-container>
 
-      <!-- DENSITY SELECTOR -->
       <div class="density-selector">
         <button
           nz-button
@@ -71,7 +90,7 @@
           class="density-btn mini-btn"
           [class.active]="density === 'small'"
           (click)="setDensity('small')"
-          title="Xem thu gọn"
+          [attr.title]="'table.densityCompact' | translate"
         >
           Mini
         </button>
@@ -82,7 +101,7 @@
           class="density-btn normal-btn"
           [class.active]="density === 'normal'"
           (click)="setDensity('normal')"
-          title="Xem vừa phải"
+          [attr.title]="'table.densityDefault' | translate"
         >
           Normal
         </button>
@@ -93,13 +112,12 @@
           class="density-btn big-btn"
           [class.active]="density === 'large'"
           (click)="setDensity('large')"
-          title="Xem rộng rãi"
+          [attr.title]="'table.densityComfortable' | translate"
         >
           Big
         </button>
       </div>
 
-      <!-- REFRESH BUTTON -->
       <button
         *ngIf="toolbar?.showRefreshButton"
         nz-button
@@ -107,12 +125,11 @@
         class="toolbar-action-btn refresh-btn"
         (click)="onRefreshClick()"
         [disabled]="loading"
-        title="Làm mới"
+        [attr.title]="'table.refresh' | translate"
       >
         <span nz-icon nzType="reload" nzTheme="outline" [nzSpin]="loading"></span>
       </button>
 
-      <!-- COLUMN CONFIG COG -->
       <div class="relative config-dropdown">
         <button
           nz-button
@@ -120,7 +137,7 @@
           class="toolbar-action-btn config-cog-btn"
           [class.bg-active]="showConfig"
           (click)="showConfig = !showConfig"
-          title="Cài đặt hiển thị cột"
+          [attr.title]="'table.columnSettings' | translate"
         >
           <span nz-icon nzType="setting" nzTheme="outline"></span>
         </button>
@@ -128,12 +145,11 @@
         <div *ngIf="showConfig" class="config-menu shadow-lg">
           <div class="config-menu-header">
             <span nz-icon nzType="table" nzTheme="outline"></span>
-            Hiển thị cột
+            {{ 'table.columnConfigTitle' | translate }}
           </div>
           <div class="config-menu-list">
             <label *ngFor="let col of columns" class="config-item-label">
               <input
-                nzSize="large"
                 type="checkbox"
                 [checked]="visibleColumnsMap[col.field]"
                 (change)="toggleColumnVisibility(col.field)"
@@ -147,12 +163,10 @@
     </div>
   </div>
 
-  <!-- TABLE WRAPPER -->
   <div class="table-scroll-wrapper shadow-lg">
     <table class="custom-data-table" [class.gridlines]="showGridlines">
       <thead>
         <tr class="table-header-row">
-          <!-- Checkbox Header -->
           <th
             *ngIf="enableSelection"
             class="checkbox-cell header-cell sticky-col sticky-left-0"
@@ -160,7 +174,6 @@
           >
             <div *ngIf="selectionMode === 'multiple'" class="flex-center">
               <input
-                nzSize="large"
                 type="checkbox"
                 [checked]="isAllSelected()"
                 (change)="onSelectAll($any($event.target).checked)"
@@ -169,7 +182,6 @@
             </div>
           </th>
 
-          <!-- STT Header -->
           <th
             *ngIf="showIndexList"
             class="stt-cell header-cell sticky-col"
@@ -179,7 +191,6 @@
             {{ 'common.stt' | translate }}
           </th>
 
-          <!-- Data Headers -->
           <th
             *ngFor="let col of visibleColumns"
             draggable="true"
@@ -229,7 +240,6 @@
               </div>
             </div>
 
-            <!-- Resize Handle -->
             <div
               *ngIf="col.resizable !== false"
               (mousedown)="onResizeStart($event, col.field, getColumnWidth(col))"
@@ -238,7 +248,6 @@
             ></div>
           </th>
 
-          <!-- Actions Header -->
           <th
             *ngIf="rowActions && rowActions.length > 0"
             [style.width]="rowActionsWidth"
@@ -256,7 +265,6 @@
         </tr>
       </thead>
       <tbody>
-        <!-- Loading -->
         <tr *ngIf="loading" class="table-loading-row">
           <td
             [attr.colspan]="
@@ -274,7 +282,6 @@
           </td>
         </tr>
 
-        <!-- No Data -->
         <tr *ngIf="!loading && data.length === 0" class="table-empty-row">
           <td
             [attr.colspan]="
@@ -287,12 +294,11 @@
           >
             <div class="empty-state-wrapper">
               <span nz-icon nzType="inbox" class="empty-icon"></span>
-              <span class="empty-text">{{ emptyText }}</span>
+              <span class="empty-text">{{ emptyText | translate }}</span>
             </div>
           </td>
         </tr>
 
-        <!-- Data Rows -->
         <ng-container *ngIf="!loading && data.length > 0">
           <tr
             *ngFor="let rowData of data; let rowIndex = index"
@@ -300,7 +306,6 @@
             class="table-data-row"
             [class.striped-row]="stripedRows && rowIndex % 2 === 1"
           >
-            <!-- Checkbox Cell -->
             <td
               *ngIf="enableSelection"
               class="checkbox-cell body-cell sticky-col sticky-left-0"
@@ -309,7 +314,6 @@
             >
               <div class="flex-center">
                 <input
-                  nzSize="large"
                   type="checkbox"
                   [checked]="isRowSelected(rowData)"
                   (change)="onSelectRow(rowData, $any($event.target).checked)"
@@ -318,7 +322,6 @@
               </div>
             </td>
 
-            <!-- STT Cell -->
             <td
               *ngIf="showIndexList"
               class="stt-cell body-cell sticky-col"
@@ -328,7 +331,6 @@
               {{ getRowIndex(rowIndex) }}
             </td>
 
-            <!-- Data Cells -->
             <td
               *ngFor="let col of visibleColumns"
               [style.text-align]="col.align || 'left'"
@@ -344,21 +346,17 @@
               }"
               [ngStyle]="col.bodyStyle"
             >
-              <!-- Custom body template -->
               <ng-container *ngIf="col.body">
                 <ng-container
                   *ngTemplateOutlet="col.body; context: { $implicit: rowData, rowIndex: rowIndex }"
                 ></ng-container>
               </ng-container>
 
-              <!-- Standard formats -->
               <ng-container *ngIf="!col.body">
-                <!-- Text -->
                 <span *ngIf="!col.type || col.type === 'text'">
                   {{ rowData[col.field] != null ? rowData[col.field] : '-' }}
                 </span>
 
-                <!-- Number -->
                 <span *ngIf="col.type === 'number'">
                   {{
                     rowData[col.field] != null
@@ -367,13 +365,11 @@
                   }}
                 </span>
 
-                <!-- Currency -->
                 <span *ngIf="col.type === 'currency'">
                   {{ rowData[col.field] != null ? (rowData[col.field] | number: '1.0-0') : '-' }}
                   {{ col.currencySymbol || '₫' }}
                 </span>
 
-                <!-- Date -->
                 <span *ngIf="col.type === 'date'">
                   {{
                     rowData[col.field] != null
@@ -382,7 +378,6 @@
                   }}
                 </span>
 
-                <!-- DateTime -->
                 <span *ngIf="col.type === 'datetime'">
                   {{
                     rowData[col.field] != null
@@ -391,7 +386,6 @@
                   }}
                 </span>
 
-                <!-- Boolean -->
                 <span *ngIf="col.type === 'boolean'">
                   <ng-container *ngIf="col.renderBoolean">
                     {{ col.renderBoolean(rowData[col.field]) }}
@@ -401,12 +395,11 @@
                       class="badge-status"
                       [ngClass]="rowData[col.field] ? 'status-true' : 'status-false'"
                     >
-                      {{ rowData[col.field] ? 'Có' : 'Không' }}
+                      {{ rowData[col.field] ? ('common.yes' | translate) : ('common.no' | translate) }}
                     </span>
                   </ng-container>
                 </span>
 
-                <!-- Badge / Tag -->
                 <span *ngIf="col.type === 'badge' || col.type === 'tag'">
                   <span
                     *ngIf="rowData[col.field] != null"
@@ -428,7 +421,6 @@
               </ng-container>
             </td>
 
-            <!-- Actions Cell -->
             <td
               *ngIf="rowActions && rowActions.length > 0"
               [style.right.px]="rowActionsFrozen ? 0 : null"
@@ -484,14 +476,16 @@
     </table>
   </div>
 
-  <!-- PAGINATION -->
   <div *ngIf="pagination && !loading && data.length > 0" class="table-pagination-container">
     <div class="pagination-summary">
-      Hiển thị {{ displayedFrom }} - {{ displayedTo }} của {{ pagination.total }} bản ghi
+      {{
+        'table.paginationSummary'
+          | translate: { from: displayedFrom, to: displayedTo, total: pagination.total }
+      }}
     </div>
     <div class="pagination-actions">
       <div class="page-size-selector">
-        <span class="selector-label">Số dòng:</span>
+        <span class="selector-label">{{ 'table.pageSizeLabel' | translate }}</span>
         <nz-select
           [ngModel]="pagination.pageSize.toString()"
           (ngModelChange)="onPageSizeChange(+$event)"
@@ -509,22 +503,54 @@
           nz-button
           nzType="default"
           size="small"
-          class="h-8 nav-btn"
-          (click)="onPageChangeClick(pagination.current - 1)"
+          class="h-8 nav-btn nav-btn-icon"
+          (click)="onPageChangeClick(1)"
           [disabled]="pagination.current === 1"
+          nz-tooltip
+          [nzTooltipTitle]="'table.firstPage' | translate"
         >
-          Trước
+          <span nz-icon nzType="double-left" nzTheme="outline"></span>
         </button>
-        <span class="pagination-page-indicator"> {{ pagination.current }} / {{ totalPages }} </span>
+
         <button
           nz-button
           nzType="default"
           size="small"
-          class="h-8 nav-btn"
+          class="h-8 nav-btn nav-btn-icon"
+          (click)="onPageChangeClick(pagination.current - 1)"
+          [disabled]="pagination.current === 1"
+          nz-tooltip
+          [nzTooltipTitle]="'table.prevPage' | translate"
+        >
+          <span nz-icon nzType="left-circle" nzTheme="outline"></span>
+        </button>
+
+        <span class="pagination-page-indicator"> {{ pagination.current }} / {{ totalPages }} </span>
+
+        <button
+          nz-button
+          nzType="default"
+          size="small"
+          class="h-8 nav-btn nav-btn-icon"
           (click)="onPageChangeClick(pagination.current + 1)"
           [disabled]="pagination.current * pagination.pageSize >= pagination.total"
+          nz-tooltip
+          [nzTooltipTitle]="'table.nextPage' | translate"
         >
-          Sau
+          <span nz-icon nzType="right-circle" nzTheme="outline"></span>
+        </button>
+
+        <button
+          nz-button
+          nzType="default"
+          size="small"
+          class="h-8 nav-btn nav-btn-icon"
+          (click)="onPageChangeClick(totalPages)"
+          [disabled]="pagination.current * pagination.pageSize >= pagination.total"
+          nz-tooltip
+          [nzTooltipTitle]="'table.lastPage' | translate"
+        >
+          <span nz-icon nzType="double-right" nzTheme="outline"></span>
         </button>
       </div>
     </div>

@@ -1,9 +1,13 @@
-<nz-tabs [nzSelectedIndex]="activeTabKey === 'part' ? 0 : 1" (nzSelectedIndexChange)="onTabChange($event)" nzType="card" nzSize="large">
-  <nz-tab nzTitle="Bộ Phận">
+<nz-tabs
+  [nzSelectedIndex]="activeTabKey === 'part' ? 0 : 1"
+  (nzSelectedIndexChange)="onTabChange($event)"
+  nzType="card"
+>
+  <nz-tab [nzTitle]="'organization.part.tabPart' | translate">
     <app-part></app-part>
   </nz-tab>
 
-  <nz-tab nzTitle="Danh Mục Bộ Phận">
+  <nz-tab [nzTitle]="'organization.partMaster.tabPartMaster' | translate">
     <app-part-master></app-part-master>
   </nz-tab>
 </nz-tabs>

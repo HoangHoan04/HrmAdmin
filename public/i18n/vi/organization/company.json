@@ -1,7 +1,8 @@
 {
   "organization": {
     "company": {
-      "title": "Quản lý doanh nghiệp",
+      "entityName": "công ty",
+      "title": "Quản lý công ty",
       "code": "Mã công ty",
       "name": "Tên công ty",
       "address": "Địa chỉ trụ sở",
@@ -23,7 +24,7 @@
       "deactivate": "Ngưng hoạt động",
       "addTitle": "Thêm Công Ty Mới",
       "editTitle": "Cập Nhật Thông Tin Công Ty",
-      "detailTitle": "Chi Tiết Doanh Nghiệp",
+      "detailTitle": "Chi Tiết Công Ty",
       "backToList": "Danh sách công ty",
       "codeRequired": "Vui lòng nhập mã công ty!",
       "nameRequired": "Vui lòng nhập tên công ty!",
@@ -48,7 +49,7 @@
       "operatingStatus": "Trạng thái hoạt động DN",
       "legalRepresentative": "Người đại diện pháp luật",
       "legalRepresentativePosition": "Chức danh người đại diện",
-      "companyType": "Loại hình doanh nghiệp",
+      "companyType": "Loại hình công ty",
       "industry": "Ngành nghề kinh doanh",
       "prefixMaleCode": "Tiền tố mã NV nam",
       "prefixFemaleCode": "Tiền tố mã NV nữ",
@@ -69,6 +70,8 @@
       "tabActivityLog": "Lịch sử hoạt động",
       "tabBranches": "Chi nhánh",
       "tabChildCompanies": "Công ty con",
+      "manageBranches": "Quản lý chi nhánh theo công ty",
+      "addBranch": "Thêm chi nhánh",
       "noBranches": "Chưa có chi nhánh thuộc công ty này.",
       "noChildCompanies": "Chưa có công ty con."
     }

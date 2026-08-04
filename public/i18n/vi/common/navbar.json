@@ -6,6 +6,9 @@
     "profile": "Hồ sơ",
     "settings": "Cài đặt",
     "logout": "Đăng xuất",
-    "changeTheme": "Đổi giao diện"
+    "changeTheme": "Đổi giao diện",
+    "changePassword": "Đổi mật khẩu",
+    "changePasswordTitle": "Đổi mật khẩu tài khoản",
+    "changeLanguage": "Đổi ngôn ngữ"
   }
 }

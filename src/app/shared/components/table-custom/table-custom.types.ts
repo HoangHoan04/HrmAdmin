@@ -17,15 +17,7 @@ export interface TableColumn<T = any> {
   align?: 'left' | 'center' | 'right';
   hidden?: boolean;
   resizable?: boolean;
-  type?:
-  | 'text'
-  | 'number'
-  | 'currency'
-  | 'date'
-  | 'datetime'
-  | 'boolean'
-  | 'badge'
-  | 'tag';
+  type?: 'text' | 'number' | 'currency' | 'date' | 'datetime' | 'boolean' | 'badge' | 'tag';
   dateFormat?: string;
   currencySymbol?: string;
   numberFormat?: string;
@@ -79,12 +71,13 @@ export interface TableAction {
   subActions?: TableAction[];
   acceptFiles?: string;
   onFileSelect?: (file: File) => void;
+  __open?: boolean;
 }
 
 export const CommonActions = {
   create: (onClick?: () => void): TableAction => ({
     key: 'create',
-    label: "common.actions.create",
+    label: 'common.actions.create',
     icon: 'plus-circle',
     severity: 'success',
     onClick,

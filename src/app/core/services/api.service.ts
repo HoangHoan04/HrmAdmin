@@ -15,7 +15,13 @@ export class ApiService {
   get AUTH() { return this.endpoints.AUTH; }
   get COMPANY() { return this.endpoints.COMPANY; }
   get BRANCH() { return this.endpoints.BRANCH; }
+  get DEPARTMENT() { return this.endpoints.DEPARTMENT; }
+  get PART() { return this.endpoints.PART; }
+  get PART_MASTER() { return this.endpoints.PART_MASTER; }
+  get POSITION() { return this.endpoints.POSITION; }
+  get POSITION_MASTER() { return this.endpoints.POSITION_MASTER; }
   get ACTION_LOG() { return this.endpoints.ACTION_LOG; }
+  get ORGANIZATION() { return this.endpoints.ORGANIZATION; }
 
   get<T>(url: string): Observable<T> {
     return this.http.get<T>(url);

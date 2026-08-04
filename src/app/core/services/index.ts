@@ -1,3 +1,4 @@
+export * from './i18n-message.service';
 export * from './api.service';
 export * from './auth.service';
 export * from './dashboard.service';

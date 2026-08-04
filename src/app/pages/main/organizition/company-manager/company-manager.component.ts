@@ -1,12 +1,13 @@
 import { enumData } from '@/app/core/constants/enums/enumData';
+import { Company } from '@/app/core/models/organization/company.models';
 import { ActionConfirmService } from '@/app/shared/services/action-confirm.service';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { ROUTES_CONFIG } from '../../../../core/constants/common/routes.config';
-import { PagedResult } from '../../../../core/models/common.models';
-import { Company, CompanyImportResult } from '../../../../core/models/organization.models';
+import { ImportResult, PagedResult } from '../../../../core/models/common.models';
 import { ApiService } from '../../../../core/services/api.service';
+import { I18nMessageService } from '../../../../core/services/i18n-message.service';
 import { downloadBlob, extractFileName } from '../../../../core/utils/file.util';
 import {
   CommonFilterActions,
@@ -30,6 +31,8 @@ import {
   styleUrls: ['./company-manager.component.scss'],
 })
 export class CompanyManagerComponent implements OnInit {
+  private readonly ENTITY_KEY = 'organization.company.entityName';
+
   data: (Company & { status?: boolean })[] = [];
   loading = false;
   excelLoading = false;
@@ -133,17 +136,27 @@ export class CompanyManagerComponent implements OnInit {
       onClick: (record) => this.openEdit(record),
     },
     {
-      key: 'toggleStatus',
-      icon: 'sync',
-      tooltip: 'organization.company.toggleStatus',
-      severity: 'warning',
-      onClick: (record) => this.toggleStatus(record),
+      key: 'activate',
+      icon: 'check-circle',
+      tooltip: 'organization.company.activate',
+      severity: 'success',
+      visible: (record) => record.isDeleted === true,
+      onClick: (record) => this.activateCompany(record),
+    },
+    {
+      key: 'deactivate',
+      icon: 'stop',
+      tooltip: 'organization.company.deactivate',
+      severity: 'danger',
+      visible: (record) => record.isDeleted === false,
+      onClick: (record) => this.deactivateCompany(record),
     },
   ];
 
   constructor(
     private readonly router: Router,
     private readonly message: NzMessageService,
+    private readonly i18n: I18nMessageService,
     private readonly apiService: ApiService,
     private readonly cdr: ChangeDetectorRef,
     private readonly actionConfirm: ActionConfirmService,
@@ -185,7 +198,7 @@ export class CompanyManagerComponent implements OnInit {
           this.cdr.markForCheck();
         },
         error: (err: any) => {
-          this.message.error(err.error || 'Không thể tải danh sách doanh nghiệp.');
+          this.message.error(this.i18n.loadListFailed(this.ENTITY_KEY, err.error));
           this.loading = false;
           this.syncFilterActionsLoading();
           this.cdr.markForCheck();
@@ -220,36 +233,62 @@ export class CompanyManagerComponent implements OnInit {
     this.loadData();
   }
 
-  async toggleStatus(company: Company): Promise<void> {
-    if (!company.id) return;
+  async activateCompany(company: Company): Promise<void> {
+    if (!company.id) {
+      this.message.error(this.i18n.entityNotFound(this.ENTITY_KEY));
+      return;
+    }
 
-    const confirmed = company.isDeleted
-      ? await this.actionConfirm.confirmActivate('công ty', company.name)
-      : await this.actionConfirm.confirmDeactivate('công ty', company.name);
-
+    const confirmed = await this.actionConfirm.confirmActivate(this.ENTITY_KEY, company.name);
     if (!confirmed) return;
 
-    const endpoint = company.isDeleted
-      ? this.apiService.COMPANY.ACTIVATE
-      : this.apiService.COMPANY.DEACTIVATE;
-
-    this.apiService.post<boolean>(endpoint, { id: company.id }).subscribe({
+    this.apiService.post<boolean>(this.apiService.COMPANY.ACTIVATE, { id: company.id }).subscribe({
       next: (success) => {
         if (success) {
-          this.message.success(
-            company.isDeleted
-              ? 'Kích hoạt hoạt động công ty thành công!'
-              : 'Ngưng hoạt động công ty thành công!',
-          );
+          this.message.success(this.i18n.activateSuccess(this.ENTITY_KEY, company.name));
           this.loadData();
         } else {
-          this.message.error('Không thể thay đổi trạng thái.');
+          this.message.error(this.i18n.activateFailed(this.ENTITY_KEY));
         }
       },
       error: (err: any) => {
-        this.message.error(err.error || 'Có lỗi xảy ra.');
+        this.message.error(this.i18n.activateError(this.ENTITY_KEY, err.error));
       },
     });
+  }
+
+  async deactivateCompany(company: Company): Promise<void> {
+    if (!company.id) {
+      this.message.error(this.i18n.entityNotFound(this.ENTITY_KEY));
+      return;
+    }
+
+    const confirmed = await this.actionConfirm.confirmDeactivate(this.ENTITY_KEY, company.name);
+    if (!confirmed) return;
+
+    this.apiService
+      .post<boolean>(this.apiService.COMPANY.DEACTIVATE, { id: company.id })
+      .subscribe({
+        next: (success) => {
+          if (success) {
+            this.message.success(this.i18n.deactivateSuccess(this.ENTITY_KEY, company.name));
+            this.loadData();
+          } else {
+            this.message.error(this.i18n.deactivateFailed(this.ENTITY_KEY));
+          }
+        },
+        error: (err: any) => {
+          this.message.error(this.i18n.deactivateError(this.ENTITY_KEY, err.error));
+        },
+      });
+  }
+
+  async toggleStatus(company: Company): Promise<void> {
+    if (company.isDeleted) {
+      await this.activateCompany(company);
+    } else {
+      await this.deactivateCompany(company);
+    }
   }
 
   openCreateModal(): void {
@@ -278,7 +317,7 @@ export class CompanyManagerComponent implements OnInit {
       next: (response) => {
         const blob = response.body;
         if (!blob) {
-          this.message.error('Không thể tải file mẫu Excel.');
+          this.message.error(this.i18n.excelTemplateFailed());
           this.excelLoading = false;
           return;
         }
@@ -287,11 +326,11 @@ export class CompanyManagerComponent implements OnInit {
           'Mau_Import_Cong_Ty.xlsx',
         );
         downloadBlob(blob, fileName);
-        this.message.success('Tải file mẫu Excel thành công!');
+        this.message.success(this.i18n.excelTemplateSuccess());
         this.excelLoading = false;
       },
       error: () => {
-        this.message.error('Không thể tải file mẫu Excel.');
+        this.message.error(this.i18n.excelTemplateFailed());
         this.excelLoading = false;
       },
     });
@@ -299,28 +338,24 @@ export class CompanyManagerComponent implements OnInit {
 
   uploadFile(file: File): void {
     this.excelLoading = true;
-    this.apiService
-      .uploadFile<CompanyImportResult>(this.apiService.COMPANY.EXCEL_IMPORT, file)
-      .subscribe({
-        next: (result) => {
-          this.excelLoading = false;
-          if (result.errorCount > 0) {
-            this.message.warning(
-              `Import hoàn tất: ${result.successCount}/${result.totalRows} thành công. ${result.errorCount} lỗi.`,
-            );
-            if (result.errors?.length) {
-              console.warn('Company import errors:', result.errors);
-            }
-          } else {
-            this.message.success(`Import Excel thành công ${result.successCount} công ty!`);
+    this.apiService.uploadFile<ImportResult>(this.apiService.COMPANY.EXCEL_IMPORT, file).subscribe({
+      next: (result) => {
+        this.excelLoading = false;
+        if (result.errorCount > 0) {
+          this.message.warning(this.i18n.excelImportPartial(result.successCount, result.totalRows, result.errorCount));
+          if (result.errors?.length) {
+            console.warn('Company import errors:', result.errors);
           }
-          this.loadData();
-        },
-        error: (err: any) => {
-          this.excelLoading = false;
-          this.message.error(err.error || 'Import Excel thất bại.');
-        },
-      });
+        } else {
+          this.message.success(this.i18n.excelImportSuccess(result.successCount, this.ENTITY_KEY));
+        }
+        this.loadData();
+      },
+      error: (err: any) => {
+        this.excelLoading = false;
+        this.message.error(this.i18n.excelImportFailed(err.error));
+      },
+    });
   }
 
   exportExcel(): void {
@@ -337,7 +372,7 @@ export class CompanyManagerComponent implements OnInit {
       next: (response) => {
         const blob = response.body;
         if (!blob) {
-          this.message.error('Không thể xuất file Excel.');
+          this.message.error(this.i18n.excelExportFailed());
           this.excelLoading = false;
           return;
         }
@@ -346,11 +381,11 @@ export class CompanyManagerComponent implements OnInit {
           `Danh_Sach_Cong_Ty_${new Date().getTime()}.xlsx`,
         );
         downloadBlob(blob, fileName);
-        this.message.success('Xuất Excel thành công!');
+        this.message.success(this.i18n.excelExportSuccess());
         this.excelLoading = false;
       },
       error: () => {
-        this.message.error('Không thể xuất file Excel.');
+        this.message.error(this.i18n.excelExportFailed());
         this.excelLoading = false;
       },
     });

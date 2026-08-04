@@ -1,6 +1,7 @@
 {
   "organization": {
     "company": {
+      "entityName": "company",
       "title": "Company Management",
       "code": "Company Code",
       "name": "Company Name",
@@ -69,6 +70,8 @@
       "tabActivityLog": "Activity History",
       "tabBranches": "Branches",
       "tabChildCompanies": "Child Companies",
+      "manageBranches": "Manage branches by company",
+      "addBranch": "Add branch",
       "noBranches": "No branches under this company.",
       "noChildCompanies": "No child companies."
     }

@@ -88,6 +88,38 @@
     "companyWebsite": "Company Website",
     "copyrightYear": "Copyright Year",
     "icpNumber": "ICP License",
-    "icpLink": "ICP Link"
+    "icpLink": "ICP Link",
+    "layout": {
+      "horizontal": "Horizontal",
+      "detached": "Detached",
+      "modern": "Modern",
+      "twoColumn": "Two column",
+      "hovered": "Hovered menu",
+      "boxed": "Boxed",
+      "horizontalSingle": "Horizontal single",
+      "horizontalOverlay": "Horizontal overlay",
+      "horizontalBox": "Horizontal box",
+      "menuAside": "Menu aside",
+      "transparent": "Transparent",
+      "withoutHeader": "Without header",
+      "rtl": "RTL"
+    },
+    "transition": {
+      "fade": "Fade",
+      "fadeSide": "Fade side",
+      "fadeUp": "Fade up",
+      "fadeDown": "Fade down",
+      "fadeZoom": "Fade zoom",
+      "slideLeft": "Slide left",
+      "slideRight": "Slide right",
+      "zoomIn": "Zoom in",
+      "zoomOut": "Zoom out",
+      "rotate": "Rotate",
+      "flipX": "Flip X",
+      "flipY": "Flip Y",
+      "bounce": "Bounce",
+      "slideUp": "Slide up",
+      "slideDown": "Slide down"
+    }
   }
 }

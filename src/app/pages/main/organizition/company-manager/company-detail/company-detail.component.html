@@ -46,19 +46,30 @@
       <nz-tab [nzTitle]="'organization.company.tabActivityLog' | translate">
         <div class="tab-content">
           <app-action-log
-            entityName="Company"
+            entityName="CompanyEntity"
             [entityId]="id ?? undefined"
-            title="Lịch sử thao tác"
+            [title]="'actionLog.title' | translate"
           ></app-action-log>
         </div>
       </nz-tab>
 
       <nz-tab [nzTitle]="'organization.company.tabBranches' | translate">
         <div class="tab-content">
+          <div class="tab-toolbar">
+            <button nz-button nzType="default" (click)="viewAllBranches()">
+              <i nz-icon nzType="unordered-list"></i>
+              {{ 'organization.company.manageBranches' | translate }}
+            </button>
+            <button nz-button nzType="primary" (click)="addBranch()">
+              <i nz-icon nzType="plus"></i>
+              {{ 'organization.company.addBranch' | translate }}
+            </button>
+          </div>
           <app-table-custom
             [id]="'company-detail-branches'"
             [data]="branches"
             [columns]="branchColumns"
+            [rowActions]="branchRowActions"
             [loading]="branchesLoading"
             [stripedRows]="true"
             [showIndexList]="true"

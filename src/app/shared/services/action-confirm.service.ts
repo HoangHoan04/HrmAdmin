@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
 
 export interface ActionConfirmOptions {
@@ -14,15 +15,18 @@ export interface ActionConfirmOptions {
   providedIn: 'root',
 })
 export class ActionConfirmService {
-  constructor(private readonly modal: NzModalService) {}
+  constructor(
+    private readonly modal: NzModalService,
+    private readonly translate: TranslateService,
+  ) {}
 
   confirm(options: ActionConfirmOptions): Promise<boolean> {
     return new Promise((resolve) => {
       this.modal.confirm({
         nzTitle: options.title,
         nzContent: options.content,
-        nzOkText: options.okText ?? 'Xác nhận',
-        nzCancelText: options.cancelText ?? 'Hủy',
+        nzOkText: options.okText ?? this.translate.instant('common.messages.confirm'),
+        nzCancelText: options.cancelText ?? this.translate.instant('common.messages.cancel'),
         nzOkType: options.okType ?? 'primary',
         nzIconType: options.icon === 'warning' ? 'exclamation-circle' : 'question-circle',
         nzOnOk: () => resolve(true),
@@ -31,21 +35,29 @@ export class ActionConfirmService {
     });
   }
 
-  confirmActivate(entityName: string, itemName: string): Promise<boolean> {
+  confirmActivate(entityI18nKey: string, itemName: string): Promise<boolean> {
+    const entity = this.translate.instant(entityI18nKey);
     return this.confirm({
-      title: 'Xác nhận kích hoạt',
-      content: `Bạn có chắc chắn muốn kích hoạt ${entityName} "${itemName}"?`,
-      okText: 'Kích hoạt',
+      title: this.translate.instant('common.messages.confirmActivate'),
+      content: this.translate.instant('common.messages.activateContent', {
+        entity,
+        name: itemName,
+      }),
+      okText: this.translate.instant('common.messages.activateAction'),
       okType: 'primary',
       icon: 'confirm',
     });
   }
 
-  confirmDeactivate(entityName: string, itemName: string): Promise<boolean> {
+  confirmDeactivate(entityI18nKey: string, itemName: string): Promise<boolean> {
+    const entity = this.translate.instant(entityI18nKey);
     return this.confirm({
-      title: 'Xác nhận ngưng hoạt động',
-      content: `Bạn có chắc chắn muốn ngưng hoạt động ${entityName} "${itemName}"? Dữ liệu sẽ được giữ lại trong hệ thống.`,
-      okText: 'Ngưng hoạt động',
+      title: this.translate.instant('common.messages.confirmDeactivate'),
+      content: this.translate.instant('common.messages.deactivateContentLong', {
+        entity,
+        name: itemName,
+      }),
+      okText: this.translate.instant('common.messages.deactivateAction'),
       okType: 'primary',
       icon: 'warning',
     });

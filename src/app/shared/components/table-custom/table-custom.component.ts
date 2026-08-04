@@ -28,7 +28,7 @@ export class TableCustomComponent implements OnInit, OnChanges, OnDestroy {
   @Input() data: any[] = [];
   @Input() columns: TableColumn[] = [];
   @Input() loading: boolean = false;
-  @Input() emptyText: string = 'Không có dữ liệu';
+  @Input() emptyText: string = 'common.noData';
   @Input() dataKey: string = 'id';
   @Input() pagination?: PaginationConfig;
   @Input() enableSelection: boolean = false;
@@ -95,6 +95,10 @@ export class TableCustomComponent implements OnInit, OnChanges, OnDestroy {
     if (changes['columns']) {
       this.syncColumnSettings();
     }
+  }
+
+  onDropdownVisibleChange(visible: boolean, act: any): void {
+    act.__open = visible;
   }
 
   ngOnDestroy(): void {

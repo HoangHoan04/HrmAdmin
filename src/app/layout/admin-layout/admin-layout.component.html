@@ -1,16 +1,14 @@
 <nz-layout class="admin-layout" [style.--font-family]="s.fontFamily">
-  <!-- Page progress bar -->
   @if (s.pageProgress && isNavigating) {
     <div class="page-progress-bar">
       <div class="page-progress-bar-value"></div>
     </div>
   }
 
-  <!-- Full page loader overlay -->
   @if (s.pageLoader && isNavigating) {
     <div class="page-loader-overlay">
       <div class="page-loader-spinner-wrap">
-        <nz-spin nzSimple nzSize="large"></nz-spin>
+        <nz-spin nzSimple></nz-spin>
         <span class="page-loader-text">Đang tải trang...</span>
       </div>
     </div>
@@ -20,9 +18,9 @@
   <nz-layout class="admin-right">
     <app-navbar></app-navbar>
     <app-tabs-bar></app-tabs-bar>
-    <nz-content 
-      class="admin-content" 
-      [class.page-transition-active]="s.pageTransition" 
+    <nz-content
+      class="admin-content"
+      [class.page-transition-active]="s.pageTransition"
       [attr.data-effect]="s.transitionEffect"
       [attr.data-transition-state]="currentTransitionState"
     >
@@ -39,4 +37,3 @@
   </nz-layout>
 </nz-layout>
 <app-config-setting></app-config-setting>
-

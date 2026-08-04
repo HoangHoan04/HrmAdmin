@@ -1,0 +1,23 @@
+{
+  "table": {
+    "densityCompact": "Xem thu gọn",
+    "densityDefault": "Xem vừa phải",
+    "densityComfortable": "Xem rộng rãi",
+    "columnSettings": "Cài đặt hiển thị cột",
+    "prevPage": "Trang trước",
+    "nextPage": "Trang sau",
+    "lastPage": "Trang cuối",
+    "languageVi": "Tiếng Việt",
+    "languageEn": "English",
+    "fontWeightLight": "Light",
+    "fontWeightNormal": "Normal",
+    "fontWeightMedium": "Medium",
+    "fontWeightSemibold": "Semibold",
+    "notAvailable": "Không có",
+    "refresh": "Làm mới",
+    "firstPage": "Trang đầu",
+    "columnConfigTitle": "Cột hiển thị",
+    "paginationSummary": "Hiển thị {{from}} - {{to}} của {{total}} bản ghi",
+    "pageSizeLabel": "Số dòng:"
+  }
+}

@@ -3,8 +3,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { ROUTES_CONFIG } from '../../../../../core/constants/common/routes.config';
-import { Company, CompanySelectBoxDto } from '../../../../../core/models/organization.models';
+import { Company, CompanySelectBoxDto } from '../../../../../core/models';
 import { ApiService } from '../../../../../core/services/api.service';
+import { I18nMessageService } from '../../../../../core/services/i18n-message.service';
 
 @Component({
   standalone: false,
@@ -25,6 +26,7 @@ export class AddOrUpdateCompanyComponent implements OnInit {
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly message: NzMessageService,
+    private readonly i18n: I18nMessageService,
     private readonly apiService: ApiService,
   ) {}
 
@@ -90,7 +92,7 @@ export class AddOrUpdateCompanyComponent implements OnInit {
           this.parentCompanies = items;
         },
         error: () => {
-          this.message.error('Không thể tải danh sách công ty mẹ.');
+          this.message.error(this.i18n.instant('common.messages.loadParentCompanyFailed'));
         },
       });
   }
@@ -141,7 +143,7 @@ export class AddOrUpdateCompanyComponent implements OnInit {
         this.loading = false;
       },
       error: (err: any) => {
-        this.message.error(err.error || 'Không thể tải thông tin chi tiết công ty.');
+        this.message.error(err.error || this.i18n.loadDetailFailed(err.error));
         this.goBack();
       },
     });
@@ -177,13 +179,11 @@ export class AddOrUpdateCompanyComponent implements OnInit {
 
     this.apiService.post<any>(endpoint, payload).subscribe({
       next: () => {
-        this.message.success(
-          this.isEdit ? 'Cập nhật thông tin công ty thành công!' : 'Thêm mới công ty thành công!',
-        );
+        this.message.success(this.isEdit ? this.i18n.updateSuccess() : this.i18n.createSuccess());
         this.goBack();
       },
       error: (err: any) => {
-        this.message.error(err.error || 'Lưu thông tin thất bại.');
+        this.message.error(this.i18n.genericError(err.error));
         this.submitting = false;
       },
     });

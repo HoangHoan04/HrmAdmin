@@ -4,8 +4,18 @@
     "createdByName": "Performed By",
     "actionType": "Action",
     "createdNote": "Note",
-    "title": "Activity History",
+    "title": "Activity Log",
     "empty": "No activity history",
-    "viewDetail": "View change details"
+    "viewDetail": "View change details",
+    "modalTitle": "Data Change Details",
+    "performedBy": "Performed by",
+    "timestamp": "Timestamp",
+    "action": "Action",
+    "note": "Note",
+    "oldValue": "Old data (oldValue)",
+    "newValue": "New data (newValue)",
+    "noOldValue": "No old data or record was newly created.",
+    "noNewValue": "No new data was updated.",
+    "close": "Close"
   }
 }

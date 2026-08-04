@@ -13,7 +13,6 @@
     </div>
 
     <div class="config-body">
-      <!-- GENERAL -->
       <section class="config-section">
         <h4 class="config-section-title">{{ 'configSetting.tab.general' | translate }}</h4>
 
@@ -24,8 +23,8 @@
             (ngModelChange)="update({ language: $event })"
             style="width: 200px"
           >
-            <nz-option nzValue="vi" nzLabel="Tiếng Việt"></nz-option>
-            <nz-option nzValue="en" nzLabel="English"></nz-option>
+            <nz-option nzValue="vi" [nzLabel]="'table.languageVi' | translate"></nz-option>
+            <nz-option nzValue="en" [nzLabel]="'table.languageEn' | translate"></nz-option>
           </nz-select>
         </div>
 
@@ -59,7 +58,6 @@
               'configSetting.watermarkText' | translate
             }}</span>
             <input
-              nzSize="large"
               nz-input
               [(ngModel)]="s.watermarkText"
               (ngModelChange)="update({ watermarkText: $event })"
@@ -71,7 +69,6 @@
 
       <nz-divider></nz-divider>
 
-      <!-- INTERFACE -->
       <section class="config-section">
         <h4 class="config-section-title">{{ 'configSetting.tab.interface' | translate }}</h4>
 
@@ -143,10 +140,10 @@
             (ngModelChange)="update({ fontWeight: $event })"
             style="width: 200px"
           >
-            <nz-option nzValue="light" nzLabel="Light"></nz-option>
-            <nz-option nzValue="normal" nzLabel="Normal"></nz-option>
-            <nz-option nzValue="medium" nzLabel="Medium"></nz-option>
-            <nz-option nzValue="semibold" nzLabel="Semibold"></nz-option>
+            <nz-option nzValue="light" [nzLabel]="'table.fontWeightLight' | translate"></nz-option>
+            <nz-option nzValue="normal" [nzLabel]="'table.fontWeightNormal' | translate"></nz-option>
+            <nz-option nzValue="medium" [nzLabel]="'table.fontWeightMedium' | translate"></nz-option>
+            <nz-option nzValue="semibold" [nzLabel]="'table.fontWeightSemibold' | translate"></nz-option>
           </nz-select>
         </div>
 
@@ -206,6 +203,7 @@
                 class="color-swatch"
                 [class.active]="s.primaryColor === c.value"
                 [style.background]="c.value"
+                [attr.title]="colorLabel(c.name)"
                 (click)="update({ primaryColor: c.value })"
               >
                 @if (s.primaryColor === c.value) {
@@ -216,7 +214,6 @@
           </div>
         </div>
 
-        <!-- Navbar Color -->
         <div class="config-color-section">
           <div class="config-row">
             <span class="config-label">{{ 'configSetting.navbarColor' | translate }}</span>
@@ -266,7 +263,6 @@
           }
         </div>
 
-        <!-- Sidebar Color -->
         <div class="config-color-section">
           <div class="config-row">
             <span class="config-label">{{ 'configSetting.sidebarColor' | translate }}</span>
@@ -319,7 +315,6 @@
 
       <nz-divider></nz-divider>
 
-      <!-- LAYOUT -->
       <section class="config-section">
         <h4 class="config-section-title">{{ 'configSetting.tab.layout' | translate }}</h4>
 
@@ -330,8 +325,8 @@
             (ngModelChange)="update({ layoutMode: $event })"
             style="width: 200px"
           >
-            @for (m of layoutModes; track $index) {
-              <nz-option [nzValue]="m" [nzLabel]="m | uppercase"></nz-option>
+            @for (m of layoutModes; track m.value) {
+              <nz-option [nzValue]="m.value" [nzLabel]="m.labelKey | translate"></nz-option>
             }
           </nz-select>
         </div>
@@ -343,8 +338,8 @@
             (ngModelChange)="update({ sidebarPosition: $event })"
             style="width: 200px"
           >
-            <nz-option nzValue="left" nzLabel="Trái"></nz-option>
-            <nz-option nzValue="right" nzLabel="Phải"></nz-option>
+            <nz-option nzValue="left" [nzLabel]="'configSetting.positionLeft' | translate"></nz-option>
+            <nz-option nzValue="right" [nzLabel]="'configSetting.positionRight' | translate"></nz-option>
           </nz-select>
         </div>
 
@@ -369,7 +364,6 @@
 
       <nz-divider></nz-divider>
 
-      <!-- SIDEBAR -->
       <section class="config-section">
         <h4 class="config-section-title">{{ 'configSetting.tab.sidebar' | translate }}</h4>
 
@@ -426,7 +420,6 @@
 
       <nz-divider></nz-divider>
 
-      <!-- TABS -->
       <section class="config-section">
         <h4 class="config-section-title">{{ 'configSetting.tab.tabs' | translate }}</h4>
 
@@ -477,8 +470,8 @@
             (ngModelChange)="update({ tabStyle: $event })"
             style="width: 200px"
           >
-            @for (t of tabStyles; track $index) {
-              <nz-option [nzValue]="t" [nzLabel]="t | titlecase"></nz-option>
+            @for (t of tabStyles; track t.value) {
+              <nz-option [nzValue]="t.value" [nzLabel]="t.labelKey | translate"></nz-option>
             }
           </nz-select>
         </div>
@@ -498,7 +491,6 @@
 
       <nz-divider></nz-divider>
 
-      <!-- EFFECTS -->
       <section class="config-section">
         <h4 class="config-section-title">{{ 'configSetting.tab.effects' | translate }}</h4>
 
@@ -533,8 +525,8 @@
             (ngModelChange)="update({ transitionEffect: $event })"
             style="width: 200px"
           >
-            @for (e of transitionEffects; track $index) {
-              <nz-option [nzValue]="e" [nzLabel]="e"></nz-option>
+            @for (e of transitionEffects; track e.value) {
+              <nz-option [nzValue]="e.value" [nzLabel]="e.labelKey | translate"></nz-option>
             }
           </nz-select>
         </div>
@@ -542,7 +534,6 @@
 
       <nz-divider></nz-divider>
 
-      <!-- FOOTER -->
       <section class="config-section">
         <h4 class="config-section-title">{{ 'configSetting.tab.footer' | translate }}</h4>
 
@@ -567,7 +558,6 @@
             'configSetting.companyName' | translate
           }}</span>
           <input
-            nzSize="large"
             nz-input
             [(ngModel)]="s.companyName"
             (ngModelChange)="update({ companyName: $event })"
@@ -580,7 +570,6 @@
             'configSetting.companyWebsite' | translate
           }}</span>
           <input
-            nzSize="large"
             nz-input
             [(ngModel)]="s.companyWebsite"
             (ngModelChange)="update({ companyWebsite: $event })"
@@ -593,7 +582,6 @@
             'configSetting.copyrightYear' | translate
           }}</span>
           <input
-            nzSize="large"
             nz-input
             [(ngModel)]="s.copyrightYear"
             (ngModelChange)="update({ copyrightYear: $event })"
@@ -606,7 +594,6 @@
             'configSetting.icpNumber' | translate
           }}</span>
           <input
-            nzSize="large"
             nz-input
             [(ngModel)]="s.icpNumber"
             (ngModelChange)="update({ icpNumber: $event })"
@@ -619,7 +606,6 @@
             'configSetting.icpLink' | translate
           }}</span>
           <input
-            nzSize="large"
             nz-input
             [(ngModel)]="s.icpLink"
             (ngModelChange)="update({ icpLink: $event })"
@@ -630,22 +616,16 @@
     </div>
 
     <div class="config-footer">
-      <button nz-button nzSize="large" (click)="reset()">
+      <button nz-button (click)="reset()">
         <span nz-icon nzType="reload" nzTheme="outline"></span>
         {{ 'configSetting.reset' | translate }}
       </button>
-      <button nz-button nzSize="large" (click)="copyConfig()">
+      <button nz-button (click)="copyConfig()">
         <span nz-icon nzType="copy" nzTheme="outline"></span>
         {{ 'configSetting.copyConfig' | translate }}
       </button>
-      <button
-        nz-button
-        nzSize="large"
-        nzDanger
-        (click)="clearCacheAndLogout()"
-        class="config-logout-btn"
-      >
-        <span nz-icon nzType="logout" nzTheme="outline"></span>
+      <button nz-button (click)="clearCacheAndLogout()" class="ant-btn-danger">
+        <span nz-icon nzType="logout" nzTheme="fill"></span>
         {{ 'configSetting.clearCacheLogout' | translate }}
       </button>
     </div>

@@ -1,0 +1,45 @@
+{
+  "enums": {
+    "notAvailable": "N/A",
+    "statusFilter": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "all": "All"
+    },
+    "gender": {
+      "male": "Male",
+      "female": "Female",
+      "other": "Other"
+    },
+    "daysOfWeek": {
+      "mon": "Monday",
+      "tue": "Tuesday",
+      "wed": "Wednesday",
+      "thu": "Thursday",
+      "fri": "Friday",
+      "sat": "Saturday",
+      "sun": "Sunday"
+    },
+    "actionType": {
+      "create": "Create",
+      "approve": "Approve",
+      "activate": "Activate",
+      "login": "Login",
+      "update": "Update",
+      "edit": "Edit",
+      "delete": "Delete",
+      "reject": "Reject",
+      "cancel": "Cancel",
+      "deactivate": "Deactivate",
+      "logout": "Logout",
+      "sync": "Sync",
+      "sendApprove": "Submit for approval",
+      "restore": "Restore",
+      "register": "Register",
+      "importExcel": "Import Excel",
+      "uploadFile": "Upload file",
+      "lock": "Lock",
+      "unlock": "Unlock"
+    }
+  }
+}

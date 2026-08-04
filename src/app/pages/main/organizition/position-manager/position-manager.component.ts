@@ -3,6 +3,7 @@ import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { Subscription } from 'rxjs';
+import { SharedModule } from '../../../../shared/shared.module';
 import { PositionMasterComponent } from './position-master/position-master.component';
 import { PositionComponent } from './position/position.component';
 
@@ -10,7 +11,7 @@ import { PositionComponent } from './position/position.component';
   standalone: true,
   selector: 'app-position-manager',
   templateUrl: './position-manager.component.html',
-  imports: [CommonModule, NzTabsModule, PositionComponent, PositionMasterComponent],
+  imports: [CommonModule, NzTabsModule, SharedModule, PositionComponent, PositionMasterComponent],
   styleUrls: [],
 })
 export class PositionManagerComponent implements OnInit, OnDestroy {

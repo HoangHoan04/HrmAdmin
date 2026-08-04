@@ -88,6 +88,38 @@
     "companyWebsite": "Trang web công ty",
     "copyrightYear": "Ngày bản quyền (Năm)",
     "icpNumber": "Số ICP",
-    "icpLink": "Liên kết ICP"
+    "icpLink": "Liên kết ICP",
+    "layout": {
+      "horizontal": "Ngang (Horizontal)",
+      "detached": "Tách rời (Detached)",
+      "modern": "Hiện đại (Modern)",
+      "twoColumn": "Hai cột (Two column)",
+      "hovered": "Hover menu",
+      "boxed": "Hộp (Boxed)",
+      "horizontalSingle": "Ngang đơn (Horizontal single)",
+      "horizontalOverlay": "Ngang overlay",
+      "horizontalBox": "Ngang hộp (Horizontal box)",
+      "menuAside": "Menu bên (Menu aside)",
+      "transparent": "Trong suốt (Transparent)",
+      "withoutHeader": "Không header (Without header)",
+      "rtl": "RTL"
+    },
+    "transition": {
+      "fade": "Fade",
+      "fadeSide": "Fade side",
+      "fadeUp": "Fade up",
+      "fadeDown": "Fade down",
+      "fadeZoom": "Fade zoom",
+      "slideLeft": "Slide left",
+      "slideRight": "Slide right",
+      "zoomIn": "Zoom in",
+      "zoomOut": "Zoom out",
+      "rotate": "Rotate",
+      "flipX": "Flip X",
+      "flipY": "Flip Y",
+      "bounce": "Bounce",
+      "slideUp": "Slide up",
+      "slideDown": "Slide down"
+    }
   }
 }

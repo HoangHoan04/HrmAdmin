@@ -3,10 +3,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { ROUTES_CONFIG } from '../../../../../core/constants/common/routes.config';
 import { PagedResult } from '../../../../../core/models/common.models';
-import { Branch, Company } from '../../../../../core/models/organization.models';
+import { Branch, Company } from '../../../../../core/models';
 import { ApiService } from '../../../../../core/services/api.service';
+import { I18nMessageService } from '../../../../../core/services/i18n-message.service';
 import { ActionConfirmService } from '../../../../../shared/services/action-confirm.service';
-import { TableColumn } from '../../../../../shared/components/table-custom/table-custom.types';
+import { TableColumn, RowAction } from '../../../../../shared/components/table-custom/table-custom.types';
 
 @Component({
   standalone: false,
@@ -15,6 +16,8 @@ import { TableColumn } from '../../../../../shared/components/table-custom/table
   styleUrls: ['./company-detail.component.scss'],
 })
 export class CompanyDetailComponent implements OnInit {
+  private readonly ENTITY_KEY = 'organization.company.entityName';
+
   id: string | null = null;
   loading = false;
   company: Company | null = null;
@@ -26,6 +29,16 @@ export class CompanyDetailComponent implements OnInit {
   childCompanies: (Company & { status?: boolean })[] = [];
   childCompaniesLoading = false;
 
+  branchRowActions: RowAction[] = [
+    {
+      key: 'view',
+      icon: 'eye',
+      tooltip: 'organization.branch.viewDetail',
+      severity: 'primary',
+      onClick: (record) => this.viewBranch(record),
+    },
+  ];
+
   branchColumns: TableColumn[] = [
     { field: 'code', header: 'organization.branch.code', type: 'text' },
     { field: 'name', header: 'organization.branch.name', type: 'text' },
@@ -34,7 +47,8 @@ export class CompanyDetailComponent implements OnInit {
       field: 'status',
       header: 'organization.branch.status',
       type: 'boolean',
-      renderBoolean: (value) => (value ? 'Đang hoạt động' : 'Ngưng hoạt động'),
+      renderBoolean: (value) =>
+        value ? this.i18n.instant('common.statusActive') : this.i18n.instant('common.statusInactive'),
     },
   ];
 
@@ -46,7 +60,8 @@ export class CompanyDetailComponent implements OnInit {
       field: 'status',
       header: 'organization.company.status',
       type: 'boolean',
-      renderBoolean: (value) => (value ? 'Đang hoạt động' : 'Ngưng hoạt động'),
+      renderBoolean: (value) =>
+        value ? this.i18n.instant('common.statusActive') : this.i18n.instant('common.statusInactive'),
     },
   ];
 
@@ -94,6 +109,7 @@ export class CompanyDetailComponent implements OnInit {
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly message: NzMessageService,
+    private readonly i18n: I18nMessageService,
     private readonly apiService: ApiService,
     private readonly actionConfirm: ActionConfirmService,
   ) {}
@@ -115,7 +131,7 @@ export class CompanyDetailComponent implements OnInit {
         this.loadChildCompanies();
       },
       error: (err: any) => {
-        this.message.error(err.error || 'Không thể tải thông tin chi tiết công ty.');
+        this.message.error(err.error || this.i18n.loadDetailFailed(err.error));
         this.loading = false;
         this.goBack();
       },
@@ -183,7 +199,7 @@ export class CompanyDetailComponent implements OnInit {
     if (value === null || value === undefined || value === '') return '---';
 
     if (field.type === 'boolean') {
-      return value ? 'Có' : 'Không';
+      return value ? this.i18n.instant('common.yes') : this.i18n.instant('common.no');
     }
 
     if (field.type === 'date') {
@@ -205,12 +221,35 @@ export class CompanyDetailComponent implements OnInit {
     ]);
   }
 
+  viewAllBranches(): void {
+    if (!this.company?.code) return;
+    this.router.navigate([ROUTES_CONFIG.ORGANIZATION.children.BRANCH_MANAGER.path], {
+      queryParams: { companyCode: this.company.code },
+    });
+  }
+
+  addBranch(): void {
+    if (!this.company?.code) return;
+    this.router.navigate(
+      [ROUTES_CONFIG.ORGANIZATION.children.BRANCH_MANAGER.children.ADD_BRANCH.path],
+      { queryParams: { companyCode: this.company.code } },
+    );
+  }
+
+  viewBranch(branch: Branch): void {
+    if (!branch.id) return;
+    this.router.navigate([
+      ROUTES_CONFIG.ORGANIZATION.children.BRANCH_MANAGER.children.DETAIL_BRANCH.path,
+      branch.id,
+    ]);
+  }
+
   async toggleStatus(): Promise<void> {
     if (!this.company?.id) return;
 
     const confirmed = this.company.isDeleted
-      ? await this.actionConfirm.confirmActivate('công ty', this.company.name)
-      : await this.actionConfirm.confirmDeactivate('công ty', this.company.name);
+      ? await this.actionConfirm.confirmActivate(this.ENTITY_KEY, this.company.name)
+      : await this.actionConfirm.confirmDeactivate(this.ENTITY_KEY, this.company.name);
 
     if (!confirmed) return;
 
@@ -223,14 +262,14 @@ export class CompanyDetailComponent implements OnInit {
         if (success) {
           this.message.success(
             this.company!.isDeleted
-              ? 'Kích hoạt hoạt động công ty thành công!'
-              : 'Ngưng hoạt động công ty thành công!',
+              ? this.i18n.activateSuccess(this.ENTITY_KEY, this.company!.name)
+              : this.i18n.deactivateSuccess(this.ENTITY_KEY, this.company!.name),
           );
           this.loadCompanyDetail(this.company!.id!);
         }
       },
       error: (err: any) => {
-        this.message.error(err.error || 'Có lỗi xảy ra.');
+        this.message.error(err.error || this.i18n.genericError());
       },
     });
   }

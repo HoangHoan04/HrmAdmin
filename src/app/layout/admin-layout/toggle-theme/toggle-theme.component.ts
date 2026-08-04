@@ -1,5 +1,6 @@
 import { DashboardService } from '@/app/core/services';
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -15,7 +16,10 @@ export class ToggleThemeComponent implements OnInit, OnDestroy {
   private sub = new Subscription();
   private transEndHandler: (() => void) | null = null;
 
-  constructor(private dashboardService: DashboardService) {}
+  constructor(
+    private dashboardService: DashboardService,
+    private readonly translate: TranslateService,
+  ) {}
 
   ngOnInit(): void {
     this.sub.add(
@@ -37,9 +41,9 @@ export class ToggleThemeComponent implements OnInit, OnDestroy {
   }
 
   get themeLabel(): string {
-    if (this.theme === 'dark') return 'Tối';
-    if (this.theme === 'light') return 'Sáng';
-    return 'Hệ thống';
+    if (this.theme === 'dark') return this.translate.instant('configSetting.themeDark');
+    if (this.theme === 'light') return this.translate.instant('configSetting.themeLight');
+    return this.translate.instant('configSetting.themeSystem');
   }
 
   get isDark(): boolean {

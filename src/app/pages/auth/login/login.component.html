@@ -5,39 +5,50 @@
 
 <form (ngSubmit)="onLogin()" class="login-form" #loginForm="ngForm">
   @if (error) {
-  <div class="login-alert">
-    <span nz-icon nzType="warning" nzTheme="fill"></span>
-    <span>{{ error }}</span>
-  </div>
+    <div class="login-alert">
+      <span nz-icon nzType="warning" nzTheme="fill"></span>
+      <span>{{ error }}</span>
+    </div>
   }
 
   <div class="login-field">
     <label class="login-label" for="username">{{ 'auth.emailAddress' | translate }}</label>
-    <nz-input-group nzSize="large" [nzPrefix]="prefixMail" class="login-input-wrap">
-      <input nzSize="large" id="username" nz-input [(ngModel)]="username" name="username" type="email"
-        [placeholder]="'auth.emailPlaceholder' | translate" autocomplete="email" required />
-    </nz-input-group>
-    <ng-template #prefixMail>
-      <span nz-icon nzType="mail" nzTheme="outline"></span>
-    </ng-template>
+    <input
+      nz-input
+      id="username"
+      [(ngModel)]="username"
+      name="username"
+      type="email"
+      [placeholder]="'auth.emailPlaceholder' | translate"
+      autocomplete="email"
+      required
+      class="login-input-wrap"
+    />
   </div>
 
   <div class="login-field">
     <label class="login-label" for="password">{{ 'auth.password' | translate }}</label>
-    <nz-input-group nzSize="large" [nzPrefix]="prefixLock" [nzSuffix]="suffixPw" class="login-input-wrap">
-      <input nzSize="large" id="password" nz-input [type]="showPassword ? 'text' : 'password'" [(ngModel)]="password" name="password"
-        [placeholder]="'auth.passwordPlaceholder' | translate" autocomplete="current-password" required />
-    </nz-input-group>
-    <ng-template #prefixLock>
-      <span nz-icon nzType="lock" nzTheme="outline"></span>
-    </ng-template>
-    <ng-template #suffixPw>
-      <button type="button" class="login-eye" (click)="showPassword = !showPassword" tabindex="-1">
-        <span nz-icon [nzType]="showPassword ? 'eye-invisible' : 'eye'" nzTheme="outline"></span>
-      </button>
-    </ng-template>
+    <div class="password-wrap">
+      <input
+        nz-input
+        id="password"
+        [type]="passwordVisible ? 'text' : 'password'"
+        [(ngModel)]="password"
+        name="password"
+        [placeholder]="'auth.passwordPlaceholder' | translate"
+        autocomplete="current-password"
+        required
+        class="login-input-wrap"
+      />
+      <span
+        nz-icon
+        class="password-toggle-icon"
+        [nzType]="passwordVisible ? 'eye-invisible' : 'eye'"
+        nzTheme="outline"
+        (click)="passwordVisible = !passwordVisible"
+      ></span>
+    </div>
   </div>
-
   <div class="login-options">
     <label class="login-remember" [class.checked]="rememberMe" (click)="rememberMe = !rememberMe">
       <span class="login-checkbox">
@@ -47,12 +58,12 @@
     </label>
     <a routerLink="/auth/forgot-password" class="login-forgot">{{
       'auth.forgotPassword' | translate
-      }}</a>
+    }}</a>
   </div>
 
   <button nz-button nzType="primary" nzBlock [nzLoading]="loading" class="login-btn">
     @if (!loading) {
-    <span nz-icon nzType="login" nzTheme="outline"></span>
+      <span nz-icon nzType="login" nzTheme="outline"></span>
     }
     <span>{{ 'auth.signIn' | translate }}</span>
   </button>
@@ -61,12 +72,19 @@
     {{ 'auth.dontHaveAccount' | translate }}
     <a (click)="openContactModal()" class="create-account-link">{{
       'auth.createAccount' | translate
-      }}</a>
+    }}</a>
   </div>
 </form>
 
-<nz-modal [(nzVisible)]="isModalVisible" [nzTitle]="modalTitleTpl" (nzOnCancel)="closeContactModal()"
-  [nzFooter]="modalFooter" nzWidth="520px" [nzCentered]="true" class="hr-contact-modal">
+<nz-modal
+  [(nzVisible)]="isModalVisible"
+  [nzTitle]="modalTitleTpl"
+  (nzOnCancel)="closeContactModal()"
+  [nzFooter]="modalFooter"
+  nzWidth="520px"
+  [nzCentered]="true"
+  class="hr-contact-modal"
+>
   <ng-template #modalTitleTpl>
     <div class="modal-custom-header">
       <div class="header-icon-wrap">
@@ -103,7 +121,9 @@
             </div>
             <div class="meta-item">
               <span nz-icon nzType="phone" nzTheme="outline" class="meta-icon"></span>
-              <span class="meta-text">(028) 1234 5678 <small class="text-muted">(Ext: 101)</small></span>
+              <span class="meta-text"
+                >(028) 1234 5678 <small class="text-muted">(Ext: 101)</small></span
+              >
             </div>
           </div>
         </div>
@@ -127,7 +147,9 @@
             </div>
             <div class="meta-item">
               <span nz-icon nzType="phone" nzTheme="outline" class="meta-icon"></span>
-              <span class="meta-text">(028) 1234 5678 <small class="text-muted">(Ext: 102)</small></span>
+              <span class="meta-text"
+                >(028) 1234 5678 <small class="text-muted">(Ext: 102)</small></span
+              >
             </div>
           </div>
         </div>

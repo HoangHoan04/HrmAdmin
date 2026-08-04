@@ -1,7 +1,6 @@
-import { SelectBoxDto } from './common.models';
+import { Base, SelectBoxDto } from '../common.models';
 
-export interface Company {
-  id?: string;
+export interface Company extends Base {
   code: string;
   name: string;
   description?: string;
@@ -39,9 +38,6 @@ export interface Company {
   isActive?: boolean;
   socialInsuranceCode?: string;
   timeKeepingStandardId?: string | null;
-  isDeleted?: boolean;
-  createdAt?: string;
-  updatedAt?: string;
 }
 
 export interface CompanyImportResult {
@@ -51,24 +47,4 @@ export interface CompanyImportResult {
   errors: string[];
 }
 
-export interface Branch {
-  id?: string;
-  code: string;
-  name: string;
-  description: string;
-  address: string;
-  ipAddress: string;
-  groupSalary: string;
-  shortName: string;
-  type: string;
-  companyId?: string;
-  companyName?: string;
-  isDeleted?: boolean;
-  createdAt?: string;
-}
-
 export type CompanySelectBoxDto = SelectBoxDto;
-
-export interface BranchSelectBoxDto extends SelectBoxDto {
-  companyId?: string;
-}

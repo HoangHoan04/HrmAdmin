@@ -458,3 +458,24 @@
     }
   }
 }
+
+.password-wrap {
+  position: relative;
+
+  .login-input-wrap {
+    padding-right: 36px;
+  }
+
+  .password-toggle-icon {
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: rgba(0, 0, 0, 0.45);
+
+    &:hover {
+      color: rgba(0, 0, 0, 0.75);
+    }
+  }
+}

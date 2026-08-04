@@ -1,3 +1,4 @@
+import { TranslateService } from '@ngx-translate/core';
 import {
   Component,
   Input,
@@ -11,11 +12,7 @@ import { enumData } from '../../../core/constants/enums/enumData';
 import { ActionLog, ActionTypeMeta } from '../../../core/models/action-log.models';
 import { PagedResult } from '../../../core/models/common.models';
 import { ApiService } from '../../../core/services/api.service';
-import {
-  PaginationConfig,
-  RowAction,
-  TableColumn,
-} from '../table-custom/table-custom.types';
+import { PaginationConfig, RowAction, TableColumn } from '../table-custom/table-custom.types';
 
 @Component({
   standalone: false,
@@ -24,13 +21,8 @@ import {
   styleUrls: ['./action-log.component.scss'],
 })
 export class ActionLogComponent implements OnInit, OnChanges {
-  /** @deprecated Use functionType — kept for backward compatibility */
   @Input() entityName!: string;
-  /** @deprecated Use functionId — kept for backward compatibility */
   @Input() entityId?: string;
-
-  @Input() functionType?: string;
-  @Input() functionId?: string;
   @Input() title?: string;
 
   @ViewChild('actionTypeTpl', { static: true }) actionTypeTpl!: TemplateRef<any>;
@@ -60,7 +52,10 @@ export class ActionLogComponent implements OnInit, OnChanges {
   selectedLog: ActionLog | null = null;
   modalVisible = false;
 
-  constructor(private readonly apiService: ApiService) {}
+  constructor(
+    private readonly apiService: ApiService,
+    private readonly translate: TranslateService,
+  ) {}
 
   ngOnInit(): void {
     this.initColumns();
@@ -71,7 +66,7 @@ export class ActionLogComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    const keys = ['entityName', 'entityId', 'functionType', 'functionId'];
+    const keys = ['entityName', 'entityId'];
     const hasRelevantChange = keys.some((key) => changes[key] && !changes[key]?.firstChange);
 
     if (hasRelevantChange) {
@@ -111,11 +106,11 @@ export class ActionLogComponent implements OnInit, OnChanges {
   }
 
   get resolvedEntityName(): string {
-    return this.functionType || this.entityName || '';
+    return this.entityName || '';
   }
 
   get resolvedEntityId(): string | undefined {
-    return this.functionId || this.entityId;
+    return this.entityId;
   }
 
   loadLogs(): void {
@@ -152,7 +147,11 @@ export class ActionLogComponent implements OnInit, OnChanges {
   }
 
   getActionTypeLabel(actionType?: string): string {
-    return this.getActionTypeMeta(actionType)?.name || actionType || 'N/A';
+    const meta = this.getActionTypeMeta(actionType);
+    if (meta?.labelKey) {
+      return this.translate.instant(meta.labelKey);
+    }
+    return actionType || this.translate.instant('enums.notAvailable');
   }
 
   openDetailModal(log: ActionLog): void {

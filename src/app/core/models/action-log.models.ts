@@ -19,7 +19,7 @@ export interface ActionLog {
 
 export interface ActionTypeMeta {
   code: string;
-  name: string;
+  labelKey: string;
   type?: string;
   color?: string;
 }

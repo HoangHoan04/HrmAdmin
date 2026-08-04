@@ -6,6 +6,16 @@
     "createdNote": "Ghi chú",
     "title": "Lịch sử thao tác",
     "empty": "Không có lịch sử thao tác",
-    "viewDetail": "Xem chi tiết thay đổi"
+    "viewDetail": "Xem chi tiết thay đổi",
+    "modalTitle": "Chi tiết thay đổi dữ liệu",
+    "performedBy": "Người thực hiện",
+    "timestamp": "Thời gian",
+    "action": "Hành động",
+    "note": "Ghi chú",
+    "oldValue": "Dữ liệu cũ (oldValue)",
+    "newValue": "Dữ liệu mới (newValue)",
+    "noOldValue": "Không có dữ liệu cũ hoặc record được tạo mới.",
+    "noNewValue": "Không có dữ liệu mới cập nhật.",
+    "close": "Đóng"
   }
 }

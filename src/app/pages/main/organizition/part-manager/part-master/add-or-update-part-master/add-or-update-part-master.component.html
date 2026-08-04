@@ -1,43 +1,160 @@
-<nz-card [nzTitle]="isEdit ? 'Cập Nhật Danh Mục Bộ Phận' : 'Thêm Mới Danh Mục Bộ Phận'" [nzExtra]="extraTemplate" [nzLoading]="loading">
-  <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()" nzLayout="vertical">
-    <div nz-row [nzGutter]="16">
-      <div nz-col [nzSpan]="12">
-        <nz-form-item>
-          <nz-form-label nzRequired nzFor="code">Mã danh mục bộ phận</nz-form-label>
-          <nz-form-control nzErrorTip="Vui lòng nhập mã danh mục bộ phận!">
-            <input nzSize="large" nz-input formControlName="code" id="code" placeholder="Ví dụ: PM-WEB" />
-          </nz-form-control>
-        </nz-form-item>
-      </div>
-
-      <div nz-col [nzSpan]="12">
-        <nz-form-item>
-          <nz-form-label nzRequired nzFor="name">Tên danh mục bộ phận</nz-form-label>
-          <nz-form-control nzErrorTip="Vui lòng nhập tên danh mục bộ phận!">
-            <input nzSize="large" nz-input formControlName="name" id="name" placeholder="Ví dụ: Tổ Phát triển Web" />
-          </nz-form-control>
-        </nz-form-item>
-      </div>
-
-      <div nz-col [nzSpan]="24">
-        <nz-form-item>
-          <nz-form-label nzFor="description">Mô tả / Ghi chú</nz-form-label>
-          <nz-form-control>
-            <textarea nzSize="large" nz-input formControlName="description" id="description" [nzAutosize]="{ minRows: 3, maxRows: 6 }" placeholder="Nhập mô tả danh mục bộ phận..."></textarea>
-          </nz-form-control>
-        </nz-form-item>
-      </div>
-    </div>
-
-    <div style="border-top: 1px solid var(--border); padding-top: 16px; margin-top: 16px; display: flex; justify-content: flex-end; gap: 8px;">
-      <button nz-button nzType="default" type="button" (click)="goBack()">Hủy</button>
-      <button nz-button nzType="primary" [nzLoading]="submitting" type="submit">Lưu Lại</button>
-    </div>
-  </form>
+<nz-card [nzTitle]="titleTemplate" [nzExtra]="extraTemplate">
+  <ng-container *ngTemplateOutlet="formTpl"></ng-container>
 </nz-card>
+
+<ng-template #titleTemplate>
+  {{
+    (isEdit ? 'organization.partMaster.editTitle' : 'organization.partMaster.addTitle') | translate
+  }}
+</ng-template>
+
+<ng-template #formTpl>
+  <nz-spin [nzSpinning]="loading">
+    <form nz-form [formGroup]="validateForm" nzLayout="vertical" (ngSubmit)="submitForm()">
+      <div nz-row [nzGutter]="24">
+        <div nz-col nzXs="24" nzMd="12">
+          <nz-form-item>
+            <nz-form-label [nzRequired]="true">{{
+              'organization.partMaster.code' | translate
+            }}</nz-form-label>
+            <nz-form-control [nzErrorTip]="'organization.partMaster.codeRequired' | translate">
+              <input
+                nz-input
+                formControlName="code"
+                [placeholder]="'organization.partMaster.codePlaceholder' | translate"
+                [disabled]="isEdit"
+              />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="12">
+          <nz-form-item>
+            <nz-form-label [nzRequired]="true">{{
+              'organization.partMaster.name' | translate
+            }}</nz-form-label>
+            <nz-form-control [nzErrorTip]="'organization.partMaster.nameRequired' | translate">
+              <input
+                nz-input
+                formControlName="name"
+                [placeholder]="'organization.partMaster.namePlaceholder' | translate"
+              />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+
+      <div nz-row [nzGutter]="24">
+        <div nz-col nzXs="24" nzMd="12">
+          <nz-form-item>
+            <nz-form-label>{{ 'organization.partMaster.companyName' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-select
+                formControlName="companyId"
+                nzAllowClear
+                [nzPlaceHolder]="'organization.partMaster.filterCompany' | translate"
+              >
+                @for (c of companies; track c.id) {
+                  <nz-option
+                    [nzValue]="c.id"
+                    [nzLabel]="c.code ? c.code + ' - ' + c.name : c.name"
+                  ></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="12">
+          <nz-form-item>
+            <nz-form-label>{{ 'organization.partMaster.branchName' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-select
+                formControlName="branchId"
+                nzAllowClear
+                [nzPlaceHolder]="'organization.partMaster.filterBranch' | translate"
+              >
+                @for (b of branches; track b.id) {
+                  <nz-option
+                    [nzValue]="b.id"
+                    [nzLabel]="b.code ? b.code + ' - ' + b.name : b.name"
+                  ></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+
+      <div nz-row [nzGutter]="24">
+        <div nz-col nzXs="24" nzMd="12">
+          <nz-form-item>
+            <nz-form-label>{{ 'organization.partMaster.type' | translate }}</nz-form-label>
+            <nz-form-control>
+              <input
+                nz-input
+                formControlName="type"
+                [placeholder]="'organization.partMaster.typePlaceholder' | translate"
+              />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="6">
+          <nz-form-item>
+            <nz-form-label>{{ 'organization.partMaster.displayOrder' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-input-number
+                formControlName="displayOrder"
+                [nzMin]="0"
+                [nzStep]="1"
+                style="width: 100%"
+              ></nz-input-number>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="6">
+          <nz-form-item>
+            <nz-form-label>{{ 'organization.partMaster.isActive' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-switch formControlName="isActive"></nz-switch>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+
+      <nz-form-item>
+        <nz-form-label>{{ 'organization.partMaster.description' | translate }}</nz-form-label>
+        <nz-form-control>
+          <textarea
+            nz-input
+            formControlName="description"
+            [nzAutosize]="{ minRows: 3, maxRows: 6 }"
+            [placeholder]="'organization.partMaster.descriptionPlaceholder' | translate"
+          ></textarea>
+        </nz-form-control>
+      </nz-form-item>
+
+      <div
+        style="
+          border-top: 1px solid var(--border);
+          padding-top: 16px;
+          margin-top: 16px;
+          display: flex;
+          justify-content: flex-end;
+          gap: 8px;
+        "
+      >
+        <button nz-button nzType="default" type="button" (click)="goBack()">
+          {{ 'common.actions.cancel' | translate }}
+        </button>
+        <button nz-button nzType="primary" [nzLoading]="submitting" type="submit">
+          {{ 'common.actions.save' | translate }}
+        </button>
+      </div>
+    </form>
+  </nz-spin>
+</ng-template>
 
 <ng-template #extraTemplate>
   <button nz-button nzType="default" (click)="goBack()">
-    <i nz-icon nzType="arrow-left"></i> Quay Lại
+    <i nz-icon nzType="arrow-left"></i> {{ 'organization.partMaster.backToList' | translate }}
   </button>
 </ng-template>

@@ -46,6 +46,13 @@ nz-card {
   padding: 16px 0;
 }
 
+.tab-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
 .detail-field {
   margin-bottom: 8px;
 }

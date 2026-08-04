@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslatePipe } from '@ngx-translate/core';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { Subscription } from 'rxjs';
 import { PartMasterComponent } from './part-master/part-master.component';
@@ -10,7 +11,7 @@ import { PartComponent } from './part/part.component';
   standalone: true,
   selector: 'app-part-manager',
   templateUrl: './part-manager.component.html',
-  imports: [CommonModule, NzTabsModule, PartComponent, PartMasterComponent],
+  imports: [CommonModule, NzTabsModule, TranslatePipe, PartComponent, PartMasterComponent],
   styleUrls: [],
 })
 export class PartManagerComponent implements OnInit, OnDestroy {

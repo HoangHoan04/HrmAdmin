@@ -2,13 +2,12 @@
   [nzSelectedIndex]="activeTabKey === 'position' ? 0 : 1"
   (nzSelectedIndexChange)="onTabChange($event)"
   nzType="card"
-  nzSize="large"
 >
-  <nz-tab nzTitle="Chức Vụ">
+  <nz-tab [nzTitle]="'organization.position.tabPosition' | translate">
     <app-position></app-position>
   </nz-tab>
 
-  <nz-tab nzTitle="Danh Mục Chức Vụ">
+  <nz-tab [nzTitle]="'organization.positionMaster.tabTitle' | translate">
     <app-position-master></app-position-master>
   </nz-tab>
 </nz-tabs>

@@ -24,3 +24,20 @@ export interface SelectBoxDto {
   name: string;
   code?: string;
 }
+
+export interface ImportResult {
+  totalRows: number;
+  successCount: number;
+  errorCount: number;
+  errors: string[];
+}
+
+export interface Base {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  createdBy?: string;
+  updatedBy?: string;
+  isDeleted?: boolean;
+  version?: number;
+}
