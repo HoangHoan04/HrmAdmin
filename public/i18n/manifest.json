@@ -18,5 +18,6 @@
   "organization/company.json",
   "organization/department.json",
   "organization/part.json",
-  "organization/position.json"
+  "organization/position.json",
+  "human-resource/employee.json"
 ]

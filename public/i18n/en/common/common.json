@@ -74,6 +74,14 @@
       "loadCompanySelectFailed": "Unable to load company list for selection.",
       "loadCompanyListFailed": "Unable to load company list.",
       "loadParentCompanyFailed": "Unable to load parent company list."
+    },
+    "upload": {
+      "selectFile": "Select file",
+      "uploading": "Uploading...",
+      "uploadSuccess": "File uploaded successfully",
+      "uploadFailed": "File upload failed",
+      "tooLarge": "File exceeds {{max}}MB",
+      "urlPlaceholder": "Or paste file URL directly"
     }
   }
 }

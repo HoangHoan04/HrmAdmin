@@ -74,6 +74,14 @@
       "loadCompanySelectFailed": "Không thể tải danh sách công ty để chọn.",
       "loadCompanyListFailed": "Không thể tải danh sách công ty.",
       "loadParentCompanyFailed": "Không thể tải danh sách công ty mẹ."
+    },
+    "upload": {
+      "selectFile": "Chọn file",
+      "uploading": "Đang tải lên...",
+      "uploadSuccess": "Tải file lên thành công",
+      "uploadFailed": "Tải file lên thất bại",
+      "tooLarge": "File vượt quá {{max}}MB",
+      "urlPlaceholder": "Hoặc dán URL file trực tiếp"
     }
   }
 }

@@ -17,7 +17,7 @@ export interface TableColumn<T = any> {
   align?: 'left' | 'center' | 'right';
   hidden?: boolean;
   resizable?: boolean;
-  type?: 'text' | 'number' | 'currency' | 'date' | 'datetime' | 'boolean' | 'badge' | 'tag';
+  type?: 'text' | 'number' | 'currency' | 'date' | 'datetime' | 'boolean' | 'badge' | 'tag' | 'image';
   dateFormat?: string;
   currencySymbol?: string;
   numberFormat?: string;

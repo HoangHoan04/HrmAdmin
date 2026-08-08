@@ -321,7 +321,9 @@
         <div nz-col nzXs="24" nzMd="12">
           <nz-form-item>
             <nz-form-label>{{ 'organization.company.logoUrl' | translate }}</nz-form-label>
-            <nz-form-control><input nz-input formControlName="logoUrl" /></nz-form-control>
+            <nz-form-control>
+              <app-file-upload formControlName="logoUrl" mode="image" [showUrlInput]="true"></app-file-upload>
+            </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col nzXs="24" nzMd="12">

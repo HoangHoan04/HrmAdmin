@@ -20,8 +20,10 @@ export class ApiService {
   get PART_MASTER() { return this.endpoints.PART_MASTER; }
   get POSITION() { return this.endpoints.POSITION; }
   get POSITION_MASTER() { return this.endpoints.POSITION_MASTER; }
+  get EMPLOYEE() { return this.endpoints.EMPLOYEE; }
   get ACTION_LOG() { return this.endpoints.ACTION_LOG; }
   get ORGANIZATION() { return this.endpoints.ORGANIZATION; }
+  get UPLOAD_FILE() { return this.endpoints.UPLOAD_FILE; }
 
   get<T>(url: string): Observable<T> {
     return this.http.get<T>(url);
@@ -41,6 +43,26 @@ export class ApiService {
   uploadFile<T>(url: string, file: File, fieldName = 'file'): Observable<T> {
     const formData = new FormData();
     formData.append(fieldName, file);
+    return this.http.post<T>(url, formData);
+  }
+
+  uploadFileWithFields<T>(
+    url: string,
+    file: File,
+    fields?: Record<string, string>,
+    fieldName = 'file',
+  ): Observable<T> {
+    const formData = new FormData();
+    formData.append(fieldName, file);
+    if (fields) {
+      Object.entries(fields).forEach(([key, value]) => formData.append(key, value));
+    }
+    return this.http.post<T>(url, formData);
+  }
+
+  uploadFiles<T>(url: string, files: File[], fieldName = 'files'): Observable<T> {
+    const formData = new FormData();
+    files.forEach((file) => formData.append(fieldName, file));
     return this.http.post<T>(url, formData);
   }
 

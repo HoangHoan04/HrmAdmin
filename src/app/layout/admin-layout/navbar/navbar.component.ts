@@ -1,4 +1,3 @@
-import { TranslateService } from '@ngx-translate/core';
 import {
   AuthService,
   DashboardService,
@@ -7,6 +6,7 @@ import {
 } from '@/app/core/services';
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { Subscription } from 'rxjs';
 

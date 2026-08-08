@@ -8,8 +8,12 @@ export class EndpointService {
   private readonly baseUrl = environment.apiUrl;
 
   AUTH = {
-    BASE: `${this.baseUrl}/auth`,
-    LOGIN: `${this.baseUrl}/auth/login`,
+    LOGIN: `${this.baseUrl}/admin/auth/login`,
+    REFRESH: `${this.baseUrl}/admin/auth/refresh`,
+    CHANGE_PASSWORD: `${this.baseUrl}/admin/auth/change-password`,
+    FORGOT_PASSWORD: `${this.baseUrl}/admin/auth/forgot-password`,
+    RESET_PASSWORD_WITH_OTP: `${this.baseUrl}/admin/auth/reset-password-with-otp`,
+    ME: `${this.baseUrl}/admin/auth/me`,
   };
 
   COMPANY = {
@@ -103,15 +107,57 @@ export class EndpointService {
     EXCEL_IMPORT: `${this.baseUrl}/position-master/excel/import`,
   };
 
+  EMPLOYEE = {
+    PAGINATION: `${this.baseUrl}/employee/pagination`,
+    DETAIL: `${this.baseUrl}/employee/detail`,
+    CREATE: `${this.baseUrl}/employee/create`,
+    UPDATE: `${this.baseUrl}/employee/update`,
+    ACTIVATE: `${this.baseUrl}/employee/activate`,
+    DEACTIVATE: `${this.baseUrl}/employee/deactivate`,
+    SELECT_BOX: `${this.baseUrl}/employee/select-box`,
+    EXCEL_TEMPLATE: `${this.baseUrl}/employee/excel/template`,
+    EXCEL_EXPORT: `${this.baseUrl}/employee/excel/export`,
+    EXCEL_IMPORT: `${this.baseUrl}/employee/excel/import`,
+    DEPENDENT_CREATE: `${this.baseUrl}/employee/dependent/create`,
+    DEPENDENT_UPDATE: `${this.baseUrl}/employee/dependent/update`,
+    DEPENDENT_DELETE: `${this.baseUrl}/employee/dependent/delete`,
+    EDUCATION_CREATE: `${this.baseUrl}/employee/education/create`,
+    EDUCATION_UPDATE: `${this.baseUrl}/employee/education/update`,
+    EDUCATION_DELETE: `${this.baseUrl}/employee/education/delete`,
+    CERTIFICATE_CREATE: `${this.baseUrl}/employee/certificate/create`,
+    CERTIFICATE_UPDATE: `${this.baseUrl}/employee/certificate/update`,
+    CERTIFICATE_DELETE: `${this.baseUrl}/employee/certificate/delete`,
+    FILE_CREATE: `${this.baseUrl}/employee/file/create`,
+    FILE_UPDATE: `${this.baseUrl}/employee/file/update`,
+    FILE_DELETE: `${this.baseUrl}/employee/file/delete`,
+    SALARY_HISTORY_CREATE: `${this.baseUrl}/employee/salary-history/create`,
+    SALARY_HISTORY_UPDATE: `${this.baseUrl}/employee/salary-history/update`,
+    SALARY_HISTORY_DELETE: `${this.baseUrl}/employee/salary-history/delete`,
+  };
+
   ACTION_LOG = {
     BASE: `${this.baseUrl}/action-logs`,
   };
 
   ORGANIZATION = {
-    BRANCHES_BY_COMPANY: `${this.baseUrl}/organization/branches-by-company`,
-    DEPARTMENTS_BY_BRANCH: `${this.baseUrl}/organization/departments-by-branch`,
-    PARTS_BY_DEPARTMENT: `${this.baseUrl}/organization/parts-by-department`,
-    PART_MASTERS_BY_SCOPE: `${this.baseUrl}/organization/part-masters-by-scope`,
-    POSITION_MASTERS_BY_SCOPE: `${this.baseUrl}/organization/position-masters-by-scope`,
+    BRANCHES_BY_COMPANY: `${this.baseUrl}/branch/by-company`,
+    DEPARTMENTS_BY_BRANCH: `${this.baseUrl}/department/by-branch`,
+    PARTS_BY_DEPARTMENT: `${this.baseUrl}/part/by-department`,
+    PART_MASTERS_BY_SCOPE: `${this.baseUrl}/part-master/by-scope`,
+    POSITION_MASTERS_BY_SCOPE: `${this.baseUrl}/position-master/by-scope`,
+  };
+
+  UPLOAD_FILE = {
+    UPLOAD_SINGLE: `${this.baseUrl}/upload-file/upload-single`,
+    UPLOAD_MULTI: `${this.baseUrl}/upload-file/upload-multi`,
+    UPLOAD_IMAGE: `${this.baseUrl}/upload-file/upload-image`,
+    UPLOAD_AUDIO: `${this.baseUrl}/upload-file/upload-audio`,
+    UPLOAD_DOCUMENT: `${this.baseUrl}/upload-file/upload-document`,
+    UPLOAD_CATBOX: `${this.baseUrl}/upload-file/upload-catbox`,
+    UPLOAD_CATBOX_URL: `${this.baseUrl}/upload-file/upload-catbox-url`,
+    UPLOAD_S3: `${this.baseUrl}/upload-file/upload-s3`,
+    UPLOAD_SINGLE_S3: `${this.baseUrl}/upload-file/upload-single-s3`,
+    UPLOAD_MULTI_S3: `${this.baseUrl}/upload-file/upload-multi-s3`,
+    DOWNLOAD_IMAGES_ZIP: `${this.baseUrl}/upload-file/download-images-zip`,
   };
 }

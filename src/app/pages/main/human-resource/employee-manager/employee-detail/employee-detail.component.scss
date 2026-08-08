@@ -1,0 +1,87 @@
+nz-card {
+  border-radius: 8px;
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: 600;
+
+  i {
+    margin-right: 8px;
+  }
+}
+
+.detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+  color: var(--foreground);
+
+  h2 {
+    margin: 0;
+    color: var(--foreground);
+    font-weight: 600;
+  }
+
+  p {
+    margin: 4px 0 0;
+    color: var(--foreground);
+    font-size: 14px;
+  }
+}
+
+.header-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tab-content {
+  padding: 16px 0;
+}
+
+.tab-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.detail-field {
+  margin-bottom: 8px;
+}
+
+.field-label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 4px;
+  color: var(--foreground);
+  font-size: 13px;
+}
+
+.field-value {
+  font-size: 15px;
+  word-break: break-word;
+  color: var(--foreground);
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-weight: 500;
+  font-size: 13px;
+
+  &.active {
+    background: rgba(76, 175, 80, 0.15);
+    color: #4caf50;
+  }
+
+  &.inactive {
+    background: rgba(244, 67, 54, 0.15);
+    color: #f44336;
+  }
+}

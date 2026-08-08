@@ -26,6 +26,8 @@ export const ROUTES_CONFIG = {
     path: '/',
     icon: 'home',
   },
+
+  // ─── Tổ chức: Company → Branch → Department; Part↔PartMaster; Position↔PositionMaster ───
   ORGANIZATION: {
     key: 'ORGANIZATION',
     label: 'routes.organization',
@@ -132,7 +134,6 @@ export const ROUTES_CONFIG = {
           },
         },
       },
-
       PART_MANAGER: {
         key: 'PART_MANAGER',
         label: 'routes.partList',
@@ -190,7 +191,6 @@ export const ROUTES_CONFIG = {
           },
         },
       },
-
       POSITION_MANAGER: {
         key: 'POSITION_MANAGER',
         label: 'routes.positionList',
@@ -250,29 +250,312 @@ export const ROUTES_CONFIG = {
       },
     },
   },
+
+  // ─── Nhân sự: Employee (hồ sơ 360 gom tab con); Hợp đồng; Điều chuyển ───
   HUMAN_RESOURCE: {
     key: 'HUMAN_RESOURCE',
     label: 'routes.humanResource',
     translationKey: 'routes.humanResource',
     icon: 'team',
     path: '/human-resource',
-    children: {},
+    children: {
+      EMPLOYEE_MANAGER: {
+        key: 'EMPLOYEE_MANAGER',
+        label: 'routes.employeeList',
+        translationKey: 'routes.employeeList',
+        icon: 'user',
+        path: '/human-resource/employee',
+        children: {
+          ADD_EMPLOYEE: {
+            key: 'ADD_EMPLOYEE',
+            label: 'routes.addEmployee',
+            translationKey: 'routes.addEmployee',
+            icon: 'plus',
+            path: '/human-resource/employee/add',
+            isShow: false,
+          },
+          EDIT_EMPLOYEE: {
+            key: 'EDIT_EMPLOYEE',
+            label: 'routes.editEmployee',
+            translationKey: 'routes.editEmployee',
+            icon: 'plus',
+            path: '/human-resource/employee/edit',
+            isShow: false,
+          },
+          DETAIL_EMPLOYEE: {
+            key: 'DETAIL_EMPLOYEE',
+            label: 'routes.detailEmployee',
+            translationKey: 'routes.detailEmployee',
+            icon: 'plus',
+            path: '/human-resource/employee/detail',
+            isShow: false,
+          },
+        },
+      },
+      CONTRACT_MANAGER: {
+        key: 'CONTRACT_MANAGER',
+        label: 'routes.contractList',
+        translationKey: 'routes.contractList',
+        icon: 'file-text',
+        path: '/human-resource/contract',
+        children: {
+          ADD_CONTRACT: {
+            key: 'ADD_CONTRACT',
+            label: 'routes.addContract',
+            translationKey: 'routes.addContract',
+            icon: 'plus',
+            path: '/human-resource/contract/add',
+            isShow: false,
+          },
+          EDIT_CONTRACT: {
+            key: 'EDIT_CONTRACT',
+            label: 'routes.editContract',
+            translationKey: 'routes.editContract',
+            icon: 'plus',
+            path: '/human-resource/contract/edit',
+            isShow: false,
+          },
+          DETAIL_CONTRACT: {
+            key: 'DETAIL_CONTRACT',
+            label: 'routes.detailContract',
+            translationKey: 'routes.detailContract',
+            icon: 'plus',
+            path: '/human-resource/contract/detail',
+            isShow: false,
+          },
+        },
+      },
+      TRANSFER_MANAGER: {
+        key: 'TRANSFER_MANAGER',
+        label: 'routes.transferList',
+        translationKey: 'routes.transferList',
+        icon: 'swap',
+        path: '/human-resource/transfer',
+        children: {
+          ADD_TRANSFER: {
+            key: 'ADD_TRANSFER',
+            label: 'routes.addTransfer',
+            translationKey: 'routes.addTransfer',
+            icon: 'plus',
+            path: '/human-resource/transfer/add',
+            isShow: false,
+          },
+          EDIT_TRANSFER: {
+            key: 'EDIT_TRANSFER',
+            label: 'routes.editTransfer',
+            translationKey: 'routes.editTransfer',
+            icon: 'plus',
+            path: '/human-resource/transfer/edit',
+            isShow: false,
+          },
+          DETAIL_TRANSFER: {
+            key: 'DETAIL_TRANSFER',
+            label: 'routes.detailTransfer',
+            translationKey: 'routes.detailTransfer',
+            icon: 'plus',
+            path: '/human-resource/transfer/detail',
+            isShow: false,
+          },
+        },
+      },
+    },
   },
+
+  // ─── Chấm công & nghỉ phép (Timekeeping + Leave) ───
+  TIME_ATTENDANCE: {
+    key: 'TIME_ATTENDANCE',
+    label: 'routes.timeAttendance',
+    translationKey: 'routes.timeAttendance',
+    icon: 'clock-circle',
+    path: '/time-attendance',
+    children: {
+      TIMEKEEPING_MANAGER: {
+        key: 'TIMEKEEPING_MANAGER',
+        label: 'routes.timekeepingList',
+        translationKey: 'routes.timekeepingList',
+        icon: 'schedule',
+        path: '/time-attendance/timekeeping',
+      },
+      SHIFT_MANAGER: {
+        key: 'SHIFT_MANAGER',
+        label: 'routes.shiftList',
+        translationKey: 'routes.shiftList',
+        icon: 'field-time',
+        path: '/time-attendance/shift',
+      },
+      LEAVE_MANAGER: {
+        key: 'LEAVE_MANAGER',
+        label: 'routes.leaveRequestList',
+        translationKey: 'routes.leaveRequestList',
+        icon: 'calendar',
+        path: '/time-attendance/leave',
+      },
+    },
+  },
+
+  // ─── Lương & phúc lợi ───
+  PAYROLL: {
+    key: 'PAYROLL',
+    label: 'routes.payroll',
+    translationKey: 'routes.payroll',
+    icon: 'dollar',
+    path: '/payroll',
+    children: {
+      PAYROLL_RUN_MANAGER: {
+        key: 'PAYROLL_RUN_MANAGER',
+        label: 'routes.payrollRunList',
+        translationKey: 'routes.payrollRunList',
+        icon: 'account-book',
+        path: '/payroll/run',
+      },
+      PAYROLL_CONFIG: {
+        key: 'PAYROLL_CONFIG',
+        label: 'routes.payrollConfig',
+        translationKey: 'routes.payrollConfig',
+        icon: 'setting',
+        path: '/payroll/config',
+      },
+    },
+  },
+
+  // ─── Tuyển dụng (pipeline: Kế hoạch → Yêu cầu → Ứng viên → Phỏng vấn) ───
+  RECRUITMENT: {
+    key: 'RECRUITMENT',
+    label: 'routes.recruitment',
+    translationKey: 'routes.recruitment',
+    icon: 'user-add',
+    path: '/recruitment',
+    children: {
+      RECRUITMENT_PIPELINE: {
+        key: 'RECRUITMENT_PIPELINE',
+        label: 'routes.recruitmentPipeline',
+        translationKey: 'routes.recruitmentPipeline',
+        icon: 'solution',
+        path: '/recruitment/pipeline',
+      },
+    },
+  },
+
+  // ─── Hiệu suất & KPI ───
+  PERFORMANCE: {
+    key: 'PERFORMANCE',
+    label: 'routes.performance',
+    translationKey: 'routes.performance',
+    icon: 'rise',
+    path: '/performance',
+    children: {
+      PERFORMANCE_REVIEW: {
+        key: 'PERFORMANCE_REVIEW',
+        label: 'routes.performanceReview',
+        translationKey: 'routes.performanceReview',
+        icon: 'audit',
+        path: '/performance/review',
+      },
+    },
+  },
+
+  // ─── Đào tạo ───
+  TRAINING: {
+    key: 'TRAINING',
+    label: 'routes.training',
+    translationKey: 'routes.training',
+    icon: 'read',
+    path: '/training',
+    children: {
+      TRAINING_MANAGER: {
+        key: 'TRAINING_MANAGER',
+        label: 'routes.trainingCourseList',
+        translationKey: 'routes.trainingCourseList',
+        icon: 'book',
+        path: '/training/course',
+      },
+    },
+  },
+
+  // ─── Kỷ luật ───
+  DISCIPLINE: {
+    key: 'DISCIPLINE',
+    label: 'routes.discipline',
+    translationKey: 'routes.discipline',
+    icon: 'warning',
+    path: '/discipline',
+    children: {
+      VIOLATION_MANAGER: {
+        key: 'VIOLATION_MANAGER',
+        label: 'routes.violationList',
+        translationKey: 'routes.violationList',
+        icon: 'alert',
+        path: '/discipline/violation',
+      },
+    },
+  },
+
+  // ─── Tài sản ───
+  ASSET: {
+    key: 'ASSET',
+    label: 'routes.asset',
+    translationKey: 'routes.asset',
+    icon: 'laptop',
+    path: '/asset',
+    children: {
+      ASSET_MANAGER: {
+        key: 'ASSET_MANAGER',
+        label: 'routes.assetList',
+        translationKey: 'routes.assetList',
+        icon: 'tool',
+        path: '/asset/inventory',
+      },
+    },
+  },
+
+  // ─── Phân quyền: User + Role + Permission ───
   ROLE_MANAGER: {
     key: 'ROLE_MANAGER',
     label: 'routes.roleManager',
     translationKey: 'routes.roleManager',
     icon: 'safety',
     path: '/role-manager',
-    children: {},
+    children: {
+      USER_MANAGER: {
+        key: 'USER_MANAGER',
+        label: 'routes.userList',
+        translationKey: 'routes.userList',
+        icon: 'user',
+        path: '/role-manager/user',
+      },
+      ROLE_LIST: {
+        key: 'ROLE_LIST',
+        label: 'routes.roleList',
+        translationKey: 'routes.roleList',
+        icon: 'safety-certificate',
+        path: '/role-manager/role',
+      },
+    },
   },
+
+  // ─── Cài đặt hệ thống ───
   SETTING_SYSTEM: {
     key: 'SETTING_SYSTEM',
     label: 'routes.settingSystem',
     translationKey: 'routes.settingSystem',
     icon: 'setting',
     path: '/system-settings',
-    children: {},
+    children: {
+      TIMEKEEPING_STANDARD: {
+        key: 'TIMEKEEPING_STANDARD',
+        label: 'routes.timekeepingStandard',
+        translationKey: 'routes.timekeepingStandard',
+        icon: 'control',
+        path: '/system-settings/timekeeping-standard',
+      },
+      ACTION_LOG: {
+        key: 'ACTION_LOG',
+        label: 'routes.actionLog',
+        translationKey: 'routes.actionLog',
+        icon: 'history',
+        path: '/system-settings/action-log',
+      },
+    },
   },
 } as const satisfies Record<string, RouteConfig>;
 

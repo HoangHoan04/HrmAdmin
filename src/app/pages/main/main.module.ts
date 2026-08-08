@@ -14,6 +14,11 @@ const routes: Routes = [
     loadChildren: () =>
       import('./organizition/organization.module').then((m) => m.OrganizationModule),
   },
+  {
+    path: getPath(ROUTES_CONFIG.HUMAN_RESOURCE.path),
+    loadChildren: () =>
+      import('./human-resource/human-resource.module').then((m) => m.HumanResourceModule),
+  },
 ];
 
 @NgModule({

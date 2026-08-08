@@ -27,12 +27,14 @@ import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzTooltipModule } from 'ng-zorro-antd/tooltip';
+import { NzUploadModule } from 'ng-zorro-antd/upload';
 import { ActionLogComponent } from './components/action-log/action-log.component';
+import { FileUploadComponent } from './components/file-upload/file-upload.component';
 import { FilterCustomComponent } from './components/filter-custom/filter-custom.component';
 import { TableCustomComponent } from './components/table-custom/table-custom.component';
 
 @NgModule({
-  declarations: [FilterCustomComponent, TableCustomComponent, ActionLogComponent],
+  declarations: [FilterCustomComponent, TableCustomComponent, ActionLogComponent, FileUploadComponent],
   imports: [
     TranslatePipe,
     CommonModule,
@@ -63,11 +65,13 @@ import { TableCustomComponent } from './components/table-custom/table-custom.com
     NzSpinModule,
     NzPaginationModule,
     NzTabsModule,
+    NzUploadModule,
   ],
   exports: [
     FilterCustomComponent,
     TableCustomComponent,
     ActionLogComponent,
+    FileUploadComponent,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
@@ -97,6 +101,7 @@ import { TableCustomComponent } from './components/table-custom/table-custom.com
     NzSpinModule,
     NzPaginationModule,
     NzTabsModule,
+    NzUploadModule,
   ],
 })
 export class SharedModule {}

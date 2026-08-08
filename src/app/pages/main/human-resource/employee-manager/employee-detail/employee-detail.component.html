@@ -1,0 +1,574 @@
+<nz-card [nzTitle]="titleTemplate" [nzExtra]="extraTemplate" [nzLoading]="loading">
+  @if (employee) {
+    <div class="detail-header">
+      <div>
+        <h2>{{ employee.fullName || employee.firstName + ' ' + employee.lastName }}</h2>
+        <p>
+          {{ 'humanResource.employee.code' | translate }}: <strong>{{ employee.code }}</strong>
+        </p>
+      </div>
+      <span
+        class="status-badge"
+        [class.active]="!employee.isDeleted"
+        [class.inactive]="employee.isDeleted"
+      >
+        {{
+          employee.isDeleted
+            ? ('humanResource.employee.statusInactive' | translate)
+            : ('humanResource.employee.statusActive' | translate)
+        }}
+      </span>
+    </div>
+
+    <nz-tabs [nzSelectedIndex]="selectedTabIndex" (nzSelectedIndexChange)="onTabChange($event)">
+      <nz-tab [nzTitle]="'humanResource.employee.tabDetail' | translate">
+        <div class="tab-content">
+          <div nz-row [nzGutter]="[24, 16]">
+            @for (field of detailFields; track field.key) {
+              <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8">
+                <div class="detail-field">
+                  <span class="field-label">{{ field.label | translate }}</span>
+                  <span class="field-value">{{ getFieldValue(field) }}</span>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      </nz-tab>
+
+      <nz-tab [nzTitle]="'humanResource.employee.tabActivityLog' | translate">
+        <div class="tab-content">
+          <app-action-log
+            entityName="EmployeeEntity"
+            [entityId]="id ?? undefined"
+            [title]="'actionLog.title' | translate"
+          ></app-action-log>
+        </div>
+      </nz-tab>
+
+      <nz-tab [nzTitle]="'humanResource.employee.tabDependents' | translate">
+        <div class="tab-content">
+          <div class="tab-toolbar">
+            <button nz-button nzType="primary" (click)="openChildCreate('dependent')">
+              <i nz-icon nzType="plus"></i>
+              {{ 'humanResource.employee.addDependent' | translate }}
+            </button>
+          </div>
+          <app-table-custom
+            [id]="'employee-detail-dependents'"
+            [data]="dependents"
+            [columns]="dependentColumns"
+            [rowActions]="dependentRowActions"
+            [stripedRows]="true"
+            [showIndexList]="true"
+            [toolbar]="{ show: false }"
+            [emptyText]="'humanResource.employee.noDependents' | translate"
+          ></app-table-custom>
+        </div>
+      </nz-tab>
+
+      <nz-tab [nzTitle]="'humanResource.employee.tabEducations' | translate">
+        <div class="tab-content">
+          <div class="tab-toolbar">
+            <button nz-button nzType="primary" (click)="openChildCreate('education')">
+              <i nz-icon nzType="plus"></i>
+              {{ 'humanResource.employee.addEducation' | translate }}
+            </button>
+          </div>
+          <app-table-custom
+            [id]="'employee-detail-educations'"
+            [data]="educations"
+            [columns]="educationColumns"
+            [rowActions]="educationRowActions"
+            [stripedRows]="true"
+            [showIndexList]="true"
+            [toolbar]="{ show: false }"
+            [emptyText]="'humanResource.employee.noEducations' | translate"
+          ></app-table-custom>
+        </div>
+      </nz-tab>
+
+      <nz-tab [nzTitle]="'humanResource.employee.tabCertificates' | translate">
+        <div class="tab-content">
+          <div class="tab-toolbar">
+            <button nz-button nzType="primary" (click)="openChildCreate('certificate')">
+              <i nz-icon nzType="plus"></i>
+              {{ 'humanResource.employee.addCertificate' | translate }}
+            </button>
+          </div>
+          <app-table-custom
+            [id]="'employee-detail-certificates'"
+            [data]="certificates"
+            [columns]="certificateColumns"
+            [rowActions]="certificateRowActions"
+            [stripedRows]="true"
+            [showIndexList]="true"
+            [toolbar]="{ show: false }"
+            [emptyText]="'humanResource.employee.noCertificates' | translate"
+          ></app-table-custom>
+        </div>
+      </nz-tab>
+
+      <nz-tab [nzTitle]="'humanResource.employee.tabSalaryHistories' | translate">
+        <div class="tab-content">
+          <div class="tab-toolbar">
+            <button nz-button nzType="primary" (click)="openChildCreate('salaryHistory')">
+              <i nz-icon nzType="plus"></i>
+              {{ 'humanResource.employee.addSalaryHistory' | translate }}
+            </button>
+          </div>
+          <app-table-custom
+            [id]="'employee-detail-salary-histories'"
+            [data]="salaryHistories"
+            [columns]="salaryHistoryColumns"
+            [rowActions]="salaryHistoryRowActions"
+            [stripedRows]="true"
+            [showIndexList]="true"
+            [toolbar]="{ show: false }"
+            [emptyText]="'humanResource.employee.noSalaryHistories' | translate"
+          ></app-table-custom>
+        </div>
+      </nz-tab>
+    </nz-tabs>
+  }
+</nz-card>
+
+<nz-modal
+  [(nzVisible)]="childModalVisible"
+  [nzTitle]="childModalTitle | translate"
+  [nzOkLoading]="childModalSubmitting"
+  [nzWidth]="720"
+  (nzOnCancel)="closeChildModal()"
+  (nzOnOk)="submitChildForm()"
+>
+  <ng-container *nzModalContent>
+    @if (childForm) {
+      <form nz-form [formGroup]="childForm" nzLayout="vertical">
+        @if (childType === 'dependent') {
+          <div nz-row [nzGutter]="16">
+            <div nz-col nzXs="24" nzMd="12">
+              <nz-form-item>
+                <nz-form-label [nzRequired]="true">{{
+                  'humanResource.employee.dependent.fullName' | translate
+                }}</nz-form-label>
+                <nz-form-control
+                  [nzErrorTip]="'humanResource.employee.dependent.fullNameRequired' | translate"
+                >
+                  <input nz-input formControlName="fullName" />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzXs="24" nzMd="12">
+              <nz-form-item>
+                <nz-form-label [nzRequired]="true">{{
+                  'humanResource.employee.dependent.relationship' | translate
+                }}</nz-form-label>
+                <nz-form-control
+                  [nzErrorTip]="'humanResource.employee.dependent.relationshipRequired' | translate"
+                >
+                  <input nz-input formControlName="relationship" />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzXs="24" nzMd="12">
+              <nz-form-item>
+                <nz-form-label>{{
+                  'humanResource.employee.dependent.dayOfBirth' | translate
+                }}</nz-form-label>
+                <nz-form-control>
+                  <nz-date-picker
+                    formControlName="dayOfBirth"
+                    nzFormat="dd/MM/yyyy"
+                    style="width: 100%"
+                  ></nz-date-picker>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzXs="24" nzMd="12">
+              <nz-form-item>
+                <nz-form-label>{{
+                  'humanResource.employee.dependent.gender' | translate
+                }}</nz-form-label>
+                <nz-form-control>
+                  <input nz-input formControlName="gender" />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzXs="24" nzMd="12">
+              <nz-form-item>
+                <nz-form-label>{{
+                  'humanResource.employee.dependent.identityNumber' | translate
+                }}</nz-form-label>
+                <nz-form-control>
+                  <input nz-input formControlName="identityNumber" />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzXs="24" nzMd="12">
+              <nz-form-item>
+                <nz-form-label>{{
+                  'humanResource.employee.dependent.taxCode' | translate
+                }}</nz-form-label>
+                <nz-form-control>
+                  <input nz-input formControlName="taxCode" />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzXs="24" nzMd="12">
+              <nz-form-item>
+                <nz-form-label>{{
+                  'humanResource.employee.dependent.dependentFromDate' | translate
+                }}</nz-form-label>
+                <nz-form-control>
+                  <nz-date-picker
+                    formControlName="dependentFromDate"
+                    nzFormat="dd/MM/yyyy"
+                    style="width: 100%"
+                  ></nz-date-picker>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzXs="24" nzMd="12">
+              <nz-form-item>
+                <nz-form-label>{{
+                  'humanResource.employee.dependent.dependentToDate' | translate
+                }}</nz-form-label>
+                <nz-form-control>
+                  <nz-date-picker
+                    formControlName="dependentToDate"
+                    nzFormat="dd/MM/yyyy"
+                    style="width: 100%"
+                  ></nz-date-picker>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzXs="24" nzMd="12">
+              <nz-form-item>
+                <nz-form-label>{{
+                  'humanResource.employee.dependent.status' | translate
+                }}</nz-form-label>
+                <nz-form-control>
+                  <input nz-input formControlName="status" />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzXs="24" nzMd="12">
+              <nz-form-item>
+                <nz-form-label>{{
+                  'humanResource.employee.dependent.note' | translate
+                }}</nz-form-label>
+                <nz-form-control>
+                  <input nz-input formControlName="note" />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+        }
+
+        @if (childType === 'education') {
+          <div nz-row [nzGutter]="16">
+            <div nz-col nzXs="24" nzMd="12">
+              <nz-form-item>
+                <nz-form-label [nzRequired]="true">{{
+                  'humanResource.employee.education.schoolName' | translate
+                }}</nz-form-label>
+                <nz-form-control
+                  [nzErrorTip]="'humanResource.employee.education.schoolNameRequired' | translate"
+                >
+                  <input nz-input formControlName="schoolName" />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzXs="24" nzMd="12">
+              <nz-form-item>
+                <nz-form-label>{{
+                  'humanResource.employee.education.degree' | translate
+                }}</nz-form-label>
+                <nz-form-control>
+                  <input nz-input formControlName="degree" />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzXs="24" nzMd="12">
+              <nz-form-item>
+                <nz-form-label>{{
+                  'humanResource.employee.education.major' | translate
+                }}</nz-form-label>
+                <nz-form-control>
+                  <input nz-input formControlName="major" />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzXs="24" nzMd="12">
+              <nz-form-item>
+                <nz-form-label>{{
+                  'humanResource.employee.education.gpa' | translate
+                }}</nz-form-label>
+                <nz-form-control>
+                  <input nz-input formControlName="gpa" />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzXs="24" nzMd="12">
+              <nz-form-item>
+                <nz-form-label>{{
+                  'humanResource.employee.education.startDate' | translate
+                }}</nz-form-label>
+                <nz-form-control>
+                  <nz-date-picker
+                    formControlName="startDate"
+                    nzFormat="dd/MM/yyyy"
+                    style="width: 100%"
+                  ></nz-date-picker>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzXs="24" nzMd="12">
+              <nz-form-item>
+                <nz-form-label>{{
+                  'humanResource.employee.education.endDate' | translate
+                }}</nz-form-label>
+                <nz-form-control>
+                  <nz-date-picker
+                    formControlName="endDate"
+                    nzFormat="dd/MM/yyyy"
+                    style="width: 100%"
+                  ></nz-date-picker>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+        }
+
+        @if (childType === 'certificate') {
+          <div nz-row [nzGutter]="16">
+            <div nz-col nzXs="24" nzMd="12">
+              <nz-form-item>
+                <nz-form-label [nzRequired]="true">{{
+                  'humanResource.employee.certificate.name' | translate
+                }}</nz-form-label>
+                <nz-form-control
+                  [nzErrorTip]="'humanResource.employee.certificate.nameRequired' | translate"
+                >
+                  <input nz-input formControlName="name" />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzXs="24" nzMd="12">
+              <nz-form-item>
+                <nz-form-label>{{
+                  'humanResource.employee.certificate.issuingOrganization' | translate
+                }}</nz-form-label>
+                <nz-form-control>
+                  <input nz-input formControlName="issuingOrganization" />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzXs="24" nzMd="12">
+              <nz-form-item>
+                <nz-form-label>{{
+                  'humanResource.employee.certificate.issueDate' | translate
+                }}</nz-form-label>
+                <nz-form-control>
+                  <nz-date-picker
+                    formControlName="issueDate"
+                    nzFormat="dd/MM/yyyy"
+                    style="width: 100%"
+                  ></nz-date-picker>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzXs="24" nzMd="12">
+              <nz-form-item>
+                <nz-form-label>{{
+                  'humanResource.employee.certificate.expiryDate' | translate
+                }}</nz-form-label>
+                <nz-form-control>
+                  <nz-date-picker
+                    formControlName="expiryDate"
+                    nzFormat="dd/MM/yyyy"
+                    style="width: 100%"
+                  ></nz-date-picker>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzXs="24" nzMd="24">
+              <nz-form-item>
+                <nz-form-label>{{
+                  'humanResource.employee.certificate.credentialId' | translate
+                }}</nz-form-label>
+                <nz-form-control>
+                  <input nz-input formControlName="credentialId" />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzXs="24" nzMd="24">
+              <nz-form-item>
+                <nz-form-label>{{
+                  'humanResource.employee.certificate.imageUrl' | translate
+                }}</nz-form-label>
+                <nz-form-control>
+                  <app-file-upload
+                    formControlName="imageUrl"
+                    mode="image"
+                    accept="image/*"
+                    listType="picture-card"
+                    [showUrlInput]="false"
+                  ></app-file-upload>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+        }
+
+        @if (childType === 'salaryHistory') {
+          <div nz-row [nzGutter]="16">
+            <div nz-col nzXs="24" nzMd="12">
+              <nz-form-item>
+                <nz-form-label [nzRequired]="true">{{
+                  'humanResource.employee.salaryHistory.effectiveDate' | translate
+                }}</nz-form-label>
+                <nz-form-control
+                  [nzErrorTip]="
+                    'humanResource.employee.salaryHistory.effectiveDateRequired' | translate
+                  "
+                >
+                  <nz-date-picker
+                    formControlName="effectiveDate"
+                    nzFormat="dd/MM/yyyy"
+                    style="width: 100%"
+                  ></nz-date-picker>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzXs="24" nzMd="12">
+              <nz-form-item>
+                <nz-form-label [nzRequired]="true">{{
+                  'humanResource.employee.salaryHistory.newBasicSalary' | translate
+                }}</nz-form-label>
+                <nz-form-control
+                  [nzErrorTip]="
+                    'humanResource.employee.salaryHistory.newBasicSalaryRequired' | translate
+                  "
+                >
+                  <nz-input-number
+                    formControlName="newBasicSalary"
+                    style="width: 100%"
+                  ></nz-input-number>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzXs="24" nzMd="12">
+              <nz-form-item>
+                <nz-form-label>{{
+                  'humanResource.employee.salaryHistory.oldBasicSalary' | translate
+                }}</nz-form-label>
+                <nz-form-control>
+                  <nz-input-number
+                    formControlName="oldBasicSalary"
+                    style="width: 100%"
+                  ></nz-input-number>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzXs="24" nzMd="12">
+              <nz-form-item>
+                <nz-form-label>{{
+                  'humanResource.employee.salaryHistory.allowance' | translate
+                }}</nz-form-label>
+                <nz-form-control>
+                  <nz-input-number
+                    formControlName="allowance"
+                    style="width: 100%"
+                  ></nz-input-number>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzXs="24" nzMd="12">
+              <nz-form-item>
+                <nz-form-label>{{
+                  'humanResource.employee.salaryHistory.changeType' | translate
+                }}</nz-form-label>
+                <nz-form-control>
+                  <input nz-input formControlName="changeType" />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzXs="24" nzMd="12">
+              <nz-form-item>
+                <nz-form-label>{{
+                  'humanResource.employee.salaryHistory.decisionNumber' | translate
+                }}</nz-form-label>
+                <nz-form-control>
+                  <input nz-input formControlName="decisionNumber" />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzXs="24" nzMd="12">
+              <nz-form-item>
+                <nz-form-label>{{
+                  'humanResource.employee.salaryHistory.approvedBy' | translate
+                }}</nz-form-label>
+                <nz-form-control>
+                  <input nz-input formControlName="approvedBy" />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzXs="24" nzMd="12">
+              <nz-form-item>
+                <nz-form-label>{{
+                  'humanResource.employee.salaryHistory.reason' | translate
+                }}</nz-form-label>
+                <nz-form-control>
+                  <input nz-input formControlName="reason" />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzXs="24" nzMd="24">
+              <nz-form-item>
+                <nz-form-label>{{
+                  'humanResource.employee.salaryHistory.note' | translate
+                }}</nz-form-label>
+                <nz-form-control>
+                  <textarea nz-input formControlName="note" rows="2"></textarea>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+        }
+      </form>
+    }
+  </ng-container>
+</nz-modal>
+
+<ng-template #titleTemplate>
+  <span class="card-title">
+    <i nz-icon nzType="user"></i>
+    {{ 'humanResource.employee.detailTitle' | translate }}
+  </span>
+</ng-template>
+
+<ng-template #extraTemplate>
+  <div class="header-actions">
+    <button nz-button nzType="default" (click)="goBack()">
+      <i nz-icon nzType="arrow-left"></i> {{ 'humanResource.employee.backToList' | translate }}
+    </button>
+    <button nz-button nzType="primary" (click)="goEdit()">
+      <i nz-icon nzType="edit"></i> {{ 'common.actions.update' | translate }}
+    </button>
+    <button
+      nz-button
+      [nzType]="employee?.isDeleted ? 'primary' : 'default'"
+      [nzDanger]="!employee?.isDeleted"
+      (click)="toggleStatus()"
+      class="ant-btn-danger"
+    >
+      <i nz-icon nzType="sync"></i>
+      {{
+        employee?.isDeleted
+          ? ('humanResource.employee.activate' | translate)
+          : ('humanResource.employee.deactivate' | translate)
+      }}
+    </button>
+  </div>
+</ng-template>

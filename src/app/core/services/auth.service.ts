@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { ApiService } from './api.service';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { ApiService } from './api.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -29,13 +29,13 @@ export class AuthService {
 
   login(username: string, password: string): Observable<any> {
     return this.apiService.post<any>(this.apiService.AUTH.LOGIN, { username, password }).pipe(
-      tap(res => {
+      tap((res) => {
         if (res && res.token) {
           sessionStorage.setItem(this.KEY_TOKEN, res.token);
           sessionStorage.setItem(this.KEY_REFRESH_TOKEN, res.refreshToken);
           sessionStorage.setItem(this.KEY_USER, res.username);
         }
-      })
+      }),
     );
   }
 
@@ -46,29 +46,29 @@ export class AuthService {
   }
 
   refreshTokens(refreshToken: string): Observable<any> {
-    return this.apiService.post<any>(`${this.apiService.AUTH.BASE}/refresh`, { refreshToken }).pipe(
-      tap(res => {
+    return this.apiService.post<any>(this.apiService.AUTH.REFRESH, { refreshToken }).pipe(
+      tap((res) => {
         if (res && res.token) {
           sessionStorage.setItem(this.KEY_TOKEN, res.token);
           sessionStorage.setItem(this.KEY_REFRESH_TOKEN, res.refreshToken);
         }
-      })
+      }),
     );
   }
 
   changePassword(body: any): Observable<any> {
-    return this.apiService.post<any>(`${this.apiService.AUTH.BASE}/change-password`, body);
+    return this.apiService.post<any>(this.apiService.AUTH.CHANGE_PASSWORD, body);
   }
 
   forgotPassword(email: string): Observable<any> {
-    return this.apiService.post<any>(`${this.apiService.AUTH.BASE}/forgot-password`, { email });
+    return this.apiService.post<any>(this.apiService.AUTH.FORGOT_PASSWORD, { email });
   }
 
   resetPasswordWithOtp(body: any): Observable<any> {
-    return this.apiService.post<any>(`${this.apiService.AUTH.BASE}/reset-password-with-otp`, body);
+    return this.apiService.post<any>(this.apiService.AUTH.RESET_PASSWORD_WITH_OTP, body);
   }
 
   getInfoUser(): Observable<any> {
-    return this.apiService.get<any>(`${this.apiService.AUTH.BASE}/me`);
+    return this.apiService.get<any>(this.apiService.AUTH.ME);
   }
 }

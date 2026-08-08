@@ -1,0 +1,33 @@
+nz-card {
+  border-radius: 8px;
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.05),
+    0 2px 4px -1px rgba(0, 0, 0, 0.03);
+}
+
+.form-actions {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.section-title {
+  margin: 0 0 16px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--foreground);
+
+  i {
+    margin-right: 8px;
+    color: var(--primary);
+  }
+}

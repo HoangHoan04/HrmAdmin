@@ -10,7 +10,9 @@
 }
 
 .table-header-row {
-  background: var(--primary-muted, #f8fafc);
+  background:
+    linear-gradient(var(--primary-muted, #f8fafc), var(--primary-muted, #f8fafc)),
+    var(--background-card, #ffffff);
 }
 
 .table-custom-toolbar {
@@ -345,11 +347,13 @@
 .custom-data-table {
   width: max-content;
   min-width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   table-layout: auto;
   text-align: left;
 
   &.gridlines {
+
     th,
     td {
       border-right: 1px solid var(--border);
@@ -364,16 +368,25 @@
 .sticky-col {
   position: sticky !important;
   z-index: 10;
-  background-color: var(--background-card);
+  background-color: var(--background-card, #ffffff) !important;
 
   &.sticky-left-0 {
     left: 0px;
   }
 }
 
-th.sticky-col {
-  z-index: 20;
-background-color: var(--primary-muted, #f8fafc);
+th.sticky-col,
+th.sticky-col.header-cell {
+  z-index: 30;
+  background:
+    linear-gradient(var(--primary-muted, #f8fafc), var(--primary-muted, #f8fafc)),
+    var(--background-card, #ffffff) !important;
+
+  &.sortable-header:hover {
+    background:
+      linear-gradient(var(--border), var(--border)),
+      var(--background-card, #ffffff) !important;
+  }
 }
 
 .sticky-left {
@@ -386,19 +399,24 @@ background-color: var(--primary-muted, #f8fafc);
 }
 
 .header-cell {
-  background-color: var(--primary-muted, #f8fafc);
+  background:
+    linear-gradient(var(--primary-muted, #f8fafc), var(--primary-muted, #f8fafc)),
+    var(--background-card, #ffffff);
   color: var(--foreground);
   font-weight: 600;
   border-bottom: 1px solid var(--border);
   position: relative;
   user-select: none;
   transition: background-color 0.15s ease;
+  z-index: 2;
 
   &.sortable-header {
     cursor: pointer;
 
     &:hover {
-      background-color: var(--border);
+      background:
+        linear-gradient(var(--border), var(--border)),
+        var(--background-card, #ffffff);
     }
   }
 }
@@ -475,14 +493,26 @@ background-color: var(--primary-muted, #f8fafc);
 .table-data-row {
   border-bottom: 1px solid var(--border);
   transition: background-color 0.15s ease;
-  background-color: var(--background-card);
+  background-color: var(--background-card, #ffffff);
 
-  &:hover {
-    background-color: var(--muted);
+  .sticky-col {
+    background-color: var(--background-card, #ffffff) !important;
   }
 
   &.striped-row {
-    background-color: rgba(120, 120, 120, 0.02);
+    background-color: var(--muted, #f3f4f6);
+
+    .sticky-col {
+      background-color: var(--muted, #f3f4f6) !important;
+    }
+  }
+
+  &:hover {
+    background-color: var(--muted, #f1f5f9);
+
+    .sticky-col {
+      background-color: var(--muted, #f1f5f9) !important;
+    }
   }
 }
 
