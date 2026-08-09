@@ -11,7 +11,7 @@
       "groupSalary": "Nhóm lương",
       "parentBranch": "Chi nhánh mẹ",
       "address": "Địa chỉ",
-      "ipAddress": "Dải IP chấm công",
+      "ipAddress": "Địa chỉ IP",
       "phoneNumber": "Điện thoại",
       "email": "Email",
       "taxCode": "Mã số thuế",
@@ -52,7 +52,11 @@
       "shortNamePlaceholder": "Ví dụ: CN HN",
       "typePlaceholder": "Ví dụ: Văn phòng / Showroom",
       "groupSalaryPlaceholder": "Ví dụ: Nhom A / Nhom B",
-      "descriptionPlaceholder": "Mô tả chi nhánh"
+      "descriptionPlaceholder": "Mô tả chi nhánh",
+      "latitude": "Vĩ độ",
+      "longitude": "Kinh độ",
+      "timeKeepingStandardId": "Chuẩn chấm công",
+      "filterTimeKeepingStandard": "Chọn chuẩn chấm công..."
     }
   }
 }

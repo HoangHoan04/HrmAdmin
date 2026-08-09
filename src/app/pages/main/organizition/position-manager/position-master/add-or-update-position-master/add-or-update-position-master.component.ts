@@ -56,6 +56,10 @@ export class AddOrUpdatePositionMasterComponent implements OnInit {
       branchId: [null],
       workingHour: [null],
       minimumWorkingHour: [null],
+      hourWorkingStart: [null],
+      hourWorkingEnd: [null],
+      hourSnapShotStart: [null],
+      hourSnapShotEnd: [null],
       isTimeKeeping: [false],
       isLimitHoursWorking: [false],
       limit: [''],
@@ -122,6 +126,10 @@ export class AddOrUpdatePositionMasterComponent implements OnInit {
           branchId: item.branchId,
           workingHour: item.workingHour,
           minimumWorkingHour: item.minimumWorkingHour,
+          hourWorkingStart: this.parseTime(item.hourWorkingStart),
+          hourWorkingEnd: this.parseTime(item.hourWorkingEnd),
+          hourSnapShotStart: this.parseTime(item.hourSnapShotStart),
+          hourSnapShotEnd: this.parseTime(item.hourSnapShotEnd),
           isTimeKeeping: item.isTimeKeeping ?? false,
           isLimitHoursWorking: item.isLimitHoursWorking ?? false,
           limit: item.limit,
@@ -171,6 +179,10 @@ export class AddOrUpdatePositionMasterComponent implements OnInit {
       branchId: value.branchId || null,
       workingHour: value.workingHour ?? null,
       minimumWorkingHour: value.minimumWorkingHour ?? null,
+      hourWorkingStart: this.formatTime(value.hourWorkingStart),
+      hourWorkingEnd: this.formatTime(value.hourWorkingEnd),
+      hourSnapShotStart: this.formatTime(value.hourSnapShotStart),
+      hourSnapShotEnd: this.formatTime(value.hourSnapShotEnd),
       isTimeKeeping: value.isTimeKeeping ?? false,
       isLimitHoursWorking: value.isLimitHoursWorking ?? false,
       limit: value.limit || null,
@@ -203,5 +215,22 @@ export class AddOrUpdatePositionMasterComponent implements OnInit {
         this.submitting = false;
       },
     });
+  }
+
+  private parseTime(value?: string | null): Date | null {
+    if (!value) return null;
+    const parts = value.split(':').map((p) => Number(p));
+    if (parts.length < 2 || Number.isNaN(parts[0]) || Number.isNaN(parts[1])) return null;
+    const d = new Date();
+    d.setHours(parts[0], parts[1], parts[2] || 0, 0);
+    return d;
+  }
+
+  private formatTime(value: Date | null): string | null {
+    if (!value) return null;
+    const hh = String(value.getHours()).padStart(2, '0');
+    const mm = String(value.getMinutes()).padStart(2, '0');
+    const ss = String(value.getSeconds()).padStart(2, '0');
+    return `${hh}:${mm}:${ss}`;
   }
 }

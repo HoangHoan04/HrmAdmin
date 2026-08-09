@@ -52,8 +52,9 @@
     "addTransfer": "Thêm điều chuyển",
     "editTransfer": "Cập nhật điều chuyển",
     "detailTransfer": "Chi tiết điều chuyển",
-    "timeAttendance": "Chấm công & nghỉ phép",
-    "timekeepingList": "Chấm công",
+     "operate": "Vận hành",
+    "timeAttendance": "Chấm công",
+    "timekeepingList": "Bảng chấm công",
     "shiftList": "Ca làm việc",
     "leaveRequestList": "Đơn nghỉ phép",
     "payroll": "Lương & phúc lợi",
@@ -72,6 +73,13 @@
     "userList": "Tài khoản người dùng",
     "roleList": "Vai trò",
     "timekeepingStandard": "Chuẩn chấm công",
+    "addTimekeepingStandard": "Thêm chuẩn chấm công",
+    "editTimekeepingStandard": "Cập nhật chuẩn chấm công",
+    "detailTimekeeping": "Chi tiết chấm công",
+    "addShift": "Thêm ca làm việc",
+    "editShift": "Cập nhật ca làm việc",
+    "addWorkSchedule": "Thêm lịch làm việc",
+    "editWorkSchedule": "Cập nhật lịch làm việc",
     "actionLog": "Nhật ký hệ thống"
   }
 }

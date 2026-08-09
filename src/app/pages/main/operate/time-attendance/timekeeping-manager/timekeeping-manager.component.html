@@ -1,0 +1,103 @@
+<app-filter-custom
+  [id]="'timekeeping-filter'"
+  [fields]="filterFields"
+  [filters]="filters"
+  [config]="filterConfig"
+  [filterActions]="filterActions"
+  [loading]="loading"
+  (filtersChange)="onFiltersChange($event)"
+></app-filter-custom>
+
+<app-table-custom
+  [id]="'timekeeping-table'"
+  [data]="data"
+  [columns]="columns"
+  [loading]="loading"
+  [showIndexList]="true"
+  [stripedRows]="true"
+  [rowActions]="rowActions"
+  [pagination]="pagination"
+  (pageChange)="onPageChange($event)"
+  (sortChange)="onSortChange($event)"
+  (refresh)="loadData()"
+></app-table-custom>
+
+<nz-drawer
+  [nzVisible]="drawerVisible"
+  [nzWidth]="520"
+  [nzTitle]="'timeAttendance.timekeeping.adjustTitle' | translate"
+  (nzOnClose)="closeDrawer()"
+>
+  <ng-container *nzDrawerContent>
+    <nz-spin [nzSpinning]="drawerLoading">
+      @if (selected) {
+        <div style="margin-bottom: 16px">
+          <p>
+            <strong>{{ 'timeAttendance.timekeeping.employee' | translate }}:</strong>
+            {{ selected.employeeCode }} - {{ selected.employeeName }}
+          </p>
+          <p>
+            <strong>{{ 'timeAttendance.timekeeping.workDate' | translate }}:</strong>
+            {{ selected.workDate }}
+          </p>
+          <p>
+            <strong>{{ 'timeAttendance.timekeeping.shiftMaster' | translate }}:</strong>
+            {{ selected.shiftMasterName || '-' }}
+          </p>
+          <p>
+            <strong>{{ 'timeAttendance.timekeeping.branch' | translate }}:</strong>
+            {{ selected.branchName || '-' }}
+          </p>
+        </div>
+
+        <form nz-form [formGroup]="adjustForm" nzLayout="vertical" (ngSubmit)="submitAdjust()">
+          <nz-form-item>
+            <nz-form-label>{{ 'timeAttendance.timekeeping.checkInAt' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-date-picker
+                formControlName="checkInAt"
+                nzShowTime
+                nzFormat="dd/MM/yyyy HH:mm"
+                style="width: 100%"
+              ></nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label>{{ 'timeAttendance.timekeeping.checkOutAt' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-date-picker
+                formControlName="checkOutAt"
+                nzShowTime
+                nzFormat="dd/MM/yyyy HH:mm"
+                style="width: 100%"
+              ></nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label>{{ 'timeAttendance.timekeeping.status' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-select formControlName="status" nzAllowClear>
+                <nz-option nzValue="ON_TIME" [nzLabel]="'timeAttendance.timekeeping.statusOnTime' | translate"></nz-option>
+                <nz-option nzValue="LATE" [nzLabel]="'timeAttendance.timekeeping.statusLate' | translate"></nz-option>
+                <nz-option nzValue="EARLY" [nzLabel]="'timeAttendance.timekeeping.statusEarly' | translate"></nz-option>
+                <nz-option nzValue="ABSENT" [nzLabel]="'timeAttendance.timekeeping.statusAbsent' | translate"></nz-option>
+                <nz-option nzValue="LEAVE" [nzLabel]="'timeAttendance.timekeeping.statusLeave' | translate"></nz-option>
+                <nz-option nzValue="INCOMPLETE" [nzLabel]="'timeAttendance.timekeeping.statusIncomplete' | translate"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label>{{ 'timeAttendance.timekeeping.note' | translate }}</nz-form-label>
+            <nz-form-control>
+              <textarea nz-input formControlName="note" rows="3"></textarea>
+            </nz-form-control>
+          </nz-form-item>
+          <button nz-button nzType="primary" type="submit" [nzLoading]="submitting">
+            <i nz-icon nzType="save"></i>
+            {{ 'timeAttendance.timekeeping.saveAdjust' | translate }}
+          </button>
+        </form>
+      }
+    </nz-spin>
+  </ng-container>
+</nz-drawer>

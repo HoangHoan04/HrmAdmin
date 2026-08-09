@@ -3,7 +3,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { ROUTES_CONFIG } from '../../../../../core/constants/common/routes.config';
-import { Company, CompanySelectBoxDto } from '../../../../../core/models';
+import {
+  Company,
+  CompanySelectBoxDto,
+  TimeKeepingStandardSelectBoxDto,
+} from '../../../../../core/models';
 import { ApiService } from '../../../../../core/services/api.service';
 import { I18nMessageService } from '../../../../../core/services/i18n-message.service';
 
@@ -20,6 +24,7 @@ export class AddOrUpdateCompanyComponent implements OnInit {
   submitting = false;
   validateForm!: FormGroup;
   parentCompanies: CompanySelectBoxDto[] = [];
+  timeKeepingStandards: TimeKeepingStandardSelectBoxDto[] = [];
 
   constructor(
     private readonly fb: FormBuilder,
@@ -35,6 +40,7 @@ export class AddOrUpdateCompanyComponent implements OnInit {
     this.id = this.route.snapshot.paramMap.get('id');
     this.isEdit = !!this.id;
     this.loadParentCompanies();
+    this.loadTimeKeepingStandards();
 
     if (this.isEdit && this.id) {
       this.loadCompanyDetail(this.id);
@@ -93,6 +99,19 @@ export class AddOrUpdateCompanyComponent implements OnInit {
         },
         error: () => {
           this.message.error(this.i18n.instant('common.messages.loadParentCompanyFailed'));
+        },
+      });
+  }
+
+  loadTimeKeepingStandards(): void {
+    this.apiService
+      .post<TimeKeepingStandardSelectBoxDto[]>(this.apiService.TIMEKEEPING_STANDARD.SELECT_BOX, {})
+      .subscribe({
+        next: (items) => {
+          this.timeKeepingStandards = items;
+        },
+        error: () => {
+          this.timeKeepingStandards = [];
         },
       });
   }

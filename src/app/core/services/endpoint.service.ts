@@ -135,6 +135,69 @@ export class EndpointService {
     SALARY_HISTORY_DELETE: `${this.baseUrl}/employee/salary-history/delete`,
   };
 
+  TIMEKEEPING_STANDARD = {
+    PAGINATION: `${this.baseUrl}/timekeeping-standard/pagination`,
+    DETAIL: `${this.baseUrl}/timekeeping-standard/detail`,
+    CREATE: `${this.baseUrl}/timekeeping-standard/create`,
+    UPDATE: `${this.baseUrl}/timekeeping-standard/update`,
+    ACTIVATE: `${this.baseUrl}/timekeeping-standard/activate`,
+    DEACTIVATE: `${this.baseUrl}/timekeeping-standard/deactivate`,
+    SELECT_BOX: `${this.baseUrl}/timekeeping-standard/select-box`,
+  };
+
+  SHIFT_MASTER = {
+    PAGINATION: `${this.baseUrl}/shift-master/pagination`,
+    DETAIL: `${this.baseUrl}/shift-master/detail`,
+    CREATE: `${this.baseUrl}/shift-master/create`,
+    UPDATE: `${this.baseUrl}/shift-master/update`,
+    ACTIVATE: `${this.baseUrl}/shift-master/activate`,
+    DEACTIVATE: `${this.baseUrl}/shift-master/deactivate`,
+    SELECT_BOX: `${this.baseUrl}/shift-master/select-box`,
+  };
+
+  WORK_SCHEDULE = {
+    PAGINATION: `${this.baseUrl}/work-schedule/pagination`,
+    DETAIL: `${this.baseUrl}/work-schedule/detail`,
+    CREATE: `${this.baseUrl}/work-schedule/create`,
+    UPDATE: `${this.baseUrl}/work-schedule/update`,
+    DEACTIVATE: `${this.baseUrl}/work-schedule/deactivate`,
+  };
+
+  TIMEKEEPING = {
+    PAGINATION: `${this.baseUrl}/timekeeping/pagination`,
+    DETAIL: `${this.baseUrl}/timekeeping/detail`,
+    ADJUST: `${this.baseUrl}/timekeeping/adjust`,
+    SUMMARIZE: `${this.baseUrl}/timekeeping/summarize`,
+    SUMMARY_PAGINATION: `${this.baseUrl}/timekeeping/summary/pagination`,
+  };
+
+  DAY_OFF_CONFIG = {
+    PAGINATION: `${this.baseUrl}/day-off-config/pagination`,
+    DETAIL: `${this.baseUrl}/day-off-config/detail`,
+    CREATE: `${this.baseUrl}/day-off-config/create`,
+    UPDATE: `${this.baseUrl}/day-off-config/update`,
+    ACTIVATE: `${this.baseUrl}/day-off-config/activate`,
+    DEACTIVATE: `${this.baseUrl}/day-off-config/deactivate`,
+    SELECT_BOX: `${this.baseUrl}/day-off-config/select-box`,
+  };
+
+  PUBLIC_HOLIDAY = {
+    PAGINATION: `${this.baseUrl}/public-holiday/pagination`,
+    DETAIL: `${this.baseUrl}/public-holiday/detail`,
+    CREATE: `${this.baseUrl}/public-holiday/create`,
+    UPDATE: `${this.baseUrl}/public-holiday/update`,
+    ACTIVATE: `${this.baseUrl}/public-holiday/activate`,
+    DEACTIVATE: `${this.baseUrl}/public-holiday/deactivate`,
+  };
+
+  REGISTER_DAY_OFF = {
+    PAGINATION: `${this.baseUrl}/register-day-off/pagination`,
+    DETAIL: `${this.baseUrl}/register-day-off/detail`,
+    CREATE: `${this.baseUrl}/register-day-off/create`,
+    APPROVE: `${this.baseUrl}/register-day-off/approve`,
+    REJECT: `${this.baseUrl}/register-day-off/reject`,
+  };
+
   ACTION_LOG = {
     BASE: `${this.baseUrl}/action-logs`,
   };

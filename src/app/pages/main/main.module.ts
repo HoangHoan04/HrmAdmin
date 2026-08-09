@@ -19,6 +19,27 @@ const routes: Routes = [
     loadChildren: () =>
       import('./human-resource/human-resource.module').then((m) => m.HumanResourceModule),
   },
+  {
+    path: getPath(ROUTES_CONFIG.OPERATE_MANAGER.path),
+    loadChildren: () => import('./operate/operate.module').then((m) => m.OperateModule),
+  },
+  {
+    path: getPath(ROUTES_CONFIG.SETTING_SYSTEM.path),
+    loadChildren: () =>
+      import('./system-settings/system-settings.module').then((m) => m.SystemSettingsModule),
+  },
+  {
+    path: getPath(ROUTES_CONFIG.RECRUITMENT.path),
+    loadChildren: () => import('./recruitment/recruitment.module').then((m) => m.RecruitmentModule),
+  },
+  {
+    path: getPath(ROUTES_CONFIG.PAYROLL.path),
+    loadChildren: () => import('./payroll/payroll.module').then((m) => m.PayrollModule),
+  },
+  {
+    path: getPath(ROUTES_CONFIG.ASSET.path),
+    loadChildren: () => import('./asset/asset.module').then((m) => m.AssetModule),
+  },
 ];
 
 @NgModule({

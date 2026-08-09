@@ -52,7 +52,11 @@
       "shortNamePlaceholder": "e.g. HN Branch",
       "typePlaceholder": "e.g. Office / Showroom",
       "groupSalaryPlaceholder": "e.g. Group A / Group B",
-      "descriptionPlaceholder": "Branch description"
+      "descriptionPlaceholder": "Branch description",
+      "latitude": "Latitude",
+      "longitude": "Longitude",
+      "timeKeepingStandardId": "Timekeeping standard",
+      "filterTimeKeepingStandard": "Select timekeeping standard..."
     }
   }
 }

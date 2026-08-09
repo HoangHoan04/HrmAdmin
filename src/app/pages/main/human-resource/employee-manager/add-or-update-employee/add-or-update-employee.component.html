@@ -13,12 +13,7 @@
               'humanResource.employee.code' | translate
             }}</nz-form-label>
             <nz-form-control [nzErrorTip]="'humanResource.employee.codeRequired' | translate">
-              <input
-                nz-input
-                formControlName="code"
-                placeholder="NV001"
-                [disabled]="isEdit"
-              />
+              <input nz-input formControlName="code" placeholder="NV001" [disabled]="isEdit" />
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -47,6 +42,18 @@
             <nz-form-label>{{ 'humanResource.employee.fullName' | translate }}</nz-form-label>
             <nz-form-control>
               <input nz-input formControlName="fullName" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'humanResource.employee.gender' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-select formControlName="gender" nzAllowClear>
+                @for (opt of genderOptions; track opt.value) {
+                  <nz-option [nzValue]="opt.value" [nzLabel]="opt.labelKey | translate"></nz-option>
+                }
+              </nz-select>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -287,11 +294,15 @@
       <nz-divider></nz-divider>
       <h3 class="section-title">{{ 'humanResource.employee.sectionWork' | translate }}</h3>
       <div nz-row [nzGutter]="24">
-         <div nz-col nzXs="24" nzMd="8">
+        <div nz-col nzXs="24" nzMd="8">
           <nz-form-item>
             <nz-form-label>{{ 'humanResource.employee.level' | translate }}</nz-form-label>
             <nz-form-control>
-              <input nz-input formControlName="level" />
+              <nz-select formControlName="level" nzAllowClear>
+                @for (opt of employeeLevelOptions; track opt.value) {
+                  <nz-option [nzValue]="opt.value" [nzLabel]="opt.labelKey | translate"></nz-option>
+                }
+              </nz-select>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -299,7 +310,11 @@
           <nz-form-item>
             <nz-form-label>{{ 'humanResource.employee.workingMode' | translate }}</nz-form-label>
             <nz-form-control>
-              <input nz-input formControlName="workingMode" />
+              <nz-select formControlName="workingMode" nzAllowClear>
+                @for (opt of workingModeOptions; track opt.value) {
+                  <nz-option [nzValue]="opt.value" [nzLabel]="opt.labelKey | translate"></nz-option>
+                }
+              </nz-select>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -307,7 +322,11 @@
           <nz-form-item>
             <nz-form-label>{{ 'humanResource.employee.contractType' | translate }}</nz-form-label>
             <nz-form-control>
-              <input nz-input formControlName="contractType" />
+              <nz-select formControlName="contractType" nzAllowClear>
+                @for (opt of contractTypeOptions; track opt.value) {
+                  <nz-option [nzValue]="opt.value" [nzLabel]="opt.labelKey | translate"></nz-option>
+                }
+              </nz-select>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -329,7 +348,12 @@
           <nz-form-item>
             <nz-form-label>{{ 'organization.branch.entityName' | translate }}</nz-form-label>
             <nz-form-control>
-              <nz-select formControlName="branchId" nzAllowClear [nzPlaceHolder]="'Chọn Chi nhánh'" [disabled]="!validateForm.get('companyId')?.value">
+              <nz-select
+                formControlName="branchId"
+                nzAllowClear
+                [nzPlaceHolder]="'Chọn Chi nhánh'"
+                [disabled]="!validateForm.get('companyId')?.value"
+              >
                 @for (b of branches; track b.id) {
                   <nz-option [nzValue]="b.id" [nzLabel]="b.name"></nz-option>
                 }
@@ -341,7 +365,12 @@
           <nz-form-item>
             <nz-form-label>{{ 'organization.department.entityName' | translate }}</nz-form-label>
             <nz-form-control>
-              <nz-select formControlName="departmentId" nzAllowClear [nzPlaceHolder]="'Chọn Phòng ban'" [disabled]="!validateForm.get('branchId')?.value">
+              <nz-select
+                formControlName="departmentId"
+                nzAllowClear
+                [nzPlaceHolder]="'Chọn Phòng ban'"
+                [disabled]="!validateForm.get('branchId')?.value"
+              >
                 @for (d of departments; track d.id) {
                   <nz-option [nzValue]="d.id" [nzLabel]="d.name"></nz-option>
                 }
@@ -353,7 +382,12 @@
           <nz-form-item>
             <nz-form-label>{{ 'organization.part.entityName' | translate }}</nz-form-label>
             <nz-form-control>
-              <nz-select formControlName="partId" nzAllowClear [nzPlaceHolder]="'Chọn Tổ/Nhóm'" [disabled]="!validateForm.get('departmentId')?.value">
+              <nz-select
+                formControlName="partId"
+                nzAllowClear
+                [nzPlaceHolder]="'Chọn Tổ/Nhóm'"
+                [disabled]="!validateForm.get('departmentId')?.value"
+              >
                 @for (p of parts; track p.id) {
                   <nz-option [nzValue]="p.id" [nzLabel]="p.name"></nz-option>
                 }
@@ -365,7 +399,12 @@
           <nz-form-item>
             <nz-form-label>{{ 'organization.position.entityName' | translate }}</nz-form-label>
             <nz-form-control>
-              <nz-select formControlName="positionId" nzAllowClear [nzPlaceHolder]="'Chọn Chức danh'" [disabled]="!validateForm.get('departmentId')?.value">
+              <nz-select
+                formControlName="positionId"
+                nzAllowClear
+                [nzPlaceHolder]="'Chọn Chức danh'"
+                [disabled]="!validateForm.get('departmentId')?.value"
+              >
                 @for (pos of positions; track pos.id) {
                   <nz-option [nzValue]="pos.id" [nzLabel]="pos.name"></nz-option>
                 }
@@ -379,7 +418,7 @@
             <nz-form-control>
               <nz-select formControlName="status" nzAllowClear>
                 @for (opt of workStatusOptions; track opt.value) {
-                  <nz-option [nzValue]="opt.value" [nzLabel]="opt.label | translate"></nz-option>
+                  <nz-option [nzValue]="opt.value" [nzLabel]="opt.labelKey | translate"></nz-option>
                 }
               </nz-select>
             </nz-form-control>
@@ -401,7 +440,9 @@
         </div>
         <div nz-col nzXs="24" nzMd="8">
           <nz-form-item>
-            <nz-form-label>{{ 'humanResource.employee.resignationDate' | translate }}</nz-form-label>
+            <nz-form-label>{{
+              'humanResource.employee.resignationDate' | translate
+            }}</nz-form-label>
             <nz-form-control>
               <nz-date-picker
                 formControlName="resignationDate"

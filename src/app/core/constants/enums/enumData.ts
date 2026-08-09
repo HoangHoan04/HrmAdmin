@@ -15,9 +15,9 @@ export const enumData = {
   },
 
   GENDER: {
-    MALE: { code: 'MALE', labelKey: 'enums.gender.male' },
-    FEMALE: { code: 'FEMALE', labelKey: 'enums.gender.female' },
-    OTHER: { code: 'OTHER', labelKey: 'enums.gender.other' },
+    MALE: { code: 'MALE', labelKey: 'enums.gender.male', value: 'MALE', color: '#1890ff' },
+    FEMALE: { code: 'FEMALE', labelKey: 'enums.gender.female', value: 'FEMALE', color: '#faad14' },
+    OTHER: { code: 'OTHER', labelKey: 'enums.gender.other', value: 'OTHER', color: '#722ed1' },
   },
 
   ACTION_TYPE: {
@@ -147,4 +147,166 @@ export const enumData = {
     { key: 'T7', labelKey: 'enums.daysOfWeek.sat' },
     { key: 'CN', labelKey: 'enums.daysOfWeek.sun' },
   ],
+
+  EMPLOYEE_LEVEL: {
+    INTERNSHIP: {
+      code: 'INTERNSHIP',
+      labelKey: 'enums.employeeLevel.internship',
+      value: 'INTERNSHIP',
+      color: '#8c8c8c',
+    },
+    FRESHER: {
+      code: 'FRESHER',
+      labelKey: 'enums.employeeLevel.fresher',
+      value: 'FRESHER',
+      color: '#52c41a',
+    },
+    JUNIOR: {
+      code: 'JUNIOR',
+      labelKey: 'enums.employeeLevel.junior',
+      value: 'JUNIOR',
+      color: '#1890ff',
+    },
+    MIDDLE: {
+      code: 'MIDDLE',
+      labelKey: 'enums.employeeLevel.middle',
+      value: 'MIDDLE',
+      color: '#faad14',
+    },
+    SENIOR: {
+      code: 'SENIOR',
+      labelKey: 'enums.employeeLevel.senior',
+      value: 'SENIOR',
+      color: '#f5222d',
+    },
+    LEADER: {
+      code: 'LEADER',
+      labelKey: 'enums.employeeLevel.leader',
+      value: 'LEADER',
+      color: '#722ed1',
+    },
+    MANAGER: {
+      code: 'MANAGER',
+      labelKey: 'enums.employeeLevel.manager',
+      value: 'MANAGER',
+      color: '#eb2f96',
+    },
+    DIRECTOR: {
+      code: 'DIRECTOR',
+      labelKey: 'enums.employeeLevel.director',
+      value: 'DIRECTOR',
+      color: '#13c2c2',
+    },
+    EXECUTIVE: {
+      code: 'EXECUTIVE',
+      labelKey: 'enums.employeeLevel.executive',
+      value: 'EXECUTIVE',
+      color: '#2f54eb',
+    },
+  },
+
+  WORKING_MODE: {
+    ON_SITE: {
+      code: 'ON_SITE',
+      labelKey: 'enums.workingMode.onSite',
+      value: 'ON_SITE',
+      color: '#1890ff',
+    },
+    REMOTE: {
+      code: 'REMOTE',
+      labelKey: 'enums.workingMode.remote',
+      value: 'REMOTE',
+      color: '#52c41a',
+    },
+    HYBRID: {
+      code: 'HYBRID',
+      labelKey: 'enums.workingMode.hybrid',
+      value: 'HYBRID',
+      color: '#faad14',
+    },
+    FLEXIBLE: {
+      code: 'FLEXIBLE',
+      labelKey: 'enums.workingMode.flexible',
+      value: 'FLEXIBLE',
+      color: '#722ed1',
+    },
+    BUSINESS_TRIP: {
+      code: 'BUSINESS_TRIP',
+      labelKey: 'enums.workingMode.businessTrip',
+      value: 'BUSINESS_TRIP',
+      color: '#13c2c2',
+    },
+  },
+
+  CONTRACT_TYPE: {
+    PROBATION: {
+      code: 'PROBATION',
+      labelKey: 'enums.contractType.probation',
+      value: 'PROBATION',
+      color: '#faad14',
+    },
+    INDEFINITE: {
+      code: 'INDEFINITE',
+      labelKey: 'enums.contractType.indefinite',
+      value: 'INDEFINITE',
+      color: '#52c41a',
+    },
+    DEFINITE: {
+      code: 'DEFINITE',
+      labelKey: 'enums.contractType.definite',
+      value: 'DEFINITE',
+      color: '#1890ff',
+    },
+    SEASONAL: {
+      code: 'SEASONAL',
+      labelKey: 'enums.contractType.seasonal',
+      value: 'SEASONAL',
+      color: '#fa8c16',
+    },
+    COLLABORATOR: {
+      code: 'COLLABORATOR',
+      labelKey: 'enums.contractType.collaborator',
+      value: 'COLLABORATOR',
+      color: '#722ed1',
+    },
+    INTERNSHIP: {
+      code: 'INTERNSHIP',
+      labelKey: 'enums.contractType.internship',
+      value: 'INTERNSHIP',
+      color: '#8c8c8c',
+    },
+  },
+
+  WORK_STATUS: {
+    WORKING: {
+      code: 'WORKING',
+      labelKey: 'enums.workStatus.working',
+      value: 'WORKING',
+      color: '#52c41a',
+    },
+    RESIGNED: {
+      code: 'RESIGNED',
+      labelKey: 'enums.workStatus.resigned',
+      value: 'RESIGNED',
+      color: '#f5222d',
+    },
+    ON_LEAVE: {
+      code: 'ON_LEAVE',
+      labelKey: 'enums.workStatus.onLeave',
+      value: 'ON_LEAVE',
+      color: '#faad14',
+    },
+    SUSPENDED: {
+      code: 'SUSPENDED',
+      labelKey: 'enums.workStatus.suspended',
+      value: 'SUSPENDED',
+      color: '#722ed1',
+    },
+    RETIRED: {
+      code: 'RETIRED',
+      labelKey: 'enums.workStatus.retired',
+      value: 'RETIRED',
+      color: '#8c8c8c',
+    },
+  },
 };

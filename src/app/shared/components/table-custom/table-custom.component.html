@@ -449,7 +449,7 @@
                       isActionDisabled(action, rowData) || isActionLoading(action, rowData)
                     "
                     (click)="action.onClick?.(rowData, rowIndex)"
-                    [nzTooltipTitle]="action.tooltip || null"
+                    [nzTooltipTitle]="(action.tooltip | translate) || null"
                     nz-tooltip
                     class="row-action-btn"
                     [ngClass]="getActionSeverityClass(action)"
@@ -471,7 +471,7 @@
                     <span
                       *ngIf="!isActionLoading(action, rowData) && !action.icon && action.label"
                       class="action-btn-label"
-                      >{{ action.label }}</span
+                      >{{ action.label | translate }}</span
                     >
                   </button>
                 </ng-container>

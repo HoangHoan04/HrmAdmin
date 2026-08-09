@@ -52,8 +52,9 @@
     "addTransfer": "Add Transfer",
     "editTransfer": "Edit Transfer",
     "detailTransfer": "Transfer Details",
-    "timeAttendance": "Time & Attendance",
-    "timekeepingList": "Timekeeping",
+     "operate": "Operation",
+    "timeAttendance": "Time Attendance",
+    "timekeepingList": "Attendance Sheet",
     "shiftList": "Work Shifts",
     "leaveRequestList": "Leave Requests",
     "payroll": "Payroll & Benefits",
@@ -72,6 +73,13 @@
     "userList": "User Accounts",
     "roleList": "Roles",
     "timekeepingStandard": "Timekeeping Standard",
+    "addTimekeepingStandard": "Add Timekeeping Standard",
+    "editTimekeepingStandard": "Edit Timekeeping Standard",
+    "detailTimekeeping": "Timekeeping Details",
+    "addShift": "Add Shift",
+    "editShift": "Edit Shift",
+    "addWorkSchedule": "Add Work Schedule",
+    "editWorkSchedule": "Edit Work Schedule",
     "actionLog": "System Audit Log"
   }
 }

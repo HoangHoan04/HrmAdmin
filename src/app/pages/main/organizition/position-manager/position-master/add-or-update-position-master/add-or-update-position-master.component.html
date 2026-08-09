@@ -167,6 +167,70 @@
 
       <div nz-col [nzXs]="24" [nzMd]="12">
         <nz-form-item>
+          <nz-form-label nzFor="hourWorkingStart">{{
+            'organization.positionMaster.hourWorkingStart' | translate
+          }}</nz-form-label>
+          <nz-form-control>
+            <nz-time-picker
+              formControlName="hourWorkingStart"
+              id="hourWorkingStart"
+              nzFormat="HH:mm"
+              style="width: 100%"
+            ></nz-time-picker>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <div nz-col [nzXs]="24" [nzMd]="12">
+        <nz-form-item>
+          <nz-form-label nzFor="hourWorkingEnd">{{
+            'organization.positionMaster.hourWorkingEnd' | translate
+          }}</nz-form-label>
+          <nz-form-control>
+            <nz-time-picker
+              formControlName="hourWorkingEnd"
+              id="hourWorkingEnd"
+              nzFormat="HH:mm"
+              style="width: 100%"
+            ></nz-time-picker>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <div nz-col [nzXs]="24" [nzMd]="12">
+        <nz-form-item>
+          <nz-form-label nzFor="hourSnapShotStart">{{
+            'organization.positionMaster.hourSnapShotStart' | translate
+          }}</nz-form-label>
+          <nz-form-control>
+            <nz-time-picker
+              formControlName="hourSnapShotStart"
+              id="hourSnapShotStart"
+              nzFormat="HH:mm"
+              style="width: 100%"
+            ></nz-time-picker>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <div nz-col [nzXs]="24" [nzMd]="12">
+        <nz-form-item>
+          <nz-form-label nzFor="hourSnapShotEnd">{{
+            'organization.positionMaster.hourSnapShotEnd' | translate
+          }}</nz-form-label>
+          <nz-form-control>
+            <nz-time-picker
+              formControlName="hourSnapShotEnd"
+              id="hourSnapShotEnd"
+              nzFormat="HH:mm"
+              style="width: 100%"
+            ></nz-time-picker>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <div nz-col [nzXs]="24" [nzMd]="12">
+        <nz-form-item>
           <nz-form-label nzFor="isTimeKeeping">{{
             'organization.positionMaster.isTimeKeeping' | translate
           }}</nz-form-label>

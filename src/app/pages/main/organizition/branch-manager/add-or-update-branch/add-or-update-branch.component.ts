@@ -3,7 +3,12 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { ROUTES_CONFIG } from '../../../../../core/constants/common/routes.config';
-import { Branch, BranchSelectBoxDto, CompanySelectBoxDto } from '../../../../../core/models';
+import {
+  Branch,
+  BranchSelectBoxDto,
+  CompanySelectBoxDto,
+  TimeKeepingStandardSelectBoxDto,
+} from '../../../../../core/models';
 import { ApiService } from '../../../../../core/services/api.service';
 import { I18nMessageService } from '../../../../../core/services/i18n-message.service';
 
@@ -21,6 +26,7 @@ export class AddOrUpdateBranchComponent implements OnInit {
   validateForm!: FormGroup;
   companies: CompanySelectBoxDto[] = [];
   parentBranches: BranchSelectBoxDto[] = [];
+  timeKeepingStandards: TimeKeepingStandardSelectBoxDto[] = [];
   private companyCodeFromRoute: string | null = null;
 
   constructor(
@@ -59,11 +65,15 @@ export class AddOrUpdateBranchComponent implements OnInit {
       groupSalary: [''],
       phoneNumber: [''],
       email: [''],
+      latitude: [null],
+      longitude: [null],
+      timeKeepingStandardId: [null],
       isActive: [true],
     });
 
     this.validateForm.get('companyId')?.valueChanges.subscribe((companyId) => {
       this.loadParentBranches(companyId);
+      this.loadTimeKeepingStandards(companyId);
       if (!companyId) {
         this.validateForm.patchValue({ parentBranchId: null }, { emitEvent: false });
       }
@@ -96,14 +106,34 @@ export class AddOrUpdateBranchComponent implements OnInit {
       payload['excludeId'] = excludeId;
     }
 
-    this.apiService.post<BranchSelectBoxDto[]>(this.apiService.BRANCH.SELECT_BOX, payload).subscribe({
-      next: (items) => {
-        this.parentBranches = items;
-      },
-      error: () => {
-        this.parentBranches = [];
-      },
-    });
+    this.apiService
+      .post<BranchSelectBoxDto[]>(this.apiService.BRANCH.SELECT_BOX, payload)
+      .subscribe({
+        next: (items) => {
+          this.parentBranches = items;
+        },
+        error: () => {
+          this.parentBranches = [];
+        },
+      });
+  }
+
+  loadTimeKeepingStandards(companyId?: string | null): void {
+    const payload: Record<string, string> = {};
+    if (companyId) payload['companyId'] = companyId;
+    this.apiService
+      .post<TimeKeepingStandardSelectBoxDto[]>(
+        this.apiService.TIMEKEEPING_STANDARD.SELECT_BOX,
+        payload,
+      )
+      .subscribe({
+        next: (items) => {
+          this.timeKeepingStandards = items;
+        },
+        error: () => {
+          this.timeKeepingStandards = [];
+        },
+      });
   }
 
   loadBranchDetail(id: string): void {
@@ -123,9 +153,13 @@ export class AddOrUpdateBranchComponent implements OnInit {
           groupSalary: branch.groupSalary,
           phoneNumber: branch.phoneNumber,
           email: branch.email,
+          latitude: branch.latitude ?? null,
+          longitude: branch.longitude ?? null,
+          timeKeepingStandardId: branch.timeKeepingStandardId ?? null,
           isActive: branch.isActive ?? true,
         });
         this.loadParentBranches(branch.companyId ?? null, id);
+        this.loadTimeKeepingStandards(branch.companyId ?? null);
         this.loading = false;
       },
       error: (err: any) => {
@@ -136,8 +170,12 @@ export class AddOrUpdateBranchComponent implements OnInit {
   }
 
   goBack(): void {
-    const queryParams = this.companyCodeFromRoute ? { companyCode: this.companyCodeFromRoute } : undefined;
-    this.router.navigate([ROUTES_CONFIG.ORGANIZATION.children.BRANCH_MANAGER.path], { queryParams });
+    const queryParams = this.companyCodeFromRoute
+      ? { companyCode: this.companyCodeFromRoute }
+      : undefined;
+    this.router.navigate([ROUTES_CONFIG.ORGANIZATION.children.BRANCH_MANAGER.path], {
+      queryParams,
+    });
   }
 
   submitForm(): void {
@@ -157,6 +195,9 @@ export class AddOrUpdateBranchComponent implements OnInit {
       ...value,
       companyId: value.companyId || null,
       parentBranchId: value.parentBranchId || null,
+      timeKeepingStandardId: value.timeKeepingStandardId || null,
+      latitude: value.latitude ?? null,
+      longitude: value.longitude ?? null,
     };
 
     const endpoint = this.isEdit ? this.apiService.BRANCH.UPDATE : this.apiService.BRANCH.CREATE;

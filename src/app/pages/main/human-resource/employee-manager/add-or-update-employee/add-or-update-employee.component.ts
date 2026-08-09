@@ -1,3 +1,4 @@
+import { enumData } from '@/app/core/constants/enums/enumData';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -20,12 +21,12 @@ export class AddOrUpdateEmployeeComponent implements OnInit, OnDestroy {
   loading = false;
   submitting = false;
   validateForm!: FormGroup;
-
-  readonly workStatusOptions = [
-    { label: 'humanResource.employee.statusWorking', value: 'Đang làm việc' },
-    { label: 'humanResource.employee.statusResigned', value: 'Nghỉ việc' },
-    { label: 'humanResource.employee.statusOnLeave', value: 'Tạm nghỉ' },
-  ];
+  enumData = enumData;
+  genderOptions = Object.values(enumData.GENDER);
+  employeeLevelOptions = Object.values(enumData.EMPLOYEE_LEVEL);
+  workingModeOptions = Object.values(enumData.WORKING_MODE);
+  contractTypeOptions = Object.values(enumData.CONTRACT_TYPE);
+  workStatusOptions = Object.values(enumData.WORK_STATUS);
 
   companies: any[] = [];
   branches: any[] = [];
@@ -121,66 +122,86 @@ export class AddOrUpdateEmployeeComponent implements OnInit, OnDestroy {
         this.fullNameManuallyEdited = !!value && value.trim() !== computed;
       });
 
-    // Cascading dropdown subscriptions
-    this.validateForm.get('companyId')?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(companyId => {
-      this.branches = [];
-      this.departments = [];
-      this.parts = [];
-      this.positions = [];
-      this.validateForm.patchValue({ branchId: null, departmentId: null, partId: null, positionId: null }, { emitEvent: false });
-      if (companyId) {
-        this.loadBranches(companyId);
-      }
-    });
+    this.validateForm
+      .get('companyId')
+      ?.valueChanges.pipe(takeUntil(this.destroy$))
+      .subscribe((companyId) => {
+        this.branches = [];
+        this.departments = [];
+        this.parts = [];
+        this.positions = [];
+        this.validateForm.patchValue(
+          { branchId: null, departmentId: null, partId: null, positionId: null },
+          { emitEvent: false },
+        );
+        if (companyId) {
+          this.loadBranches(companyId);
+        }
+      });
 
-    this.validateForm.get('branchId')?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(branchId => {
-      this.departments = [];
-      this.parts = [];
-      this.positions = [];
-      this.validateForm.patchValue({ departmentId: null, partId: null, positionId: null }, { emitEvent: false });
-      if (branchId) {
-        this.loadDepartments(branchId);
-      }
-    });
+    this.validateForm
+      .get('branchId')
+      ?.valueChanges.pipe(takeUntil(this.destroy$))
+      .subscribe((branchId) => {
+        this.departments = [];
+        this.parts = [];
+        this.positions = [];
+        this.validateForm.patchValue(
+          { departmentId: null, partId: null, positionId: null },
+          { emitEvent: false },
+        );
+        if (branchId) {
+          this.loadDepartments(branchId);
+        }
+      });
 
-    this.validateForm.get('departmentId')?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(departmentId => {
-      this.parts = [];
-      this.positions = [];
-      this.validateForm.patchValue({ partId: null, positionId: null }, { emitEvent: false });
-      if (departmentId) {
-        this.loadParts(departmentId);
-        this.loadPositions(departmentId);
-      }
-    });
+    this.validateForm
+      .get('departmentId')
+      ?.valueChanges.pipe(takeUntil(this.destroy$))
+      .subscribe((departmentId) => {
+        this.parts = [];
+        this.positions = [];
+        this.validateForm.patchValue({ partId: null, positionId: null }, { emitEvent: false });
+        if (departmentId) {
+          this.loadParts(departmentId);
+          this.loadPositions(departmentId);
+        }
+      });
   }
 
   loadCompanies(): void {
     this.apiService.post<any[]>(this.apiService.COMPANY.SELECT_BOX, {}).subscribe({
-      next: (res) => this.companies = res,
+      next: (res) => (this.companies = res),
     });
   }
 
   loadBranches(companyId: string): void {
-    this.apiService.post<any[]>(this.apiService.ORGANIZATION.BRANCHES_BY_COMPANY, { companyId }).subscribe({
-      next: (res) => this.branches = res,
-    });
+    this.apiService
+      .post<any[]>(this.apiService.ORGANIZATION.BRANCHES_BY_COMPANY, { companyId })
+      .subscribe({
+        next: (res) => (this.branches = res),
+      });
   }
 
   loadDepartments(branchId: string): void {
-    this.apiService.post<any[]>(this.apiService.ORGANIZATION.DEPARTMENTS_BY_BRANCH, { branchId }).subscribe({
-      next: (res) => this.departments = res,
-    });
+    this.apiService
+      .post<any[]>(this.apiService.ORGANIZATION.DEPARTMENTS_BY_BRANCH, { branchId })
+      .subscribe({
+        next: (res) => (this.departments = res),
+      });
   }
 
   loadParts(departmentId: string): void {
-    this.apiService.post<any[]>(this.apiService.ORGANIZATION.PARTS_BY_DEPARTMENT, { departmentId }).subscribe({
-      next: (res) => this.parts = res,
-    });
+    this.apiService
+      .post<any[]>(this.apiService.ORGANIZATION.PARTS_BY_DEPARTMENT, { departmentId })
+      .subscribe({
+        next: (res) => (this.parts = res),
+      });
   }
 
   loadPositions(departmentId: string): void {
     this.apiService.post<any[]>(this.apiService.POSITION.SELECT_BOX, { departmentId }).subscribe({
-      next: (res) => this.positions = res,
+      next: (res) => (this.positions = res),
     });
   }
 
@@ -231,7 +252,6 @@ export class AddOrUpdateEmployeeComponent implements OnInit, OnDestroy {
           positionId: employee.positionId,
         });
 
-        // Trigger loading child data manually in edit mode to preserve selected items
         if (employee.companyId) {
           this.loadBranches(employee.companyId);
         }

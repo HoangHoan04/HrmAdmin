@@ -331,12 +331,21 @@
             <nz-form-label>{{
               'organization.company.timeKeepingStandardId' | translate
             }}</nz-form-label>
-            <nz-form-control
-              ><input
-                nz-input
+            <nz-form-control>
+              <nz-select
                 formControlName="timeKeepingStandardId"
-                placeholder="UUID chuẩn chấm công"
-            /></nz-form-control>
+                nzAllowClear
+                [nzPlaceHolder]="'organization.company.timeKeepingStandardId' | translate"
+                nzShowSearch
+              >
+                @for (s of timeKeepingStandards; track s.id) {
+                  <nz-option
+                    [nzValue]="s.id"
+                    [nzLabel]="s.code ? s.code + ' - ' + s.name : s.name"
+                  ></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
           </nz-form-item>
         </div>
       </div>

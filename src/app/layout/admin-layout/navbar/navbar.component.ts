@@ -59,18 +59,27 @@ export class NavbarComponent implements OnInit, OnDestroy {
   loadUserInfo(): void {
     this.auth.getInfoUser().subscribe({
       next: (user) => {
-        if (user) {
-          this.username = user.username;
-          this.email = user.email;
-          this.avatarText = this.username ? this.username.substring(0, 2).toUpperCase() : 'US';
-          this.cdr.detectChanges();
-        }
+        // Defer template updates to the next macrotask to avoid NG0100 in the navbar tree.
+        setTimeout(() => {
+          if (user) {
+            this.username = user.username;
+            this.email = user.email;
+            this.avatarText = this.username ? this.username.substring(0, 2).toUpperCase() : 'US';
+          } else {
+            this.username = 'User';
+            this.email = '';
+            this.avatarText = 'US';
+          }
+          this.cdr.markForCheck();
+        });
       },
       error: () => {
-        this.username = 'User';
-        this.email = '';
-        this.avatarText = 'US';
-        this.cdr.detectChanges();
+        setTimeout(() => {
+          this.username = 'User';
+          this.email = '';
+          this.avatarText = 'US';
+          this.cdr.markForCheck();
+        });
       },
     });
   }

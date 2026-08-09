@@ -26,6 +26,7 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
+import { NzTimePickerModule } from 'ng-zorro-antd/time-picker';
 import { NzTooltipModule } from 'ng-zorro-antd/tooltip';
 import { NzUploadModule } from 'ng-zorro-antd/upload';
 import { ActionLogComponent } from './components/action-log/action-log.component';
@@ -62,6 +63,7 @@ import { TableCustomComponent } from './components/table-custom/table-custom.com
     NzFormModule,
     NzGridModule,
     NzDatePickerModule,
+    NzTimePickerModule,
     NzSpinModule,
     NzPaginationModule,
     NzTabsModule,
@@ -98,6 +100,7 @@ import { TableCustomComponent } from './components/table-custom/table-custom.com
     NzFormModule,
     NzGridModule,
     NzDatePickerModule,
+    NzTimePickerModule,
     NzSpinModule,
     NzPaginationModule,
     NzTabsModule,

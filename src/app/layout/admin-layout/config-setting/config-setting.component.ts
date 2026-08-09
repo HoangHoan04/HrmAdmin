@@ -1,8 +1,8 @@
 import { DashboardService, DashboardSettings } from '@/app/core/services';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-config-setting',
@@ -12,7 +12,8 @@ import { Observable, Subscription } from 'rxjs';
 })
 export class ConfigSettingComponent implements OnInit, OnDestroy {
   s: DashboardSettings;
-  configOpen$: Observable<boolean>;
+  /** Bound to nz-drawer; avoid async pipe to prevent NG0100 (zIndex 9 → -1). */
+  configOpen = false;
   private sub = new Subscription();
 
   primaryColors = [
@@ -125,15 +126,25 @@ export class ConfigSettingComponent implements OnInit, OnDestroy {
     public ds: DashboardService,
     private readonly translate: TranslateService,
     private readonly message: NzMessageService,
+    private readonly cdr: ChangeDetectorRef,
   ) {
     this.s = ds.snapshot;
-    this.configOpen$ = ds.configOpen$;
   }
 
   ngOnInit(): void {
     this.sub.add(
       this.ds.settings$.subscribe((settings) => {
         this.s = settings;
+      }),
+    );
+    this.sub.add(
+      this.ds.configOpen$.subscribe((open) => {
+        // Defer visibility flip so NzDrawer zIndex updates outside the current CD cycle.
+        queueMicrotask(() => {
+          if (this.configOpen === open) return;
+          this.configOpen = open;
+          this.cdr.detectChanges();
+        });
       }),
     );
   }
@@ -144,6 +155,12 @@ export class ConfigSettingComponent implements OnInit, OnDestroy {
 
   close(): void {
     this.ds.setConfigOpen(false);
+  }
+
+  onVisibleChange(visible: boolean): void {
+    if (this.configOpen === visible) return;
+    this.configOpen = visible;
+    this.ds.setConfigOpen(visible);
   }
 
   update(partial: Partial<DashboardSettings>): void {

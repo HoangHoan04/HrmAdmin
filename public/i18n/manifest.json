@@ -14,10 +14,11 @@
   "common/search.json",
   "common/table.json",
   "common/tabsBar.json",
+  "human-resource/employee.json",
   "organization/branch.json",
   "organization/company.json",
   "organization/department.json",
   "organization/part.json",
   "organization/position.json",
-  "human-resource/employee.json"
+  "time-attendance/time-attendance.json"
 ]

@@ -107,6 +107,12 @@ app-sidebar .ant-layout-sider-children {
   background: var(--sidebar-bg) !important;
 }
 
+app-sidebar .ant-layout-sider-children {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
 html.dark .admin-content {
   background: var(--muted);
 }
@@ -247,12 +253,14 @@ app-sidebar .ant-layout-sider {
 
 .admin-layout .admin-sidebar .sidebar-menu {
   flex: 1;
-  overflow: hidden;
-  padding: 8px;
-}
-
-.admin-layout .admin-sidebar .sidebar-menu:hover {
   overflow-y: auto;
+  padding: 8px;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none; 
+  scrollbar-width: none; 
 }
 
 html[data-navbar-color-type='gradient'] .admin-navbar {

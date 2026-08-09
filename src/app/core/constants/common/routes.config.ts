@@ -27,7 +27,6 @@ export const ROUTES_CONFIG = {
     icon: 'home',
   },
 
-  // ─── Tổ chức: Company → Branch → Department; Part↔PartMaster; Position↔PositionMaster ───
   ORGANIZATION: {
     key: 'ORGANIZATION',
     label: 'routes.organization',
@@ -251,7 +250,6 @@ export const ROUTES_CONFIG = {
     },
   },
 
-  // ─── Nhân sự: Employee (hồ sơ 360 gom tab con); Hợp đồng; Điều chuyển ───
   HUMAN_RESOURCE: {
     key: 'HUMAN_RESOURCE',
     label: 'routes.humanResource',
@@ -361,39 +359,143 @@ export const ROUTES_CONFIG = {
     },
   },
 
-  // ─── Chấm công & nghỉ phép (Timekeeping + Leave) ───
-  TIME_ATTENDANCE: {
-    key: 'TIME_ATTENDANCE',
-    label: 'routes.timeAttendance',
-    translationKey: 'routes.timeAttendance',
-    icon: 'clock-circle',
-    path: '/time-attendance',
+  OPERATE_MANAGER: {
+    key: 'OPERATE_MANAGER',
+    label: 'routes.operate',
+    translationKey: 'routes.operate',
+    icon: 'control',
+    path: '/operate-manager',
     children: {
-      TIMEKEEPING_MANAGER: {
-        key: 'TIMEKEEPING_MANAGER',
-        label: 'routes.timekeepingList',
-        translationKey: 'routes.timekeepingList',
-        icon: 'schedule',
-        path: '/time-attendance/timekeeping',
+      TIME_ATTENDANCE: {
+        key: 'TIME_ATTENDANCE',
+        label: 'routes.timeAttendance',
+        translationKey: 'routes.timeAttendance',
+        icon: 'clock-circle',
+        path: '/operate-manager/time-attendance',
+        children: {
+          TIMEKEEPING_STANDARD: {
+            key: 'TIMEKEEPING_STANDARD',
+            label: 'routes.timekeepingStandard',
+            translationKey: 'routes.timekeepingStandard',
+            path: '/operate-manager/time-attendance/timekeeping-standard',
+            children: {
+              ADD_TIMEKEEPING_STANDARD: {
+                key: 'ADD_TIMEKEEPING_STANDARD',
+                label: 'routes.addTimekeepingStandard',
+                translationKey: 'routes.addTimekeepingStandard',
+                icon: 'plus',
+                path: '/operate-manager/time-attendance/timekeeping-standard/add',
+                isShow: false,
+              },
+              EDIT_TIMEKEEPING_STANDARD: {
+                key: 'EDIT_TIMEKEEPING_STANDARD',
+                label: 'routes.editTimekeepingStandard',
+                translationKey: 'routes.editTimekeepingStandard',
+                icon: 'plus',
+                path: '/operate-manager/time-attendance/timekeeping-standard/edit',
+                isShow: false,
+              },
+            },
+          },
+          TIMEKEEPING_MANAGER: {
+            key: 'TIMEKEEPING_MANAGER',
+            label: 'routes.timekeepingList',
+            translationKey: 'routes.timekeepingList',
+            path: '/operate-manager/time-attendance/timekeeping',
+            children: {
+              DETAIL_TIMEKEEPING: {
+                key: 'DETAIL_TIMEKEEPING',
+                label: 'routes.detailTimekeeping',
+                translationKey: 'routes.detailTimekeeping',
+                icon: 'eye',
+                path: '/operate-manager/time-attendance/timekeeping/detail',
+                isShow: false,
+              },
+            },
+          },
+          SHIFT_MANAGER: {
+            key: 'SHIFT_MANAGER',
+            label: 'routes.shiftList',
+            translationKey: 'routes.shiftList',
+            path: '/operate-manager/time-attendance/shift',
+            children: {
+              ADD_SHIFT: {
+                key: 'ADD_SHIFT',
+                label: 'routes.addShift',
+                translationKey: 'routes.addShift',
+                icon: 'plus',
+                path: '/operate-manager/time-attendance/shift/add',
+                isShow: false,
+              },
+              EDIT_SHIFT: {
+                key: 'EDIT_SHIFT',
+                label: 'routes.editShift',
+                translationKey: 'routes.editShift',
+                icon: 'plus',
+                path: '/operate-manager/time-attendance/shift/edit',
+                isShow: false,
+              },
+              ADD_WORK_SCHEDULE: {
+                key: 'ADD_WORK_SCHEDULE',
+                label: 'routes.addWorkSchedule',
+                translationKey: 'routes.addWorkSchedule',
+                icon: 'plus',
+                path: '/operate-manager/time-attendance/shift/work-schedule/add',
+                isShow: false,
+              },
+              EDIT_WORK_SCHEDULE: {
+                key: 'EDIT_WORK_SCHEDULE',
+                label: 'routes.editWorkSchedule',
+                translationKey: 'routes.editWorkSchedule',
+                icon: 'plus',
+                path: '/operate-manager/time-attendance/shift/work-schedule/edit',
+                isShow: false,
+              },
+            },
+          },
+          LEAVE_MANAGER: {
+            key: 'LEAVE_MANAGER',
+            label: 'routes.leaveRequestList',
+            translationKey: 'routes.leaveRequestList',
+            path: '/operate-manager/time-attendance/leave',
+          },
+        },
       },
-      SHIFT_MANAGER: {
-        key: 'SHIFT_MANAGER',
-        label: 'routes.shiftList',
-        translationKey: 'routes.shiftList',
-        icon: 'field-time',
-        path: '/time-attendance/shift',
+      PERFORMANCE: {
+        key: 'PERFORMANCE',
+        label: 'routes.performance',
+        translationKey: 'routes.performance',
+        icon: 'rise',
+        path: '/operate-manager/performance',
+        children: {
+          PERFORMANCE_REVIEW: {
+            key: 'PERFORMANCE_REVIEW',
+            label: 'routes.performanceReview',
+            translationKey: 'routes.performanceReview',
+            icon: 'audit',
+            path: '/operate-manager/performance/review',
+          },
+        },
       },
-      LEAVE_MANAGER: {
-        key: 'LEAVE_MANAGER',
-        label: 'routes.leaveRequestList',
-        translationKey: 'routes.leaveRequestList',
-        icon: 'calendar',
-        path: '/time-attendance/leave',
+      DISCIPLINE: {
+        key: 'DISCIPLINE',
+        label: 'routes.discipline',
+        translationKey: 'routes.discipline',
+        icon: 'warning',
+        path: '/operate-manager/discipline',
+        children: {
+          VIOLATION_MANAGER: {
+            key: 'VIOLATION_MANAGER',
+            label: 'routes.violationList',
+            translationKey: 'routes.violationList',
+            icon: 'alert',
+            path: '/operate-manager/discipline/violation',
+          },
+        },
       },
     },
   },
 
-  // ─── Lương & phúc lợi ───
   PAYROLL: {
     key: 'PAYROLL',
     label: 'routes.payroll',
@@ -418,7 +520,6 @@ export const ROUTES_CONFIG = {
     },
   },
 
-  // ─── Tuyển dụng (pipeline: Kế hoạch → Yêu cầu → Ứng viên → Phỏng vấn) ───
   RECRUITMENT: {
     key: 'RECRUITMENT',
     label: 'routes.recruitment',
@@ -433,64 +534,25 @@ export const ROUTES_CONFIG = {
         icon: 'solution',
         path: '/recruitment/pipeline',
       },
-    },
-  },
-
-  // ─── Hiệu suất & KPI ───
-  PERFORMANCE: {
-    key: 'PERFORMANCE',
-    label: 'routes.performance',
-    translationKey: 'routes.performance',
-    icon: 'rise',
-    path: '/performance',
-    children: {
-      PERFORMANCE_REVIEW: {
-        key: 'PERFORMANCE_REVIEW',
-        label: 'routes.performanceReview',
-        translationKey: 'routes.performanceReview',
-        icon: 'audit',
-        path: '/performance/review',
+      TRAINING: {
+        key: 'TRAINING',
+        label: 'routes.training',
+        translationKey: 'routes.training',
+        icon: 'read',
+        path: '/training',
+        children: {
+          TRAINING_MANAGER: {
+            key: 'TRAINING_MANAGER',
+            label: 'routes.trainingCourseList',
+            translationKey: 'routes.trainingCourseList',
+            icon: 'book',
+            path: '/training/course',
+          },
+        },
       },
     },
   },
 
-  // ─── Đào tạo ───
-  TRAINING: {
-    key: 'TRAINING',
-    label: 'routes.training',
-    translationKey: 'routes.training',
-    icon: 'read',
-    path: '/training',
-    children: {
-      TRAINING_MANAGER: {
-        key: 'TRAINING_MANAGER',
-        label: 'routes.trainingCourseList',
-        translationKey: 'routes.trainingCourseList',
-        icon: 'book',
-        path: '/training/course',
-      },
-    },
-  },
-
-  // ─── Kỷ luật ───
-  DISCIPLINE: {
-    key: 'DISCIPLINE',
-    label: 'routes.discipline',
-    translationKey: 'routes.discipline',
-    icon: 'warning',
-    path: '/discipline',
-    children: {
-      VIOLATION_MANAGER: {
-        key: 'VIOLATION_MANAGER',
-        label: 'routes.violationList',
-        translationKey: 'routes.violationList',
-        icon: 'alert',
-        path: '/discipline/violation',
-      },
-    },
-  },
-
-  // ─── Tài sản ───
   ASSET: {
     key: 'ASSET',
     label: 'routes.asset',
@@ -504,11 +566,36 @@ export const ROUTES_CONFIG = {
         translationKey: 'routes.assetList',
         icon: 'tool',
         path: '/asset/inventory',
+        children: {
+          ADD_ASSET: {
+            key: 'ADD_ASSET',
+              label: 'routes.addAsset',
+            translationKey: 'routes.addAsset',
+            icon: 'plus',
+            path: '/asset/inventory/add',
+            isShow: false,
+          },
+          EDIT_ASSET: {
+            key: 'EDIT_ASSET',
+            label: 'routes.editAsset',
+            translationKey: 'routes.editAsset',
+            icon: 'plus',
+            path: '/asset/inventory/edit',
+            isShow: false,
+          },
+          DETAIL_ASSET: {
+            key: 'DETAIL_ASSET',
+            label: 'routes.detailAsset',
+            translationKey: 'routes.detailAsset',
+            icon: 'plus',
+            path: '/asset/inventory/detail',
+            isShow: false,
+          },
+        },
       },
     },
   },
 
-  // ─── Phân quyền: User + Role + Permission ───
   ROLE_MANAGER: {
     key: 'ROLE_MANAGER',
     label: 'routes.roleManager',
@@ -533,7 +620,6 @@ export const ROUTES_CONFIG = {
     },
   },
 
-  // ─── Cài đặt hệ thống ───
   SETTING_SYSTEM: {
     key: 'SETTING_SYSTEM',
     label: 'routes.settingSystem',
@@ -541,13 +627,6 @@ export const ROUTES_CONFIG = {
     icon: 'setting',
     path: '/system-settings',
     children: {
-      TIMEKEEPING_STANDARD: {
-        key: 'TIMEKEEPING_STANDARD',
-        label: 'routes.timekeepingStandard',
-        translationKey: 'routes.timekeepingStandard',
-        icon: 'control',
-        path: '/system-settings/timekeeping-standard',
-      },
       ACTION_LOG: {
         key: 'ACTION_LOG',
         label: 'routes.actionLog',
@@ -608,6 +687,30 @@ export function getRouteByKey(key: string): RouteConfig | undefined {
 }
 
 export function convertRoutesToMenuItems(routes: Record<string, RouteConfig>): SidebarMenuItem[] {
+  const toMenuItem = (route: RouteConfig, depth: number): SidebarMenuItem | null => {
+    if (route.isShow === false) return null;
+
+    const item: SidebarMenuItem = {
+      key: route.key,
+      label: route.label,
+      translationKey: route.translationKey,
+      path: route.path,
+      icon: route.icon,
+      isShow: route.isShow,
+    };
+
+    if (route.children && depth < 3) {
+      const children = Object.keys(route.children)
+        .map((childKey) => toMenuItem(route.children![childKey], depth + 1))
+        .filter((child): child is SidebarMenuItem => child !== null);
+      if (children.length > 0) {
+        item.children = children;
+      }
+    }
+
+    return item;
+  };
+
   const items: SidebarMenuItem[] = [];
   const home = routes['HOME'];
   if (home && home.isShow !== false) {
@@ -620,33 +723,11 @@ export function convertRoutesToMenuItems(routes: Record<string, RouteConfig>): S
       isShow: home.isShow,
     });
   }
+
   for (const key of Object.keys(routes)) {
     if (key === 'HOME') continue;
-    const route = routes[key];
-    if (route.isShow === false) continue;
-
-    const item: SidebarMenuItem = {
-      key: route.key,
-      label: route.label,
-      translationKey: route.translationKey,
-      path: route.path,
-      icon: route.icon,
-      isShow: route.isShow,
-    };
-    if (route.children) {
-      item.children = Object.keys(route.children)
-        .map((childKey) => route.children![childKey])
-        .filter((child) => child.isShow !== false)
-        .map((child) => ({
-          key: child.key,
-          label: child.label,
-          translationKey: child.translationKey,
-          path: child.path,
-          icon: child.icon,
-          isShow: child.isShow,
-        }));
-    }
-    items.push(item);
+    const item = toMenuItem(routes[key], 1);
+    if (item) items.push(item);
   }
   return items;
 }

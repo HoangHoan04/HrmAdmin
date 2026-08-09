@@ -1,5 +1,6 @@
 <nz-drawer
-  [nzVisible]="configOpen$ | async"
+  [nzVisible]="configOpen"
+  (nzVisibleChange)="onVisibleChange($event)"
   [nzPlacement]="s.configPosition"
   nzWidth="440"
   nzClosable="false"

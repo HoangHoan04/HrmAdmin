@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { SharedModule } from '../../../shared/shared.module';
 import { ROUTES_CONFIG } from '../../../core/constants/common/routes.config';
+import { SharedModule } from '../../../shared/shared.module';
 import { AddOrUpdateEmployeeComponent } from './employee-manager/add-or-update-employee/add-or-update-employee.component';
 import { EmployeeDetailComponent } from './employee-manager/employee-detail/employee-detail.component';
 import { EmployeeManagerComponent } from './employee-manager/employee-manager.component';
@@ -40,11 +40,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [
-    EmployeeManagerComponent,
-    AddOrUpdateEmployeeComponent,
-    EmployeeDetailComponent,
-  ],
+  declarations: [EmployeeManagerComponent, AddOrUpdateEmployeeComponent, EmployeeDetailComponent],
   imports: [SharedModule, RouterModule.forChild(routes)],
 })
 export class HumanResourceModule {}

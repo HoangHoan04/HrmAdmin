@@ -4,26 +4,71 @@ import { Observable } from 'rxjs';
 import { EndpointService } from './endpoint.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ApiService {
   constructor(
     private readonly http: HttpClient,
-    private readonly endpoints: EndpointService
-  ) { }
+    private readonly endpoints: EndpointService,
+  ) {}
 
-  get AUTH() { return this.endpoints.AUTH; }
-  get COMPANY() { return this.endpoints.COMPANY; }
-  get BRANCH() { return this.endpoints.BRANCH; }
-  get DEPARTMENT() { return this.endpoints.DEPARTMENT; }
-  get PART() { return this.endpoints.PART; }
-  get PART_MASTER() { return this.endpoints.PART_MASTER; }
-  get POSITION() { return this.endpoints.POSITION; }
-  get POSITION_MASTER() { return this.endpoints.POSITION_MASTER; }
-  get EMPLOYEE() { return this.endpoints.EMPLOYEE; }
-  get ACTION_LOG() { return this.endpoints.ACTION_LOG; }
-  get ORGANIZATION() { return this.endpoints.ORGANIZATION; }
-  get UPLOAD_FILE() { return this.endpoints.UPLOAD_FILE; }
+  get AUTH() {
+    return this.endpoints.AUTH;
+  }
+  get COMPANY() {
+    return this.endpoints.COMPANY;
+  }
+  get BRANCH() {
+    return this.endpoints.BRANCH;
+  }
+  get DEPARTMENT() {
+    return this.endpoints.DEPARTMENT;
+  }
+  get PART() {
+    return this.endpoints.PART;
+  }
+  get PART_MASTER() {
+    return this.endpoints.PART_MASTER;
+  }
+  get POSITION() {
+    return this.endpoints.POSITION;
+  }
+  get POSITION_MASTER() {
+    return this.endpoints.POSITION_MASTER;
+  }
+  get EMPLOYEE() {
+    return this.endpoints.EMPLOYEE;
+  }
+  get TIMEKEEPING_STANDARD() {
+    return this.endpoints.TIMEKEEPING_STANDARD;
+  }
+  get SHIFT_MASTER() {
+    return this.endpoints.SHIFT_MASTER;
+  }
+  get WORK_SCHEDULE() {
+    return this.endpoints.WORK_SCHEDULE;
+  }
+  get TIMEKEEPING() {
+    return this.endpoints.TIMEKEEPING;
+  }
+  get DAY_OFF_CONFIG() {
+    return this.endpoints.DAY_OFF_CONFIG;
+  }
+  get PUBLIC_HOLIDAY() {
+    return this.endpoints.PUBLIC_HOLIDAY;
+  }
+  get REGISTER_DAY_OFF() {
+    return this.endpoints.REGISTER_DAY_OFF;
+  }
+  get ACTION_LOG() {
+    return this.endpoints.ACTION_LOG;
+  }
+  get ORGANIZATION() {
+    return this.endpoints.ORGANIZATION;
+  }
+  get UPLOAD_FILE() {
+    return this.endpoints.UPLOAD_FILE;
+  }
 
   get<T>(url: string): Observable<T> {
     return this.http.get<T>(url);
