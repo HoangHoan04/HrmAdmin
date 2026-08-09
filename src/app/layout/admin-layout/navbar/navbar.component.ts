@@ -59,7 +59,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
   loadUserInfo(): void {
     this.auth.getInfoUser().subscribe({
       next: (user) => {
-        // Defer template updates to the next macrotask to avoid NG0100 in the navbar tree.
         setTimeout(() => {
           if (user) {
             this.username = user.username;
