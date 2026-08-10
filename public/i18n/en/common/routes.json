@@ -52,8 +52,7 @@
     "addTransfer": "Add Transfer",
     "editTransfer": "Edit Transfer",
     "detailTransfer": "Transfer Details",
-     "operate": "Operation",
-    "timeAttendance": "Time Attendance",
+    "operate": "Operation",
     "timekeepingList": "Attendance Sheet",
     "shiftList": "Work Shifts",
     "leaveRequestList": "Leave Requests",
@@ -80,6 +79,12 @@
     "editShift": "Edit Shift",
     "addWorkSchedule": "Add Work Schedule",
     "editWorkSchedule": "Edit Work Schedule",
-    "actionLog": "System Audit Log"
+    "actionLog": "System Audit Log",
+    "dayOffConfig": "Leave Config",
+    "addDayOffConfig": "Add Leave Type",
+    "editDayOffConfig": "Edit Leave Type",
+    "publicHoliday": "Public Holiday",
+    "addPublicHoliday": "Add Public Holiday",
+    "editPublicHoliday": "Edit Public Holiday"
   }
 }

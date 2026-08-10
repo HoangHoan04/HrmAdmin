@@ -511,7 +511,9 @@ export class PartComponent implements OnInit {
       next: (result) => {
         this.excelLoading = false;
         if (result.errorCount > 0) {
-          this.message.warning(this.i18n.excelImportPartial(result.successCount, result.totalRows, result.errorCount));
+          this.message.warning(
+            this.i18n.excelImportPartial(result.successCount, result.totalRows, result.errorCount),
+          );
           if (result.errors?.length) {
             console.warn('Part import errors:', result.errors);
           }

@@ -1,0 +1,33 @@
+{
+  "timekeepingStandard": {
+    "entityName": "chuẩn chấm công",
+    "title": "Quản lý chuẩn chấm công",
+    "code": "Mã chuẩn",
+    "name": "Tên chuẩn",
+    "description": "Mô tả",
+    "companyName": "Công ty",
+    "allowedRadiusMeters": "Bán kính cho phép (m)",
+    "lateGraceMinutes": "Phút cho phép đi muộn",
+    "earlyLeaveGraceMinutes": "Phút cho phép về sớm",
+    "isActive": "Kích hoạt",
+    "status": "Hoạt động",
+    "createdAt": "Ngày tạo",
+    "searchCode": "Nhập mã chuẩn...",
+    "searchName": "Nhập tên chuẩn...",
+    "filterCompany": "Chọn công ty...",
+    "filterStatus": "Chọn trạng thái...",
+    "statusActive": "Đang hoạt động",
+    "statusInactive": "Ngưng hoạt động",
+    "viewDetail": "Xem chi tiết",
+    "edit": "Sửa chuẩn chấm công",
+    "activate": "Kích hoạt",
+    "deactivate": "Ngưng hoạt động",
+    "addTitle": "Thêm chuẩn chấm công",
+    "editTitle": "Cập nhật chuẩn chấm công",
+    "backToList": "Danh sách chuẩn chấm công",
+    "codeRequired": "Vui lòng nhập mã chuẩn!",
+    "nameRequired": "Vui lòng nhập tên chuẩn!",
+    "codePlaceholder": "Ví dụ: TKS-01",
+    "namePlaceholder": "Ví dụ: Chuẩn văn phòng"
+  }
+}

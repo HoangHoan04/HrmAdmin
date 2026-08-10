@@ -342,7 +342,9 @@ export class CompanyManagerComponent implements OnInit {
       next: (result) => {
         this.excelLoading = false;
         if (result.errorCount > 0) {
-          this.message.warning(this.i18n.excelImportPartial(result.successCount, result.totalRows, result.errorCount));
+          this.message.warning(
+            this.i18n.excelImportPartial(result.successCount, result.totalRows, result.errorCount),
+          );
           if (result.errors?.length) {
             console.warn('Company import errors:', result.errors);
           }

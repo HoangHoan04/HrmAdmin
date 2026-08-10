@@ -1,0 +1,128 @@
+<nz-card [nzTitle]="titleTemplate" [nzExtra]="extraTemplate">
+  <nz-spin [nzSpinning]="loading">
+    <form nz-form [formGroup]="validateForm" nzLayout="vertical" (ngSubmit)="submitForm()">
+      <div nz-row [nzGutter]="24">
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label [nzRequired]="true">{{
+              'publicHoliday.code' | translate
+            }}</nz-form-label>
+            <nz-form-control [nzErrorTip]="'publicHoliday.codeRequired' | translate">
+              <input
+                nz-input
+                formControlName="code"
+                [placeholder]="'publicHoliday.codePlaceholder' | translate"
+                [disabled]="isEdit"
+              />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label [nzRequired]="true">{{
+              'publicHoliday.name' | translate
+            }}</nz-form-label>
+            <nz-form-control [nzErrorTip]="'publicHoliday.nameRequired' | translate">
+              <input
+                nz-input
+                formControlName="name"
+                [placeholder]="'publicHoliday.namePlaceholder' | translate"
+                [disabled]="isEdit"
+              />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'publicHoliday.companyName' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-select
+                formControlName="companyId"
+                nzAllowClear
+                [nzPlaceHolder]="'publicHoliday.filterCompany' | translate"
+              >
+                @for (c of companies; track c.id) {
+                  <nz-option
+                    [nzValue]="c.id"
+                    [nzLabel]="c.code ? c.code + ' - ' + c.name : c.name"
+                  ></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+
+      <div nz-row [nzGutter]="24">
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label [nzRequired]="true">{{
+              'publicHoliday.holidayDate' | translate
+            }}</nz-form-label>
+            <nz-form-control>
+              <nz-date-picker
+                formControlName="holidayDate"
+                [nzFormat]="'dd/MM/yyyy'"
+                [nzPlaceHolder]="'publicHoliday.holidayDatePlaceholder' | translate"
+                style="width: 100%"
+              ></nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'publicHoliday.isRecurringYearly' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-switch formControlName="isRecurringYearly"></nz-switch>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'publicHoliday.isActive' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-switch formControlName="isActive"></nz-switch>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+
+      <nz-form-item>
+        <nz-form-label>{{ 'publicHoliday.description' | translate }}</nz-form-label>
+        <nz-form-control>
+          <textarea nz-input formControlName="description" rows="3"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+
+      <div class="form-actions" style="margin-top: 24px">
+        <button nz-button nzType="default" type="button" (click)="goBack()" [disabled]="submitting">
+          <i nz-icon nzType="arrow-left"></i>
+          {{ 'publicHoliday.backToList' | translate }}
+        </button>
+        <button
+          nz-button
+          nzType="primary"
+          type="submit"
+          [nzLoading]="submitting"
+          style="margin-left: 12px"
+        >
+          <i nz-icon nzType="save"></i> {{ 'common.actions.save' | translate }}
+        </button>
+      </div>
+    </form>
+  </nz-spin>
+</nz-card>
+
+<ng-template #titleTemplate>
+  <span style="font-size: 18px; font-weight: 600">
+    <i nz-icon nzType="control" style="margin-right: 8px"></i>
+    {{ isEdit ? ('publicHoliday.editTitle' | translate) : ('publicHoliday.addTitle' | translate) }}
+  </span>
+</ng-template>
+
+<ng-template #extraTemplate>
+  <button nz-button nzType="default" (click)="goBack()">
+    {{ 'publicHoliday.backToList' | translate }}
+  </button>
+</ng-template>

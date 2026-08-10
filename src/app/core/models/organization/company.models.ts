@@ -1,6 +1,6 @@
-import { Base, SelectBoxDto } from '../common.models';
+import { BaseDto, SelectBoxDto } from '../common.models';
 
-export interface Company extends Base {
+export interface Company extends BaseDto {
   code: string;
   name: string;
   description?: string;

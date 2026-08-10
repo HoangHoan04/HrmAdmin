@@ -484,12 +484,20 @@ export class DepartmentManagerComponent implements OnInit {
         next: (result) => {
           this.excelLoading = false;
           if (result.errorCount > 0) {
-            this.message.warning(this.i18n.excelImportPartial(result.successCount, result.totalRows, result.errorCount));
+            this.message.warning(
+              this.i18n.excelImportPartial(
+                result.successCount,
+                result.totalRows,
+                result.errorCount,
+              ),
+            );
             if (result.errors?.length) {
               console.warn('Department import errors:', result.errors);
             }
           } else {
-            this.message.success(this.i18n.excelImportSuccess(result.successCount, this.ENTITY_KEY));
+            this.message.success(
+              this.i18n.excelImportSuccess(result.successCount, this.ENTITY_KEY),
+            );
           }
           this.loadData();
         },

@@ -6,7 +6,7 @@ import {
   withInterceptorsFromDi,
 } from '@angular/common/http';
 import vi from '@angular/common/locales/vi';
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, Injector, NgModule } from '@angular/core'; // 👈 thêm APP_INITIALIZER, Injector
 import { BrowserModule } from '@angular/platform-browser';
 import { IconDefinition } from '@ant-design/icons-angular';
 import * as AllIcons from '@ant-design/icons-angular/icons';
@@ -18,6 +18,7 @@ import { catchError, map, switchMap } from 'rxjs/operators';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
+import { StaticTranslateService } from './core/services/static-translate.service'; // 👈 thêm import
 import { AdminLayoutModule } from './layout/admin-layout/admin-layout.module';
 import { OtherModule } from './pages/other/other.module';
 import { SharedModule } from './shared/shared.module';
@@ -69,6 +70,13 @@ export class CustomTranslateLoader implements TranslateLoader {
   }
 }
 
+// 👇 Factory function để khởi tạo StaticTranslateService trước mọi thứ khác
+export function initStaticTranslateFactory(injector: Injector) {
+  return () => {
+    injector.get(StaticTranslateService); // trigger constructor -> gán static instance
+  };
+}
+
 @NgModule({
   declarations: [AppComponent],
   imports: [BrowserModule, SharedModule, AdminLayoutModule, OtherModule, AppRoutingModule],
@@ -89,6 +97,13 @@ export class CustomTranslateLoader implements TranslateLoader {
         deps: [HttpClient],
       },
     }),
+    // 👇 Thêm APP_INITIALIZER
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initStaticTranslateFactory,
+      deps: [Injector],
+      multi: true,
+    },
   ],
   bootstrap: [AppComponent],
 })

@@ -139,7 +139,6 @@ export class ConfigSettingComponent implements OnInit, OnDestroy {
     );
     this.sub.add(
       this.ds.configOpen$.subscribe((open) => {
-        // Defer visibility flip so NzDrawer zIndex updates outside the current CD cycle.
         queueMicrotask(() => {
           if (this.configOpen === open) return;
           this.configOpen = open;

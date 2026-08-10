@@ -1,6 +1,6 @@
-import { Base, SelectBoxDto } from '../common.models';
+import { BaseDto, SelectBoxDto } from '../common.models';
 
-export interface Branch extends Base {
+export interface Branch extends BaseDto {
   code: string;
   name: string;
   shortName?: string;

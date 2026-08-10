@@ -28,7 +28,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
   styleUrls: [],
 })
 export class TimekeepingStandardManagerComponent implements OnInit {
-  private readonly ENTITY_KEY = 'timeAttendance.timekeepingStandard.entityName';
+  private readonly ENTITY_KEY = 'timekeepingStandard.entityName';
 
   data: (TimeKeepingStandard & { status?: boolean })[] = [];
   loading = false;
@@ -63,39 +63,39 @@ export class TimekeepingStandardManagerComponent implements OnInit {
   filterFields: FilterField[] = [
     {
       key: 'code',
-      label: 'timeAttendance.timekeepingStandard.code',
+      label: 'timekeepingStandard.code',
       type: 'input',
-      placeholder: 'timeAttendance.timekeepingStandard.searchCode',
+      placeholder: 'timekeepingStandard.searchCode',
       col: 6,
       allowClear: true,
     },
     {
       key: 'name',
-      label: 'timeAttendance.timekeepingStandard.name',
+      label: 'timekeepingStandard.name',
       type: 'input',
-      placeholder: 'timeAttendance.timekeepingStandard.searchName',
+      placeholder: 'timekeepingStandard.searchName',
       col: 6,
       allowClear: true,
     },
     {
       key: 'companyId',
-      label: 'timeAttendance.timekeepingStandard.companyName',
+      label: 'timekeepingStandard.companyName',
       type: 'select',
-      placeholder: 'timeAttendance.timekeepingStandard.filterCompany',
+      placeholder: 'timekeepingStandard.filterCompany',
       col: 6,
       allowClear: true,
       options: [],
     },
     {
       key: 'isDeleted',
-      label: 'timeAttendance.timekeepingStandard.status',
+      label: 'timekeepingStandard.status',
       type: 'select',
-      placeholder: 'timeAttendance.timekeepingStandard.filterStatus',
+      placeholder: 'timekeepingStandard.filterStatus',
       col: 6,
       allowClear: true,
       options: [
-        { label: 'timeAttendance.timekeepingStandard.statusActive', value: false },
-        { label: 'timeAttendance.timekeepingStandard.statusInactive', value: true },
+        { label: 'timekeepingStandard.statusActive', value: false },
+        { label: 'timekeepingStandard.statusInactive', value: true },
       ],
     },
   ];
@@ -108,35 +108,35 @@ export class TimekeepingStandardManagerComponent implements OnInit {
   columns: TableColumn[] = [
     {
       field: 'code',
-      header: 'timeAttendance.timekeepingStandard.code',
+      header: 'timekeepingStandard.code',
       type: 'text',
       sortable: true,
     },
     {
       field: 'name',
-      header: 'timeAttendance.timekeepingStandard.name',
+      header: 'timekeepingStandard.name',
       type: 'text',
       sortable: true,
     },
     {
       field: 'companyName',
-      header: 'timeAttendance.timekeepingStandard.companyName',
+      header: 'timekeepingStandard.companyName',
       type: 'text',
     },
     {
       field: 'allowedRadiusMeters',
-      header: 'timeAttendance.timekeepingStandard.allowedRadiusMeters',
+      header: 'timekeepingStandard.allowedRadiusMeters',
       type: 'text',
     },
     {
       field: 'lateGraceMinutes',
-      header: 'timeAttendance.timekeepingStandard.lateGraceMinutes',
+      header: 'timekeepingStandard.lateGraceMinutes',
       type: 'text',
     },
-    { field: 'status', header: 'timeAttendance.timekeepingStandard.status', type: 'boolean' },
+    { field: 'status', header: 'timekeepingStandard.status', type: 'boolean' },
     {
       field: 'createdAt',
-      header: 'timeAttendance.timekeepingStandard.createdAt',
+      header: 'timekeepingStandard.createdAt',
       type: 'date',
       sortable: true,
     },
@@ -146,14 +146,14 @@ export class TimekeepingStandardManagerComponent implements OnInit {
     {
       key: 'edit',
       icon: 'edit',
-      tooltip: 'timeAttendance.timekeepingStandard.edit',
+      tooltip: 'timekeepingStandard.edit',
       severity: 'info',
       onClick: (record) => this.openEdit(record),
     },
     {
       key: 'activate',
       icon: 'check-circle',
-      tooltip: 'timeAttendance.timekeepingStandard.activate',
+      tooltip: 'timekeepingStandard.activate',
       severity: 'success',
       visible: (record) => record.isDeleted === true,
       onClick: (record) => this.activate(record),
@@ -161,7 +161,7 @@ export class TimekeepingStandardManagerComponent implements OnInit {
     {
       key: 'deactivate',
       icon: 'stop',
-      tooltip: 'timeAttendance.timekeepingStandard.deactivate',
+      tooltip: 'timekeepingStandard.deactivate',
       severity: 'danger',
       visible: (record) => record.isDeleted === false,
       onClick: (record) => this.deactivate(record),

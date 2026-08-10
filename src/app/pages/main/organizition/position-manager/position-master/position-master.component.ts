@@ -370,9 +370,7 @@ export class PositionMasterComponent implements OnInit {
       .subscribe({
         next: (success) => {
           if (success) {
-            this.message.success(
-              this.i18n.deactivateSuccess(this.ENTITY_KEY, positionMaster.name),
-            );
+            this.message.success(this.i18n.deactivateSuccess(this.ENTITY_KEY, positionMaster.name));
             this.loadData();
           } else {
             this.message.error(this.i18n.deactivateFailed(this.ENTITY_KEY));
@@ -445,7 +443,13 @@ export class PositionMasterComponent implements OnInit {
         next: (result) => {
           this.excelLoading = false;
           if (result.errorCount > 0) {
-            this.message.warning(this.i18n.excelImportPartial(result.successCount, result.totalRows, result.errorCount));
+            this.message.warning(
+              this.i18n.excelImportPartial(
+                result.successCount,
+                result.totalRows,
+                result.errorCount,
+              ),
+            );
             if (result.errors?.length) {
               console.warn('Position master import errors:', result.errors);
             }

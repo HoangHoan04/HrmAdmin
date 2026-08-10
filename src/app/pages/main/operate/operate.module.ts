@@ -2,12 +2,16 @@ import { ROUTES_CONFIG } from '@/app/core/constants/common/routes.config';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from '../../../shared/shared.module';
-import { LeaveManagerComponent } from './time-attendance/leave-manager/leave-manager.component';
-import { AddOrUpdateShiftComponent } from './time-attendance/shift-manager/add-or-update-shift/add-or-update-shift.component';
-import { AddOrUpdateWorkScheduleComponent } from './time-attendance/shift-manager/add-or-update-work-schedule/add-or-update-work-schedule.component';
-import { ShiftListComponent } from './time-attendance/shift-manager/shift-list/shift-list.component';
-import { ShiftManagerComponent } from './time-attendance/shift-manager/shift-manager.component';
-import { WorkScheduleManagerComponent } from './time-attendance/shift-manager/work-schedule-manager/work-schedule-manager.component';
+import { AddOrUpdateDayOffConfigComponent } from './leave/day-off-config-manager/add-or-update-day-off-config/add-or-update-day-off-config.component';
+import { DayOffConfigManagerComponent } from './leave/day-off-config-manager/day-off-config-manager.component';
+import { LeaveManagerComponent } from './leave/leave-manager/leave-manager.component';
+import { AddOrUpdatePublicHolidayComponent } from './leave/public-holiday-manager/add-or-update-public-holiday/add-or-update-public-holiday.component';
+import { PublicHolidayManagerComponent } from './leave/public-holiday-manager/public-holiday-manager.component';
+import { ShiftManagerComponent } from './shift/shift-manager.component';
+import { AddOrUpdateShiftComponent } from './shift/shift-manager/add-or-update-shift/add-or-update-shift.component';
+import { ShiftListComponent } from './shift/shift-manager/shift-list.component';
+import { AddOrUpdateWorkScheduleComponent } from './shift/work-schedule/add-or-update-work-schedule/add-or-update-work-schedule.component';
+import { WorkScheduleManagerComponent } from './shift/work-schedule/work-schedule-manager.component';
 import { TimekeepingManagerComponent } from './time-attendance/timekeeping-manager/timekeeping-manager.component';
 import { AddOrUpdateTimekeepingStandardComponent } from './time-attendance/timekeeping-standard-manager/add-or-update-timekeeping-standard/add-or-update-timekeeping-standard.component';
 import { TimekeepingStandardManagerComponent } from './time-attendance/timekeeping-standard-manager/timekeeping-standard-manager.component';
@@ -19,6 +23,52 @@ const getRelativePath = (p: string) => {
 };
 
 const routes: Routes = [
+  // Day Off Config
+  {
+    path: getRelativePath(
+      ROUTES_CONFIG.OPERATE_MANAGER.children.LEAVE_MANAGER.children.DAY_OFF_CONFIG.path,
+    ),
+    component: DayOffConfigManagerComponent,
+  },
+  {
+    path: getRelativePath(
+      ROUTES_CONFIG.OPERATE_MANAGER.children.LEAVE_MANAGER.children.DAY_OFF_CONFIG.children
+        .ADD_DAY_OFF_CONFIG.path,
+    ),
+    component: AddOrUpdateDayOffConfigComponent,
+  },
+  {
+    path:
+      getRelativePath(
+        ROUTES_CONFIG.OPERATE_MANAGER.children.LEAVE_MANAGER.children.DAY_OFF_CONFIG.children
+          .EDIT_DAY_OFF_CONFIG.path,
+      ) + '/:id',
+    component: AddOrUpdateDayOffConfigComponent,
+  },
+  // Public Holiday
+  {
+    path: getRelativePath(
+      ROUTES_CONFIG.OPERATE_MANAGER.children.LEAVE_MANAGER.children.PUBLIC_HOLIDAY.path,
+    ),
+    component: PublicHolidayManagerComponent,
+  },
+  {
+    path: getRelativePath(
+      ROUTES_CONFIG.OPERATE_MANAGER.children.LEAVE_MANAGER.children.PUBLIC_HOLIDAY.children
+        .ADD_PUBLIC_HOLIDAY.path,
+    ),
+    component: AddOrUpdatePublicHolidayComponent,
+  },
+  {
+    path:
+      getRelativePath(
+        ROUTES_CONFIG.OPERATE_MANAGER.children.LEAVE_MANAGER.children.PUBLIC_HOLIDAY.children
+          .EDIT_PUBLIC_HOLIDAY.path,
+      ) + '/:id',
+    component: AddOrUpdatePublicHolidayComponent,
+  },
+
+  // Timekeeping Standard
   {
     path: getRelativePath(
       ROUTES_CONFIG.OPERATE_MANAGER.children.TIME_ATTENDANCE.children.TIMEKEEPING_STANDARD.path,
@@ -40,51 +90,49 @@ const routes: Routes = [
       ) + '/:id',
     component: AddOrUpdateTimekeepingStandardComponent,
   },
+  // Timekeeping
   {
     path: getRelativePath(
       ROUTES_CONFIG.OPERATE_MANAGER.children.TIME_ATTENDANCE.children.TIMEKEEPING_MANAGER.path,
     ),
     component: TimekeepingManagerComponent,
   },
+  // Shift
   {
-    path: getRelativePath(
-      ROUTES_CONFIG.OPERATE_MANAGER.children.TIME_ATTENDANCE.children.SHIFT_MANAGER.path,
-    ),
+    path: getRelativePath(ROUTES_CONFIG.OPERATE_MANAGER.children.SHIFT_MANAGER.path),
     component: ShiftManagerComponent,
   },
   {
     path: getRelativePath(
-      ROUTES_CONFIG.OPERATE_MANAGER.children.TIME_ATTENDANCE.children.SHIFT_MANAGER.children
-        .ADD_SHIFT.path,
+      ROUTES_CONFIG.OPERATE_MANAGER.children.SHIFT_MANAGER.children.ADD_SHIFT.path,
     ),
     component: AddOrUpdateShiftComponent,
   },
   {
     path:
       getRelativePath(
-        ROUTES_CONFIG.OPERATE_MANAGER.children.TIME_ATTENDANCE.children.SHIFT_MANAGER.children
-          .EDIT_SHIFT.path,
+        ROUTES_CONFIG.OPERATE_MANAGER.children.SHIFT_MANAGER.children.EDIT_SHIFT.path,
       ) + '/:id',
     component: AddOrUpdateShiftComponent,
   },
+  // Work Schedule
   {
     path: getRelativePath(
-      ROUTES_CONFIG.OPERATE_MANAGER.children.TIME_ATTENDANCE.children.SHIFT_MANAGER.children
-        .ADD_WORK_SCHEDULE.path,
+      ROUTES_CONFIG.OPERATE_MANAGER.children.SHIFT_MANAGER.children.ADD_WORK_SCHEDULE.path,
     ),
     component: AddOrUpdateWorkScheduleComponent,
   },
   {
     path:
       getRelativePath(
-        ROUTES_CONFIG.OPERATE_MANAGER.children.TIME_ATTENDANCE.children.SHIFT_MANAGER.children
-          .EDIT_WORK_SCHEDULE.path,
+        ROUTES_CONFIG.OPERATE_MANAGER.children.SHIFT_MANAGER.children.EDIT_WORK_SCHEDULE.path,
       ) + '/:id',
     component: AddOrUpdateWorkScheduleComponent,
   },
+  // Leave Manager
   {
     path: getRelativePath(
-      ROUTES_CONFIG.OPERATE_MANAGER.children.TIME_ATTENDANCE.children.LEAVE_MANAGER.path,
+      ROUTES_CONFIG.OPERATE_MANAGER.children.LEAVE_MANAGER.children.LEAVE_LIST.path,
     ),
     component: LeaveManagerComponent,
   },
@@ -101,6 +149,10 @@ const routes: Routes = [
     WorkScheduleManagerComponent,
     AddOrUpdateWorkScheduleComponent,
     LeaveManagerComponent,
+    DayOffConfigManagerComponent,
+    AddOrUpdateDayOffConfigComponent,
+    PublicHolidayManagerComponent,
+    AddOrUpdatePublicHolidayComponent,
   ],
   imports: [SharedModule, RouterModule.forChild(routes)],
 })

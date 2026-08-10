@@ -5,15 +5,13 @@
         <div nz-col nzXs="24" nzMd="12">
           <nz-form-item>
             <nz-form-label [nzRequired]="true">{{
-              'timeAttendance.timekeepingStandard.code' | translate
+              'timekeepingStandard.code' | translate
             }}</nz-form-label>
-            <nz-form-control
-              [nzErrorTip]="'timeAttendance.timekeepingStandard.codeRequired' | translate"
-            >
+            <nz-form-control [nzErrorTip]="'timekeepingStandard.codeRequired' | translate">
               <input
                 nz-input
                 formControlName="code"
-                [placeholder]="'timeAttendance.timekeepingStandard.codePlaceholder' | translate"
+                [placeholder]="'timekeepingStandard.codePlaceholder' | translate"
                 [disabled]="isEdit"
               />
             </nz-form-control>
@@ -21,14 +19,12 @@
         </div>
         <div nz-col nzXs="24" nzMd="12">
           <nz-form-item>
-            <nz-form-label>{{
-              'timeAttendance.timekeepingStandard.companyName' | translate
-            }}</nz-form-label>
+            <nz-form-label>{{ 'timekeepingStandard.companyName' | translate }}</nz-form-label>
             <nz-form-control>
               <nz-select
                 formControlName="companyId"
                 nzAllowClear
-                [nzPlaceHolder]="'timeAttendance.timekeepingStandard.filterCompany' | translate"
+                [nzPlaceHolder]="'timekeepingStandard.filterCompany' | translate"
               >
                 @for (c of companies; track c.id) {
                   <nz-option
@@ -44,13 +40,13 @@
 
       <nz-form-item>
         <nz-form-label [nzRequired]="true">{{
-          'timeAttendance.timekeepingStandard.name' | translate
+          'timekeepingStandard.name' | translate
         }}</nz-form-label>
-        <nz-form-control [nzErrorTip]="'timeAttendance.timekeepingStandard.nameRequired' | translate">
+        <nz-form-control [nzErrorTip]="'timekeepingStandard.nameRequired' | translate">
           <input
             nz-input
             formControlName="name"
-            [placeholder]="'timeAttendance.timekeepingStandard.namePlaceholder' | translate"
+            [placeholder]="'timekeepingStandard.namePlaceholder' | translate"
           />
         </nz-form-control>
       </nz-form-item>
@@ -59,7 +55,7 @@
         <div nz-col nzXs="24" nzMd="8">
           <nz-form-item>
             <nz-form-label [nzRequired]="true">{{
-              'timeAttendance.timekeepingStandard.allowedRadiusMeters' | translate
+              'timekeepingStandard.allowedRadiusMeters' | translate
             }}</nz-form-label>
             <nz-form-control>
               <nz-input-number
@@ -72,9 +68,7 @@
         </div>
         <div nz-col nzXs="24" nzMd="8">
           <nz-form-item>
-            <nz-form-label>{{
-              'timeAttendance.timekeepingStandard.lateGraceMinutes' | translate
-            }}</nz-form-label>
+            <nz-form-label>{{ 'timekeepingStandard.lateGraceMinutes' | translate }}</nz-form-label>
             <nz-form-control>
               <nz-input-number
                 formControlName="lateGraceMinutes"
@@ -87,7 +81,7 @@
         <div nz-col nzXs="24" nzMd="8">
           <nz-form-item>
             <nz-form-label>{{
-              'timeAttendance.timekeepingStandard.earlyLeaveGraceMinutes' | translate
+              'timekeepingStandard.earlyLeaveGraceMinutes' | translate
             }}</nz-form-label>
             <nz-form-control>
               <nz-input-number
@@ -101,14 +95,14 @@
       </div>
 
       <nz-form-item>
-        <nz-form-label>{{ 'timeAttendance.timekeepingStandard.description' | translate }}</nz-form-label>
+        <nz-form-label>{{ 'timekeepingStandard.description' | translate }}</nz-form-label>
         <nz-form-control>
           <textarea nz-input formControlName="description" rows="3"></textarea>
         </nz-form-control>
       </nz-form-item>
 
       <nz-form-item>
-        <nz-form-label>{{ 'timeAttendance.timekeepingStandard.isActive' | translate }}</nz-form-label>
+        <nz-form-label>{{ 'timekeepingStandard.isActive' | translate }}</nz-form-label>
         <nz-form-control>
           <nz-switch formControlName="isActive"></nz-switch>
         </nz-form-control>
@@ -117,7 +111,7 @@
       <div class="form-actions" style="margin-top: 24px">
         <button nz-button nzType="default" type="button" (click)="goBack()" [disabled]="submitting">
           <i nz-icon nzType="arrow-left"></i>
-          {{ 'timeAttendance.timekeepingStandard.backToList' | translate }}
+          {{ 'timekeepingStandard.backToList' | translate }}
         </button>
         <button
           nz-button
@@ -138,14 +132,14 @@
     <i nz-icon nzType="control" style="margin-right: 8px"></i>
     {{
       isEdit
-        ? ('timeAttendance.timekeepingStandard.editTitle' | translate)
-        : ('timeAttendance.timekeepingStandard.addTitle' | translate)
+        ? ('timekeepingStandard.editTitle' | translate)
+        : ('timekeepingStandard.addTitle' | translate)
     }}
   </span>
 </ng-template>
 
 <ng-template #extraTemplate>
   <button nz-button nzType="default" (click)="goBack()">
-    {{ 'timeAttendance.timekeepingStandard.backToList' | translate }}
+    {{ 'timekeepingStandard.backToList' | translate }}
   </button>
 </ng-template>

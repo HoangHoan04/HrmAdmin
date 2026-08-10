@@ -52,8 +52,7 @@
     "addTransfer": "Thêm điều chuyển",
     "editTransfer": "Cập nhật điều chuyển",
     "detailTransfer": "Chi tiết điều chuyển",
-     "operate": "Vận hành",
-    "timeAttendance": "Chấm công",
+    "operate": "Vận hành",
     "timekeepingList": "Bảng chấm công",
     "shiftList": "Ca làm việc",
     "leaveRequestList": "Đơn nghỉ phép",
@@ -80,6 +79,12 @@
     "editShift": "Cập nhật ca làm việc",
     "addWorkSchedule": "Thêm lịch làm việc",
     "editWorkSchedule": "Cập nhật lịch làm việc",
-    "actionLog": "Nhật ký hệ thống"
+    "actionLog": "Nhật ký hệ thống",
+    "dayOffConfig": "Cấu hình nghỉ phép",
+    "addDayOffConfig": "Thêm loại nghỉ phép",
+    "editDayOffConfig": "Cập nhật loại nghỉ phép",
+    "publicHoliday": "Ngày nghỉ lễ",
+    "addPublicHoliday": "Thêm ngày nghỉ lễ",
+    "editPublicHoliday": "Cập nhật ngày nghỉ lễ"
   }
 }

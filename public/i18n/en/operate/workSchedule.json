@@ -1,0 +1,25 @@
+{
+  "workSchedule": {
+    "entityName": "work schedule",
+    "title": "Work schedule management",
+    "employee": "Employee",
+    "employeeCode": "Employee code",
+    "shiftMaster": "Shift",
+    "workDate": "Work date",
+    "branch": "Branch",
+    "note": "Note",
+    "createdAt": "Created at",
+    "filterEmployee": "Select employee...",
+    "filterShift": "Select shift...",
+    "filterBranch": "Select branch...",
+    "filterDateRange": "Date range",
+    "edit": "Edit schedule",
+    "deactivate": "Remove schedule",
+    "addTitle": "Add work schedule",
+    "editTitle": "Edit work schedule",
+    "backToList": "Back to list",
+    "employeeRequired": "Employee is required!",
+    "shiftRequired": "Shift is required!",
+    "workDateRequired": "Work date is required!"
+  }
+}

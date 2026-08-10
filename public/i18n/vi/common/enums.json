@@ -40,6 +40,47 @@
       "uploadFile": "Tải file lên",
       "lock": "Khóa",
       "unlock": "Mở khóa"
+    },
+    "employeeLevel": {
+      "internship": "Thực tập sinh",
+      "fresher": "Fresher",
+      "junior": "Junior",
+      "middle": "Middle",
+      "senior": "Senior",
+      "leader": "Trưởng nhóm",
+      "manager": "Quản lý",
+      "director": "Giám đốc",
+      "executive": "Ban điều hành"
+    },
+    "workingMode": {
+      "onSite": "Làm việc tại văn phòng",
+      "remote": "Làm việc từ xa",
+      "hybrid": "Kết hợp",
+      "flexible": "Linh hoạt",
+      "businessTrip": "Công tác"
+    },
+    "contractType": {
+      "probation": "Thử việc",
+      "indefinite": "Không xác định thời hạn",
+      "definite": "Xác định thời hạn",
+      "seasonal": "Thời vụ",
+      "collaborator": "Cộng tác viên",
+      "internship": "Thực tập"
+    },
+    "workStatus": {
+      "working": "Đang làm việc",
+      "resigned": "Đã nghỉ việc",
+      "onLeave": "Đang nghỉ phép",
+      "suspended": "Tạm ngưng công tác",
+      "retired": "Đã nghỉ hưu"
+    },
+    "dayOffConfigType": {
+      "annual": "Phép năm",
+      "sick": "Nghỉ ốm",
+      "unpaid": "Nghỉ không lương",
+      "maternity": "Nghỉ thai sản",
+      "paternity": "Nghỉ chế độ thai sản (cho chồng)",
+      "other": "Khác"
     }
   }
 }

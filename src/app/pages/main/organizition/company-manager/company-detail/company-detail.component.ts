@@ -2,12 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { ROUTES_CONFIG } from '../../../../../core/constants/common/routes.config';
-import { PagedResult } from '../../../../../core/models/common.models';
 import { Branch, Company } from '../../../../../core/models';
+import { PagedResult } from '../../../../../core/models/common.models';
 import { ApiService } from '../../../../../core/services/api.service';
 import { I18nMessageService } from '../../../../../core/services/i18n-message.service';
+import {
+  RowAction,
+  TableColumn,
+} from '../../../../../shared/components/table-custom/table-custom.types';
 import { ActionConfirmService } from '../../../../../shared/services/action-confirm.service';
-import { TableColumn, RowAction } from '../../../../../shared/components/table-custom/table-custom.types';
 
 @Component({
   standalone: false,
@@ -48,7 +51,9 @@ export class CompanyDetailComponent implements OnInit {
       header: 'organization.branch.status',
       type: 'boolean',
       renderBoolean: (value) =>
-        value ? this.i18n.instant('common.statusActive') : this.i18n.instant('common.statusInactive'),
+        value
+          ? this.i18n.instant('common.statusActive')
+          : this.i18n.instant('common.statusInactive'),
     },
   ];
 
@@ -61,11 +66,17 @@ export class CompanyDetailComponent implements OnInit {
       header: 'organization.company.status',
       type: 'boolean',
       renderBoolean: (value) =>
-        value ? this.i18n.instant('common.statusActive') : this.i18n.instant('common.statusInactive'),
+        value
+          ? this.i18n.instant('common.statusActive')
+          : this.i18n.instant('common.statusInactive'),
     },
   ];
 
-  detailFields: { key: keyof Company | string; label: string; type?: 'date' | 'boolean' | 'text' }[] = [
+  detailFields: {
+    key: keyof Company | string;
+    label: string;
+    type?: 'date' | 'boolean' | 'text';
+  }[] = [
     { key: 'code', label: 'organization.company.code' },
     { key: 'name', label: 'organization.company.name' },
     { key: 'parentName', label: 'organization.company.parentCompany' },
@@ -85,14 +96,21 @@ export class CompanyDetailComponent implements OnInit {
     { key: 'industry', label: 'organization.company.industry' },
     { key: 'operatingStatus', label: 'organization.company.operatingStatus' },
     { key: 'legalRepresentative', label: 'organization.company.legalRepresentative' },
-    { key: 'legalRepresentativePosition', label: 'organization.company.legalRepresentativePosition' },
+    {
+      key: 'legalRepresentativePosition',
+      label: 'organization.company.legalRepresentativePosition',
+    },
     { key: 'foundedDate', label: 'organization.company.foundedDate', type: 'date' },
     { key: 'prefixMaleCode', label: 'organization.company.prefixMaleCode' },
     { key: 'prefixFemaleCode', label: 'organization.company.prefixFemaleCode' },
     { key: 'prefixFullTimeCode', label: 'organization.company.prefixFullTimeCode' },
     { key: 'prefixPartTimeCode', label: 'organization.company.prefixPartTimeCode' },
     { key: 'dayComputeSalary', label: 'organization.company.dayComputeSalary', type: 'date' },
-    { key: 'isComputePrevMonth', label: 'organization.company.isComputePrevMonth', type: 'boolean' },
+    {
+      key: 'isComputePrevMonth',
+      label: 'organization.company.isComputePrevMonth',
+      type: 'boolean',
+    },
     { key: 'bankAccountNumber', label: 'organization.company.bankAccountNumber' },
     { key: 'bankName', label: 'organization.company.bankName' },
     { key: 'bankBranch', label: 'organization.company.bankBranch' },

@@ -1,4 +1,3 @@
-import { TranslateService } from '@ngx-translate/core';
 import {
   Component,
   Input,
@@ -8,6 +7,7 @@ import {
   TemplateRef,
   ViewChild,
 } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { enumData } from '../../../core/constants/enums/enumData';
 import { ActionLog, ActionTypeMeta } from '../../../core/models/action-log.models';
 import { PagedResult } from '../../../core/models/common.models';

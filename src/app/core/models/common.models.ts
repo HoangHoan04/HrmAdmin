@@ -32,7 +32,7 @@ export interface ImportResult {
   errors: string[];
 }
 
-export interface Base {
+export interface BaseDto {
   id: string;
   createdAt: string;
   updatedAt: string;

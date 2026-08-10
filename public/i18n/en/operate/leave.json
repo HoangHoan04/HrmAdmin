@@ -1,0 +1,31 @@
+{
+  "leave": {
+    "entityName": "leave request",
+    "title": "Leave request management",
+    "employee": "Employee",
+    "employeeCode": "Employee code",
+    "branch": "Branch",
+    "dayOffType": "Leave type",
+    "dayOffConfig": "Leave config",
+    "fromDate": "From date",
+    "toDate": "To date",
+    "totalDays": "Total days",
+    "reason": "Reason",
+    "status": "Status",
+    "approverName": "Approver",
+    "approverNote": "Approver note",
+    "approvedAt": "Approved at",
+    "createdAt": "Created at",
+    "filterEmployee": "Select employee...",
+    "filterBranch": "Select branch...",
+    "filterStatus": "Select status...",
+    "filterDateRange": "Date range",
+    "approve": "Approve",
+    "reject": "Reject",
+    "statusPending": "Pending",
+    "statusApproved": "Approved",
+    "statusRejected": "Rejected",
+    "statusCancelled": "Cancelled",
+    "approverNotePlaceholder": "Enter note (optional)..."
+  }
+}

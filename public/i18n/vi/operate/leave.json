@@ -1,0 +1,31 @@
+{
+  "leave": {
+    "entityName": "đơn nghỉ phép",
+    "title": "Quản lý đơn nghỉ phép",
+    "employee": "Nhân viên",
+    "employeeCode": "Mã NV",
+    "branch": "Chi nhánh",
+    "dayOffType": "Loại nghỉ",
+    "dayOffConfig": "Cấu hình nghỉ",
+    "fromDate": "Từ ngày",
+    "toDate": "Đến ngày",
+    "totalDays": "Số ngày",
+    "reason": "Lý do",
+    "status": "Trạng thái",
+    "approverName": "Người duyệt",
+    "approverNote": "Ghi chú duyệt",
+    "approvedAt": "Thời điểm duyệt",
+    "createdAt": "Ngày tạo",
+    "filterEmployee": "Chọn nhân viên...",
+    "filterBranch": "Chọn chi nhánh...",
+    "filterStatus": "Chọn trạng thái...",
+    "filterDateRange": "Khoảng ngày",
+    "approve": "Duyệt",
+    "reject": "Từ chối",
+    "statusPending": "Chờ duyệt",
+    "statusApproved": "Đã duyệt",
+    "statusRejected": "Từ chối",
+    "statusCancelled": "Đã hủy",
+    "approverNotePlaceholder": "Nhập ghi chú (nếu có)..."
+  }
+}

@@ -1,6 +1,6 @@
-import { Base, SelectBoxDto } from '../common.models';
+import { BaseDto, SelectBoxDto } from '../common.models';
 
-export interface EmployeeDependent extends Base {
+export interface EmployeeDependent extends BaseDto {
   employeeId: string;
   fullName: string;
   relationship: string;
@@ -14,7 +14,7 @@ export interface EmployeeDependent extends Base {
   note?: string;
 }
 
-export interface EmployeeEducation extends Base {
+export interface EmployeeEducation extends BaseDto {
   employeeId: string;
   schoolName: string;
   degree?: string;
@@ -24,7 +24,7 @@ export interface EmployeeEducation extends Base {
   gpa?: string;
 }
 
-export interface EmployeeCertificate extends Base {
+export interface EmployeeCertificate extends BaseDto {
   employeeId: string;
   name: string;
   issuingOrganization?: string;
@@ -33,7 +33,7 @@ export interface EmployeeCertificate extends Base {
   credentialId?: string;
 }
 
-export interface EmployeeFile extends Base {
+export interface EmployeeFile extends BaseDto {
   employeeId: string;
   fileCategory: string;
   fileName: string;
@@ -44,7 +44,7 @@ export interface EmployeeFile extends Base {
   expiryDate?: string | null;
 }
 
-export interface EmployeeSalaryHistory extends Base {
+export interface EmployeeSalaryHistory extends BaseDto {
   employeeId: string;
   effectiveDate: string;
   oldBasicSalary?: number | null;
@@ -57,7 +57,7 @@ export interface EmployeeSalaryHistory extends Base {
   note?: string;
 }
 
-export interface Employee extends Base {
+export interface Employee extends BaseDto {
   code: string;
   firstName: string;
   lastName: string;

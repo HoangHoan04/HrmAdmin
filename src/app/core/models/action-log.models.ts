@@ -1,5 +1,6 @@
-export interface ActionLog {
-  id: string;
+import { BaseDto } from './common.models';
+
+export interface ActionLog extends BaseDto {
   createdById: string;
   createdByCode: string;
   createdByName: string;

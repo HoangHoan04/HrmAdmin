@@ -1,0 +1,25 @@
+{
+  "workSchedule": {
+    "entityName": "lịch làm việc",
+    "title": "Quản lý lịch làm việc",
+    "employee": "Nhân viên",
+    "employeeCode": "Mã NV",
+    "shiftMaster": "Ca làm việc",
+    "workDate": "Ngày làm việc",
+    "branch": "Chi nhánh",
+    "note": "Ghi chú",
+    "createdAt": "Ngày tạo",
+    "filterEmployee": "Chọn nhân viên...",
+    "filterShift": "Chọn ca...",
+    "filterBranch": "Chọn chi nhánh...",
+    "filterDateRange": "Khoảng ngày",
+    "edit": "Sửa lịch",
+    "deactivate": "Xóa lịch",
+    "addTitle": "Thêm lịch làm việc",
+    "editTitle": "Cập nhật lịch làm việc",
+    "backToList": "Danh sách lịch",
+    "employeeRequired": "Vui lòng chọn nhân viên!",
+    "shiftRequired": "Vui lòng chọn ca!",
+    "workDateRequired": "Vui lòng chọn ngày!"
+  }
+}

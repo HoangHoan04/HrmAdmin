@@ -40,6 +40,47 @@
       "uploadFile": "Upload file",
       "lock": "Lock",
       "unlock": "Unlock"
+    },
+    "employeeLevel": {
+      "internship": "Internship",
+      "fresher": "Fresher",
+      "junior": "Junior",
+      "middle": "Middle",
+      "senior": "Senior",
+      "leader": "Leader",
+      "manager": "Manager",
+      "director": "Director",
+      "executive": "Executive"
+    },
+    "workingMode": {
+      "onSite": "On-site",
+      "remote": "Remote",
+      "hybrid": "Hybrid",
+      "flexible": "Flexible",
+      "businessTrip": "Business trip"
+    },
+    "contractType": {
+      "probation": "Probation",
+      "indefinite": "Indefinite term",
+      "definite": "Definite term",
+      "seasonal": "Seasonal",
+      "collaborator": "Collaborator",
+      "internship": "Internship"
+    },
+    "workStatus": {
+      "working": "Working",
+      "resigned": "Resigned",
+      "onLeave": "On leave",
+      "suspended": "Suspended",
+      "retired": "Retired"
+    },
+    "dayOffConfigType": {
+      "annual": "Annual leave",
+      "sick": "Sick leave",
+      "unpaid": "Unpaid leave",
+      "maternity": "Maternity leave",
+      "paternity": "Paternity leave",
+      "other": "Other"
     }
   }
 }

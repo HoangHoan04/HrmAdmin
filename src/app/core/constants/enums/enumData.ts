@@ -309,4 +309,43 @@ export const enumData = {
       color: '#8c8c8c',
     },
   },
+
+  DAY_OFF_CONFIG_TYPE: {
+    ANNUAL: {
+      code: 'ANNUAL',
+      labelKey: 'enums.dayOffConfigType.annual',
+      value: 'ANNUAL',
+      color: '#52c41a',
+    },
+    SICK: {
+      code: 'SICK',
+      labelKey: 'enums.dayOffConfigType.sick',
+      value: 'SICK',
+      color: '#faad14',
+    },
+    UNPAID: {
+      code: 'UNPAID',
+      labelKey: 'enums.dayOffConfigType.unpaid',
+      value: 'UNPAID',
+      color: '#722ed1',
+    },
+    MATERNITY: {
+      code: 'MATERNITY',
+      labelKey: 'enums.dayOffConfigType.maternity',
+      value: 'MATERNITY',
+      color: '#1890ff',
+    },
+    PATERNITY: {
+      code: 'PATERNITY',
+      labelKey: 'enums.dayOffConfigType.paternity',
+      value: 'PATERNITY',
+      color: '#13c2c2',
+    },
+    OTHER: {
+      code: 'OTHER',
+      labelKey: 'enums.dayOffConfigType.other',
+      value: 'OTHER',
+      color: '#8c8c8c',
+    },
+  },
 };

@@ -30,7 +30,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
   styleUrls: [],
 })
 export class TimekeepingManagerComponent implements OnInit {
-  private readonly ENTITY_KEY = 'timeAttendance.timekeeping.entityName';
+  private readonly ENTITY_KEY = 'timekeeping.entityName';
 
   data: Timekeeping[] = [];
   loading = false;
@@ -69,41 +69,41 @@ export class TimekeepingManagerComponent implements OnInit {
   filterFields: FilterField[] = [
     {
       key: 'employeeId',
-      label: 'timeAttendance.timekeeping.employee',
+      label: 'timekeeping.employee',
       type: 'select',
-      placeholder: 'timeAttendance.timekeeping.filterEmployee',
+      placeholder: 'timekeeping.filterEmployee',
       col: 6,
       allowClear: true,
       options: [],
     },
     {
       key: 'branchId',
-      label: 'timeAttendance.timekeeping.branch',
+      label: 'timekeeping.branch',
       type: 'select',
-      placeholder: 'timeAttendance.timekeeping.filterBranch',
+      placeholder: 'timekeeping.filterBranch',
       col: 6,
       allowClear: true,
       options: [],
     },
     {
       key: 'status',
-      label: 'timeAttendance.timekeeping.status',
+      label: 'timekeeping.status',
       type: 'select',
-      placeholder: 'timeAttendance.timekeeping.filterStatus',
+      placeholder: 'timekeeping.filterStatus',
       col: 6,
       allowClear: true,
       options: [
-        { label: 'timeAttendance.timekeeping.statusOnTime', value: 'ON_TIME' },
-        { label: 'timeAttendance.timekeeping.statusLate', value: 'LATE' },
-        { label: 'timeAttendance.timekeeping.statusEarly', value: 'EARLY' },
-        { label: 'timeAttendance.timekeeping.statusAbsent', value: 'ABSENT' },
-        { label: 'timeAttendance.timekeeping.statusLeave', value: 'LEAVE' },
-        { label: 'timeAttendance.timekeeping.statusIncomplete', value: 'INCOMPLETE' },
+        { label: 'timekeeping.statusOnTime', value: 'ON_TIME' },
+        { label: 'timekeeping.statusLate', value: 'LATE' },
+        { label: 'timekeeping.statusEarly', value: 'EARLY' },
+        { label: 'timekeeping.statusAbsent', value: 'ABSENT' },
+        { label: 'timekeeping.statusLeave', value: 'LEAVE' },
+        { label: 'timekeeping.statusIncomplete', value: 'INCOMPLETE' },
       ],
     },
     {
       key: 'dateRange',
-      label: 'timeAttendance.timekeeping.filterDateRange',
+      label: 'timekeeping.filterDateRange',
       type: 'dateRange',
       col: 6,
       allowClear: true,
@@ -116,28 +116,28 @@ export class TimekeepingManagerComponent implements OnInit {
   ];
 
   columns: TableColumn[] = [
-    { field: 'employeeCode', header: 'timeAttendance.timekeeping.employeeCode', type: 'text' },
-    { field: 'employeeName', header: 'timeAttendance.timekeeping.employee', type: 'text' },
+    { field: 'employeeCode', header: 'timekeeping.employeeCode', type: 'text' },
+    { field: 'employeeName', header: 'timekeeping.employee', type: 'text' },
     {
       field: 'workDate',
-      header: 'timeAttendance.timekeeping.workDate',
+      header: 'timekeeping.workDate',
       type: 'date',
       sortable: true,
     },
-    { field: 'shiftMasterName', header: 'timeAttendance.timekeeping.shiftMaster', type: 'text' },
-    { field: 'checkInAt', header: 'timeAttendance.timekeeping.checkInAt', type: 'datetime' },
-    { field: 'checkOutAt', header: 'timeAttendance.timekeeping.checkOutAt', type: 'datetime' },
-    { field: 'status', header: 'timeAttendance.timekeeping.status', type: 'text' },
-    { field: 'lateMinutes', header: 'timeAttendance.timekeeping.lateMinutes', type: 'text' },
-    { field: 'workedMinutes', header: 'timeAttendance.timekeeping.workedMinutes', type: 'text' },
-    { field: 'branchName', header: 'timeAttendance.timekeeping.branch', type: 'text' },
+    { field: 'shiftMasterName', header: 'timekeeping.shiftMaster', type: 'text' },
+    { field: 'checkInAt', header: 'timekeeping.checkInAt', type: 'datetime' },
+    { field: 'checkOutAt', header: 'timekeeping.checkOutAt', type: 'datetime' },
+    { field: 'status', header: 'timekeeping.status', type: 'text' },
+    { field: 'lateMinutes', header: 'timekeeping.lateMinutes', type: 'text' },
+    { field: 'workedMinutes', header: 'timekeeping.workedMinutes', type: 'text' },
+    { field: 'branchName', header: 'timekeeping.branch', type: 'text' },
   ];
 
   rowActions: RowAction[] = [
     {
       key: 'view',
       icon: 'edit',
-      tooltip: 'timeAttendance.timekeeping.viewDetail',
+      tooltip: 'timekeeping.viewDetail',
       severity: 'primary',
       onClick: (record) => this.openDetail(record),
     },
