@@ -73,6 +73,15 @@
       "flexible": "Flexible",
       "businessTrip": "Business trip"
     },
+    "paymentMethod": {
+      "bankTransfer": "Bank transfer",
+      "cash": "Cash",
+      "other": "Other"
+    },
+    "currency": {
+      "vnd": "VND",
+      "usd": "USD"
+    },
     "contractType": {
       "probation": "Probation",
       "indefinite": "Indefinite term",
@@ -104,6 +113,13 @@
       "expired": "Expired",
       "terminated": "Terminated",
       "liquidated": "Liquidated"
+    },
+    "salaryStatus": {
+      "draft": "Draft",
+      "processing": "Processing",
+      "approved": "Approved",
+      "paid": "Paid",
+      "cancelled": "Cancelled"
     },
     "reviewRenewalStatus": {
       "pendingReview": "Pending review",
@@ -149,6 +165,30 @@
       "approved": "Approved",
       "rejected": "Rejected",
       "cancelled": "Cancelled"
+    },
+    "attendanceComplaintStatus": {
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "cancelled": "Cancelled"
+    },
+    "attendanceComplaintType": {
+      "forgotCheckIn": "Forgot check-in",
+      "forgotCheckOut": "Forgot check-out",
+      "forgotBoth": "Forgot both",
+      "wrongTime": "Wrong time",
+      "other": "Other"
+    },
+    "leaveSession": {
+      "full": "Full day",
+      "am": "Morning",
+      "pm": "Afternoon"
+    },
+    "dataScope": {
+      "all": "All",
+      "branch": "Branch",
+      "department": "Department",
+      "own": "Own"
     }
   }
 }

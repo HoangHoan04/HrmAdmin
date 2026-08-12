@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { ApiService } from './api.service';
+import { PermissionService } from './permission.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -9,7 +10,10 @@ export class AuthService {
   private readonly KEY_TOKEN = 'auth_token';
   private readonly KEY_REFRESH_TOKEN = 'auth_refresh_token';
 
-  constructor(private readonly apiService: ApiService) {}
+  constructor(
+    private readonly apiService: ApiService,
+    private readonly permissionService: PermissionService,
+  ) {}
 
   get isLoggedIn(): boolean {
     return !!sessionStorage.getItem(this.KEY_TOKEN);
@@ -34,6 +38,11 @@ export class AuthService {
           sessionStorage.setItem(this.KEY_TOKEN, res.token);
           sessionStorage.setItem(this.KEY_REFRESH_TOKEN, res.refreshToken);
           sessionStorage.setItem(this.KEY_USER, res.username);
+          this.permissionService.setAuthContext({
+            roles: Array.isArray(res.roles) ? res.roles : [],
+            permissions: Array.isArray(res.permissions) ? res.permissions : [],
+            type: res.type ?? null,
+          });
         }
       }),
     );
@@ -43,6 +52,7 @@ export class AuthService {
     sessionStorage.removeItem(this.KEY_TOKEN);
     sessionStorage.removeItem(this.KEY_REFRESH_TOKEN);
     sessionStorage.removeItem(this.KEY_USER);
+    this.permissionService.clear();
   }
 
   refreshTokens(refreshToken: string): Observable<any> {
@@ -51,6 +61,15 @@ export class AuthService {
         if (res && res.token) {
           sessionStorage.setItem(this.KEY_TOKEN, res.token);
           sessionStorage.setItem(this.KEY_REFRESH_TOKEN, res.refreshToken);
+          if (Array.isArray(res.roles) || Array.isArray(res.permissions) || res.type) {
+            this.permissionService.setAuthContext({
+              roles: Array.isArray(res.roles) ? res.roles : this.permissionService.roles,
+              permissions: Array.isArray(res.permissions)
+                ? res.permissions
+                : this.permissionService.permissions,
+              type: res.type ?? this.permissionService.userType,
+            });
+          }
         }
       }),
     );

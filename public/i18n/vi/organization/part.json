@@ -11,6 +11,8 @@
       "branchName": "Chi nhánh",
       "departmentName": "Phòng ban",
       "partMasterName": "Danh mục bộ phận",
+      "managerName": "Người quản lý",
+      "filterManager": "Chọn người quản lý...",
       "limit": "Giới hạn nhân sự",
       "displayOrder": "Thứ tự hiển thị",
       "isActive": "Kích hoạt hệ thống",

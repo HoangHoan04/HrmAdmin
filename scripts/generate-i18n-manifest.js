@@ -8,7 +8,7 @@ const manifestPath = path.join(projectRoot, 'public', 'i18n', 'manifest.json');
 function getJsonFiles(dir, baseDir = dir) {
   let results = [];
   const list = fs.readdirSync(dir);
-  list.forEach(file => {
+  list.forEach((file) => {
     const filePath = path.join(dir, file);
     const stat = fs.statSync(filePath);
     if (stat && stat.isDirectory()) {

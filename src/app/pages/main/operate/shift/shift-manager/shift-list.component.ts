@@ -110,6 +110,8 @@ export class ShiftListComponent implements OnInit {
     { field: 'name', header: 'shift.name', type: 'text', sortable: true },
     { field: 'startTime', header: 'shift.startTime', type: 'text' },
     { field: 'endTime', header: 'shift.endTime', type: 'text' },
+    { field: 'breakStartTime', header: 'shift.breakStartTime', type: 'text' },
+    { field: 'breakEndTime', header: 'shift.breakEndTime', type: 'text' },
     { field: 'breakMinutes', header: 'shift.breakMinutes', type: 'text' },
     { field: 'workingMinutes', header: 'shift.workingMinutes', type: 'text' },
     { field: 'companyName', header: 'shift.companyName', type: 'text' },

@@ -10,6 +10,9 @@
     "resetPassword": "Reset Password",
     "humanResource": "Human Resources",
     "roleManager": "Access Control",
+    "accountManager": "Account management",
+    "roleList": "Role management",
+    "accessControl": "Permission assignment",
     "settingSystem": "System Settings",
     "organization": "Organization",
     "companyList": "Company List",
@@ -61,11 +64,17 @@
     "detailTransfer": "Transfer Details",
     "operate": "Operation",
     "timekeepingList": "Attendance Sheet",
+    "attendanceComplaint": "Attendance Complaints",
     "shiftList": "Work Shifts",
     "leaveRequestList": "Leave Requests",
     "payroll": "Payroll & Benefits",
     "payrollRunList": "Payroll Runs",
     "payrollConfig": "Payroll Configuration",
+    "addSalary": "Add Salary Slip",
+    "editSalary": "Edit Salary Slip",
+    "detailSalary": "Salary Slip Details",
+    "addSalaryConfig": "Add Payroll Config",
+    "editSalaryConfig": "Edit Payroll Config",
     "recruitment": "Recruitment",
     "recruitmentPipeline": "Recruitment Pipeline",
     "performance": "Performance",
@@ -92,6 +101,7 @@
     "editDayOffConfig": "Edit Leave Type",
     "publicHoliday": "Public Holiday",
     "addPublicHoliday": "Add Public Holiday",
-    "editPublicHoliday": "Edit Public Holiday"
+    "editPublicHoliday": "Edit Public Holiday",
+    "leaveAllocation": "Leave Allocation"
   }
 }

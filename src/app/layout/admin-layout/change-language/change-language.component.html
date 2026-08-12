@@ -14,24 +14,14 @@
       <img src="/icons/vi.svg" alt="VI" class="lang-icon" />
       <span class="lang-text">{{ 'table.languageVi' | translate }}</span>
       @if (s.language === 'vi') {
-        <span
-          nz-icon
-          nzType="check"
-          nzTheme="outline"
-          class="lang-check"
-        ></span>
+        <span nz-icon nzType="check" nzTheme="outline" class="lang-check"></span>
       }
     </li>
     <li class="lang-item" nz-menu-item (click)="setLanguage('en')">
       <img src="/icons/en.svg" alt="EN" class="lang-icon" />
       <span class="lang-text">{{ 'table.languageEn' | translate }}</span>
       @if (s.language === 'en') {
-        <span
-          nz-icon
-          nzType="check"
-          nzTheme="outline"
-          class="lang-check"
-        ></span>
+        <span nz-icon nzType="check" nzTheme="outline" class="lang-check"></span>
       }
     </li>
   </ul>

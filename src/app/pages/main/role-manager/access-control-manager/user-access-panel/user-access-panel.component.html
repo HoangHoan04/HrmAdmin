@@ -1,0 +1,67 @@
+<section class="access-pane access-pane-single">
+  <div class="access-pane-header">
+    <h3 class="access-pane-title">{{ 'role.assignRolesTitle' | translate }}</h3>
+  </div>
+
+  <div class="access-pane-body">
+    <nz-form-item>
+      <nz-form-label nzRequired>{{ 'role.selectEmployee' | translate }}</nz-form-label>
+      <nz-form-control>
+        <nz-select
+          [ngModel]="selectedEmployeeId"
+          (ngModelChange)="onEmployeeSelected($event)"
+          [nzPlaceHolder]="'role.selectEmployeePlaceholder' | translate"
+          [nzLoading]="employeesLoading"
+          nzShowSearch
+          nzAllowClear
+          style="width: 100%; max-width: 480px"
+        >
+          @for (emp of employees; track emp.id) {
+            <nz-option [nzValue]="emp.id" [nzLabel]="(emp.code || '') + ' - ' + emp.name"></nz-option>
+          }
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+
+    @if (!selectedEmployeeId) {
+      <div class="access-empty">
+        <span class="access-empty-icon" nz-icon nzType="team"></span>
+        <div>{{ 'role.selectEmployeeHint' | translate }}</div>
+      </div>
+    } @else {
+      <nz-spin [nzSpinning]="detailLoading">
+        @if (selectedEmployee) {
+          <p class="access-selected-meta">
+            <strong>{{ selectedEmployee.code }} - {{ selectedEmployee.name }}</strong>
+          </p>
+        }
+
+        <div class="section-label">{{ 'role.assignRoles' | translate }}</div>
+
+        @for (role of roleOptions; track role.id) {
+          <div class="access-list-item" style="cursor: default">
+            <label
+              nz-checkbox
+              [ngModel]="isRoleChecked(role.id)"
+              (ngModelChange)="onRoleCheck(role.id, $event)"
+              [name]="'urole-' + role.id"
+            >
+              <span class="access-list-item-title" style="font-weight: 650">
+                {{ role.name }}
+              </span>
+              <span class="perm-code">{{ role.code }}</span>
+            </label>
+          </div>
+        } @empty {
+          <p>{{ 'common.noData' | translate }}</p>
+        }
+
+        <div class="access-actions">
+          <button nz-button nzType="primary" [nzLoading]="saving" (click)="saveEmployeeRoles()">
+            {{ 'common.actions.save' | translate }}
+          </button>
+        </div>
+      </nz-spin>
+    }
+  </div>
+</section>

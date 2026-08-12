@@ -7,6 +7,7 @@ import {
   BranchSelectBoxDto,
   CompanySelectBoxDto,
   DepartmentSelectBoxDto,
+  EmployeeSelectBoxDto,
   Part,
   PartMasterSelectBoxDto,
 } from '../../../../../../core/models';
@@ -29,6 +30,7 @@ export class AddOrUpdatePartComponent implements OnInit {
   branches: BranchSelectBoxDto[] = [];
   departments: DepartmentSelectBoxDto[] = [];
   partMasters: PartMasterSelectBoxDto[] = [];
+  employees: EmployeeSelectBoxDto[] = [];
 
   constructor(
     private readonly fb: FormBuilder,
@@ -44,6 +46,7 @@ export class AddOrUpdatePartComponent implements OnInit {
     this.id = this.route.snapshot.paramMap.get('id');
     this.isEdit = !!this.id;
     this.loadCompanies();
+    this.loadEmployees();
     if (this.isEdit && this.id) {
       this.loadPartDetail(this.id);
     }
@@ -58,6 +61,7 @@ export class AddOrUpdatePartComponent implements OnInit {
       branchId: [null, [Validators.required]],
       departmentId: [null, [Validators.required]],
       partMasterId: [null, [Validators.required]],
+      managerId: [null],
       limit: [null],
       isActive: [true],
       displayOrder: [0],
@@ -97,6 +101,15 @@ export class AddOrUpdatePartComponent implements OnInit {
       },
       error: () => this.message.error(this.i18n.instant('common.messages.loadCompanyListFailed')),
     });
+  }
+
+  loadEmployees(): void {
+    this.apiService
+      .post<EmployeeSelectBoxDto[]>(this.apiService.EMPLOYEE.SELECT_BOX, {})
+      .subscribe({
+        next: (items) => (this.employees = items),
+        error: () => (this.employees = []),
+      });
   }
 
   loadBranches(companyId: string | null): void {
@@ -149,6 +162,7 @@ export class AddOrUpdatePartComponent implements OnInit {
           branchId: part.branchId,
           departmentId: part.departmentId,
           partMasterId: part.partMasterId,
+          managerId: part.managerId ?? null,
           limit: part.limit,
           isActive: part.isActive ?? true,
           displayOrder: part.displayOrder ?? 0,
@@ -190,6 +204,7 @@ export class AddOrUpdatePartComponent implements OnInit {
       branchId: value.branchId || null,
       departmentId: value.departmentId || null,
       partMasterId: value.partMasterId || null,
+      managerId: value.managerId || null,
       limit: value.limit ?? null,
       isActive: value.isActive ?? true,
       displayOrder: value.displayOrder ?? 0,

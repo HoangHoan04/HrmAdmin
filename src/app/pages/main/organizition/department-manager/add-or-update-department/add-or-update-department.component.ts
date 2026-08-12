@@ -8,6 +8,7 @@ import {
   CompanySelectBoxDto,
   Department,
   DepartmentSelectBoxDto,
+  EmployeeSelectBoxDto,
 } from '../../../../../core/models';
 import { ApiService } from '../../../../../core/services/api.service';
 import { I18nMessageService } from '../../../../../core/services/i18n-message.service';
@@ -27,6 +28,7 @@ export class AddOrUpdateDepartmentComponent implements OnInit {
   companies: CompanySelectBoxDto[] = [];
   branches: BranchSelectBoxDto[] = [];
   parentDepartments: DepartmentSelectBoxDto[] = [];
+  employees: EmployeeSelectBoxDto[] = [];
   private companyCodeFromRoute: string | null = null;
   private branchCodeFromRoute: string | null = null;
 
@@ -47,6 +49,7 @@ export class AddOrUpdateDepartmentComponent implements OnInit {
     this.branchCodeFromRoute = this.route.snapshot.queryParamMap.get('branchCode');
 
     this.loadCompanies();
+    this.loadEmployees();
 
     if (this.isEdit && this.id) {
       this.loadDepartmentDetail(this.id);
@@ -63,6 +66,8 @@ export class AddOrUpdateDepartmentComponent implements OnInit {
       companyId: [null, [Validators.required]],
       branchId: [null, [Validators.required]],
       parentDepartmentId: [null],
+      managerId: [null],
+      deputyManagerId: [null],
       level: [1, [Validators.min(1)]],
       limit: [0, [Validators.min(0)]],
       email: ['', [Validators.email]],
@@ -104,6 +109,15 @@ export class AddOrUpdateDepartmentComponent implements OnInit {
         this.message.error(this.i18n.instant('common.messages.loadCompanySelectFailed'));
       },
     });
+  }
+
+  loadEmployees(): void {
+    this.apiService
+      .post<EmployeeSelectBoxDto[]>(this.apiService.EMPLOYEE.SELECT_BOX, {})
+      .subscribe({
+        next: (items) => (this.employees = items),
+        error: () => (this.employees = []),
+      });
   }
 
   loadBranches(companyId: string | null, onComplete?: () => void): void {
@@ -162,6 +176,8 @@ export class AddOrUpdateDepartmentComponent implements OnInit {
           companyId: department.companyId,
           branchId: department.branchId,
           parentDepartmentId: department.parentDepartmentId,
+          managerId: department.managerId ?? null,
+          deputyManagerId: department.deputyManagerId ?? null,
           level: department.level ?? 1,
           limit: department.limit ?? 0,
           email: department.email ?? '',
@@ -214,6 +230,8 @@ export class AddOrUpdateDepartmentComponent implements OnInit {
       companyId: value.companyId || null,
       branchId: value.branchId || null,
       parentDepartmentId: value.parentDepartmentId || null,
+      managerId: value.managerId || null,
+      deputyManagerId: value.deputyManagerId || null,
       level: value.level ?? 1,
       limit: value.limit ?? 0,
       email: value.email?.trim() || null,

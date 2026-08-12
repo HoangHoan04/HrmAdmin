@@ -95,6 +95,52 @@
         </div>
       </div>
 
+      <div nz-row [nzGutter]="24">
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'dayOffConfig.deductBalance' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-switch formControlName="deductBalance"></nz-switch>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'dayOffConfig.requireAttachment' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-switch formControlName="requireAttachment"></nz-switch>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'dayOffConfig.maxDaysPerRequest' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-input-number
+                formControlName="maxDaysPerRequest"
+                [nzMin]="0"
+                style="width: 100%"
+              ></nz-input-number>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+
+      <div nz-row [nzGutter]="24">
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'dayOffConfig.minNoticeDays' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-input-number
+                formControlName="minNoticeDays"
+                [nzMin]="0"
+                style="width: 100%"
+              ></nz-input-number>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+
       <nz-form-item>
         <nz-form-label>{{ 'dayOffConfig.description' | translate }}</nz-form-label>
         <nz-form-control>

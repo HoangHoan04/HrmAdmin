@@ -6,7 +6,7 @@ import {
   withInterceptorsFromDi,
 } from '@angular/common/http';
 import vi from '@angular/common/locales/vi';
-import { APP_INITIALIZER, Injector, NgModule } from '@angular/core'; 
+import { APP_INITIALIZER, Injector, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { IconDefinition } from '@ant-design/icons-angular';
 import * as AllIcons from '@ant-design/icons-angular/icons';
@@ -19,7 +19,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { ErrorInterceptor } from './core/interceptors/error.interceptor';
-import { StaticTranslateService } from './core/services/static-translate.service'; 
+import { StaticTranslateService } from './core/services/static-translate.service';
 import { AdminLayoutModule } from './layout/admin-layout/admin-layout.module';
 import { OtherModule } from './pages/other/other.module';
 import { SharedModule } from './shared/shared.module';

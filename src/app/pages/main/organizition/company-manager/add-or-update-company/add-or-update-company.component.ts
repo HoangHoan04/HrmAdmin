@@ -86,6 +86,7 @@ export class AddOrUpdateCompanyComponent implements OnInit {
       isActive: [true],
       socialInsuranceCode: ['', [Validators.maxLength(50)]],
       timeKeepingStandardId: [null],
+      saturdayPolicy: ['Work'],
     });
   }
 
@@ -158,6 +159,7 @@ export class AddOrUpdateCompanyComponent implements OnInit {
           isActive: company.isActive ?? true,
           socialInsuranceCode: company.socialInsuranceCode,
           timeKeepingStandardId: company.timeKeepingStandardId,
+          saturdayPolicy: company.saturdayPolicy || 'Work',
         });
         this.loading = false;
       },
@@ -192,6 +194,7 @@ export class AddOrUpdateCompanyComponent implements OnInit {
       foundedDate: raw.foundedDate ? new Date(raw.foundedDate).toISOString() : null,
       parentId: raw.parentId || null,
       timeKeepingStandardId: raw.timeKeepingStandardId || null,
+      saturdayPolicy: raw.saturdayPolicy || 'Work',
     };
 
     const endpoint = this.isEdit ? this.apiService.COMPANY.UPDATE : this.apiService.COMPANY.CREATE;

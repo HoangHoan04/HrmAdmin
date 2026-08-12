@@ -334,6 +334,27 @@
         </div>
         <div nz-col nzXs="24" nzMd="8">
           <nz-form-item>
+            <nz-form-label>{{ 'organization.company.saturdayPolicy' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-select formControlName="saturdayPolicy">
+                <nz-option
+                  nzValue="Work"
+                  [nzLabel]="'organization.company.saturdayWork' | translate"
+                ></nz-option>
+                <nz-option
+                  nzValue="Off"
+                  [nzLabel]="'organization.company.saturdayOff' | translate"
+                ></nz-option>
+                <nz-option
+                  nzValue="Half"
+                  [nzLabel]="'organization.company.saturdayHalf' | translate"
+                ></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
             <nz-form-label>{{ 'organization.company.isActive' | translate }}</nz-form-label>
             <nz-form-control> <nz-switch formControlName="isActive"></nz-switch></nz-form-control>
           </nz-form-item>

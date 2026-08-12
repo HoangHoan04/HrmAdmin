@@ -138,6 +138,8 @@ export class ContractManagerComponent implements OnInit {
     { field: 'code', header: 'contract.code', type: 'text', sortable: true },
     { field: 'employeeName', header: 'contract.employeeName', type: 'text' },
     { field: 'contractTypeName', header: 'contract.contractTypeName', type: 'text' },
+    { field: 'departmentName', header: 'contract.departmentName', type: 'text' },
+    { field: 'jobTitle', header: 'contract.jobTitle', type: 'text' },
     { field: 'startDate', header: 'contract.startDate', type: 'date', sortable: true },
     { field: 'endDate', header: 'contract.endDate', type: 'date', sortable: true },
     {

@@ -1,4 +1,4 @@
-import { Injector, Injectable } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { NzMessageRef, NzMessageService } from 'ng-zorro-antd/message';
 
@@ -28,12 +28,11 @@ export class NetworkErrorToastService {
         return msg;
       }
     } catch {
-      // Translate may not be ready during early bootstrap
+      //! Translate may not be ready during early bootstrap
     }
     return FALLBACK_MSG;
   }
 
-  /** Shows the network toast at most once per dedupe window. */
   notify(): string {
     const text = this.text();
     this.message.error(text);

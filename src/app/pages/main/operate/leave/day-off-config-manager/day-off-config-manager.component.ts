@@ -124,6 +124,26 @@ export class DayOffConfigManagerComponent implements OnInit {
       type: 'text',
     },
     {
+      field: 'defaultDaysPerYear',
+      header: 'dayOffConfig.defaultDayPerYear',
+      type: 'text',
+    },
+    {
+      field: 'deductBalance',
+      header: 'dayOffConfig.deductBalance',
+      type: 'boolean',
+    },
+    {
+      field: 'requireAttachment',
+      header: 'dayOffConfig.requireAttachment',
+      type: 'boolean',
+    },
+    {
+      field: 'minNoticeDays',
+      header: 'dayOffConfig.minNoticeDays',
+      type: 'text',
+    },
+    {
       field: 'createdAt',
       header: 'dayOffConfig.createdAt',
       type: 'date',

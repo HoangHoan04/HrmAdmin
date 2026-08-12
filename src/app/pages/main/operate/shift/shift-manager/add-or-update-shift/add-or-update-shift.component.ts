@@ -44,6 +44,10 @@ export class AddOrUpdateShiftComponent implements OnInit {
     start.setHours(8, 0, 0, 0);
     const end = new Date();
     end.setHours(17, 0, 0, 0);
+    const breakStart = new Date();
+    breakStart.setHours(12, 0, 0, 0);
+    const breakEnd = new Date();
+    breakEnd.setHours(13, 0, 0, 0);
 
     this.validateForm = this.fb.group({
       code: ['', [Validators.required, Validators.maxLength(50)]],
@@ -52,11 +56,16 @@ export class AddOrUpdateShiftComponent implements OnInit {
       companyId: [null],
       startTime: [start, [Validators.required]],
       endTime: [end, [Validators.required]],
-      breakMinutes: [60, [Validators.min(0)]],
+      breakStartTime: [breakStart],
+      breakEndTime: [breakEnd],
+      breakMinutes: [{ value: 60, disabled: true }, [Validators.min(0)]],
       workingMinutes: [480, [Validators.min(0)]],
       isOvernight: [false],
       isActive: [true],
     });
+
+    this.validateForm.get('breakStartTime')?.valueChanges.subscribe(() => this.syncBreakMinutes());
+    this.validateForm.get('breakEndTime')?.valueChanges.subscribe(() => this.syncBreakMinutes());
   }
 
   loadCompanies(): void {
@@ -77,11 +86,14 @@ export class AddOrUpdateShiftComponent implements OnInit {
           companyId: item.companyId,
           startTime: this.parseTime(item.startTime),
           endTime: this.parseTime(item.endTime),
+          breakStartTime: this.parseTime(item.breakStartTime),
+          breakEndTime: this.parseTime(item.breakEndTime),
           breakMinutes: item.breakMinutes,
           workingMinutes: item.workingMinutes,
           isOvernight: item.isOvernight ?? false,
           isActive: item.isActive ?? true,
         });
+        this.syncBreakMinutes();
         this.loading = false;
       },
       error: (err: any) => {
@@ -117,7 +129,9 @@ export class AddOrUpdateShiftComponent implements OnInit {
       companyId: value.companyId || null,
       startTime: this.formatTime(value.startTime),
       endTime: this.formatTime(value.endTime),
-      breakMinutes: value.breakMinutes ?? 0,
+      breakStartTime: this.formatTime(value.breakStartTime),
+      breakEndTime: this.formatTime(value.breakEndTime),
+      breakMinutes: this.validateForm.get('breakMinutes')?.value ?? 0,
       workingMinutes: value.workingMinutes ?? 0,
       isOvernight: value.isOvernight ?? false,
       isActive: value.isActive ?? true,
@@ -155,5 +169,17 @@ export class AddOrUpdateShiftComponent implements OnInit {
     const mm = String(value.getMinutes()).padStart(2, '0');
     const ss = String(value.getSeconds()).padStart(2, '0');
     return `${hh}:${mm}:${ss}`;
+  }
+
+  private syncBreakMinutes(): void {
+    const start = this.validateForm.get('breakStartTime')?.value as Date | null;
+    const end = this.validateForm.get('breakEndTime')?.value as Date | null;
+    if (!start || !end) {
+      this.validateForm.get('breakMinutes')?.setValue(0, { emitEvent: false });
+      return;
+    }
+    let mins = Math.round((end.getTime() - start.getTime()) / 60000);
+    if (mins < 0) mins += 24 * 60;
+    this.validateForm.get('breakMinutes')?.setValue(Math.max(0, mins), { emitEvent: false });
   }
 }

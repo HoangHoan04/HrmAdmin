@@ -12,7 +12,6 @@ export class I18nMessageService {
     return this.translate.instant(key, params);
   }
 
-  /** Normalize API / network error payloads into a display string. */
   resolveServerMessage(serverMessage?: unknown): string | undefined {
     if (serverMessage == null || serverMessage === '') return undefined;
     if (typeof serverMessage === 'string') {
@@ -51,7 +50,9 @@ export class I18nMessageService {
   }
 
   loadDetailFailed(serverMessage?: unknown): string {
-    return this.resolveServerMessage(serverMessage) || this.instant('common.messages.loadDetailFailed');
+    return (
+      this.resolveServerMessage(serverMessage) || this.instant('common.messages.loadDetailFailed')
+    );
   }
 
   activateSuccess(entityI18nKey: string, name: string): string {
@@ -115,7 +116,9 @@ export class I18nMessageService {
   }
 
   excelImportFailed(serverMessage?: unknown): string {
-    return this.resolveServerMessage(serverMessage) || this.instant('common.messages.excelImportFailed');
+    return (
+      this.resolveServerMessage(serverMessage) || this.instant('common.messages.excelImportFailed')
+    );
   }
 
   excelImportPartial(success: number, total: number, errors: number): string {

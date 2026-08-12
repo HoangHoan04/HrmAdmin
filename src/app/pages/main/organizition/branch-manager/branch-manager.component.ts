@@ -133,6 +133,12 @@ export class BranchManagerComponent implements OnInit {
       type: 'text',
       sortable: true,
     },
+    {
+      field: 'managerName',
+      header: 'organization.branch.managerName',
+      type: 'text',
+      sortable: false,
+    },
     { field: 'status', header: 'organization.branch.status', type: 'boolean', sortable: true },
   ];
 

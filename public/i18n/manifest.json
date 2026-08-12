@@ -19,16 +19,21 @@
   "human-resource/employee.json",
   "human-resource/reviewRenewal.json",
   "human-resource/transfer.json",
+  "operate/attendanceComplaint.json",
   "operate/dayOffConfig.json",
   "operate/leave.json",
   "operate/publicHoliday.json",
   "operate/shift.json",
   "operate/timekeeping.json",
   "operate/timekeepingStandard.json",
+  "operate/work-pattern.json",
   "operate/workSchedule.json",
   "organization/branch.json",
   "organization/company.json",
   "organization/department.json",
   "organization/part.json",
-  "organization/position.json"
+  "organization/position.json",
+  "payroll/salary.json",
+  "payroll/salaryConfig.json",
+  "system/role.json"
 ]

@@ -108,6 +108,48 @@
         </div>
         <div nz-col nzXs="24" nzMd="8">
           <nz-form-item>
+            <nz-form-label>{{ 'organization.department.managerName' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-select
+                formControlName="managerId"
+                nzShowSearch
+                nzAllowClear
+                [nzPlaceHolder]="'organization.department.filterManager' | translate"
+              >
+                @for (e of employees; track e.id) {
+                  <nz-option
+                    [nzValue]="e.id"
+                    [nzLabel]="e.code ? e.code + ' - ' + e.name : e.name"
+                  ></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{
+              'organization.department.deputyManagerName' | translate
+            }}</nz-form-label>
+            <nz-form-control>
+              <nz-select
+                formControlName="deputyManagerId"
+                nzShowSearch
+                nzAllowClear
+                [nzPlaceHolder]="'organization.department.filterDeputyManager' | translate"
+              >
+                @for (e of employees; track e.id) {
+                  <nz-option
+                    [nzValue]="e.id"
+                    [nzLabel]="e.code ? e.code + ' - ' + e.name : e.name"
+                  ></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
             <nz-form-label>{{ 'organization.department.type' | translate }}</nz-form-label>
             <nz-form-control>
               <input nz-input formControlName="type" />

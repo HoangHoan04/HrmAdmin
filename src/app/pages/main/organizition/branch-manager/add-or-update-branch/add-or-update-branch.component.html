@@ -114,6 +114,27 @@
 
         <div nz-col nzXs="24" nzMd="8">
           <nz-form-item>
+            <nz-form-label>{{ 'organization.branch.managerName' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-select
+                formControlName="managerId"
+                nzShowSearch
+                nzAllowClear
+                [nzPlaceHolder]="'organization.branch.filterManager' | translate"
+              >
+                @for (e of employees; track e.id) {
+                  <nz-option
+                    [nzValue]="e.id"
+                    [nzLabel]="e.code ? e.code + ' - ' + e.name : e.name"
+                  ></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
             <nz-form-label>{{ 'organization.branch.address' | translate }}</nz-form-label>
             <nz-form-control>
               <input

@@ -3,6 +3,7 @@
     "entityName": "work schedule",
     "title": "Work schedule management",
     "employee": "Employee",
+    "employees": "Employees",
     "employeeCode": "Employee code",
     "shiftMaster": "Shift",
     "workDate": "Work date",
@@ -20,6 +21,16 @@
     "backToList": "Back to list",
     "employeeRequired": "Employee is required!",
     "shiftRequired": "Shift is required!",
-    "workDateRequired": "Work date is required!"
+    "workDateRequired": "Work date is required!",
+    "bulkCreate": "Bulk schedule",
+    "bulkCreateTitle": "Bulk create schedules",
+    "copyWeek": "Copy week",
+    "copyWeekTitle": "Copy week schedule",
+    "skipWeekends": "Skip weekends",
+    "overwriteExisting": "Overwrite existing",
+    "sourceWeekStart": "Source week start",
+    "targetWeekStart": "Target week start",
+    "validationDateRange": "Please select date range",
+    "bulkResult": "Created {{created}}, updated {{updated}}, skipped {{skipped}}"
   }
 }

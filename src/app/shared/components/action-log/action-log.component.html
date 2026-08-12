@@ -63,7 +63,9 @@
           {{ getActionTypeLabel(selectedLog.actionType) }}
         </p>
         @if (selectedLog.createdNote) {
-          <p><strong>{{ 'actionLog.note' | translate }}:</strong> {{ selectedLog.createdNote }}</p>
+          <p>
+            <strong>{{ 'actionLog.note' | translate }}:</strong> {{ selectedLog.createdNote }}
+          </p>
         }
       </div>
 
@@ -73,7 +75,9 @@
             <span nz-icon nzType="history" nzTheme="outline"></span>
             {{ 'actionLog.oldValue' | translate }}
           </h4>
-          <pre>{{ formatJsonValue(selectedLog.oldValueObj, ('actionLog.noOldValue' | translate)) }}</pre>
+          <pre>{{
+            formatJsonValue(selectedLog.oldValueObj, 'actionLog.noOldValue' | translate)
+          }}</pre>
         </div>
 
         <div class="json-panel json-panel-new">
@@ -81,13 +85,17 @@
             <span nz-icon nzType="history" nzTheme="outline"></span>
             {{ 'actionLog.newValue' | translate }}
           </h4>
-          <pre>{{ formatJsonValue(selectedLog.newValueObj, ('actionLog.noNewValue' | translate)) }}</pre>
+          <pre>{{
+            formatJsonValue(selectedLog.newValueObj, 'actionLog.noNewValue' | translate)
+          }}</pre>
         </div>
       </div>
     }
   </ng-container>
 
   <ng-template #modalFooter>
-    <button nz-button nzType="primary" (click)="closeModal()">{{ 'actionLog.close' | translate }}</button>
+    <button nz-button nzType="primary" (click)="closeModal()">
+      {{ 'actionLog.close' | translate }}
+    </button>
   </ng-template>
 </nz-modal>

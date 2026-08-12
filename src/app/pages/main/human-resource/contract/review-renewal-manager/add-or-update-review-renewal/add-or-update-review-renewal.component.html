@@ -170,11 +170,7 @@
 <ng-template #titleTemplate>
   <span style="font-size: 18px; font-weight: 600">
     <i nz-icon nzType="audit" style="margin-right: 8px"></i>
-    {{
-      isEdit
-        ? ('reviewRenewal.editTitle' | translate)
-        : ('reviewRenewal.addTitle' | translate)
-    }}
+    {{ isEdit ? ('reviewRenewal.editTitle' | translate) : ('reviewRenewal.addTitle' | translate) }}
   </span>
 </ng-template>
 

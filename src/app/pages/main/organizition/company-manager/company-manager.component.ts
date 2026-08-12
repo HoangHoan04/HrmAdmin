@@ -1,5 +1,7 @@
+import { PERMISSION_CODES } from '@/app/core/constants/common/permission-codes';
 import { enumData } from '@/app/core/constants/enums/enumData';
 import { Company } from '@/app/core/models/organization/company.models';
+import { PermissionService } from '@/app/core/services/permission.service';
 import { ActionConfirmService } from '@/app/shared/services/action-confirm.service';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
@@ -52,12 +54,21 @@ export class CompanyManagerComponent implements OnInit {
   };
 
   toolbarActions: TableAction[] = [
-    CommonActions.create(() => this.openCreateModal()),
-    CommonActions.uploadExcel(
-      () => this.downloadTemplate(),
-      (file) => this.uploadFile(file),
-    ),
-    CommonActions.exportExcel(() => this.exportExcel()),
+    {
+      ...CommonActions.create(() => this.openCreateModal()),
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.ORG_COMPANY_CREATE),
+    },
+    {
+      ...CommonActions.uploadExcel(
+        () => this.downloadTemplate(),
+        (file) => this.uploadFile(file),
+      ),
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.ORG_COMPANY_IMPORT_EXCEL),
+    },
+    {
+      ...CommonActions.exportExcel(() => this.exportExcel()),
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.ORG_COMPANY_EXPORT_EXCEL),
+    },
   ];
 
   filters: Record<string, any> = {
@@ -132,6 +143,7 @@ export class CompanyManagerComponent implements OnInit {
       icon: 'edit',
       tooltip: 'organization.company.edit',
       severity: 'info',
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.ORG_COMPANY_UPDATE),
       onClick: (record) => this.openEdit(record),
     },
     {
@@ -139,7 +151,9 @@ export class CompanyManagerComponent implements OnInit {
       icon: 'check-circle',
       tooltip: 'organization.company.activate',
       severity: 'success',
-      visible: (record) => record.isDeleted === true,
+      visible: (record) =>
+        record.isDeleted === true &&
+        this.permissionSvc.has(PERMISSION_CODES.ORG_COMPANY_ACTIVATE),
       onClick: (record) => this.activateCompany(record),
     },
     {
@@ -147,7 +161,9 @@ export class CompanyManagerComponent implements OnInit {
       icon: 'stop',
       tooltip: 'organization.company.deactivate',
       severity: 'danger',
-      visible: (record) => record.isDeleted === false,
+      visible: (record) =>
+        record.isDeleted === false &&
+        this.permissionSvc.has(PERMISSION_CODES.ORG_COMPANY_DEACTIVATE),
       onClick: (record) => this.deactivateCompany(record),
     },
   ];
@@ -159,6 +175,7 @@ export class CompanyManagerComponent implements OnInit {
     private readonly apiService: ApiService,
     private readonly cdr: ChangeDetectorRef,
     private readonly actionConfirm: ActionConfirmService,
+    readonly permissionSvc: PermissionService,
   ) {}
 
   ngOnInit(): void {

@@ -42,6 +42,11 @@ const routes: Routes = [
     path: getPath(ROUTES_CONFIG.ASSET.path),
     loadChildren: () => import('./asset/asset.module').then((m) => m.AssetModule),
   },
+  {
+    path: getPath(ROUTES_CONFIG.ROLE_MANAGER.path),
+    loadChildren: () =>
+      import('./role-manager/role-manager.module').then((m) => m.RoleManagerModule),
+  },
 ];
 
 @NgModule({

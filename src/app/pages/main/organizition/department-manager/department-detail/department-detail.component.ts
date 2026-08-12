@@ -32,6 +32,8 @@ export class DepartmentDetailComponent implements OnInit {
     { key: 'companyName', label: 'organization.department.companyName' },
     { key: 'branchName', label: 'organization.department.branchName' },
     { key: 'parentDepartmentName', label: 'organization.department.parentDepartment' },
+    { key: 'managerName', label: 'organization.department.managerName' },
+    { key: 'deputyManagerName', label: 'organization.department.deputyManagerName' },
     { key: 'level', label: 'organization.department.level' },
     { key: 'limit', label: 'organization.department.limit' },
     { key: 'currentHeadCount', label: 'organization.department.currentHeadCount' },

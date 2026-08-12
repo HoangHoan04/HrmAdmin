@@ -1,5 +1,7 @@
+import { PERMISSION_CODES } from '@/app/core/constants/common/permission-codes';
 import { enumData } from '@/app/core/constants/enums/enumData';
 import { Employee } from '@/app/core/models/human-resource/employee.models';
+import { PermissionService } from '@/app/core/services/permission.service';
 import { ActionConfirmService } from '@/app/shared/services/action-confirm.service';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
@@ -52,12 +54,21 @@ export class EmployeeManagerComponent implements OnInit {
   };
 
   toolbarActions: TableAction[] = [
-    CommonActions.create(() => this.openCreateModal()),
-    CommonActions.uploadExcel(
-      () => this.downloadTemplate(),
-      (file) => this.uploadFile(file),
-    ),
-    CommonActions.exportExcel(() => this.exportExcel()),
+    {
+      ...CommonActions.create(() => this.openCreateModal()),
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.HR_EMPLOYEE_CREATE),
+    },
+    {
+      ...CommonActions.uploadExcel(
+        () => this.downloadTemplate(),
+        (file) => this.uploadFile(file),
+      ),
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.HR_EMPLOYEE_IMPORT_EXCEL),
+    },
+    {
+      ...CommonActions.exportExcel(() => this.exportExcel()),
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.HR_EMPLOYEE_EXPORT_EXCEL),
+    },
   ];
 
   filters: Record<string, any> = {
@@ -167,6 +178,7 @@ export class EmployeeManagerComponent implements OnInit {
       icon: 'edit',
       tooltip: 'humanResource.employee.edit',
       severity: 'info',
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.HR_EMPLOYEE_UPDATE),
       onClick: (record) => this.openEdit(record),
     },
     {
@@ -174,7 +186,9 @@ export class EmployeeManagerComponent implements OnInit {
       icon: 'check-circle',
       tooltip: 'humanResource.employee.activate',
       severity: 'success',
-      visible: (record) => record.isDeleted === true,
+      visible: (record) =>
+        record.isDeleted === true &&
+        this.permissionSvc.has(PERMISSION_CODES.HR_EMPLOYEE_ACTIVATE),
       onClick: (record) => this.activateEmployee(record),
     },
     {
@@ -182,7 +196,9 @@ export class EmployeeManagerComponent implements OnInit {
       icon: 'stop',
       tooltip: 'humanResource.employee.deactivate',
       severity: 'danger',
-      visible: (record) => record.isDeleted === false,
+      visible: (record) =>
+        record.isDeleted === false &&
+        this.permissionSvc.has(PERMISSION_CODES.HR_EMPLOYEE_DEACTIVATE),
       onClick: (record) => this.deactivateEmployee(record),
     },
   ];
@@ -194,6 +210,7 @@ export class EmployeeManagerComponent implements OnInit {
     private readonly apiService: ApiService,
     private readonly cdr: ChangeDetectorRef,
     private readonly actionConfirm: ActionConfirmService,
+    readonly permissionSvc: PermissionService,
   ) {}
 
   ngOnInit(): void {
@@ -378,13 +395,19 @@ export class EmployeeManagerComponent implements OnInit {
           this.excelLoading = false;
           if (result.errorCount > 0) {
             this.message.warning(
-              this.i18n.excelImportPartial(result.successCount, result.totalRows, result.errorCount),
+              this.i18n.excelImportPartial(
+                result.successCount,
+                result.totalRows,
+                result.errorCount,
+              ),
             );
             if (result.errors?.length) {
               console.warn('Employee import errors:', result.errors);
             }
           } else {
-            this.message.success(this.i18n.excelImportSuccess(result.successCount, this.ENTITY_KEY));
+            this.message.success(
+              this.i18n.excelImportSuccess(result.successCount, this.ENTITY_KEY),
+            );
           }
           this.loadData();
         },

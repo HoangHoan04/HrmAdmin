@@ -5,16 +5,8 @@ import { ComingSoonComponent } from './coming-soon/coming-soon.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 
 @NgModule({
-  declarations: [
-    ServerErrorComponent,
-    ComingSoonComponent,
-    NotFoundComponent,
-  ],
-  exports: [
-    ServerErrorComponent,
-    ComingSoonComponent,
-    NotFoundComponent,
-  ],
+  declarations: [ServerErrorComponent, ComingSoonComponent, NotFoundComponent],
+  exports: [ServerErrorComponent, ComingSoonComponent, NotFoundComponent],
   imports: [SharedModule],
 })
-export class OtherModule { }
+export class OtherModule {}

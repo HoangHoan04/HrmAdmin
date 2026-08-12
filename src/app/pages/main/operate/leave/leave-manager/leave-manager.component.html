@@ -16,8 +16,227 @@
   [showIndexList]="true"
   [stripedRows]="true"
   [rowActions]="rowActions"
+  [toolbarActions]="toolbarActions"
   [pagination]="pagination"
   (pageChange)="onPageChange($event)"
   (sortChange)="onSortChange($event)"
   (refresh)="loadData()"
 ></app-table-custom>
+
+<nz-drawer
+  [nzVisible]="drawerVisible"
+  [nzWidth]="560"
+  [nzTitle]="'leave.detailTitle' | translate"
+  (nzOnClose)="closeDrawer()"
+>
+  <ng-container *nzDrawerContent>
+    <nz-spin [nzSpinning]="drawerLoading">
+      @if (selected) {
+        <div class="leave-detail">
+          <p>
+            <strong>{{ 'leave.employee' | translate }}:</strong>
+            {{ selected.employeeCode }} - {{ selected.employeeName }}
+          </p>
+          <p>
+            <strong>{{ 'leave.branch' | translate }}:</strong>
+            {{ selected.branchName || '-' }}
+          </p>
+          <p>
+            <strong>{{ 'leave.dayOffType' | translate }}:</strong>
+            {{ getDayOffTypeLabel(selected.dayOffType) }}
+          </p>
+          <p>
+            <strong>{{ 'leave.dayOffConfig' | translate }}:</strong>
+            {{ selected.dayOffConfigName || '-' }}
+          </p>
+          <p>
+            <strong>{{ 'leave.fromDate' | translate }}:</strong>
+            {{ selected.fromDate }}
+          </p>
+          <p>
+            <strong>{{ 'leave.toDate' | translate }}:</strong>
+            {{ selected.toDate }}
+          </p>
+          <p>
+            <strong>{{ 'leave.session' | translate }}:</strong>
+            {{ getLeaveSessionLabel(selected.session) }}
+          </p>
+          <p>
+            <strong>{{ 'leave.totalDays' | translate }}:</strong>
+            {{ selected.totalDays }}
+          </p>
+          <p>
+            <strong>{{ 'leave.reason' | translate }}:</strong>
+            {{ selected.reason || '-' }}
+          </p>
+          <p>
+            <strong>{{ 'leave.attachmentUrl' | translate }}:</strong>
+            @if (selected.attachmentUrl) {
+              <a [href]="selected.attachmentUrl" target="_blank" rel="noopener">
+                {{ selected.attachmentUrl }}
+              </a>
+            } @else {
+              -
+            }
+          </p>
+          <p>
+            <strong>{{ 'leave.status' | translate }}:</strong>
+            {{ getDayOffStatusLabel(selected.status) }}
+          </p>
+          <p>
+            <strong>{{ 'leave.approverName' | translate }}:</strong>
+            {{ selected.approverName || '-' }}
+          </p>
+          <p>
+            <strong>{{ 'leave.requestedApprover' | translate }}:</strong>
+            {{ selected.requestedApproverName || '-' }}
+          </p>
+          <p>
+            <strong>{{ 'leave.approvedAt' | translate }}:</strong>
+            {{ selected.approvedAt || '-' }}
+          </p>
+          <p>
+            <strong>{{ 'leave.approverNote' | translate }}:</strong>
+            {{ selected.approverNote || '-' }}
+          </p>
+          <p>
+            <strong>{{ 'leave.cancelReason' | translate }}:</strong>
+            {{ selected.cancelReason || '-' }}
+          </p>
+          <p>
+            <strong>{{ 'leave.createdAt' | translate }}:</strong>
+            {{ selected.createdAt || '-' }}
+          </p>
+
+          <div style="display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap">
+            @if (selected.status === 'PENDING') {
+              <button nz-button nzType="primary" (click)="approve(selected)">
+                {{ 'leave.approve' | translate }}
+              </button>
+              <button nz-button nzDanger (click)="reject(selected)">
+                {{ 'leave.reject' | translate }}
+              </button>
+            }
+            @if (selected.status === 'PENDING' || selected.status === 'APPROVED') {
+              <button nz-button nzType="default" nzDanger (click)="cancel(selected)">
+                {{ 'leave.cancel' | translate }}
+              </button>
+            }
+          </div>
+        </div>
+      }
+    </nz-spin>
+  </ng-container>
+</nz-drawer>
+
+<nz-modal
+  [nzVisible]="createVisible"
+  [nzTitle]="'leave.createTitle' | translate"
+  [nzOkText]="'common.actions.save' | translate"
+  [nzCancelText]="'common.actions.cancel' | translate"
+  [nzOkLoading]="submitting"
+  (nzOnCancel)="closeCreate()"
+  (nzOnOk)="submitCreate()"
+>
+  <ng-container *nzModalContent>
+    <form nz-form [formGroup]="createForm" nzLayout="vertical">
+      <nz-form-item>
+        <nz-form-label nzRequired>{{ 'leave.employee' | translate }}</nz-form-label>
+        <nz-form-control>
+          <nz-select
+            formControlName="employeeId"
+            nzShowSearch
+            nzAllowClear
+            [nzPlaceHolder]="'leave.filterEmployee' | translate"
+          >
+            @for (opt of employeeOptions; track opt.value) {
+              <nz-option [nzValue]="opt.value" [nzLabel]="opt.label"></nz-option>
+            }
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired>{{ 'leave.dayOffConfig' | translate }}</nz-form-label>
+        <nz-form-control>
+          <nz-select
+            formControlName="dayOffConfigId"
+            nzShowSearch
+            nzAllowClear
+            [nzPlaceHolder]="'leave.filterDayOffConfig' | translate"
+          >
+            @for (opt of dayOffConfigOptions; track opt.value) {
+              <nz-option [nzValue]="opt.value" [nzLabel]="opt.label"></nz-option>
+            }
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired>{{ 'leave.dayOffType' | translate }}</nz-form-label>
+        <nz-form-control>
+          <nz-select formControlName="dayOffType">
+            @for (t of dayOffTypes; track t.value) {
+              <nz-option [nzValue]="t.value" [nzLabel]="t.labelKey | translate"></nz-option>
+            }
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired>{{ 'leave.filterDateRange' | translate }}</nz-form-label>
+        <nz-form-control>
+          <nz-range-picker formControlName="dateRange" style="width: 100%"></nz-range-picker>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired>{{ 'leave.session' | translate }}</nz-form-label>
+        <nz-form-control>
+          <nz-select formControlName="session">
+            @for (s of leaveSessions; track s.value) {
+              <nz-option [nzValue]="s.value" [nzLabel]="s.labelKey | translate"></nz-option>
+            }
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label>{{ 'leave.previewTotalDays' | translate }}</nz-form-label>
+        <nz-form-control>
+          <nz-spin [nzSpinning]="previewLoading">
+            <input
+              nz-input
+              [ngModel]="previewTotalDays ?? '-'"
+              [ngModelOptions]="{ standalone: true }"
+              disabled
+            />
+          </nz-spin>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired>{{ 'leave.reason' | translate }}</nz-form-label>
+        <nz-form-control>
+          <textarea
+            nz-input
+            formControlName="reason"
+            rows="3"
+            [placeholder]="'leave.reasonPlaceholder' | translate"
+          ></textarea>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label>{{ 'leave.attachmentUrl' | translate }}</nz-form-label>
+        <nz-form-control>
+          <input
+            nz-input
+            formControlName="attachmentUrl"
+            [placeholder]="'leave.attachmentPlaceholder' | translate"
+          />
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-container>
+</nz-modal>

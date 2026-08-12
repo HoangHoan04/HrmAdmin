@@ -5,6 +5,7 @@ import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { SharedModule } from '../../../shared/shared.module';
 import { AddOrUpdateDayOffConfigComponent } from './leave/day-off-config-manager/add-or-update-day-off-config/add-or-update-day-off-config.component';
 import { DayOffConfigManagerComponent } from './leave/day-off-config-manager/day-off-config-manager.component';
+import { LeaveAllocationManagerComponent } from './leave/leave-allocation-manager/leave-allocation-manager.component';
 import { LeaveManagerComponent } from './leave/leave-manager/leave-manager.component';
 import { AddOrUpdatePublicHolidayComponent } from './leave/public-holiday-manager/add-or-update-public-holiday/add-or-update-public-holiday.component';
 import { PublicHolidayManagerComponent } from './leave/public-holiday-manager/public-holiday-manager.component';
@@ -13,7 +14,9 @@ import { AddOrUpdateShiftComponent } from './shift/shift-manager/add-or-update-s
 import { ShiftListComponent } from './shift/shift-manager/shift-list.component';
 import { AddOrUpdateWorkScheduleComponent } from './shift/work-schedule/add-or-update-work-schedule/add-or-update-work-schedule.component';
 import { WorkScheduleManagerComponent } from './shift/work-schedule/work-schedule-manager.component';
+import { WorkPatternManagerComponent } from './shift/work-pattern/work-pattern-manager.component';
 import { TimekeepingManagerComponent } from './time-attendance/timekeeping-manager/timekeeping-manager.component';
+import { AttendanceComplaintManagerComponent } from './time-attendance/attendance-complaint-manager/attendance-complaint-manager.component';
 import { AddOrUpdateTimekeepingStandardComponent } from './time-attendance/timekeeping-standard-manager/add-or-update-timekeeping-standard/add-or-update-timekeeping-standard.component';
 import { TimekeepingStandardManagerComponent } from './time-attendance/timekeeping-standard-manager/timekeeping-standard-manager.component';
 
@@ -95,6 +98,12 @@ const routes: Routes = [
     component: TimekeepingManagerComponent,
   },
   {
+    path: getRelativePath(
+      ROUTES_CONFIG.OPERATE_MANAGER.children.TIME_ATTENDANCE.children.ATTENDANCE_COMPLAINT.path,
+    ),
+    component: AttendanceComplaintManagerComponent,
+  },
+  {
     path: getRelativePath(ROUTES_CONFIG.OPERATE_MANAGER.children.SHIFT_MANAGER.path),
     component: ShiftManagerComponent,
   },
@@ -130,6 +139,12 @@ const routes: Routes = [
     ),
     component: LeaveManagerComponent,
   },
+  {
+    path: getRelativePath(
+      ROUTES_CONFIG.OPERATE_MANAGER.children.LEAVE_MANAGER.children.LEAVE_ALLOCATION.path,
+    ),
+    component: LeaveAllocationManagerComponent,
+  },
 ];
 
 @NgModule({
@@ -137,12 +152,15 @@ const routes: Routes = [
     TimekeepingStandardManagerComponent,
     AddOrUpdateTimekeepingStandardComponent,
     TimekeepingManagerComponent,
+    AttendanceComplaintManagerComponent,
     ShiftManagerComponent,
     ShiftListComponent,
     AddOrUpdateShiftComponent,
     WorkScheduleManagerComponent,
     AddOrUpdateWorkScheduleComponent,
+    WorkPatternManagerComponent,
     LeaveManagerComponent,
+    LeaveAllocationManagerComponent,
     DayOffConfigManagerComponent,
     AddOrUpdateDayOffConfigComponent,
     PublicHolidayManagerComponent,

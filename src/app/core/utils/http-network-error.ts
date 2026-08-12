@@ -1,6 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
 
-/** API unreachable / not running / browser network failure (status 0). */
 export function isHttpNetworkError(error: unknown): boolean {
   if (!(error instanceof HttpErrorResponse)) return false;
   if (error.status === 0) return true;
@@ -13,7 +12,12 @@ export function isHttpNetworkError(error: unknown): boolean {
 export function isNetworkErrorPayload(payload: unknown): boolean {
   if (payload == null) return false;
   if (typeof ProgressEvent !== 'undefined' && payload instanceof ProgressEvent) return true;
-  if (typeof payload === 'object' && payload !== null && 'isTrusted' in payload && !('message' in payload)) {
+  if (
+    typeof payload === 'object' &&
+    payload !== null &&
+    'isTrusted' in payload &&
+    !('message' in payload)
+  ) {
     return true;
   }
   return false;

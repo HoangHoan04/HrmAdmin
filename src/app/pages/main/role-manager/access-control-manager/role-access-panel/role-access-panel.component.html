@@ -1,0 +1,175 @@
+<section class="role-access-page">
+  <nz-collapse [nzBordered]="false" class="role-filter-collapse mt-2">
+    <nz-collapse-panel [nzHeader]="'role.filterSearch' | translate" [nzActive]="true">
+      <div class="role-filter-row">
+        <div class="role-filter-select-wrap">
+          <label class="role-filter-label">
+            {{ 'role.selectRoleRequired' | translate }}
+            <span class="text-danger">*</span>
+          </label>
+          <nz-select
+            class="role-filter-select mt-1"
+            [ngModel]="selectedRoleId"
+            (ngModelChange)="onRoleSelected($event)"
+            [nzPlaceHolder]="'role.selectRolePlaceholder' | translate"
+            [nzLoading]="rolesLoading"
+            nzShowSearch
+            nzAllowClear
+          >
+            @for (role of roleOptions; track role.id) {
+              <nz-option [nzValue]="role.id" [nzLabel]="role.name"></nz-option>
+            }
+          </nz-select>
+        </div>
+        <div class="role-filter-actions">
+          <button
+            nz-button
+            nzType="default"
+            [disabled]="!selectedRoleId"
+            (click)="goEmployeeTab()"
+          >
+            <span nz-icon nzType="team"></span>
+            {{ 'role.viewEmployees' | translate }}
+          </button>
+        </div>
+      </div>
+    </nz-collapse-panel>
+  </nz-collapse>
+
+  @if (selectedRoleId) {
+    <div class="mt-2">
+      <nz-spin [nzSpinning]="permLoading">
+        <div class="d-flex justify-content-between mb-3 align-items-center role-save-bar">
+          @if (isDirty) {
+            <button
+              nz-button
+              nzType="primary"
+              [nzLoading]="permSaving"
+              (click)="savePermissions()"
+            >
+              <span nz-icon nzType="save"></span>
+              {{ 'role.savePermissions' | translate }}
+            </button>
+          } @else {
+            <span class="role-save-hint">{{ 'role.noPendingChanges' | translate }}</span>
+          }
+
+          @if (selectedRole) {
+            <div class="role-meta">
+              <strong>{{ selectedRole.name }}</strong>
+              @if (selectedRole.isSystem) {
+                <nz-tag nzColor="blue">{{ 'role.isSystem' | translate }}</nz-tag>
+              }
+              <span class="role-meta-count">{{ totalChecked }}/{{ totalPermissions }}</span>
+            </div>
+          }
+        </div>
+
+        <div nz-row [nzGutter]="[16, 16]">
+          @for (group of permissionGroups; track group.module) {
+            <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8" [nzLg]="6">
+              <nz-card nzSize="small" class="permission-card" [nzTitle]="cardTitleTpl">
+                <ng-template #cardTitleTpl>
+                  <div class="card-title-wrapper">
+                    <label
+                      nz-checkbox
+                      class="card-module-check"
+                      [nzIndeterminate]="isModuleIndeterminate(group)"
+                      [ngModel]="isModuleFullyChecked(group)"
+                      (ngModelChange)="toggleModule(group, $event)"
+                      [name]="'mod-' + group.module"
+                      (click)="$event.stopPropagation()"
+                    ></label>
+                    <span class="card-title-text">{{ group.moduleName || group.module }}</span>
+                    <span class="card-count">
+                      {{ moduleCheckedCount(group) }}/{{ moduleTotalCount(group) }}
+                    </span>
+                  </div>
+                </ng-template>
+
+                <div class="tree-wrapper">
+                  @for (item of group.items || []; track item.key) {
+                    <div class="tree-item">
+                      <div class="tree-item-head">
+                        <button
+                          type="button"
+                          class="tree-expand-btn"
+                          (click)="toggleItemExpand(group.module + ':' + item.key)"
+                        >
+                          <span
+                            nz-icon
+                            [nzType]="
+                              isItemExpanded(group.module + ':' + item.key)
+                                ? 'caret-down'
+                                : 'caret-right'
+                            "
+                          ></span>
+                        </button>
+                        <label
+                          nz-checkbox
+                          [nzIndeterminate]="isItemIndeterminate(item)"
+                          [ngModel]="isItemFullyChecked(item)"
+                          (ngModelChange)="toggleItem(item, $event)"
+                          [name]="'item-' + group.module + '-' + item.key"
+                        >
+                          <span class="tree-item-title">{{ item.name }}</span>
+                        </label>
+                      </div>
+
+                      @if (isItemExpanded(group.module + ':' + item.key)) {
+                        <div class="tree-actions">
+                          @for (action of item.actions; track action.code) {
+                            <div
+                              class="tree-action-row"
+                              [class.is-checked]="isChecked(action.code)"
+                            >
+                              <label
+                                nz-checkbox
+                                class="tree-action-name"
+                                [ngModel]="isChecked(action.code)"
+                                (ngModelChange)="onCheck(action, $event)"
+                                [name]="'act-' + action.code"
+                              >
+                                <span class="node-title">{{
+                                  action.actionName || action.name
+                                }}</span>
+                              </label>
+
+                              <div class="tree-action-scope">
+                                @if (isChecked(action.code) && action.isScopable !== false) {
+                                  <nz-select
+                                    class="tree-scope-select"
+                                    [ngModel]="getScope(action.code)"
+                                    (ngModelChange)="onScopeChange(action.code, $event)"
+                                    [nzPlaceHolder]="'role.dataScope' | translate"
+                                    nzSize="small"
+                                  >
+                                    @for (scope of dataScopes; track scope.value) {
+                                      <nz-option
+                                        [nzValue]="scope.value"
+                                        [nzLabel]="scope.labelKey | translate"
+                                      ></nz-option>
+                                    }
+                                  </nz-select>
+                                }
+                              </div>
+                            </div>
+                          }
+                        </div>
+                      }
+                    </div>
+                  }
+                </div>
+              </nz-card>
+            </div>
+          }
+        </div>
+      </nz-spin>
+    </div>
+  } @else {
+    <nz-empty
+      class="role-empty"
+      [nzNotFoundContent]="'role.selectRoleEmpty' | translate"
+    ></nz-empty>
+  }
+</section>

@@ -255,12 +255,12 @@ export class DashboardService {
     root.style.setProperty('--color-primary', s.primaryColor);
     root.style.setProperty('--primary-hover', this.shadeColor(s.primaryColor, -12));
     root.style.setProperty('--primary-active', this.shadeColor(s.primaryColor, -22));
-    root.style.setProperty(
-      '--primary-muted',
-      this.hexToRgba(s.primaryColor, isDark ? 0.18 : 0.12),
-    );
+    root.style.setProperty('--primary-muted', this.hexToRgba(s.primaryColor, isDark ? 0.18 : 0.12));
     root.style.setProperty('--ring', this.hexToRgba(s.primaryColor, 0.4));
-    root.style.setProperty('--shadow-primary', `0 8px 20px ${this.hexToRgba(s.primaryColor, 0.28)}`);
+    root.style.setProperty(
+      '--shadow-primary',
+      `0 8px 20px ${this.hexToRgba(s.primaryColor, 0.28)}`,
+    );
     root.style.setProperty('--radius', `${s.borderRadius}px`);
     root.style.setProperty('--sidebar-width', `${s.sidebarWidth}px`);
     root.style.setProperty('--sidebar-collapsed-width', `${s.sidebarCollapsedWidth}px`);

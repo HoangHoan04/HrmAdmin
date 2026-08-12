@@ -31,6 +31,8 @@ export class BranchDetailComponent implements OnInit {
     { key: 'shortName', label: 'organization.branch.shortName' },
     { key: 'companyName', label: 'organization.branch.companyName' },
     { key: 'parentBranchName', label: 'organization.branch.parentBranch' },
+    { key: 'managerName', label: 'organization.branch.managerName' },
+    { key: 'managerPhone', label: 'organization.branch.managerPhone' },
     { key: 'type', label: 'organization.branch.type' },
     { key: 'groupSalary', label: 'organization.branch.groupSalary' },
     { key: 'address', label: 'organization.branch.address' },

@@ -1,0 +1,118 @@
+<app-filter-custom
+  [id]="'attendance-complaint-filter'"
+  [fields]="filterFields"
+  [filters]="filters"
+  [config]="filterConfig"
+  [filterActions]="filterActions"
+  [loading]="loading"
+  (filtersChange)="onFiltersChange($event)"
+></app-filter-custom>
+
+<app-table-custom
+  [id]="'attendance-complaint-table'"
+  [data]="data"
+  [columns]="columns"
+  [loading]="loading"
+  [showIndexList]="true"
+  [stripedRows]="true"
+  [rowActions]="rowActions"
+  [pagination]="pagination"
+  (pageChange)="onPageChange($event)"
+  (sortChange)="onSortChange($event)"
+  (refresh)="loadData()"
+></app-table-custom>
+
+<nz-drawer
+  [nzVisible]="drawerVisible"
+  [nzWidth]="560"
+  [nzTitle]="'attendanceComplaint.detailTitle' | translate"
+  (nzOnClose)="closeDrawer()"
+>
+  <ng-container *nzDrawerContent>
+    <nz-spin [nzSpinning]="drawerLoading">
+      @if (selected) {
+        <div class="attendance-complaint-detail">
+          <p>
+            <strong>{{ 'attendanceComplaint.employee' | translate }}:</strong>
+            {{ formatEmployee(selected.employeeCode, selected.employeeName) }}
+          </p>
+          <p>
+            <strong>{{ 'attendanceComplaint.branch' | translate }}:</strong>
+            {{ selected.branchName || '-' }}
+          </p>
+          <p>
+            <strong>{{ 'attendanceComplaint.workDate' | translate }}:</strong>
+            {{ selected.workDate }}
+          </p>
+          <p>
+            <strong>{{ 'attendanceComplaint.complaintType' | translate }}:</strong>
+            {{ getComplaintTypeLabel(selected.complaintType) }}
+          </p>
+          <p>
+            <strong>{{ 'attendanceComplaint.reason' | translate }}:</strong>
+            {{ selected.reason || '-' }}
+          </p>
+          <p>
+            <strong>{{ 'attendanceComplaint.attachmentUrl' | translate }}:</strong>
+            @if (selected.attachmentUrl) {
+              <a [href]="selected.attachmentUrl" target="_blank" rel="noopener">
+                {{ selected.attachmentUrl }}
+              </a>
+            } @else {
+              -
+            }
+          </p>
+
+          <p>
+            <strong>{{ 'attendanceComplaint.currentCheckIn' | translate }}:</strong>
+            {{ formatDateTime(selected.currentCheckInAt) }}
+          </p>
+          <p>
+            <strong>{{ 'attendanceComplaint.currentCheckOut' | translate }}:</strong>
+            {{ formatDateTime(selected.currentCheckOutAt) }}
+          </p>
+          <p>
+            <strong>{{ 'attendanceComplaint.requestedCheckIn' | translate }}:</strong>
+            {{ formatTime(selected.requestedCheckInTime) }}
+          </p>
+          <p>
+            <strong>{{ 'attendanceComplaint.requestedCheckOut' | translate }}:</strong>
+            {{ formatTime(selected.requestedCheckOutTime) }}
+          </p>
+
+          <p>
+            <strong>{{ 'attendanceComplaint.status' | translate }}:</strong>
+            {{ getStatusLabel(selected.status) }}
+          </p>
+          <p>
+            <strong>{{ 'attendanceComplaint.approverName' | translate }}:</strong>
+            {{ selected.approverName || '-' }}
+          </p>
+          <p>
+            <strong>{{ 'attendanceComplaint.reviewedAt' | translate }}:</strong>
+            {{ formatDateTime(selected.reviewedAt) }}
+          </p>
+          <p>
+            <strong>{{ 'attendanceComplaint.approverNote' | translate }}:</strong>
+            {{ selected.approverNote || '-' }}
+          </p>
+          <p>
+            <strong>{{ 'attendanceComplaint.createdAt' | translate }}:</strong>
+            {{ formatDateTime(selected.createdAt) }}
+          </p>
+
+          <div style="display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap">
+            @if (selected.status === 'PENDING') {
+              <button nz-button nzType="primary" (click)="approve(selected)">
+                {{ 'attendanceComplaint.approve' | translate }}
+              </button>
+              <button nz-button nzDanger (click)="reject(selected)">
+                {{ 'attendanceComplaint.reject' | translate }}
+              </button>
+            }
+          </div>
+        </div>
+      }
+    </nz-spin>
+  </ng-container>
+</nz-drawer>

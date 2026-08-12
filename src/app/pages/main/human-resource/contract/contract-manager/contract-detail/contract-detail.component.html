@@ -31,6 +31,9 @@
       <nz-descriptions-item [nzTitle]="'contract.code' | translate">
         {{ contract.code }}
       </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'contract.decisionNumber' | translate">
+        {{ contract.decisionNumber || '-' }}
+      </nz-descriptions-item>
       <nz-descriptions-item [nzTitle]="'contract.employeeName' | translate">
         {{ contract.employeeCode ? contract.employeeCode + ' - ' : '' }}{{ contract.employeeName }}
       </nz-descriptions-item>
@@ -44,22 +47,32 @@
         {{ contract.startDate | date: 'dd/MM/yyyy' }}
       </nz-descriptions-item>
       <nz-descriptions-item [nzTitle]="'contract.endDate' | translate">
-        {{ contract.endDate ? (contract.endDate | date: 'dd/MM/yyyy') : '-' }}
+        {{
+          contract.endDate
+            ? (contract.endDate | date: 'dd/MM/yyyy')
+            : ('contract.unlimited' | translate)
+        }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'contract.probationEndDate' | translate">
+        {{ contract.probationEndDate ? (contract.probationEndDate | date: 'dd/MM/yyyy') : '-' }}
       </nz-descriptions-item>
       <nz-descriptions-item [nzTitle]="'contract.signDate' | translate">
         {{ contract.signDate ? (contract.signDate | date: 'dd/MM/yyyy') : '-' }}
       </nz-descriptions-item>
-      <nz-descriptions-item [nzTitle]="'contract.basicSalary' | translate">
-        {{ contract.basicSalary ?? '-' }}
+      <nz-descriptions-item [nzTitle]="'contract.companyName' | translate">
+        {{ contract.companyName || '-' }}
       </nz-descriptions-item>
-      <nz-descriptions-item [nzTitle]="'contract.allowance' | translate">
-        {{ contract.allowance ?? '-' }}
+      <nz-descriptions-item [nzTitle]="'contract.branchName' | translate">
+        {{ contract.branchName || '-' }}
       </nz-descriptions-item>
-      <nz-descriptions-item [nzTitle]="'contract.insuranceSalary' | translate">
-        {{ contract.insuranceSalary ?? '-' }}
+      <nz-descriptions-item [nzTitle]="'contract.departmentName' | translate">
+        {{ contract.departmentName || '-' }}
       </nz-descriptions-item>
-      <nz-descriptions-item [nzTitle]="'contract.paymentMethod' | translate">
-        {{ contract.paymentMethod || '-' }}
+      <nz-descriptions-item [nzTitle]="'contract.partName' | translate">
+        {{ contract.partName || '-' }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'contract.positionName' | translate">
+        {{ contract.positionName || '-' }}
       </nz-descriptions-item>
       <nz-descriptions-item [nzTitle]="'contract.jobTitle' | translate">
         {{ contract.jobTitle || '-' }}
@@ -67,16 +80,41 @@
       <nz-descriptions-item [nzTitle]="'contract.workingLocation' | translate">
         {{ contract.workingLocation || '-' }}
       </nz-descriptions-item>
-      <nz-descriptions-item [nzTitle]="'contract.companyName' | translate">
-        {{ contract.companyName || '-' }}
+      <nz-descriptions-item [nzTitle]="'contract.workingMode' | translate">
+        {{ workingModeLabel(contract.workingMode) }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'contract.workingHoursPerWeek' | translate">
+        {{ contract.workingHoursPerWeek ?? '-' }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'contract.annualLeaveDays' | translate">
+        {{ contract.annualLeaveDays ?? '-' }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'contract.basicSalary' | translate">
+        {{ contract.basicSalary ?? '-' }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'contract.salaryCoefficient' | translate">
+        {{ contract.salaryCoefficient ?? '-' }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'contract.allowance' | translate">
+        {{ contract.allowance ?? '-' }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'contract.insuranceSalary' | translate">
+        {{ contract.insuranceSalary ?? '-' }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'contract.currency' | translate">
+        {{ contract.currency || '-' }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'contract.paymentMethod' | translate">
+        {{ paymentMethodLabel(contract.paymentMethod) }}
       </nz-descriptions-item>
       <nz-descriptions-item [nzTitle]="'contract.isAutoRenew' | translate">
-        {{
-          contract.isAutoRenew ? ('common.yes' | translate) : ('common.no' | translate)
-        }}
+        {{ contract.isAutoRenew ? ('common.yes' | translate) : ('common.no' | translate) }}
       </nz-descriptions-item>
       <nz-descriptions-item [nzTitle]="'contract.renewalTimes' | translate">
         {{ contract.renewalTimes }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'contract.previousContractCode' | translate">
+        {{ contract.previousContractCode || '-' }}
       </nz-descriptions-item>
       <nz-descriptions-item [nzTitle]="'contract.signedByCompanyRepresentative' | translate">
         {{ contract.signedByCompanyRepresentative || '-' }}
@@ -89,6 +127,9 @@
       </nz-descriptions-item>
       <nz-descriptions-item [nzTitle]="'contract.terminationReason' | translate" [nzSpan]="2">
         {{ contract.terminationReason || '-' }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'contract.jobDescription' | translate" [nzSpan]="3">
+        {{ contract.jobDescription || '-' }}
       </nz-descriptions-item>
       <nz-descriptions-item [nzTitle]="'contract.note' | translate" [nzSpan]="3">
         {{ contract.note || '-' }}
@@ -116,7 +157,11 @@
           <p>
             {{ item.startDate | date: 'dd/MM/yyyy' }}
             →
-            {{ item.endDate ? (item.endDate | date: 'dd/MM/yyyy') : ('contract.unlimited' | translate) }}
+            {{
+              item.endDate
+                ? (item.endDate | date: 'dd/MM/yyyy')
+                : ('contract.unlimited' | translate)
+            }}
           </p>
           <p>{{ item.contractTypeName || '-' }} | {{ item.basicSalary ?? '-' }}</p>
         </nz-timeline-item>
@@ -253,7 +298,9 @@
         </div>
         <div nz-col nzXs="24" nzMd="12">
           <nz-form-item>
-            <nz-form-label [nzRequired]="true">{{ 'contract.startDate' | translate }}</nz-form-label>
+            <nz-form-label [nzRequired]="true">{{
+              'contract.startDate' | translate
+            }}</nz-form-label>
             <nz-form-control>
               <nz-date-picker formControlName="startDate" style="width: 100%"></nz-date-picker>
             </nz-form-control>

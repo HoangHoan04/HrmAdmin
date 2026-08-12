@@ -41,7 +41,6 @@ h6,
 }
 
 app-sidebar {
-
   .ant-menu-item,
   .ant-menu-submenu-title {
     display: flex !important;
@@ -160,7 +159,7 @@ html[data-sidebar-position='right'] .admin-layout {
   background-color: var(--background) !important;
 }
 
-.admin-layout>.admin-right {
+.admin-layout > .admin-right {
   display: flex !important;
   flex-direction: column !important;
   overflow: hidden;
@@ -259,8 +258,8 @@ app-sidebar .ant-layout-sider {
   &::-webkit-scrollbar {
     display: none;
   }
-  -ms-overflow-style: none; 
-  scrollbar-width: none; 
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 html[data-navbar-color-type='gradient'] .admin-navbar {
@@ -911,20 +910,18 @@ html.dark .tab-item.tab-card.tab-active {
     border-color 0.25s ease;
 }
 
-.ant-form-item-label>label {
+.ant-form-item-label > label {
   color: var(--foreground) !important;
   transition: color 0.25s ease;
 }
 
 html.s-maximized {
-
   app-sidebar,
   app-navbar,
   .admin-footer {
     display: none !important;
   }
 }
-
 
 body,
 .admin-layout,
@@ -955,7 +952,7 @@ html[data-layout='detached'] {
     background: transparent;
   }
 
-  router-outlet+* {
+  router-outlet + * {
     display: block;
     background: var(--background-card);
     border-radius: 16px;
@@ -1035,7 +1032,8 @@ html.dark .page-loader-overlay {
 
 .admin-content.page-transition-active {
   position: relative;
-  transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1),
+  transition:
+    transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1),
     opacity 0.4s cubic-bezier(0.25, 0.8, 0.25, 1),
     filter 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
 

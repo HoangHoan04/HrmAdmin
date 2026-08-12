@@ -7,6 +7,7 @@ import {
   Branch,
   BranchSelectBoxDto,
   CompanySelectBoxDto,
+  EmployeeSelectBoxDto,
   TimeKeepingStandardSelectBoxDto,
 } from '../../../../../core/models';
 import { ApiService } from '../../../../../core/services/api.service';
@@ -27,6 +28,7 @@ export class AddOrUpdateBranchComponent implements OnInit {
   companies: CompanySelectBoxDto[] = [];
   parentBranches: BranchSelectBoxDto[] = [];
   timeKeepingStandards: TimeKeepingStandardSelectBoxDto[] = [];
+  employees: EmployeeSelectBoxDto[] = [];
   private companyCodeFromRoute: string | null = null;
 
   constructor(
@@ -45,6 +47,7 @@ export class AddOrUpdateBranchComponent implements OnInit {
     this.companyCodeFromRoute = this.route.snapshot.queryParamMap.get('companyCode');
 
     this.loadCompanies();
+    this.loadEmployees();
 
     if (this.isEdit && this.id) {
       this.loadBranchDetail(this.id);
@@ -67,6 +70,7 @@ export class AddOrUpdateBranchComponent implements OnInit {
       email: [''],
       latitude: [null],
       longitude: [null],
+      managerId: [null],
       timeKeepingStandardId: [null],
       isActive: [true],
     });
@@ -93,6 +97,15 @@ export class AddOrUpdateBranchComponent implements OnInit {
         this.message.error(this.i18n.instant('common.messages.loadCompanySelectFailed'));
       },
     });
+  }
+
+  loadEmployees(): void {
+    this.apiService
+      .post<EmployeeSelectBoxDto[]>(this.apiService.EMPLOYEE.SELECT_BOX, {})
+      .subscribe({
+        next: (items) => (this.employees = items),
+        error: () => (this.employees = []),
+      });
   }
 
   loadParentBranches(companyId: string | null, excludeId?: string): void {
@@ -155,6 +168,7 @@ export class AddOrUpdateBranchComponent implements OnInit {
           email: branch.email,
           latitude: branch.latitude ?? null,
           longitude: branch.longitude ?? null,
+          managerId: branch.managerId ?? null,
           timeKeepingStandardId: branch.timeKeepingStandardId ?? null,
           isActive: branch.isActive ?? true,
         });
@@ -195,6 +209,7 @@ export class AddOrUpdateBranchComponent implements OnInit {
       ...value,
       companyId: value.companyId || null,
       parentBranchId: value.parentBranchId || null,
+      managerId: value.managerId || null,
       timeKeepingStandardId: value.timeKeepingStandardId || null,
       latitude: value.latitude ?? null,
       longitude: value.longitude ?? null,

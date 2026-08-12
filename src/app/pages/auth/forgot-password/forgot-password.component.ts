@@ -136,7 +136,9 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
       error: (err) => {
         this.loading = false;
         this.error =
-          typeof err.error === 'string' ? err.error : this.translate.instant('auth.resendOtpFailed');
+          typeof err.error === 'string'
+            ? err.error
+            : this.translate.instant('auth.resendOtpFailed');
       },
     });
   }

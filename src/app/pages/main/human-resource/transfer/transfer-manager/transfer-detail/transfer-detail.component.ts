@@ -206,9 +206,7 @@ export class TransferDetailComponent implements OnInit {
           'transfer.notePlaceholder',
         )}"></textarea>`,
         nzOnOk: () => {
-          const el = document.getElementById(
-            'transfer-detail-note',
-          ) as HTMLTextAreaElement | null;
+          const el = document.getElementById('transfer-detail-note') as HTMLTextAreaElement | null;
           resolve(el?.value?.trim() || '');
         },
         nzOnCancel: () => resolve(undefined),

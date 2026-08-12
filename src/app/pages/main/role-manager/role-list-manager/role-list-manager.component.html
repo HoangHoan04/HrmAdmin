@@ -1,0 +1,102 @@
+<app-filter-custom
+  [id]="'role-filter'"
+  [fields]="filterFields"
+  [filters]="filters"
+  [config]="filterConfig"
+  [filterActions]="filterActions"
+  [loading]="loading"
+  (filtersChange)="onFiltersChange($event)"
+></app-filter-custom>
+
+<app-table-custom
+  [id]="'role-table'"
+  [data]="data"
+  [columns]="columns"
+  [loading]="loading"
+  [showIndexList]="true"
+  [stripedRows]="true"
+  [rowActions]="rowActions"
+  [pagination]="pagination"
+  [toolbar]="toolbar"
+  [toolbarActions]="toolbarActions"
+  (pageChange)="onPageChange($event)"
+  (sortChange)="onSortChange($event)"
+  (refresh)="loadData()"
+></app-table-custom>
+
+<nz-modal
+  [(nzVisible)]="modalVisible"
+  [nzTitle]="(isEdit ? 'role.editTitle' : 'role.createTitle') | translate"
+  [nzOkLoading]="modalSaving"
+  [nzOkText]="'common.actions.save' | translate"
+  [nzCancelText]="'common.actions.cancel' | translate"
+  (nzOnOk)="saveModal()"
+  (nzOnCancel)="closeModal()"
+>
+  <ng-container *nzModalContent>
+    <div class="role-form-grid">
+      <nz-form-item>
+        <nz-form-label nzRequired>{{ 'role.code' | translate }}</nz-form-label>
+        <nz-form-control>
+          <input
+            nz-input
+            [(ngModel)]="formModel.code"
+            name="roleCode"
+            [disabled]="isEdit || !!formModel.isSystem"
+            [placeholder]="'role.codePlaceholder' | translate"
+          />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired>{{ 'role.name' | translate }}</nz-form-label>
+        <nz-form-control>
+          <input
+            nz-input
+            [(ngModel)]="formModel.name"
+            name="roleName"
+            [placeholder]="'role.namePlaceholder' | translate"
+          />
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+    <nz-form-item>
+      <nz-form-label>{{ 'role.company' | translate }}</nz-form-label>
+      <nz-form-control>
+        <nz-select
+          [(ngModel)]="formModel.companyId"
+          name="roleCompany"
+          [nzPlaceHolder]="'role.filterCompany' | translate"
+          nzAllowClear
+          nzShowSearch
+          [disabled]="!!formModel.isSystem"
+        >
+          @for (c of companies; track c.id) {
+            <nz-option [nzValue]="c.id" [nzLabel]="c.code + ' - ' + c.name"></nz-option>
+          }
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label>{{ 'role.description' | translate }}</nz-form-label>
+      <nz-form-control>
+        <textarea
+          nz-input
+          rows="2"
+          [(ngModel)]="formModel.description"
+          name="roleDescription"
+          [placeholder]="'role.descriptionPlaceholder' | translate"
+        ></textarea>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label>{{ 'role.isActive' | translate }}</nz-form-label>
+      <nz-form-control>
+        <nz-switch [(ngModel)]="formModel.isActive" name="roleActive"></nz-switch>
+      </nz-form-control>
+    </nz-form-item>
+  </ng-container>
+</nz-modal>

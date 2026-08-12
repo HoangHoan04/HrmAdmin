@@ -1,10 +1,6 @@
 import { ROUTES_CONFIG } from '@/app/core/constants/common';
 import { enumData } from '@/app/core/constants/enums';
-import {
-  EmployeeSelectBoxDto,
-  PagedResult,
-  ReviewRenewal,
-} from '@/app/core/models';
+import { EmployeeSelectBoxDto, PagedResult, ReviewRenewal } from '@/app/core/models';
 import { ApiService, I18nMessageService } from '@/app/core/services';
 import {
   CommonFilterActions,
@@ -221,10 +217,7 @@ export class ReviewRenewalManagerComponent implements OnInit {
         next: (res) => {
           this.statusLabelMap.clear();
           this.data = res.items.map((item) => {
-            const statusLabel = this.resolveEnumLabel(
-              item.status,
-              enumData.REVIEW_RENEWAL_STATUS,
-            );
+            const statusLabel = this.resolveEnumLabel(item.status, enumData.REVIEW_RENEWAL_STATUS);
             const recommendationLabel = this.resolveEnumLabel(
               item.recommendation,
               enumData.REVIEW_RECOMMENDATION,

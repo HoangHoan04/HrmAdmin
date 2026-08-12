@@ -16,7 +16,9 @@ export interface Department extends BaseDto {
   limit?: number;
   currentHeadCount?: number;
   managerId?: string | null;
+  managerName?: string;
   deputyManagerId?: string | null;
+  deputyManagerName?: string;
   email?: string;
   phoneExtension?: string;
   costCenterCode?: string;

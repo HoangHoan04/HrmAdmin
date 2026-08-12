@@ -395,7 +395,9 @@
                       class="badge-status"
                       [ngClass]="rowData[col.field] ? 'status-true' : 'status-false'"
                     >
-                      {{ rowData[col.field] ? ('common.yes' | translate) : ('common.no' | translate) }}
+                      {{
+                        rowData[col.field] ? ('common.yes' | translate) : ('common.no' | translate)
+                      }}
                     </span>
                   </ng-container>
                 </span>
@@ -421,7 +423,16 @@
 
                 <span *ngIf="col.type === 'image'">
                   <ng-container *ngIf="rowData[col.field]">
-                    <img [src]="rowData[col.field]" alt="Image" style="max-height: 40px; max-width: 60px; object-fit: cover; border-radius: 4px;" />
+                    <img
+                      [src]="rowData[col.field]"
+                      alt="Image"
+                      style="
+                        max-height: 40px;
+                        max-width: 60px;
+                        object-fit: cover;
+                        border-radius: 4px;
+                      "
+                    />
                   </ng-container>
                   <ng-container *ngIf="!rowData[col.field]">-</ng-container>
                 </span>

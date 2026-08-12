@@ -25,7 +25,9 @@
         <div class="tab-content">
           @if (department.description) {
             <div class="description-box">
-              <span class="field-label">{{ 'organization.department.description' | translate }}</span>
+              <span class="field-label">{{
+                'organization.department.description' | translate
+              }}</span>
               <p>{{ department.description }}</p>
             </div>
           }

@@ -1,12 +1,7 @@
 import { ROUTES_CONFIG } from '@/app/core/constants/common';
 import { enumData } from '@/app/core/constants/enums/enumData';
 import { toUtcDateIso } from '@/app/core/constants/helpers';
-import {
-  Contract,
-  ContractTypeSelectBoxDto,
-  PagedResult,
-  ReviewRenewal,
-} from '@/app/core/models';
+import { Contract, ContractTypeSelectBoxDto, PagedResult, ReviewRenewal } from '@/app/core/models';
 import { ApiService, I18nMessageService } from '@/app/core/services';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -89,10 +84,7 @@ export class AddOrUpdateReviewRenewalComponent implements OnInit {
             id: item.id,
             label: `${item.code} - ${item.employeeName || ''}`,
           }));
-          if (
-            preferredId &&
-            !this.contracts.some((c) => c.id === preferredId)
-          ) {
+          if (preferredId && !this.contracts.some((c) => c.id === preferredId)) {
             this.apiService
               .post<Contract>(this.apiService.CONTRACT.DETAIL, { id: preferredId })
               .subscribe({
@@ -121,48 +113,41 @@ export class AddOrUpdateReviewRenewalComponent implements OnInit {
 
   loadDetail(id: string): void {
     this.loading = true;
-    this.apiService
-      .post<ReviewRenewal>(this.apiService.REVIEW_RENEWAL.DETAIL, { id })
-      .subscribe({
-        next: (item) => {
-          if (
-            item.contractId &&
-            !this.contracts.some((c) => c.id === item.contractId)
-          ) {
-            this.contracts = [
-              {
-                id: item.contractId,
-                label: `${item.contractCode || item.contractId} - ${item.employeeName || ''}`,
-              },
-              ...this.contracts,
-            ];
-          }
-          this.validateForm.patchValue({
-            contractId: item.contractId,
-            reviewDate: item.reviewDate ? new Date(item.reviewDate) : null,
-            reviewedBy: item.reviewedBy,
-            performanceScore: item.performanceScore,
-            reviewResult: item.reviewResult,
-            reviewComment: item.reviewComment,
-            recommendation: item.recommendation,
-            proposedContractTypeId: item.proposedContractTypeId,
-            proposedStartDate: item.proposedStartDate
-              ? new Date(item.proposedStartDate)
-              : null,
-            proposedEndDate: item.proposedEndDate ? new Date(item.proposedEndDate) : null,
-            proposedBasicSalary: item.proposedBasicSalary,
-            note: item.note,
-          });
-          if (this.isEdit) {
-            this.validateForm.get('contractId')?.disable();
-          }
-          this.loading = false;
-        },
-        error: (err: any) => {
-          this.message.error(this.i18n.loadDetailFailed(err.error));
-          this.goBack();
-        },
-      });
+    this.apiService.post<ReviewRenewal>(this.apiService.REVIEW_RENEWAL.DETAIL, { id }).subscribe({
+      next: (item) => {
+        if (item.contractId && !this.contracts.some((c) => c.id === item.contractId)) {
+          this.contracts = [
+            {
+              id: item.contractId,
+              label: `${item.contractCode || item.contractId} - ${item.employeeName || ''}`,
+            },
+            ...this.contracts,
+          ];
+        }
+        this.validateForm.patchValue({
+          contractId: item.contractId,
+          reviewDate: item.reviewDate ? new Date(item.reviewDate) : null,
+          reviewedBy: item.reviewedBy,
+          performanceScore: item.performanceScore,
+          reviewResult: item.reviewResult,
+          reviewComment: item.reviewComment,
+          recommendation: item.recommendation,
+          proposedContractTypeId: item.proposedContractTypeId,
+          proposedStartDate: item.proposedStartDate ? new Date(item.proposedStartDate) : null,
+          proposedEndDate: item.proposedEndDate ? new Date(item.proposedEndDate) : null,
+          proposedBasicSalary: item.proposedBasicSalary,
+          note: item.note,
+        });
+        if (this.isEdit) {
+          this.validateForm.get('contractId')?.disable();
+        }
+        this.loading = false;
+      },
+      error: (err: any) => {
+        this.message.error(this.i18n.loadDetailFailed(err.error));
+        this.goBack();
+      },
+    });
   }
 
   goBack(): void {
@@ -193,9 +178,7 @@ export class AddOrUpdateReviewRenewalComponent implements OnInit {
       reviewComment: value.reviewComment || null,
       recommendation: value.recommendation || null,
       proposedContractTypeId: value.proposedContractTypeId || null,
-      proposedStartDate: value.proposedStartDate
-        ? toUtcDateIso(value.proposedStartDate)
-        : null,
+      proposedStartDate: value.proposedStartDate ? toUtcDateIso(value.proposedStartDate) : null,
       proposedEndDate: value.proposedEndDate ? toUtcDateIso(value.proposedEndDate) : null,
       clearProposedEndDate: !value.proposedEndDate,
       proposedBasicSalary: value.proposedBasicSalary,

@@ -3,6 +3,7 @@
     "entityName": "lịch làm việc",
     "title": "Quản lý lịch làm việc",
     "employee": "Nhân viên",
+    "employees": "Nhân viên",
     "employeeCode": "Mã NV",
     "shiftMaster": "Ca làm việc",
     "workDate": "Ngày làm việc",
@@ -20,6 +21,16 @@
     "backToList": "Danh sách lịch",
     "employeeRequired": "Vui lòng chọn nhân viên!",
     "shiftRequired": "Vui lòng chọn ca!",
-    "workDateRequired": "Vui lòng chọn ngày!"
+    "workDateRequired": "Vui lòng chọn ngày!",
+    "bulkCreate": "Xếp hàng loạt",
+    "bulkCreateTitle": "Xếp lịch hàng loạt",
+    "copyWeek": "Copy tuần",
+    "copyWeekTitle": "Sao chép lịch tuần",
+    "skipWeekends": "Bỏ qua cuối tuần",
+    "overwriteExisting": "Ghi đè lịch đã có",
+    "sourceWeekStart": "Ngày bắt đầu tuần nguồn",
+    "targetWeekStart": "Ngày bắt đầu tuần đích",
+    "validationDateRange": "Vui lòng chọn khoảng ngày",
+    "bulkResult": "Đã tạo {{created}}, cập nhật {{updated}}, bỏ qua {{skipped}}"
   }
 }

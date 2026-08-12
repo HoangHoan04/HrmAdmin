@@ -3,7 +3,11 @@
     <div class="detail-header">
       <div class="detail-header-main">
         @if (employee.avatarUrl) {
-          <img class="employee-avatar" [src]="employee.avatarUrl" [alt]="employee.fullName || employee.code" />
+          <img
+            class="employee-avatar"
+            [src]="employee.avatarUrl"
+            [alt]="employee.fullName || employee.code"
+          />
         }
         <div>
           <h2>{{ employee.fullName || employee.firstName + ' ' + employee.lastName }}</h2>

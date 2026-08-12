@@ -44,9 +44,13 @@ export class UploadService {
   }
 
   uploadSingleS3(file: File, isHd = false): Observable<UploadFileResult> {
-    return this.api.uploadFileWithFields<UploadFileResult>(this.api.UPLOAD_FILE.UPLOAD_SINGLE_S3, file, {
-      isHD: isHd ? 'true' : 'false',
-    });
+    return this.api.uploadFileWithFields<UploadFileResult>(
+      this.api.UPLOAD_FILE.UPLOAD_SINGLE_S3,
+      file,
+      {
+        isHD: isHd ? 'true' : 'false',
+      },
+    );
   }
 
   uploadMultiS3(files: File[]): Observable<UploadFileResult[]> {

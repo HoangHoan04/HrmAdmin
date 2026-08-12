@@ -362,9 +362,7 @@ export class PartMasterComponent implements OnInit {
       .subscribe({
         next: (success) => {
           if (success) {
-            this.message.success(
-              this.i18n.deactivateSuccess(this.ENTITY_KEY, partMaster.name),
-            );
+            this.message.success(this.i18n.deactivateSuccess(this.ENTITY_KEY, partMaster.name));
             this.loadData();
           } else {
             this.message.error(this.i18n.deactivateFailed(this.ENTITY_KEY));
@@ -437,7 +435,13 @@ export class PartMasterComponent implements OnInit {
         next: (result) => {
           this.excelLoading = false;
           if (result.errorCount > 0) {
-            this.message.warning(this.i18n.excelImportPartial(result.successCount, result.totalRows, result.errorCount));
+            this.message.warning(
+              this.i18n.excelImportPartial(
+                result.successCount,
+                result.totalRows,
+                result.errorCount,
+              ),
+            );
             if (result.errors?.length) {
               console.warn('PartMaster import errors:', result.errors);
             }

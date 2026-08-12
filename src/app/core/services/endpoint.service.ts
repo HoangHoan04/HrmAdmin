@@ -166,6 +166,15 @@ export class EndpointService {
     CREATE: `${this.baseUrl}/work-schedule/create`,
     UPDATE: `${this.baseUrl}/work-schedule/update`,
     DEACTIVATE: `${this.baseUrl}/work-schedule/deactivate`,
+    BULK_CREATE: `${this.baseUrl}/work-schedule/bulk-create`,
+    COPY_WEEK: `${this.baseUrl}/work-schedule/copy-week`,
+  };
+
+  EMPLOYEE_WORK_PATTERN = {
+    PAGINATION: `${this.baseUrl}/employee-work-pattern/pagination`,
+    UPSERT: `${this.baseUrl}/employee-work-pattern/upsert`,
+    BULK_UPSERT: `${this.baseUrl}/employee-work-pattern/bulk-upsert`,
+    DEACTIVATE: `${this.baseUrl}/employee-work-pattern/deactivate`,
   };
 
   TIMEKEEPING = {
@@ -174,6 +183,13 @@ export class EndpointService {
     ADJUST: `${this.baseUrl}/timekeeping/adjust`,
     SUMMARIZE: `${this.baseUrl}/timekeeping/summarize`,
     SUMMARY_PAGINATION: `${this.baseUrl}/timekeeping/summary/pagination`,
+  };
+
+  ATTENDANCE_COMPLAINT = {
+    PAGINATION: `${this.baseUrl}/attendance-complaint/pagination`,
+    DETAIL: `${this.baseUrl}/attendance-complaint/detail`,
+    APPROVE: `${this.baseUrl}/attendance-complaint/approve`,
+    REJECT: `${this.baseUrl}/attendance-complaint/reject`,
   };
 
   DAY_OFF_CONFIG = {
@@ -201,6 +217,13 @@ export class EndpointService {
     CREATE: `${this.baseUrl}/register-day-off/create`,
     APPROVE: `${this.baseUrl}/register-day-off/approve`,
     REJECT: `${this.baseUrl}/register-day-off/reject`,
+    CANCEL: `${this.baseUrl}/register-day-off/cancel`,
+    PREVIEW_DAYS: `${this.baseUrl}/register-day-off/preview-days`,
+  };
+
+  DAY_OFF_ALLOCATION = {
+    PAGINATION: `${this.baseUrl}/day-off-allocation/pagination`,
+    UPSERT: `${this.baseUrl}/day-off-allocation/upsert`,
   };
 
   CONTRACT_TYPE = {
@@ -246,6 +269,57 @@ export class EndpointService {
     CANCEL: `${this.baseUrl}/transfer-employee/cancel`,
     HISTORY: `${this.baseUrl}/transfer-employee/history`,
     EMPLOYEE_ORG_SNAPSHOT: `${this.baseUrl}/transfer-employee/employee-org-snapshot`,
+  };
+
+  SALARY = {
+    PAGINATION: `${this.baseUrl}/salary/pagination`,
+    DETAIL: `${this.baseUrl}/salary/detail`,
+    CREATE: `${this.baseUrl}/salary/create`,
+    UPDATE: `${this.baseUrl}/salary/update`,
+    APPROVE: `${this.baseUrl}/salary/approve`,
+    MARK_PAID: `${this.baseUrl}/salary/mark-paid`,
+    CANCEL: `${this.baseUrl}/salary/cancel`,
+  };
+
+  SALARY_CONFIG = {
+    PAGINATION: `${this.baseUrl}/salary-config/pagination`,
+    DETAIL: `${this.baseUrl}/salary-config/detail`,
+    CREATE: `${this.baseUrl}/salary-config/create`,
+    UPDATE: `${this.baseUrl}/salary-config/update`,
+    ACTIVATE: `${this.baseUrl}/salary-config/activate`,
+    DEACTIVATE: `${this.baseUrl}/salary-config/deactivate`,
+    SELECT_BOX: `${this.baseUrl}/salary-config/select-box`,
+  };
+
+  PERMISSION = {
+    TREE: `${this.baseUrl}/permission/tree`,
+    LIST: `${this.baseUrl}/permission/list`,
+  };
+
+  ROLE = {
+    PAGINATION: `${this.baseUrl}/role/pagination`,
+    SELECT_BOX: `${this.baseUrl}/role/select-box`,
+    DETAIL: `${this.baseUrl}/role/detail`,
+    CREATE: `${this.baseUrl}/role/create`,
+    UPDATE: `${this.baseUrl}/role/update`,
+    DELETE: `${this.baseUrl}/role/delete`,
+    SET_PERMISSIONS: `${this.baseUrl}/role/set-permissions`,
+  };
+
+  USER_ROLE = {
+    BY_USER: `${this.baseUrl}/user-role/by-user`,
+    BY_EMPLOYEE: `${this.baseUrl}/user-role/by-employee`,
+    SET: `${this.baseUrl}/user-role/set`,
+    SET_BY_EMPLOYEE: `${this.baseUrl}/user-role/set-by-employee`,
+  };
+
+  USER = {
+    PAGINATION: `${this.baseUrl}/user/pagination`,
+    DETAIL: `${this.baseUrl}/user/detail`,
+    CREATE: `${this.baseUrl}/user/create`,
+    UPDATE: `${this.baseUrl}/user/update`,
+    RESET_PASSWORD: `${this.baseUrl}/user/reset-password`,
+    DELETE: `${this.baseUrl}/user/delete`,
   };
 
   ACTION_LOG = {

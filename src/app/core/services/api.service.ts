@@ -48,8 +48,14 @@ export class ApiService {
   get WORK_SCHEDULE() {
     return this.endpoints.WORK_SCHEDULE;
   }
+  get EMPLOYEE_WORK_PATTERN() {
+    return this.endpoints.EMPLOYEE_WORK_PATTERN;
+  }
   get TIMEKEEPING() {
     return this.endpoints.TIMEKEEPING;
+  }
+  get ATTENDANCE_COMPLAINT() {
+    return this.endpoints.ATTENDANCE_COMPLAINT;
   }
   get DAY_OFF_CONFIG() {
     return this.endpoints.DAY_OFF_CONFIG;
@@ -59,6 +65,9 @@ export class ApiService {
   }
   get REGISTER_DAY_OFF() {
     return this.endpoints.REGISTER_DAY_OFF;
+  }
+  get DAY_OFF_ALLOCATION() {
+    return this.endpoints.DAY_OFF_ALLOCATION;
   }
   get CONTRACT_TYPE() {
     return this.endpoints.CONTRACT_TYPE;
@@ -71,6 +80,24 @@ export class ApiService {
   }
   get TRANSFER_EMPLOYEE() {
     return this.endpoints.TRANSFER_EMPLOYEE;
+  }
+  get SALARY() {
+    return this.endpoints.SALARY;
+  }
+  get SALARY_CONFIG() {
+    return this.endpoints.SALARY_CONFIG;
+  }
+  get PERMISSION() {
+    return this.endpoints.PERMISSION;
+  }
+  get ROLE() {
+    return this.endpoints.ROLE;
+  }
+  get USER_ROLE() {
+    return this.endpoints.USER_ROLE;
+  }
+  get USER() {
+    return this.endpoints.USER;
   }
   get ACTION_LOG() {
     return this.endpoints.ACTION_LOG;

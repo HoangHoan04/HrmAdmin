@@ -1,8 +1,11 @@
 <nz-tabs
-  [nzSelectedIndex]="activeTabKey === 'shift' ? 0 : 1"
+  [nzSelectedIndex]="selectedIndex"
   (nzSelectedIndexChange)="onTabChange($event)"
   nzType="card"
 >
+  <nz-tab [nzTitle]="'workPattern.tabTitle' | translate">
+    <app-work-pattern-manager></app-work-pattern-manager>
+  </nz-tab>
   <nz-tab [nzTitle]="'shift.tabShift' | translate">
     <app-shift-list></app-shift-list>
   </nz-tab>

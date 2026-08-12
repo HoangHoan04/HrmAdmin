@@ -10,6 +10,9 @@
     "resetPassword": "Đặt lại mật khẩu",
     "humanResource": "Nhân sự",
     "roleManager": "Phân quyền",
+    "accountManager": "Quản lý tài khoản",
+    "roleList": "Quản lý vai trò",
+    "accessControl": "Phân quyền",
     "settingSystem": "Cài đặt hệ thống",
     "organization": "Tổ chức",
     "companyList": "Danh sách công ty",
@@ -61,11 +64,17 @@
     "detailTransfer": "Chi tiết điều chuyển",
     "operate": "Vận hành",
     "timekeepingList": "Bảng chấm công",
+    "attendanceComplaint": "Khiếu nại chấm công",
     "shiftList": "Ca làm việc",
     "leaveRequestList": "Đơn nghỉ phép",
     "payroll": "Lương & phúc lợi",
     "payrollRunList": "Bảng lương",
     "payrollConfig": "Cấu hình lương",
+    "addSalary": "Thêm phiếu lương",
+    "editSalary": "Cập nhật phiếu lương",
+    "detailSalary": "Chi tiết phiếu lương",
+    "addSalaryConfig": "Thêm cấu hình lương",
+    "editSalaryConfig": "Cập nhật cấu hình lương",
     "recruitment": "Tuyển dụng",
     "recruitmentPipeline": "Quy trình tuyển dụng",
     "performance": "Hiệu suất",
@@ -92,6 +101,7 @@
     "editDayOffConfig": "Cập nhật loại nghỉ phép",
     "publicHoliday": "Ngày nghỉ lễ",
     "addPublicHoliday": "Thêm ngày nghỉ lễ",
-    "editPublicHoliday": "Cập nhật ngày nghỉ lễ"
+    "editPublicHoliday": "Cập nhật ngày nghỉ lễ",
+    "leaveAllocation": "Quỹ phép"
   }
 }

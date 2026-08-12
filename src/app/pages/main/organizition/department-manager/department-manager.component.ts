@@ -149,6 +149,12 @@ export class DepartmentManagerComponent implements OnInit {
       type: 'text',
       sortable: true,
     },
+    {
+      field: 'managerName',
+      header: 'organization.department.managerName',
+      type: 'text',
+      sortable: false,
+    },
     { field: 'status', header: 'organization.department.status', type: 'boolean', sortable: true },
     {
       field: 'createdAt',

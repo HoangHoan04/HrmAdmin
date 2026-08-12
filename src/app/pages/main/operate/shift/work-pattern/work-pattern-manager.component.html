@@ -1,0 +1,239 @@
+<app-filter-custom
+  [id]="'work-pattern-filter'"
+  [fields]="filterFields"
+  [filters]="filters"
+  [config]="filterConfig"
+  [filterActions]="filterActions"
+  [loading]="loading"
+  (filtersChange)="onFiltersChange($event)"
+></app-filter-custom>
+
+<app-table-custom
+  [id]="'work-pattern-table'"
+  [data]="data"
+  [columns]="columns"
+  [loading]="loading"
+  [showIndexList]="true"
+  [stripedRows]="true"
+  [rowActions]="rowActions"
+  [toolbarActions]="toolbarActions"
+  [pagination]="pagination"
+  (pageChange)="onPageChange($event)"
+  (sortChange)="onSortChange($event)"
+  (refresh)="loadData()"
+></app-table-custom>
+
+<nz-modal
+  [nzVisible]="upsertVisible"
+  [nzTitle]="(editingId ? 'workPattern.editTitle' : 'workPattern.createTitle') | translate"
+  [nzOkText]="'common.actions.save' | translate"
+  [nzCancelText]="'common.actions.cancel' | translate"
+  [nzOkLoading]="submitting"
+  [nzWidth]="720"
+  (nzOnCancel)="closeUpsert()"
+  (nzOnOk)="submitUpsert()"
+>
+  <ng-container *nzModalContent>
+    <form nz-form [formGroup]="upsertForm" nzLayout="vertical">
+      <div nz-row [nzGutter]="16">
+        <div nz-col nzSpan="12">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{ 'workPattern.employee' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-select
+                formControlName="employeeId"
+                nzShowSearch
+                [nzPlaceHolder]="'workPattern.filterEmployee' | translate"
+                [nzDisabled]="!!editingId"
+              >
+                @for (opt of employeeOptions; track opt.value) {
+                  <nz-option [nzValue]="opt.value" [nzLabel]="opt.label"></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="12">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{ 'workPattern.shift' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-select
+                formControlName="shiftMasterId"
+                nzShowSearch
+                [nzPlaceHolder]="'workPattern.filterShift' | translate"
+              >
+                @for (opt of shiftOptions; track opt.value) {
+                  <nz-option [nzValue]="opt.value" [nzLabel]="opt.label"></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+
+      <nz-form-item>
+        <nz-form-label nzRequired>{{ 'workPattern.workDays' | translate }}</nz-form-label>
+        <nz-form-control>
+          <div style="display: flex; flex-wrap: wrap; gap: 12px">
+            <label nz-checkbox formControlName="workOnMonday">{{
+              'workPattern.mon' | translate
+            }}</label>
+            <label nz-checkbox formControlName="workOnTuesday">{{
+              'workPattern.tue' | translate
+            }}</label>
+            <label nz-checkbox formControlName="workOnWednesday">{{
+              'workPattern.wed' | translate
+            }}</label>
+            <label nz-checkbox formControlName="workOnThursday">{{
+              'workPattern.thu' | translate
+            }}</label>
+            <label nz-checkbox formControlName="workOnFriday">{{
+              'workPattern.fri' | translate
+            }}</label>
+            <label nz-checkbox formControlName="workOnSaturday">{{
+              'workPattern.sat' | translate
+            }}</label>
+            <label nz-checkbox formControlName="workOnSunday">{{
+              'workPattern.sun' | translate
+            }}</label>
+          </div>
+        </nz-form-control>
+      </nz-form-item>
+
+      <div nz-row [nzGutter]="16">
+        <div nz-col nzSpan="12">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{ 'workPattern.effectiveFrom' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-date-picker formControlName="effectiveFrom" style="width: 100%"></nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="12">
+          <nz-form-item>
+            <nz-form-label>{{ 'workPattern.effectiveTo' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-date-picker
+                formControlName="effectiveTo"
+                style="width: 100%"
+                nzAllowClear
+              ></nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+
+      <nz-form-item>
+        <nz-form-label>{{ 'workPattern.note' | translate }}</nz-form-label>
+        <nz-form-control>
+          <textarea nz-input formControlName="note" rows="2"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label>{{ 'workPattern.isActive' | translate }}</nz-form-label>
+        <nz-form-control><nz-switch formControlName="isActive"></nz-switch></nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-container>
+</nz-modal>
+
+<nz-modal
+  [nzVisible]="bulkVisible"
+  [nzTitle]="'workPattern.bulkTitle' | translate"
+  [nzOkText]="'common.actions.save' | translate"
+  [nzCancelText]="'common.actions.cancel' | translate"
+  [nzOkLoading]="submitting"
+  [nzWidth]="720"
+  (nzOnCancel)="closeBulk()"
+  (nzOnOk)="submitBulk()"
+>
+  <ng-container *nzModalContent>
+    <form nz-form [formGroup]="bulkForm" nzLayout="vertical">
+      <nz-form-item>
+        <nz-form-label nzRequired>{{ 'workPattern.employees' | translate }}</nz-form-label>
+        <nz-form-control>
+          <nz-select
+            formControlName="employeeIds"
+            nzMode="multiple"
+            nzShowSearch
+            [nzPlaceHolder]="'workPattern.filterEmployee' | translate"
+          >
+            @for (opt of employeeOptions; track opt.value) {
+              <nz-option [nzValue]="opt.value" [nzLabel]="opt.label"></nz-option>
+            }
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired>{{ 'workPattern.shift' | translate }}</nz-form-label>
+        <nz-form-control>
+          <nz-select formControlName="shiftMasterId" nzShowSearch>
+            @for (opt of shiftOptions; track opt.value) {
+              <nz-option [nzValue]="opt.value" [nzLabel]="opt.label"></nz-option>
+            }
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired>{{ 'workPattern.workDays' | translate }}</nz-form-label>
+        <nz-form-control>
+          <div style="display: flex; flex-wrap: wrap; gap: 12px">
+            <label nz-checkbox formControlName="workOnMonday">{{
+              'workPattern.mon' | translate
+            }}</label>
+            <label nz-checkbox formControlName="workOnTuesday">{{
+              'workPattern.tue' | translate
+            }}</label>
+            <label nz-checkbox formControlName="workOnWednesday">{{
+              'workPattern.wed' | translate
+            }}</label>
+            <label nz-checkbox formControlName="workOnThursday">{{
+              'workPattern.thu' | translate
+            }}</label>
+            <label nz-checkbox formControlName="workOnFriday">{{
+              'workPattern.fri' | translate
+            }}</label>
+            <label nz-checkbox formControlName="workOnSaturday">{{
+              'workPattern.sat' | translate
+            }}</label>
+            <label nz-checkbox formControlName="workOnSunday">{{
+              'workPattern.sun' | translate
+            }}</label>
+          </div>
+        </nz-form-control>
+      </nz-form-item>
+
+      <div nz-row [nzGutter]="16">
+        <div nz-col nzSpan="12">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{ 'workPattern.effectiveFrom' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-date-picker formControlName="effectiveFrom" style="width: 100%"></nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="12">
+          <nz-form-item>
+            <nz-form-label>{{ 'workPattern.effectiveTo' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-date-picker
+                formControlName="effectiveTo"
+                style="width: 100%"
+                nzAllowClear
+              ></nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+
+      <nz-form-item>
+        <label nz-checkbox formControlName="closeOverlapping">
+          {{ 'workPattern.closeOverlapping' | translate }}
+        </label>
+      </nz-form-item>
+    </form>
+  </ng-container>
+</nz-modal>

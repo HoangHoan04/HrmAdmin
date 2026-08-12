@@ -7,11 +7,7 @@
           {{ 'organization.part.code' | translate }}: <strong>{{ part.code }}</strong>
         </p>
       </div>
-      <span
-        class="status-badge"
-        [class.active]="!part.isDeleted"
-        [class.inactive]="part.isDeleted"
-      >
+      <span class="status-badge" [class.active]="!part.isDeleted" [class.inactive]="part.isDeleted">
         {{
           part.isDeleted
             ? ('organization.part.statusInactive' | translate)

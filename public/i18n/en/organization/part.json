@@ -11,6 +11,8 @@
       "branchName": "Branch",
       "departmentName": "Department",
       "partMasterName": "Part Category",
+      "managerName": "Manager",
+      "filterManager": "Select manager...",
       "limit": "Staff Limit",
       "displayOrder": "Display Order",
       "isActive": "System Active",

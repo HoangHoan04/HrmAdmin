@@ -1,0 +1,15 @@
+<div class="access-control-page">
+  <nz-tabs
+    class="access-control-tabs"
+    [nzSelectedIndex]="selectedIndex"
+    (nzSelectedIndexChange)="onTabChange($event)"
+    nzType="card"
+  >
+    <nz-tab [nzTitle]="'role.tabByRole' | translate">
+      <app-role-access-panel [initialRoleId]="initialRoleId"></app-role-access-panel>
+    </nz-tab>
+    <nz-tab [nzTitle]="'role.tabByEmployee' | translate">
+      <app-user-access-panel></app-user-access-panel>
+    </nz-tab>
+  </nz-tabs>
+</div>

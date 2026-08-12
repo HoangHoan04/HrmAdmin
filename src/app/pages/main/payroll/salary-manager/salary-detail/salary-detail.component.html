@@ -1,0 +1,156 @@
+<nz-card [nzTitle]="titleTemplate" [nzExtra]="extraTemplate" [nzLoading]="loading">
+  @if (salary) {
+    <div style="margin-bottom: 16px; display: flex; gap: 8px; flex-wrap: wrap">
+      @if (canEdit) {
+        <button nz-button nzType="default" (click)="openEdit()">
+          <i nz-icon nzType="edit"></i>
+          {{ 'salary.edit' | translate }}
+        </button>
+      }
+      @if (canApprove) {
+        <button nz-button nzType="primary" [nzLoading]="actionSubmitting" (click)="approve()">
+          <i nz-icon nzType="check-circle"></i>
+          {{ 'salary.approve' | translate }}
+        </button>
+      }
+      @if (canMarkPaid) {
+        <button nz-button nzType="primary" [nzLoading]="actionSubmitting" (click)="markPaid()">
+          <i nz-icon nzType="dollar"></i>
+          {{ 'salary.markPaid' | translate }}
+        </button>
+      }
+      @if (canCancel) {
+        <button nz-button nzDanger [nzLoading]="actionSubmitting" (click)="cancel()">
+          <i nz-icon nzType="stop"></i>
+          {{ 'salary.cancel' | translate }}
+        </button>
+      }
+    </div>
+
+    <nz-descriptions nzBordered [nzColumn]="{ xxl: 3, xl: 3, lg: 2, md: 2, sm: 1, xs: 1 }">
+      <nz-descriptions-item [nzTitle]="'salary.employeeName' | translate">
+        {{ salary.employeeCode ? salary.employeeCode + ' - ' : '' }}{{ salary.employeeName }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'salary.period' | translate">
+        {{ salary.periodCode }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'salary.status' | translate">
+        {{ statusLabel(salary.status) }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'salary.salaryConfigName' | translate">
+        {{ salary.salaryConfigName || '-' }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'salary.payDate' | translate">
+        {{ salary.payDate ? (salary.payDate | date: 'dd/MM/yyyy') : '-' }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'salary.companyName' | translate">
+        {{ salary.companyName || '-' }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'salary.departmentName' | translate">
+        {{ salary.departmentName || '-' }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'salary.positionName' | translate">
+        {{ salary.positionName || '-' }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'salary.standardWorkingDays' | translate">
+        {{ salary.standardWorkingDays ?? '-' }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'salary.actualWorkingDays' | translate">
+        {{ salary.actualWorkingDays ?? '-' }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'salary.basicSalary' | translate">
+        {{ salary.basicSalary | number }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'salary.insuranceSalary' | translate">
+        {{ salary.insuranceSalary ?? '-' }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'salary.grossSalary' | translate">
+        {{ salary.grossSalary | number }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'salary.totalDeduction' | translate">
+        {{ salary.totalDeduction | number }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'salary.netSalary' | translate">
+        {{ salary.netSalary | number }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'salary.currency' | translate">
+        {{ salary.currency }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'salary.approvedBy' | translate">
+        {{ salary.approvedBy || '-' }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'salary.approvedDate' | translate">
+        {{ salary.approvedDate ? (salary.approvedDate | date: 'dd/MM/yyyy') : '-' }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'salary.paidDate' | translate">
+        {{ salary.paidDate ? (salary.paidDate | date: 'dd/MM/yyyy') : '-' }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'salary.note' | translate" [nzSpan]="3">
+        {{ salary.note || '-' }}
+      </nz-descriptions-item>
+    </nz-descriptions>
+
+    <nz-divider [nzText]="'salary.incomeItems' | translate"></nz-divider>
+    <nz-table
+      [nzData]="salary.incomeItems || []"
+      [nzShowPagination]="false"
+      nzSize="small"
+      nzBordered
+    >
+      <thead>
+        <tr>
+          <th>{{ 'salary.itemCode' | translate }}</th>
+          <th>{{ 'salary.itemName' | translate }}</th>
+          <th>{{ 'salary.amount' | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of salary.incomeItems || []; track item.id || item.itemCode) {
+          <tr>
+            <td>{{ item.itemCode }}</td>
+            <td>{{ item.itemName }}</td>
+            <td>{{ item.amount | number }}</td>
+          </tr>
+        }
+      </tbody>
+    </nz-table>
+
+    <nz-divider [nzText]="'salary.deductionItems' | translate"></nz-divider>
+    <nz-table
+      [nzData]="salary.deductionItems || []"
+      [nzShowPagination]="false"
+      nzSize="small"
+      nzBordered
+    >
+      <thead>
+        <tr>
+          <th>{{ 'salary.itemCode' | translate }}</th>
+          <th>{{ 'salary.itemName' | translate }}</th>
+          <th>{{ 'salary.amount' | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of salary.deductionItems || []; track item.id || item.itemCode) {
+          <tr>
+            <td>{{ item.itemCode }}</td>
+            <td>{{ item.itemName }}</td>
+            <td>{{ item.amount | number }}</td>
+          </tr>
+        }
+      </tbody>
+    </nz-table>
+  }
+</nz-card>
+
+<ng-template #titleTemplate>
+  <span style="font-size: 18px; font-weight: 600">
+    <i nz-icon nzType="account-book" style="margin-right: 8px"></i>
+    {{ 'salary.detailTitle' | translate }}
+  </span>
+</ng-template>
+
+<ng-template #extraTemplate>
+  <button nz-button nzType="default" (click)="goBack()">
+    {{ 'salary.backToList' | translate }}
+  </button>
+</ng-template>

@@ -142,9 +142,18 @@
             style="width: 200px"
           >
             <nz-option nzValue="light" [nzLabel]="'table.fontWeightLight' | translate"></nz-option>
-            <nz-option nzValue="normal" [nzLabel]="'table.fontWeightNormal' | translate"></nz-option>
-            <nz-option nzValue="medium" [nzLabel]="'table.fontWeightMedium' | translate"></nz-option>
-            <nz-option nzValue="semibold" [nzLabel]="'table.fontWeightSemibold' | translate"></nz-option>
+            <nz-option
+              nzValue="normal"
+              [nzLabel]="'table.fontWeightNormal' | translate"
+            ></nz-option>
+            <nz-option
+              nzValue="medium"
+              [nzLabel]="'table.fontWeightMedium' | translate"
+            ></nz-option>
+            <nz-option
+              nzValue="semibold"
+              [nzLabel]="'table.fontWeightSemibold' | translate"
+            ></nz-option>
           </nz-select>
         </div>
 
@@ -339,8 +348,14 @@
             (ngModelChange)="update({ sidebarPosition: $event })"
             style="width: 200px"
           >
-            <nz-option nzValue="left" [nzLabel]="'configSetting.positionLeft' | translate"></nz-option>
-            <nz-option nzValue="right" [nzLabel]="'configSetting.positionRight' | translate"></nz-option>
+            <nz-option
+              nzValue="left"
+              [nzLabel]="'configSetting.positionLeft' | translate"
+            ></nz-option>
+            <nz-option
+              nzValue="right"
+              [nzLabel]="'configSetting.positionRight' | translate"
+            ></nz-option>
           </nz-select>
         </div>
 

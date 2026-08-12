@@ -1,0 +1,31 @@
+{
+  "attendanceComplaint": {
+    "entityName": "attendance complaint",
+    "title": "Attendance complaint management",
+    "employee": "Employee",
+    "branch": "Branch",
+    "workDate": "Work date",
+    "complaintType": "Complaint type",
+    "requestedCheckIn": "Requested check-in",
+    "requestedCheckOut": "Requested check-out",
+    "currentCheckIn": "Current check-in",
+    "currentCheckOut": "Current check-out",
+    "reason": "Reason",
+    "attachmentUrl": "Attachment URL",
+    "status": "Status",
+    "approverName": "Approver",
+    "approverNote": "Approver note",
+    "reviewedAt": "Reviewed at",
+    "createdAt": "Created at",
+    "search": "Search",
+    "searchPlaceholder": "Search by reason...",
+    "filterStatus": "Select status...",
+    "filterDateRange": "Work date range",
+    "approve": "Approve",
+    "reject": "Reject",
+    "detailTitle": "Attendance complaint detail",
+    "approverNotePlaceholder": "Enter note (optional)...",
+    "rejectNotePlaceholder": "Enter rejection reason...",
+    "rejectNoteRequired": "Rejection reason is required"
+  }
+}

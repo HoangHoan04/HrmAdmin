@@ -10,22 +10,22 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
         <p class="cs-desc">{{ 'comingSoon.desc' | translate }}</p>
         <div class="cs-countdown">
           <div class="cs-unit">
-            <span class="cs-value">{{ days | number:'2.0' }}</span>
+            <span class="cs-value">{{ days | number: '2.0' }}</span>
             <span class="cs-label">{{ 'comingSoon.days' | translate }}</span>
           </div>
           <span class="cs-sep">:</span>
           <div class="cs-unit">
-            <span class="cs-value">{{ hours | number:'2.0' }}</span>
+            <span class="cs-value">{{ hours | number: '2.0' }}</span>
             <span class="cs-label">{{ 'comingSoon.hours' | translate }}</span>
           </div>
           <span class="cs-sep">:</span>
           <div class="cs-unit">
-            <span class="cs-value">{{ minutes | number:'2.0' }}</span>
+            <span class="cs-value">{{ minutes | number: '2.0' }}</span>
             <span class="cs-label">{{ 'comingSoon.minutes' | translate }}</span>
           </div>
           <span class="cs-sep">:</span>
           <div class="cs-unit">
-            <span class="cs-value">{{ seconds | number:'2.0' }}</span>
+            <span class="cs-value">{{ seconds | number: '2.0' }}</span>
             <span class="cs-label">{{ 'comingSoon.seconds' | translate }}</span>
           </div>
         </div>
@@ -33,26 +33,62 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
       </div>
     </div>
   `,
-  styles: [`
-    .cs-container {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-      padding: 24px;
-      text-align: center;
-      color: #fff;
-    }
-    .cs-content { max-width: 500px; }
-    .cs-title { font-size: 48px; font-weight: 800; margin: 0 0 16px; }
-    .cs-desc { font-size: 16px; opacity: 0.7; margin-bottom: 40px; }
-    .cs-countdown { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 40px; }
-    .cs-unit { display: flex; flex-direction: column; align-items: center; }
-    .cs-value { font-size: 42px; font-weight: 800; font-variant-numeric: tabular-nums; }
-    .cs-label { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; opacity: 0.6; }
-    .cs-sep { font-size: 32px; font-weight: 700; opacity: 0.3; margin-bottom: 20px; }
-  `],
+  styles: [
+    `
+      .cs-container {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        padding: 24px;
+        text-align: center;
+        color: #fff;
+      }
+      .cs-content {
+        max-width: 500px;
+      }
+      .cs-title {
+        font-size: 48px;
+        font-weight: 800;
+        margin: 0 0 16px;
+      }
+      .cs-desc {
+        font-size: 16px;
+        opacity: 0.7;
+        margin-bottom: 40px;
+      }
+      .cs-countdown {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        margin-bottom: 40px;
+      }
+      .cs-unit {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .cs-value {
+        font-size: 42px;
+        font-weight: 800;
+        font-variant-numeric: tabular-nums;
+      }
+      .cs-label {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        opacity: 0.6;
+      }
+      .cs-sep {
+        font-size: 32px;
+        font-weight: 700;
+        opacity: 0.3;
+        margin-bottom: 20px;
+      }
+    `,
+  ],
 })
 export class ComingSoonComponent implements OnInit, OnDestroy {
   targetDate = new Date('2026-12-31T00:00:00');

@@ -1,3 +1,5 @@
+import { PERMISSION_CODES } from './permission-codes';
+
 export interface RouteConfig {
   key: string;
   label: string;
@@ -5,6 +7,7 @@ export interface RouteConfig {
   path: string;
   icon?: string;
   isShow?: boolean;
+  permission?: string;
   children?: Record<string, RouteConfig>;
 }
 
@@ -15,6 +18,7 @@ export interface SidebarMenuItem {
   path: string;
   icon?: string;
   isShow?: boolean;
+  permission?: string;
   children?: SidebarMenuItem[];
 }
 
@@ -25,6 +29,7 @@ export const ROUTES_CONFIG = {
     translationKey: 'routes.home',
     path: '/',
     icon: 'home',
+    permission: PERMISSION_CODES.HOME_VIEW,
   },
 
   ORGANIZATION: {
@@ -40,6 +45,7 @@ export const ROUTES_CONFIG = {
         translationKey: 'routes.companyList',
         icon: 'bank',
         path: '/organization/company',
+        permission: PERMISSION_CODES.ORG_COMPANY_VIEW,
         children: {
           ADD_COMPANY: {
             key: 'ADD_COMPANY',
@@ -48,6 +54,7 @@ export const ROUTES_CONFIG = {
             icon: 'plus-circle',
             path: '/organization/company/add',
             isShow: false,
+            permission: PERMISSION_CODES.ORG_COMPANY_CREATE,
           },
           EDIT_COMPANY: {
             key: 'EDIT_COMPANY',
@@ -56,6 +63,7 @@ export const ROUTES_CONFIG = {
             icon: 'plus',
             path: '/organization/company/edit',
             isShow: false,
+            permission: PERMISSION_CODES.ORG_COMPANY_UPDATE,
           },
           DETAIL_COMPANY: {
             key: 'DETAIL_COMPANY',
@@ -73,6 +81,7 @@ export const ROUTES_CONFIG = {
         translationKey: 'routes.branchList',
         icon: 'apartment',
         path: '/organization/branch',
+        permission: PERMISSION_CODES.ORG_BRANCH_VIEW,
         children: {
           ADD_BRANCH: {
             key: 'ADD_BRANCH',
@@ -81,6 +90,7 @@ export const ROUTES_CONFIG = {
             icon: 'plus-circle',
             path: '/organization/branch/add',
             isShow: false,
+            permission: PERMISSION_CODES.ORG_BRANCH_CREATE,
           },
           EDIT_BRANCH: {
             key: 'EDIT_BRANCH',
@@ -89,6 +99,7 @@ export const ROUTES_CONFIG = {
             icon: 'edit',
             path: '/organization/branch/edit',
             isShow: false,
+            permission: PERMISSION_CODES.ORG_BRANCH_UPDATE,
           },
           DETAIL_BRANCH: {
             key: 'DETAIL_BRANCH',
@@ -106,6 +117,7 @@ export const ROUTES_CONFIG = {
         translationKey: 'routes.departmentList',
         icon: 'cluster',
         path: '/organization/department',
+        permission: PERMISSION_CODES.ORG_DEPARTMENT_VIEW,
         children: {
           ADD_DEPARTMENT: {
             key: 'ADD_DEPARTMENT',
@@ -114,6 +126,7 @@ export const ROUTES_CONFIG = {
             icon: 'plus-circle',
             path: '/organization/department/add',
             isShow: false,
+            permission: PERMISSION_CODES.ORG_DEPARTMENT_CREATE,
           },
           EDIT_DEPARTMENT: {
             key: 'EDIT_DEPARTMENT',
@@ -122,6 +135,7 @@ export const ROUTES_CONFIG = {
             icon: 'edit',
             path: '/organization/department/edit',
             isShow: false,
+            permission: PERMISSION_CODES.ORG_DEPARTMENT_UPDATE,
           },
           DETAIL_DEPARTMENT: {
             key: 'DETAIL_DEPARTMENT',
@@ -139,6 +153,7 @@ export const ROUTES_CONFIG = {
         translationKey: 'routes.partList',
         icon: 'database',
         path: '/organization/part',
+        permission: PERMISSION_CODES.ORG_PART_VIEW,
         children: {
           ADD_PART: {
             key: 'ADD_PART',
@@ -147,6 +162,7 @@ export const ROUTES_CONFIG = {
             icon: 'plus-circle',
             path: '/organization/part/add',
             isShow: false,
+            permission: PERMISSION_CODES.ORG_PART_CREATE,
           },
           EDIT_PART: {
             key: 'EDIT_PART',
@@ -155,6 +171,7 @@ export const ROUTES_CONFIG = {
             icon: 'edit',
             path: '/organization/part/edit',
             isShow: false,
+            permission: PERMISSION_CODES.ORG_PART_UPDATE,
           },
           DETAIL_PART: {
             key: 'DETAIL_PART',
@@ -171,6 +188,7 @@ export const ROUTES_CONFIG = {
             icon: 'plus-circle',
             path: '/organization/part-master/add',
             isShow: false,
+            permission: PERMISSION_CODES.ORG_PART_MASTER_CREATE,
           },
           EDIT_PART_MASTER: {
             key: 'EDIT_PART_MASTER',
@@ -179,6 +197,7 @@ export const ROUTES_CONFIG = {
             icon: 'edit',
             path: '/organization/part-master/edit',
             isShow: false,
+            permission: PERMISSION_CODES.ORG_PART_MASTER_UPDATE,
           },
           DETAIL_PART_MASTER: {
             key: 'DETAIL_PART_MASTER',
@@ -196,6 +215,7 @@ export const ROUTES_CONFIG = {
         translationKey: 'routes.positionList',
         icon: 'team',
         path: '/organization/position',
+        permission: PERMISSION_CODES.ORG_POSITION_VIEW,
         children: {
           ADD_POSITION: {
             key: 'ADD_POSITION',
@@ -204,6 +224,7 @@ export const ROUTES_CONFIG = {
             icon: 'plus-circle',
             path: '/organization/position/add',
             isShow: false,
+            permission: PERMISSION_CODES.ORG_POSITION_CREATE,
           },
           EDIT_POSITION: {
             key: 'EDIT_POSITION',
@@ -212,6 +233,7 @@ export const ROUTES_CONFIG = {
             icon: 'edit',
             path: '/organization/position/edit',
             isShow: false,
+            permission: PERMISSION_CODES.ORG_POSITION_UPDATE,
           },
           DETAIL_POSITION: {
             key: 'DETAIL_POSITION',
@@ -228,6 +250,7 @@ export const ROUTES_CONFIG = {
             icon: 'plus-circle',
             path: '/organization/position-master/add',
             isShow: false,
+            permission: PERMISSION_CODES.ORG_POSITION_MASTER_CREATE,
           },
           EDIT_POSITION_MASTER: {
             key: 'EDIT_POSITION_MASTER',
@@ -236,6 +259,7 @@ export const ROUTES_CONFIG = {
             icon: 'edit',
             path: '/organization/position-master/edit',
             isShow: false,
+            permission: PERMISSION_CODES.ORG_POSITION_MASTER_UPDATE,
           },
           DETAIL_POSITION_MASTER: {
             key: 'DETAIL_POSITION_MASTER',
@@ -263,6 +287,7 @@ export const ROUTES_CONFIG = {
         translationKey: 'routes.employeeList',
         icon: 'user',
         path: '/human-resource/employee',
+        permission: PERMISSION_CODES.HR_EMPLOYEE_VIEW,
         children: {
           ADD_EMPLOYEE: {
             key: 'ADD_EMPLOYEE',
@@ -271,6 +296,7 @@ export const ROUTES_CONFIG = {
             icon: 'plus-circle',
             path: '/human-resource/employee/add',
             isShow: false,
+            permission: PERMISSION_CODES.HR_EMPLOYEE_CREATE,
           },
           EDIT_EMPLOYEE: {
             key: 'EDIT_EMPLOYEE',
@@ -279,6 +305,7 @@ export const ROUTES_CONFIG = {
             icon: 'edit',
             path: '/human-resource/employee/edit',
             isShow: false,
+            permission: PERMISSION_CODES.HR_EMPLOYEE_UPDATE,
           },
           DETAIL_EMPLOYEE: {
             key: 'DETAIL_EMPLOYEE',
@@ -303,6 +330,7 @@ export const ROUTES_CONFIG = {
             translationKey: 'routes.contractType',
             icon: 'tags',
             path: '/human-resource/contract/contract-type',
+            permission: PERMISSION_CODES.HR_CONTRACT_TYPE_VIEW,
             children: {
               ADD_CONTRACT_TYPE: {
                 key: 'ADD_CONTRACT_TYPE',
@@ -311,6 +339,7 @@ export const ROUTES_CONFIG = {
                 icon: 'plus-circle',
                 path: '/human-resource/contract/contract-type/add',
                 isShow: false,
+                permission: PERMISSION_CODES.HR_CONTRACT_TYPE_CREATE,
               },
               EDIT_CONTRACT_TYPE: {
                 key: 'EDIT_CONTRACT_TYPE',
@@ -319,6 +348,7 @@ export const ROUTES_CONFIG = {
                 icon: 'edit',
                 path: '/human-resource/contract/contract-type/edit',
                 isShow: false,
+                permission: PERMISSION_CODES.HR_CONTRACT_TYPE_UPDATE,
               },
             },
           },
@@ -328,6 +358,7 @@ export const ROUTES_CONFIG = {
             translationKey: 'routes.contractList',
             icon: 'file-text',
             path: '/human-resource/contract/list',
+            permission: PERMISSION_CODES.HR_CONTRACT_VIEW,
             children: {
               ADD_CONTRACT: {
                 key: 'ADD_CONTRACT',
@@ -336,6 +367,7 @@ export const ROUTES_CONFIG = {
                 icon: 'plus-circle',
                 path: '/human-resource/contract/list/add',
                 isShow: false,
+                permission: PERMISSION_CODES.HR_CONTRACT_CREATE,
               },
               EDIT_CONTRACT: {
                 key: 'EDIT_CONTRACT',
@@ -344,6 +376,7 @@ export const ROUTES_CONFIG = {
                 icon: 'edit',
                 path: '/human-resource/contract/list/edit',
                 isShow: false,
+                permission: PERMISSION_CODES.HR_CONTRACT_UPDATE,
               },
               DETAIL_CONTRACT: {
                 key: 'DETAIL_CONTRACT',
@@ -361,6 +394,7 @@ export const ROUTES_CONFIG = {
             translationKey: 'routes.reviewRenewal',
             icon: 'audit',
             path: '/human-resource/contract/review-renewal',
+            permission: PERMISSION_CODES.HR_REVIEW_RENEWAL_VIEW,
             children: {
               ADD_REVIEW_RENEWAL: {
                 key: 'ADD_REVIEW_RENEWAL',
@@ -369,6 +403,7 @@ export const ROUTES_CONFIG = {
                 icon: 'plus-circle',
                 path: '/human-resource/contract/review-renewal/add',
                 isShow: false,
+                permission: PERMISSION_CODES.HR_REVIEW_RENEWAL_CREATE,
               },
               EDIT_REVIEW_RENEWAL: {
                 key: 'EDIT_REVIEW_RENEWAL',
@@ -377,6 +412,7 @@ export const ROUTES_CONFIG = {
                 icon: 'edit',
                 path: '/human-resource/contract/review-renewal/edit',
                 isShow: false,
+                permission: PERMISSION_CODES.HR_REVIEW_RENEWAL_UPDATE,
               },
             },
           },
@@ -388,6 +424,7 @@ export const ROUTES_CONFIG = {
         translationKey: 'routes.transferList',
         icon: 'swap',
         path: '/human-resource/transfer',
+        permission: PERMISSION_CODES.HR_TRANSFER_VIEW,
         children: {
           ADD_TRANSFER: {
             key: 'ADD_TRANSFER',
@@ -396,6 +433,7 @@ export const ROUTES_CONFIG = {
             icon: 'plus-circle',
             path: '/human-resource/transfer/add',
             isShow: false,
+            permission: PERMISSION_CODES.HR_TRANSFER_CREATE,
           },
           EDIT_TRANSFER: {
             key: 'EDIT_TRANSFER',
@@ -404,6 +442,7 @@ export const ROUTES_CONFIG = {
             icon: 'edit',
             path: '/human-resource/transfer/edit',
             isShow: false,
+            permission: PERMISSION_CODES.HR_TRANSFER_UPDATE,
           },
           DETAIL_TRANSFER: {
             key: 'DETAIL_TRANSFER',
@@ -437,6 +476,7 @@ export const ROUTES_CONFIG = {
             label: 'routes.timekeepingStandard',
             translationKey: 'routes.timekeepingStandard',
             path: '/operate-manager/time-attendance/timekeeping-standard',
+            permission: PERMISSION_CODES.OPERATE_TIMEKEEPING_STANDARD_VIEW,
             children: {
               ADD_TIMEKEEPING_STANDARD: {
                 key: 'ADD_TIMEKEEPING_STANDARD',
@@ -469,6 +509,7 @@ export const ROUTES_CONFIG = {
             label: 'routes.timekeepingList',
             translationKey: 'routes.timekeepingList',
             path: '/operate-manager/time-attendance/timekeeping',
+            permission: PERMISSION_CODES.OPERATE_TIMEKEEPING_VIEW,
             children: {
               DETAIL_TIMEKEEPING: {
                 key: 'DETAIL_TIMEKEEPING',
@@ -479,6 +520,13 @@ export const ROUTES_CONFIG = {
                 isShow: false,
               },
             },
+          },
+          ATTENDANCE_COMPLAINT: {
+            key: 'ATTENDANCE_COMPLAINT',
+            label: 'routes.attendanceComplaint',
+            translationKey: 'routes.attendanceComplaint',
+            path: '/operate-manager/time-attendance/attendance-complaint',
+            permission: PERMISSION_CODES.OPERATE_ATTENDANCE_COMPLAINT_VIEW,
           },
         },
       },
@@ -495,6 +543,7 @@ export const ROUTES_CONFIG = {
             label: 'routes.dayOffConfig',
             translationKey: 'routes.dayOffConfig',
             path: '/operate-manager/time-attendance/day-off-config',
+            permission: PERMISSION_CODES.OPERATE_DAY_OFF_CONFIG_VIEW,
             children: {
               ADD_DAY_OFF_CONFIG: {
                 key: 'ADD_DAY_OFF_CONFIG',
@@ -527,6 +576,7 @@ export const ROUTES_CONFIG = {
             label: 'routes.publicHoliday',
             translationKey: 'routes.publicHoliday',
             path: '/operate-manager/time-attendance/public-holiday',
+            permission: PERMISSION_CODES.OPERATE_PUBLIC_HOLIDAY_VIEW,
             children: {
               ADD_PUBLIC_HOLIDAY: {
                 key: 'ADD_PUBLIC_HOLIDAY',
@@ -559,6 +609,7 @@ export const ROUTES_CONFIG = {
             label: 'routes.leaveRequestList',
             translationKey: 'routes.leaveRequestList',
             path: '/operate-manager/time-attendance/leave',
+            permission: PERMISSION_CODES.OPERATE_LEAVE_VIEW,
             children: {
               DETAIL_LEAVE: {
                 key: 'DETAIL_LEAVE',
@@ -570,6 +621,13 @@ export const ROUTES_CONFIG = {
               },
             },
           },
+          LEAVE_ALLOCATION: {
+            key: 'LEAVE_ALLOCATION',
+            label: 'routes.leaveAllocation',
+            translationKey: 'routes.leaveAllocation',
+            path: '/operate-manager/time-attendance/leave-allocation',
+            permission: PERMISSION_CODES.OPERATE_LEAVE_ALLOCATION_VIEW,
+          },
         },
       },
 
@@ -579,6 +637,7 @@ export const ROUTES_CONFIG = {
         translationKey: 'routes.shiftList',
         icon: 'schedule',
         path: '/operate-manager/time-attendance/shift',
+        permission: PERMISSION_CODES.OPERATE_SHIFT_VIEW,
         children: {
           ADD_SHIFT: {
             key: 'ADD_SHIFT',
@@ -680,6 +739,33 @@ export const ROUTES_CONFIG = {
         translationKey: 'routes.payrollRunList',
         icon: 'account-book',
         path: '/payroll/run',
+        permission: PERMISSION_CODES.PAYROLL_SALARY_VIEW,
+        children: {
+          ADD_SALARY: {
+            key: 'ADD_SALARY',
+            label: 'routes.addSalary',
+            translationKey: 'routes.addSalary',
+            icon: 'plus',
+            path: '/payroll/run/add',
+            isShow: false,
+          },
+          EDIT_SALARY: {
+            key: 'EDIT_SALARY',
+            label: 'routes.editSalary',
+            translationKey: 'routes.editSalary',
+            icon: 'edit',
+            path: '/payroll/run/edit',
+            isShow: false,
+          },
+          DETAIL_SALARY: {
+            key: 'DETAIL_SALARY',
+            label: 'routes.detailSalary',
+            translationKey: 'routes.detailSalary',
+            icon: 'eye',
+            path: '/payroll/run/detail',
+            isShow: false,
+          },
+        },
       },
       PAYROLL_CONFIG: {
         key: 'PAYROLL_CONFIG',
@@ -687,6 +773,25 @@ export const ROUTES_CONFIG = {
         translationKey: 'routes.payrollConfig',
         icon: 'setting',
         path: '/payroll/config',
+        permission: PERMISSION_CODES.PAYROLL_CONFIG_VIEW,
+        children: {
+          ADD_SALARY_CONFIG: {
+            key: 'ADD_SALARY_CONFIG',
+            label: 'routes.addSalaryConfig',
+            translationKey: 'routes.addSalaryConfig',
+            icon: 'plus',
+            path: '/payroll/config/add',
+            isShow: false,
+          },
+          EDIT_SALARY_CONFIG: {
+            key: 'EDIT_SALARY_CONFIG',
+            label: 'routes.editSalaryConfig',
+            translationKey: 'routes.editSalaryConfig',
+            icon: 'edit',
+            path: '/payroll/config/edit',
+            isShow: false,
+          },
+        },
       },
     },
   },
@@ -774,19 +879,29 @@ export const ROUTES_CONFIG = {
     icon: 'safety',
     path: '/role-manager',
     children: {
-      USER_MANAGER: {
-        key: 'USER_MANAGER',
-        label: 'routes.userList',
-        translationKey: 'routes.userList',
+      ACCOUNT_MANAGER: {
+        key: 'ACCOUNT_MANAGER',
+        label: 'routes.accountManager',
+        translationKey: 'routes.accountManager',
         icon: 'user',
-        path: '/role-manager/user',
+        path: '/role-manager/accounts',
+        permission: PERMISSION_CODES.USER_VIEW,
       },
       ROLE_LIST: {
         key: 'ROLE_LIST',
         label: 'routes.roleList',
         translationKey: 'routes.roleList',
-        icon: 'safety-certificate',
-        path: '/role-manager/role',
+        icon: 'team',
+        path: '/role-manager/roles',
+        permission: PERMISSION_CODES.ROLE_VIEW,
+      },
+      ACCESS_CONTROL: {
+        key: 'ACCESS_CONTROL',
+        label: 'routes.accessControl',
+        translationKey: 'routes.accessControl',
+        icon: 'key',
+        path: '/role-manager/access',
+        permission: PERMISSION_CODES.ROLE_MANAGE,
       },
     },
   },
@@ -804,6 +919,7 @@ export const ROUTES_CONFIG = {
         translationKey: 'routes.actionLog',
         icon: 'history',
         path: '/system-settings/action-log',
+        permission: PERMISSION_CODES.ACTION_LOG_VIEW,
       },
     },
   },
@@ -868,6 +984,7 @@ export function convertRoutesToMenuItems(routes: Record<string, RouteConfig>): S
       path: route.path,
       icon: route.icon,
       isShow: route.isShow,
+      permission: route.permission,
     };
 
     if (route.children && depth < 3) {
@@ -892,6 +1009,7 @@ export function convertRoutesToMenuItems(routes: Record<string, RouteConfig>): S
       path: home.path,
       icon: home.icon,
       isShow: home.isShow,
+      permission: home.permission,
     });
   }
 
@@ -901,4 +1019,31 @@ export function convertRoutesToMenuItems(routes: Record<string, RouteConfig>): S
     if (item) items.push(item);
   }
   return items;
+}
+
+export function filterMenuByPermission(
+  items: SidebarMenuItem[],
+  canAccess: (permission?: string) => boolean,
+): SidebarMenuItem[] {
+  const filterItem = (item: SidebarMenuItem): SidebarMenuItem | null => {
+    if (item.permission && !canAccess(item.permission)) {
+      return null;
+    }
+
+    if (item.children?.length) {
+      const children = item.children
+        .map((child) => filterItem(child))
+        .filter((child): child is SidebarMenuItem => child !== null);
+      if (children.length === 0) {
+        return null;
+      }
+      return { ...item, children };
+    }
+
+    return item;
+  };
+
+  return items
+    .map((item) => filterItem(item))
+    .filter((item): item is SidebarMenuItem => item !== null);
 }

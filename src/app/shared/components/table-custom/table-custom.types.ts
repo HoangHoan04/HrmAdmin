@@ -17,7 +17,8 @@ export interface TableColumn<T = any> {
   align?: 'left' | 'center' | 'right';
   hidden?: boolean;
   resizable?: boolean;
-  type?: 'text' | 'number' | 'currency' | 'date' | 'datetime' | 'boolean' | 'badge' | 'tag' | 'image';
+  type?:
+    'text' | 'number' | 'currency' | 'date' | 'datetime' | 'boolean' | 'badge' | 'tag' | 'image';
   dateFormat?: string;
   currencySymbol?: string;
   numberFormat?: string;
@@ -67,7 +68,7 @@ export interface TableAction {
   onClick?: () => void;
   loading?: boolean;
   disabled?: boolean;
-  visible?: boolean;
+  visible?: boolean | (() => boolean);
   subActions?: TableAction[];
   acceptFiles?: string;
   onFileSelect?: (file: File) => void;

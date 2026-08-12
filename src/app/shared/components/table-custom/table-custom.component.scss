@@ -353,7 +353,6 @@
   text-align: left;
 
   &.gridlines {
-
     th,
     td {
       border-right: 1px solid var(--border);
@@ -384,8 +383,7 @@ th.sticky-col.header-cell {
 
   &.sortable-header:hover {
     background:
-      linear-gradient(var(--border), var(--border)),
-      var(--background-card, #ffffff) !important;
+      linear-gradient(var(--border), var(--border)), var(--background-card, #ffffff) !important;
   }
 }
 
@@ -414,9 +412,7 @@ th.sticky-col.header-cell {
     cursor: pointer;
 
     &:hover {
-      background:
-        linear-gradient(var(--border), var(--border)),
-        var(--background-card, #ffffff);
+      background: linear-gradient(var(--border), var(--border)), var(--background-card, #ffffff);
     }
   }
 }

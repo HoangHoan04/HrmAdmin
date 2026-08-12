@@ -75,6 +75,35 @@
       </div>
 
       <div nz-row [nzGutter]="24">
+        <div nz-col nzXs="24" nzMd="12">
+          <nz-form-item>
+            <nz-form-label>{{ 'shift.breakStartTime' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-time-picker
+                formControlName="breakStartTime"
+                nzFormat="HH:mm"
+                nzAllowEmpty
+                style="width: 100%"
+              ></nz-time-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="12">
+          <nz-form-item>
+            <nz-form-label>{{ 'shift.breakEndTime' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-time-picker
+                formControlName="breakEndTime"
+                nzFormat="HH:mm"
+                nzAllowEmpty
+                style="width: 100%"
+              ></nz-time-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+
+      <div nz-row [nzGutter]="24">
         <div nz-col nzXs="24" nzMd="8">
           <nz-form-item>
             <nz-form-label>{{ 'shift.breakMinutes' | translate }}</nz-form-label>

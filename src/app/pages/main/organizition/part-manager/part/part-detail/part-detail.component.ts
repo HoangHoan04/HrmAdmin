@@ -32,6 +32,7 @@ export class PartDetailComponent implements OnInit {
     { key: 'companyName', label: 'organization.part.companyName' },
     { key: 'branchName', label: 'organization.part.branchName' },
     { key: 'departmentName', label: 'organization.part.departmentName' },
+    { key: 'managerName', label: 'organization.part.managerName' },
     { key: 'limit', label: 'organization.part.limit' },
     { key: 'displayOrder', label: 'organization.part.displayOrder' },
     { key: 'isActive', label: 'organization.part.isActive', type: 'boolean' },

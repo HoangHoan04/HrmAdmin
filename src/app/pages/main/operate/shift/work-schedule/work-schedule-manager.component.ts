@@ -25,8 +25,15 @@ import {
 } from '@/app/shared/components/table-custom/table-custom.types';
 import { ActionConfirmService } from '@/app/shared/services/action-confirm.service';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
+
+interface BulkWorkScheduleResult {
+  created: number;
+  updated: number;
+  skipped: number;
+}
 
 @Component({
   standalone: false,
@@ -39,6 +46,16 @@ export class WorkScheduleManagerComponent implements OnInit {
 
   data: WorkSchedule[] = [];
   loading = false;
+  bulkSubmitting = false;
+  copySubmitting = false;
+
+  bulkVisible = false;
+  copyVisible = false;
+  bulkForm: FormGroup;
+  copyForm: FormGroup;
+
+  employeeOptions: { label: string; value: string }[] = [];
+  shiftOptions: { label: string; value: string }[] = [];
 
   pagination: PaginationConfig = {
     current: enumData.PAGE.PAGE_INDEX,
@@ -50,7 +67,23 @@ export class WorkScheduleManagerComponent implements OnInit {
   sortField = 'workDate';
   sortOrder = 'desc';
   toolbar: ToolbarConfig = { show: true };
-  toolbarActions: TableAction[] = [CommonActions.create(() => this.openCreate())];
+  toolbarActions: TableAction[] = [
+    CommonActions.create(() => this.openCreate()),
+    {
+      key: 'bulk-create',
+      label: 'workSchedule.bulkCreate',
+      icon: 'calendar',
+      severity: 'primary',
+      onClick: () => this.openBulk(),
+    },
+    {
+      key: 'copy-week',
+      label: 'workSchedule.copyWeek',
+      icon: 'copy',
+      severity: 'info',
+      onClick: () => this.openCopyWeek(),
+    },
+  ];
 
   filters: Record<string, any> = {
     employeeId: null,
@@ -147,7 +180,23 @@ export class WorkScheduleManagerComponent implements OnInit {
     private readonly apiService: ApiService,
     private readonly cdr: ChangeDetectorRef,
     private readonly actionConfirm: ActionConfirmService,
-  ) {}
+    private readonly fb: FormBuilder,
+  ) {
+    this.bulkForm = this.fb.group({
+      employeeIds: [[], Validators.required],
+      dateRange: [null, Validators.required],
+      shiftMasterId: [null, Validators.required],
+      skipWeekends: [true],
+      overwriteExisting: [false],
+      note: [null],
+    });
+    this.copyForm = this.fb.group({
+      employeeIds: [[], Validators.required],
+      sourceWeekStart: [null, Validators.required],
+      targetWeekStart: [null, Validators.required],
+      overwriteExisting: [false],
+    });
+  }
 
   ngOnInit(): void {
     this.loadSelectBoxes();
@@ -159,13 +208,12 @@ export class WorkScheduleManagerComponent implements OnInit {
       .post<EmployeeSelectBoxDto[]>(this.apiService.EMPLOYEE.SELECT_BOX, {})
       .subscribe({
         next: (items) => {
+          this.employeeOptions = items.map((item) => ({
+            label: item.code ? `${item.code} - ${item.name}` : item.name,
+            value: item.id,
+          }));
           const field = this.filterFields.find((f) => f.key === 'employeeId');
-          if (field) {
-            field.options = items.map((item) => ({
-              label: item.code ? `${item.code} - ${item.name}` : item.name,
-              value: item.id,
-            }));
-          }
+          if (field) field.options = this.employeeOptions;
           this.cdr.markForCheck();
         },
       });
@@ -174,13 +222,12 @@ export class WorkScheduleManagerComponent implements OnInit {
       .post<ShiftMasterSelectBoxDto[]>(this.apiService.SHIFT_MASTER.SELECT_BOX, {})
       .subscribe({
         next: (items) => {
+          this.shiftOptions = items.map((item) => ({
+            label: item.code ? `${item.code} - ${item.name}` : item.name,
+            value: item.id,
+          }));
           const field = this.filterFields.find((f) => f.key === 'shiftMasterId');
-          if (field) {
-            field.options = items.map((item) => ({
-              label: item.code ? `${item.code} - ${item.name}` : item.name,
-              value: item.id,
-            }));
-          }
+          if (field) field.options = this.shiftOptions;
           this.cdr.markForCheck();
         },
       });
@@ -277,6 +324,126 @@ export class WorkScheduleManagerComponent implements OnInit {
       ROUTES_CONFIG.OPERATE_MANAGER.children.SHIFT_MANAGER.children.EDIT_WORK_SCHEDULE.path,
       item.id,
     ]);
+  }
+
+  openBulk(): void {
+    this.bulkForm.reset({
+      employeeIds: [],
+      dateRange: null,
+      shiftMasterId: null,
+      skipWeekends: true,
+      overwriteExisting: false,
+      note: null,
+    });
+    this.bulkVisible = true;
+  }
+
+  closeBulk(): void {
+    this.bulkVisible = false;
+  }
+
+  submitBulk(): void {
+    if (this.bulkForm.invalid) {
+      this.bulkForm.markAllAsTouched();
+      return;
+    }
+    const value = this.bulkForm.getRawValue();
+    const range = value.dateRange as Date[] | null;
+    if (!range?.length || range.length < 2 || !range[0] || !range[1]) {
+      this.message.error(this.i18n.instant('workSchedule.validationDateRange'));
+      return;
+    }
+    if (!value.employeeIds?.length) {
+      this.message.error(this.i18n.instant('workSchedule.employeeRequired'));
+      return;
+    }
+
+    this.bulkSubmitting = true;
+    this.apiService
+      .post<BulkWorkScheduleResult>(this.apiService.WORK_SCHEDULE.BULK_CREATE, {
+        employeeIds: value.employeeIds,
+        fromDate: toDateOnly(range[0]),
+        toDate: toDateOnly(range[1]),
+        shiftMasterId: value.shiftMasterId,
+        skipWeekends: !!value.skipWeekends,
+        overwriteExisting: !!value.overwriteExisting,
+        note: (value.note || '').trim() || null,
+      })
+      .subscribe({
+        next: (res) => {
+          this.message.success(
+            this.i18n.instant('workSchedule.bulkResult', {
+              created: res.created,
+              updated: res.updated,
+              skipped: res.skipped,
+            }),
+          );
+          this.bulkVisible = false;
+          this.bulkSubmitting = false;
+          this.loadData();
+          this.cdr.markForCheck();
+        },
+        error: (err: any) => {
+          this.message.error(this.i18n.genericError(err.error));
+          this.bulkSubmitting = false;
+          this.cdr.markForCheck();
+        },
+      });
+  }
+
+  openCopyWeek(): void {
+    this.copyForm.reset({
+      employeeIds: [],
+      sourceWeekStart: null,
+      targetWeekStart: null,
+      overwriteExisting: false,
+    });
+    this.copyVisible = true;
+  }
+
+  closeCopyWeek(): void {
+    this.copyVisible = false;
+  }
+
+  submitCopyWeek(): void {
+    if (this.copyForm.invalid) {
+      this.copyForm.markAllAsTouched();
+      return;
+    }
+    const value = this.copyForm.getRawValue();
+    if (!value.employeeIds?.length) {
+      this.message.error(this.i18n.instant('workSchedule.employeeRequired'));
+      return;
+    }
+
+    this.copySubmitting = true;
+    this.apiService
+      .post<BulkWorkScheduleResult>(this.apiService.WORK_SCHEDULE.COPY_WEEK, {
+        employeeIds: value.employeeIds,
+        sourceWeekStart: toDateOnly(value.sourceWeekStart),
+        targetWeekStart: toDateOnly(value.targetWeekStart),
+        overwriteExisting: !!value.overwriteExisting,
+      })
+      .subscribe({
+        next: (res) => {
+          this.message.success(
+            this.i18n.instant('workSchedule.bulkResult', {
+              created: res.created,
+              updated: res.updated,
+              skipped: res.skipped,
+            }),
+          );
+          this.copyVisible = false;
+          this.copySubmitting = false;
+          this.loadData();
+          this.cdr.markForCheck();
+        },
+        error: (err: any) => {
+          this.message.error(this.i18n.genericError(err.error));
+          this.copySubmitting = false;
+          this.cdr.markForCheck();
+        },
+      });
   }
 
   async deactivate(item: WorkSchedule): Promise<void> {

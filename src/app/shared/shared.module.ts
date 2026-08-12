@@ -8,11 +8,13 @@ import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
+import { NzCollapseModule } from 'ng-zorro-antd/collapse';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
+import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzIconModule } from 'ng-zorro-antd/icon';
@@ -58,6 +60,8 @@ import { TableCustomComponent } from './components/table-custom/table-custom.com
     NzBreadCrumbModule,
     NzMenuModule,
     NzCardModule,
+    NzCollapseModule,
+    NzEmptyModule,
     NzDrawerModule,
     NzSwitchModule,
     NzSelectModule,
@@ -99,6 +103,8 @@ import { TableCustomComponent } from './components/table-custom/table-custom.com
     NzBreadCrumbModule,
     NzMenuModule,
     NzCardModule,
+    NzCollapseModule,
+    NzEmptyModule,
     NzDrawerModule,
     NzSwitchModule,
     NzSelectModule,

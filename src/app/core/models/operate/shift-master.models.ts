@@ -8,6 +8,8 @@ export interface ShiftMaster extends BaseDto {
   companyName?: string;
   startTime: string;
   endTime: string;
+  breakStartTime?: string | null;
+  breakEndTime?: string | null;
   breakMinutes: number;
   workingMinutes: number;
   isOvernight: boolean;

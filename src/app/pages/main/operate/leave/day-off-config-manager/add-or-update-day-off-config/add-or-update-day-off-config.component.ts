@@ -51,6 +51,10 @@ export class AddOrUpdateDayOffConfigComponent implements OnInit {
       type: [null, [Validators.required]],
       defaultDayPerYear: [0, [Validators.min(0)]],
       isPaid: [true],
+      deductBalance: [true],
+      requireAttachment: [false],
+      maxDaysPerRequest: [null],
+      minNoticeDays: [0, [Validators.min(0)]],
       isActive: [true],
     });
   }
@@ -74,6 +78,10 @@ export class AddOrUpdateDayOffConfigComponent implements OnInit {
           type: item.dayOffType,
           defaultDayPerYear: item.defaultDaysPerYear,
           isPaid: item.isPaid,
+          deductBalance: item.deductBalance ?? true,
+          requireAttachment: item.requireAttachment ?? false,
+          maxDaysPerRequest: item.maxDaysPerRequest ?? null,
+          minNoticeDays: item.minNoticeDays ?? 0,
           isActive: item.isActive ?? true,
         });
         this.loading = false;
@@ -112,6 +120,10 @@ export class AddOrUpdateDayOffConfigComponent implements OnInit {
       dayOffType: value.type,
       defaultDaysPerYear: value.defaultDayPerYear,
       isPaid: value.isPaid,
+      deductBalance: value.deductBalance,
+      requireAttachment: value.requireAttachment,
+      maxDaysPerRequest: value.maxDaysPerRequest ?? null,
+      minNoticeDays: value.minNoticeDays ?? 0,
       isActive: value.isActive,
     };
     const endpoint = this.isEdit

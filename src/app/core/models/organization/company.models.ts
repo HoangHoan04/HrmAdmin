@@ -38,6 +38,7 @@ export interface Company extends BaseDto {
   isActive?: boolean;
   socialInsuranceCode?: string;
   timeKeepingStandardId?: string | null;
+  saturdayPolicy?: string | null;
 }
 
 export interface CompanyImportResult {

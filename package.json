@@ -10,6 +10,8 @@
     "prewatch": "node scripts/generate-i18n-manifest.js",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "serve:ssr:admin-dashboard-angular": "node dist/admin-dashboard-angular/server/server.mjs"
   },
   "private": true,

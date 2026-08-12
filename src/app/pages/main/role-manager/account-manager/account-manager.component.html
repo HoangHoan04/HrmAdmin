@@ -1,0 +1,150 @@
+<app-filter-custom
+  [id]="'account-filter'"
+  [fields]="filterFields"
+  [filters]="filters"
+  [config]="filterConfig"
+  [filterActions]="filterActions"
+  [loading]="loading"
+  (filtersChange)="onFiltersChange($event)"
+></app-filter-custom>
+
+<app-table-custom
+  [id]="'account-table'"
+  [data]="data"
+  [columns]="columns"
+  [loading]="loading"
+  [showIndexList]="true"
+  [stripedRows]="true"
+  [rowActions]="rowActions"
+  [pagination]="pagination"
+  [toolbar]="toolbar"
+  [toolbarActions]="toolbarActions"
+  (pageChange)="onPageChange($event)"
+  (sortChange)="onSortChange($event)"
+  (refresh)="loadData()"
+></app-table-custom>
+
+<nz-modal
+  [(nzVisible)]="modalVisible"
+  [nzTitle]="(isEdit ? 'role.editUserTitle' : 'role.createUserTitle') | translate"
+  [nzOkLoading]="modalSaving"
+  [nzOkText]="'common.actions.save' | translate"
+  [nzCancelText]="'common.actions.cancel' | translate"
+  (nzOnOk)="saveModal()"
+  (nzOnCancel)="closeModal()"
+>
+  <ng-container *nzModalContent>
+    <div class="role-form-grid">
+      <nz-form-item>
+        <nz-form-label nzRequired>{{ 'role.username' | translate }}</nz-form-label>
+        <nz-form-control>
+          <input
+            nz-input
+            [(ngModel)]="formModel.username"
+            name="username"
+            [disabled]="isEdit"
+            [placeholder]="'role.usernamePlaceholder' | translate"
+          />
+        </nz-form-control>
+      </nz-form-item>
+
+      @if (!isEdit) {
+        <nz-form-item>
+          <nz-form-label>{{ 'role.password' | translate }}</nz-form-label>
+          <nz-form-control>
+            <input
+              nz-input
+              type="password"
+              [(ngModel)]="formModel.password"
+              name="password"
+              [placeholder]="'role.passwordPlaceholder' | translate"
+            />
+          </nz-form-control>
+        </nz-form-item>
+      }
+    </div>
+
+    <nz-form-item>
+      <nz-form-label>{{ 'role.employeeName' | translate }}</nz-form-label>
+      <nz-form-control>
+        <nz-select
+          [ngModel]="formModel.employeeId"
+          (ngModelChange)="onEmployeeChange($event)"
+          name="employeeId"
+          [nzPlaceHolder]="'role.selectEmployee' | translate"
+          nzAllowClear
+          nzShowSearch
+        >
+          @for (e of employees; track e.id) {
+            <nz-option [nzValue]="e.id" [nzLabel]="(e.code || '') + ' - ' + e.name"></nz-option>
+          }
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+
+    <div class="role-form-grid">
+      <nz-form-item>
+        <nz-form-label>{{ 'role.company' | translate }}</nz-form-label>
+        <nz-form-control>
+          <nz-select
+            [(ngModel)]="formModel.companyId"
+            name="companyId"
+            [nzPlaceHolder]="'role.filterCompany' | translate"
+            nzAllowClear
+            nzShowSearch
+          >
+            @for (c of companies; track c.id) {
+              <nz-option [nzValue]="c.id" [nzLabel]="c.code + ' - ' + c.name"></nz-option>
+            }
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label>{{ 'role.userType' | translate }}</nz-form-label>
+        <nz-form-control>
+          <nz-select [(ngModel)]="formModel.type" name="userType">
+            <nz-option nzValue="ADMIN" [nzLabel]="'role.userTypeAdmin' | translate"></nz-option>
+            <nz-option nzValue="HR" [nzLabel]="'role.userTypeHr' | translate"></nz-option>
+            <nz-option nzValue="MANAGER" [nzLabel]="'role.userTypeManager' | translate"></nz-option>
+            <nz-option nzValue="EMPLOYEE" [nzLabel]="'role.userTypeEmployee' | translate"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+    <div class="role-form-grid">
+      <nz-form-item>
+        <nz-form-label>{{ 'role.email' | translate }}</nz-form-label>
+        <nz-form-control>
+          <input nz-input [(ngModel)]="formModel.email" name="email" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label>{{ 'role.phoneNumber' | translate }}</nz-form-label>
+        <nz-form-control>
+          <input nz-input [(ngModel)]="formModel.phoneNumber" name="phoneNumber" />
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+
+    <div class="role-form-grid">
+      <nz-form-item>
+        <nz-form-label>{{ 'role.isActive' | translate }}</nz-form-label>
+        <nz-form-control>
+          <nz-switch [(ngModel)]="formModel.isActive" name="isActive"></nz-switch>
+        </nz-form-control>
+      </nz-form-item>
+
+      @if (isEdit) {
+        <nz-form-item>
+          <nz-form-label>{{ 'role.isLocked' | translate }}</nz-form-label>
+          <nz-form-control>
+            <nz-switch [(ngModel)]="formModel.isLocked" name="isLocked"></nz-switch>
+          </nz-form-control>
+        </nz-form-item>
+      }
+    </div>
+  </ng-container>
+</nz-modal>

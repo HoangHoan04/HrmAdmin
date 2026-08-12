@@ -22,3 +22,130 @@
   (sortChange)="onSortChange($event)"
   (refresh)="loadData()"
 ></app-table-custom>
+
+<nz-modal
+  [nzVisible]="bulkVisible"
+  [nzTitle]="'workSchedule.bulkCreateTitle' | translate"
+  [nzOkText]="'common.actions.save' | translate"
+  [nzCancelText]="'common.actions.cancel' | translate"
+  [nzOkLoading]="bulkSubmitting"
+  (nzOnCancel)="closeBulk()"
+  (nzOnOk)="submitBulk()"
+>
+  <ng-container *nzModalContent>
+    <form nz-form [formGroup]="bulkForm" nzLayout="vertical">
+      <nz-form-item>
+        <nz-form-label nzRequired>{{ 'workSchedule.employees' | translate }}</nz-form-label>
+        <nz-form-control>
+          <nz-select
+            formControlName="employeeIds"
+            nzMode="multiple"
+            nzShowSearch
+            nzAllowClear
+            [nzPlaceHolder]="'workSchedule.filterEmployee' | translate"
+          >
+            @for (opt of employeeOptions; track opt.value) {
+              <nz-option [nzValue]="opt.value" [nzLabel]="opt.label"></nz-option>
+            }
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired>{{ 'workSchedule.filterDateRange' | translate }}</nz-form-label>
+        <nz-form-control>
+          <nz-range-picker formControlName="dateRange" style="width: 100%"></nz-range-picker>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired>{{ 'workSchedule.shiftMaster' | translate }}</nz-form-label>
+        <nz-form-control>
+          <nz-select
+            formControlName="shiftMasterId"
+            nzShowSearch
+            nzAllowClear
+            [nzPlaceHolder]="'workSchedule.filterShift' | translate"
+          >
+            @for (opt of shiftOptions; track opt.value) {
+              <nz-option [nzValue]="opt.value" [nzLabel]="opt.label"></nz-option>
+            }
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label>{{ 'workSchedule.skipWeekends' | translate }}</nz-form-label>
+        <nz-form-control>
+          <nz-switch formControlName="skipWeekends"></nz-switch>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label>{{ 'workSchedule.overwriteExisting' | translate }}</nz-form-label>
+        <nz-form-control>
+          <nz-switch formControlName="overwriteExisting"></nz-switch>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label>{{ 'workSchedule.note' | translate }}</nz-form-label>
+        <nz-form-control>
+          <textarea nz-input formControlName="note" rows="2"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-container>
+</nz-modal>
+
+<nz-modal
+  [nzVisible]="copyVisible"
+  [nzTitle]="'workSchedule.copyWeekTitle' | translate"
+  [nzOkText]="'common.actions.save' | translate"
+  [nzCancelText]="'common.actions.cancel' | translate"
+  [nzOkLoading]="copySubmitting"
+  (nzOnCancel)="closeCopyWeek()"
+  (nzOnOk)="submitCopyWeek()"
+>
+  <ng-container *nzModalContent>
+    <form nz-form [formGroup]="copyForm" nzLayout="vertical">
+      <nz-form-item>
+        <nz-form-label nzRequired>{{ 'workSchedule.employees' | translate }}</nz-form-label>
+        <nz-form-control>
+          <nz-select
+            formControlName="employeeIds"
+            nzMode="multiple"
+            nzShowSearch
+            nzAllowClear
+            [nzPlaceHolder]="'workSchedule.filterEmployee' | translate"
+          >
+            @for (opt of employeeOptions; track opt.value) {
+              <nz-option [nzValue]="opt.value" [nzLabel]="opt.label"></nz-option>
+            }
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired>{{ 'workSchedule.sourceWeekStart' | translate }}</nz-form-label>
+        <nz-form-control>
+          <nz-date-picker formControlName="sourceWeekStart" style="width: 100%"></nz-date-picker>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired>{{ 'workSchedule.targetWeekStart' | translate }}</nz-form-label>
+        <nz-form-control>
+          <nz-date-picker formControlName="targetWeekStart" style="width: 100%"></nz-date-picker>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label>{{ 'workSchedule.overwriteExisting' | translate }}</nz-form-label>
+        <nz-form-control>
+          <nz-switch formControlName="overwriteExisting"></nz-switch>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-container>
+</nz-modal>

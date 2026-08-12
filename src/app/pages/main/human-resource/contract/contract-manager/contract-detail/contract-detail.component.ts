@@ -118,17 +118,15 @@ export class ContractDetailComponent implements OnInit {
   }
 
   loadHistory(employeeId: string): void {
-    this.apiService
-      .post<Contract[]>(this.apiService.CONTRACT.HISTORY, { employeeId })
-      .subscribe({
-        next: (items) => {
-          this.history = [...(items || [])].sort((a, b) => {
-            const aTime = a.startDate ? new Date(a.startDate).getTime() : 0;
-            const bTime = b.startDate ? new Date(b.startDate).getTime() : 0;
-            return aTime - bTime;
-          });
-        },
-      });
+    this.apiService.post<Contract[]>(this.apiService.CONTRACT.HISTORY, { employeeId }).subscribe({
+      next: (items) => {
+        this.history = [...(items || [])].sort((a, b) => {
+          const aTime = a.startDate ? new Date(a.startDate).getTime() : 0;
+          const bTime = b.startDate ? new Date(b.startDate).getTime() : 0;
+          return aTime - bTime;
+        });
+      },
+    });
   }
 
   statusLabel(status?: string): string {
@@ -137,13 +135,24 @@ export class ContractDetailComponent implements OnInit {
     return meta ? this.i18n.instant(meta.labelKey) : status;
   }
 
+  workingModeLabel(mode?: string): string {
+    if (!mode) return '-';
+    const meta = Object.values(enumData.WORKING_MODE).find((x) => x.value === mode);
+    return meta ? this.i18n.instant(meta.labelKey) : mode;
+  }
+
+  paymentMethodLabel(method?: string): string {
+    if (!method) return '-';
+    const meta = Object.values(enumData.PAYMENT_METHOD).find((x) => x.value === method);
+    return meta ? this.i18n.instant(meta.labelKey) : method;
+  }
+
   openSignModal(): void {
     if (!this.contract) return;
     this.signForm.reset({
       signDate: new Date(),
       signedByCompanyRepresentative: this.contract.signedByCompanyRepresentative || '',
-      signedByEmployeeName:
-        this.contract.signedByEmployeeName || this.contract.employeeName || '',
+      signedByEmployeeName: this.contract.signedByEmployeeName || this.contract.employeeName || '',
       fileUrl: this.contract.fileUrl || '',
     });
     this.signModalVisible = true;
@@ -159,9 +168,7 @@ export class ContractDetailComponent implements OnInit {
 
   openRenewModal(): void {
     if (!this.contract) return;
-    const start = this.contract.endDate
-      ? new Date(this.contract.endDate)
-      : new Date();
+    const start = this.contract.endDate ? new Date(this.contract.endDate) : new Date();
     if (this.contract.endDate) {
       start.setDate(start.getDate() + 1);
     }
@@ -273,8 +280,8 @@ export class ContractDetailComponent implements OnInit {
           this.actionSubmitting = false;
           if (newId) {
             this.router.navigate([
-              ROUTES_CONFIG.HUMAN_RESOURCE.children.CONTRACT_MANAGER.children.CONTRACT_LIST
-                .children.DETAIL_CONTRACT.path,
+              ROUTES_CONFIG.HUMAN_RESOURCE.children.CONTRACT_MANAGER.children.CONTRACT_LIST.children
+                .DETAIL_CONTRACT.path,
               newId,
             ]);
           } else {

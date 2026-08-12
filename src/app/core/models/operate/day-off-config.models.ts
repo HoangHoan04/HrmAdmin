@@ -9,6 +9,10 @@ export interface DayOffConfig extends BaseDto {
   dayOffType: string;
   defaultDaysPerYear: number;
   isPaid: boolean;
+  deductBalance?: boolean;
+  requireAttachment?: boolean;
+  maxDaysPerRequest?: number | null;
+  minNoticeDays?: number;
   isActive: boolean;
 }
 

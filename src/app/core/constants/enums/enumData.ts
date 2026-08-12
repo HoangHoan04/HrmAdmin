@@ -409,6 +409,42 @@ export const enumData = {
     },
   },
 
+  PAYMENT_METHOD: {
+    BANK_TRANSFER: {
+      code: 'BANK_TRANSFER',
+      labelKey: 'enums.paymentMethod.bankTransfer',
+      value: 'BANK_TRANSFER',
+      color: '#1890ff',
+    },
+    CASH: {
+      code: 'CASH',
+      labelKey: 'enums.paymentMethod.cash',
+      value: 'CASH',
+      color: '#52c41a',
+    },
+    OTHER: {
+      code: 'OTHER',
+      labelKey: 'enums.paymentMethod.other',
+      value: 'OTHER',
+      color: '#8c8c8c',
+    },
+  },
+
+  CURRENCY: {
+    VND: {
+      code: 'VND',
+      labelKey: 'enums.currency.vnd',
+      value: 'VND',
+      color: '#1890ff',
+    },
+    USD: {
+      code: 'USD',
+      labelKey: 'enums.currency.usd',
+      value: 'USD',
+      color: '#52c41a',
+    },
+  },
+
   CONTRACT_STATUS: {
     DRAFT: {
       code: 'DRAFT',
@@ -517,6 +553,39 @@ export const enumData = {
       labelKey: 'enums.reviewRecommendation.noChange',
       value: 'NO_CHANGE',
       color: '#8c8c8c',
+    },
+  },
+
+  SALARY_STATUS: {
+    DRAFT: {
+      code: 'DRAFT',
+      labelKey: 'enums.salaryStatus.draft',
+      value: 'DRAFT',
+      color: '#8c8c8c',
+    },
+    PROCESSING: {
+      code: 'PROCESSING',
+      labelKey: 'enums.salaryStatus.processing',
+      value: 'PROCESSING',
+      color: '#1890ff',
+    },
+    APPROVED: {
+      code: 'APPROVED',
+      labelKey: 'enums.salaryStatus.approved',
+      value: 'APPROVED',
+      color: '#52c41a',
+    },
+    PAID: {
+      code: 'PAID',
+      labelKey: 'enums.salaryStatus.paid',
+      value: 'PAID',
+      color: '#13c2c2',
+    },
+    CANCELLED: {
+      code: 'CANCELLED',
+      labelKey: 'enums.salaryStatus.cancelled',
+      value: 'CANCELLED',
+      color: '#f5222d',
     },
   },
 
@@ -667,6 +736,102 @@ export const enumData = {
       labelKey: 'enums.dayOffStatus.cancelled',
       value: 'CANCELLED',
       color: '#8c8c8c',
+    },
+  },
+
+  LEAVE_SESSION: {
+    FULL: {
+      code: 'FULL',
+      labelKey: 'enums.leaveSession.full',
+      value: 'FULL',
+    },
+    AM: {
+      code: 'AM',
+      labelKey: 'enums.leaveSession.am',
+      value: 'AM',
+    },
+    PM: {
+      code: 'PM',
+      labelKey: 'enums.leaveSession.pm',
+      value: 'PM',
+    },
+  },
+
+  ATTENDANCE_COMPLAINT_STATUS: {
+    PENDING: {
+      code: 'PENDING',
+      labelKey: 'enums.attendanceComplaintStatus.pending',
+      value: 'PENDING',
+      color: '#faad14',
+    },
+    APPROVED: {
+      code: 'APPROVED',
+      labelKey: 'enums.attendanceComplaintStatus.approved',
+      value: 'APPROVED',
+      color: '#52c41a',
+    },
+    REJECTED: {
+      code: 'REJECTED',
+      labelKey: 'enums.attendanceComplaintStatus.rejected',
+      value: 'REJECTED',
+      color: '#f5222d',
+    },
+    CANCELLED: {
+      code: 'CANCELLED',
+      labelKey: 'enums.attendanceComplaintStatus.cancelled',
+      value: 'CANCELLED',
+      color: '#8c8c8c',
+    },
+  },
+
+  ATTENDANCE_COMPLAINT_TYPE: {
+    FORGOT_CHECK_IN: {
+      code: 'FORGOT_CHECK_IN',
+      labelKey: 'enums.attendanceComplaintType.forgotCheckIn',
+      value: 'FORGOT_CHECK_IN',
+    },
+    FORGOT_CHECK_OUT: {
+      code: 'FORGOT_CHECK_OUT',
+      labelKey: 'enums.attendanceComplaintType.forgotCheckOut',
+      value: 'FORGOT_CHECK_OUT',
+    },
+    FORGOT_BOTH: {
+      code: 'FORGOT_BOTH',
+      labelKey: 'enums.attendanceComplaintType.forgotBoth',
+      value: 'FORGOT_BOTH',
+    },
+    WRONG_TIME: {
+      code: 'WRONG_TIME',
+      labelKey: 'enums.attendanceComplaintType.wrongTime',
+      value: 'WRONG_TIME',
+    },
+    OTHER: {
+      code: 'OTHER',
+      labelKey: 'enums.attendanceComplaintType.other',
+      value: 'OTHER',
+    },
+  },
+
+  DATA_SCOPE: {
+    ALL: {
+      code: 'ALL',
+      labelKey: 'enums.dataScope.all',
+      value: 'ALL',
+    },
+    BRANCH: {
+      code: 'BRANCH',
+      labelKey: 'enums.dataScope.branch',
+      value: 'BRANCH',
+    },
+    DEPARTMENT: {
+      code: 'DEPARTMENT',
+      labelKey: 'enums.dataScope.department',
+      value: 'DEPARTMENT',
+    },
+    OWN: {
+      code: 'OWN',
+      labelKey: 'enums.dataScope.own',
+      value: 'OWN',
     },
   },
 };

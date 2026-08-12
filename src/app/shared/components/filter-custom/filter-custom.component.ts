@@ -9,12 +9,7 @@ import {
   SimpleChanges,
   TemplateRef,
 } from '@angular/core';
-import {
-  FilterAction,
-  FilterConfig,
-  FilterField,
-  FilterOption,
-} from './filter-custom.types';
+import { FilterAction, FilterConfig, FilterField, FilterOption } from './filter-custom.types';
 
 @Component({
   selector: 'app-filter-custom',

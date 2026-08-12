@@ -56,7 +56,11 @@ export class PositionMasterDetailComponent implements OnInit {
       label: 'organization.positionMaster.isHadASecondInterview',
       type: 'boolean',
     },
-    { key: 'isApprovedDayOff', label: 'organization.positionMaster.isApprovedDayOff', type: 'boolean' },
+    {
+      key: 'isApprovedDayOff',
+      label: 'organization.positionMaster.isApprovedDayOff',
+      type: 'boolean',
+    },
     { key: 'quantityStandard', label: 'organization.positionMaster.quantityStandard' },
     { key: 'displayOrder', label: 'organization.positionMaster.displayOrder' },
     { key: 'isActive', label: 'organization.positionMaster.isActive', type: 'boolean' },

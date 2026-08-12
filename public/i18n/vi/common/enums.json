@@ -73,6 +73,15 @@
       "flexible": "Linh hoạt",
       "businessTrip": "Công tác"
     },
+    "paymentMethod": {
+      "bankTransfer": "Chuyển khoản",
+      "cash": "Tiền mặt",
+      "other": "Khác"
+    },
+    "currency": {
+      "vnd": "VND",
+      "usd": "USD"
+    },
     "contractType": {
       "probation": "Thử việc",
       "indefinite": "Không xác định thời hạn",
@@ -104,6 +113,13 @@
       "expired": "Hết hạn",
       "terminated": "Đã chấm dứt",
       "liquidated": "Đã thanh lý"
+    },
+    "salaryStatus": {
+      "draft": "Nháp",
+      "processing": "Đang xử lý",
+      "approved": "Đã duyệt",
+      "paid": "Đã chi trả",
+      "cancelled": "Đã hủy"
     },
     "reviewRenewalStatus": {
       "pendingReview": "Chờ đánh giá",
@@ -149,6 +165,30 @@
       "approved": "Đã duyệt",
       "rejected": "Từ chối",
       "cancelled": "Đã hủy"
+    },
+    "attendanceComplaintStatus": {
+      "pending": "Chờ duyệt",
+      "approved": "Đã duyệt",
+      "rejected": "Từ chối",
+      "cancelled": "Đã hủy"
+    },
+    "attendanceComplaintType": {
+      "forgotCheckIn": "Quên check-in",
+      "forgotCheckOut": "Quên check-out",
+      "forgotBoth": "Quên cả hai",
+      "wrongTime": "Sai giờ",
+      "other": "Khác"
+    },
+    "leaveSession": {
+      "full": "Cả ngày",
+      "am": "Buổi sáng",
+      "pm": "Buổi chiều"
+    },
+    "dataScope": {
+      "all": "Toàn hệ thống",
+      "branch": "Chi nhánh",
+      "department": "Phòng ban",
+      "own": "Cá nhân"
     }
   }
 }

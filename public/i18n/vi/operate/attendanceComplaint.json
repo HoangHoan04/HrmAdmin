@@ -1,0 +1,31 @@
+{
+  "attendanceComplaint": {
+    "entityName": "khiếu nại chấm công",
+    "title": "Quản lý khiếu nại chấm công",
+    "employee": "Nhân viên",
+    "branch": "Chi nhánh",
+    "workDate": "Ngày công",
+    "complaintType": "Loại khiếu nại",
+    "requestedCheckIn": "Giờ vào đề nghị",
+    "requestedCheckOut": "Giờ ra đề nghị",
+    "currentCheckIn": "Giờ vào hiện tại",
+    "currentCheckOut": "Giờ ra hiện tại",
+    "reason": "Lý do",
+    "attachmentUrl": "File đính kèm (URL)",
+    "status": "Trạng thái",
+    "approverName": "Người duyệt",
+    "approverNote": "Ghi chú duyệt",
+    "reviewedAt": "Thời điểm duyệt",
+    "createdAt": "Ngày tạo",
+    "search": "Tìm kiếm",
+    "searchPlaceholder": "Tìm theo lý do...",
+    "filterStatus": "Chọn trạng thái...",
+    "filterDateRange": "Khoảng ngày công",
+    "approve": "Duyệt",
+    "reject": "Từ chối",
+    "detailTitle": "Chi tiết khiếu nại chấm công",
+    "approverNotePlaceholder": "Nhập ghi chú (nếu có)...",
+    "rejectNotePlaceholder": "Nhập lý do từ chối...",
+    "rejectNoteRequired": "Vui lòng nhập lý do từ chối"
+  }
+}

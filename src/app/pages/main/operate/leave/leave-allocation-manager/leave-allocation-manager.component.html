@@ -1,0 +1,102 @@
+<app-filter-custom
+  [id]="'leave-allocation-filter'"
+  [fields]="filterFields"
+  [filters]="filters"
+  [config]="filterConfig"
+  [filterActions]="filterActions"
+  [loading]="loading"
+  (filtersChange)="onFiltersChange($event)"
+></app-filter-custom>
+
+<app-table-custom
+  [id]="'leave-allocation-table'"
+  [data]="data"
+  [columns]="columns"
+  [loading]="loading"
+  [showIndexList]="true"
+  [stripedRows]="true"
+  [rowActions]="rowActions"
+  [toolbarActions]="toolbarActions"
+  [pagination]="pagination"
+  (pageChange)="onPageChange($event)"
+  (sortChange)="onSortChange($event)"
+  (refresh)="loadData()"
+></app-table-custom>
+
+<nz-modal
+  [nzVisible]="upsertVisible"
+  [nzTitle]="(editingId ? 'leaveAllocation.editTitle' : 'leaveAllocation.createTitle') | translate"
+  [nzOkText]="'common.actions.save' | translate"
+  [nzCancelText]="'common.actions.cancel' | translate"
+  [nzOkLoading]="submitting"
+  (nzOnCancel)="closeUpsert()"
+  (nzOnOk)="submitUpsert()"
+>
+  <ng-container *nzModalContent>
+    <form nz-form [formGroup]="upsertForm" nzLayout="vertical">
+      <nz-form-item>
+        <nz-form-label nzRequired>{{ 'leaveAllocation.employee' | translate }}</nz-form-label>
+        <nz-form-control>
+          <nz-select
+            formControlName="employeeId"
+            nzShowSearch
+            nzAllowClear
+            [nzPlaceHolder]="'leaveAllocation.filterEmployee' | translate"
+          >
+            @for (opt of employeeOptions; track opt.value) {
+              <nz-option [nzValue]="opt.value" [nzLabel]="opt.label"></nz-option>
+            }
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired>{{ 'leaveAllocation.configName' | translate }}</nz-form-label>
+        <nz-form-control>
+          <nz-select
+            formControlName="dayOffConfigId"
+            nzShowSearch
+            nzAllowClear
+            [nzPlaceHolder]="'leaveAllocation.filterConfig' | translate"
+          >
+            @for (opt of dayOffConfigOptions; track opt.value) {
+              <nz-option [nzValue]="opt.value" [nzLabel]="opt.label"></nz-option>
+            }
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired>{{ 'leaveAllocation.year' | translate }}</nz-form-label>
+        <nz-form-control>
+          <nz-input-number formControlName="year" [nzMin]="2000" [nzMax]="2100" style="width: 100%">
+          </nz-input-number>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired>{{ 'leaveAllocation.allocatedDays' | translate }}</nz-form-label>
+        <nz-form-control>
+          <nz-input-number
+            formControlName="allocatedDays"
+            [nzMin]="0"
+            [nzStep]="0.5"
+            style="width: 100%"
+          ></nz-input-number>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label>{{ 'leaveAllocation.note' | translate }}</nz-form-label>
+        <nz-form-control>
+          <textarea
+            nz-input
+            formControlName="note"
+            rows="3"
+            [placeholder]="'leaveAllocation.notePlaceholder' | translate"
+          ></textarea>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-container>
+</nz-modal>

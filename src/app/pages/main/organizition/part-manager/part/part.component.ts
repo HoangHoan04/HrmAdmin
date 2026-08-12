@@ -185,6 +185,12 @@ export class PartComponent implements OnInit {
       sortable: true,
     },
     { field: 'branchName', header: 'organization.part.branchName', type: 'text', sortable: true },
+    {
+      field: 'managerName',
+      header: 'organization.part.managerName',
+      type: 'text',
+      sortable: false,
+    },
     { field: 'status', header: 'organization.part.status', type: 'boolean', sortable: true },
   ];
 
