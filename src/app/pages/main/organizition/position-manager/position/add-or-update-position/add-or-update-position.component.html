@@ -1,12 +1,14 @@
 <nz-card [nzTitle]="titleTemplate" [nzExtra]="extraTemplate" [nzLoading]="loading">
   <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()" nzLayout="vertical">
     <div nz-row [nzGutter]="16">
-      <div nz-col [nzXs]="24" [nzMd]="12">
+      <div nz-col [nzXs]="24" [nzMd]="8">
         <nz-form-item>
           <nz-form-label nzRequired nzFor="positionMasterId">{{
             'organization.position.positionMasterName' | translate
           }}</nz-form-label>
-          <nz-form-control [nzErrorTip]="'organization.position.positionMasterRequired' | translate">
+          <nz-form-control
+            [nzErrorTip]="'organization.position.positionMasterRequired' | translate"
+          >
             <nz-select
               formControlName="positionMasterId"
               id="positionMasterId"
@@ -23,7 +25,7 @@
         </nz-form-item>
       </div>
 
-      <div nz-col [nzXs]="24" [nzMd]="12">
+      <div nz-col [nzXs]="24" [nzMd]="8">
         <nz-form-item>
           <nz-form-label nzFor="companyId">{{
             'organization.position.companyName' | translate
@@ -46,7 +48,7 @@
         </nz-form-item>
       </div>
 
-      <div nz-col [nzXs]="24" [nzMd]="12">
+      <div nz-col [nzXs]="24" [nzMd]="8">
         <nz-form-item>
           <nz-form-label nzFor="branchId">{{
             'organization.position.branchName' | translate
@@ -69,7 +71,7 @@
         </nz-form-item>
       </div>
 
-      <div nz-col [nzXs]="24" [nzMd]="12">
+      <div nz-col [nzXs]="24" [nzMd]="8">
         <nz-form-item>
           <nz-form-label nzFor="departmentId">{{
             'organization.position.departmentName' | translate
@@ -92,9 +94,11 @@
         </nz-form-item>
       </div>
 
-      <div nz-col [nzXs]="24" [nzMd]="12">
+      <div nz-col [nzXs]="24" [nzMd]="8">
         <nz-form-item>
-          <nz-form-label nzFor="partId">{{ 'organization.position.partName' | translate }}</nz-form-label>
+          <nz-form-label nzFor="partId">{{
+            'organization.position.partName' | translate
+          }}</nz-form-label>
           <nz-form-control>
             <nz-select
               formControlName="partId"
@@ -113,7 +117,7 @@
         </nz-form-item>
       </div>
 
-      <div nz-col [nzXs]="24" [nzMd]="12">
+      <div nz-col [nzXs]="24" [nzMd]="8">
         <nz-form-item>
           <nz-form-label nzFor="quantityStandard">{{
             'organization.position.quantityStandard' | translate
@@ -130,7 +134,7 @@
         </nz-form-item>
       </div>
 
-      <div nz-col [nzXs]="24" [nzMd]="12">
+      <div nz-col [nzXs]="24" [nzMd]="8">
         <nz-form-item>
           <nz-form-label nzFor="displayOrder">{{
             'organization.position.displayOrder' | translate
@@ -180,9 +184,7 @@
 </nz-card>
 
 <ng-template #titleTemplate>
-  {{
-    (isEdit ? 'organization.position.editTitle' : 'organization.position.addTitle') | translate
-  }}
+  {{ (isEdit ? 'organization.position.editTitle' : 'organization.position.addTitle') | translate }}
 </ng-template>
 
 <ng-template #extraTemplate>

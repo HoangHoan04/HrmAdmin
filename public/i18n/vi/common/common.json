@@ -42,6 +42,7 @@
       "activateContent": "Bạn có chắc chắn muốn kích hoạt {{entity}} \"{{name}}\"?",
       "deactivateContent": "Bạn có chắc chắn muốn ngưng hoạt động {{entity}} \"{{name}}\"?",
       "genericError": "Có lỗi xảy ra.",
+      "serverUnavailable": "Server đang kết nối hoặc có lỗi, vui lòng thử lại sau",
       "saveSuccess": "Lưu thông tin thành công!",
       "createSuccess": "Thêm mới thành công!",
       "updateSuccess": "Cập nhật thành công!",
@@ -82,6 +83,10 @@
       "uploadFailed": "Tải file lên thất bại",
       "tooLarge": "File vượt quá {{max}}MB",
       "urlPlaceholder": "Hoặc dán URL file trực tiếp"
+    },
+    "switch": {
+      "on": "Bật",
+      "off": "Tắt"
     }
   }
 }

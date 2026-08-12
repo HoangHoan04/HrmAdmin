@@ -15,7 +15,6 @@ import { ROUTES_CONFIG } from '../../../../core/constants/common/routes.config';
 import { ImportResult, PagedResult } from '../../../../core/models/common.models';
 import { ApiService } from '../../../../core/services/api.service';
 import { I18nMessageService } from '../../../../core/services/i18n-message.service';
-import { OrganizationCascadeService } from '../../../../core/services/organization-cascade.service';
 import {
   CommonActions,
   PaginationConfig,
@@ -198,7 +197,6 @@ export class DepartmentManagerComponent implements OnInit {
     private readonly message: NzMessageService,
     private readonly i18n: I18nMessageService,
     private readonly apiService: ApiService,
-    private readonly cascade: OrganizationCascadeService,
     private readonly cdr: ChangeDetectorRef,
     private readonly actionConfirm: ActionConfirmService,
   ) {}
@@ -248,24 +246,26 @@ export class DepartmentManagerComponent implements OnInit {
       return;
     }
 
-    this.cascade.loadBranchesByCompany(companyId).subscribe({
-      next: (items) => {
-        this.branches = items;
-        const branchField = this.filterFields.find((field) => field.key === 'branchId');
-        if (branchField) {
-          branchField.options = items.map((item) => ({
-            label: item.code ? `${item.code} - ${item.name}` : item.name,
-            value: item.id,
-          }));
-        }
-        onComplete?.();
-        this.cdr.markForCheck();
-      },
-      error: () => {
-        this.branches = [];
-        onComplete?.();
-      },
-    });
+    this.apiService
+      .post<BranchSelectBoxDto[]>(this.apiService.BRANCH.LOAD_BY_COMPANY, { companyId })
+      .subscribe({
+        next: (items) => {
+          this.branches = items;
+          const branchField = this.filterFields.find((field) => field.key === 'branchId');
+          if (branchField) {
+            branchField.options = items.map((item) => ({
+              label: item.code ? `${item.code} - ${item.name}` : item.name,
+              value: item.id,
+            }));
+          }
+          onComplete?.();
+          this.cdr.markForCheck();
+        },
+        error: () => {
+          this.branches = [];
+          onComplete?.();
+        },
+      });
   }
 
   loadData(): void {

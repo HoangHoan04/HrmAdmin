@@ -1,6 +1,7 @@
 import { ROUTES_CONFIG } from '@/app/core/constants/common/routes.config';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { SharedModule } from '../../../shared/shared.module';
 import { AddOrUpdateDayOffConfigComponent } from './leave/day-off-config-manager/add-or-update-day-off-config/add-or-update-day-off-config.component';
 import { DayOffConfigManagerComponent } from './leave/day-off-config-manager/day-off-config-manager.component';
@@ -23,7 +24,6 @@ const getRelativePath = (p: string) => {
 };
 
 const routes: Routes = [
-  // Day Off Config
   {
     path: getRelativePath(
       ROUTES_CONFIG.OPERATE_MANAGER.children.LEAVE_MANAGER.children.DAY_OFF_CONFIG.path,
@@ -45,7 +45,6 @@ const routes: Routes = [
       ) + '/:id',
     component: AddOrUpdateDayOffConfigComponent,
   },
-  // Public Holiday
   {
     path: getRelativePath(
       ROUTES_CONFIG.OPERATE_MANAGER.children.LEAVE_MANAGER.children.PUBLIC_HOLIDAY.path,
@@ -68,7 +67,6 @@ const routes: Routes = [
     component: AddOrUpdatePublicHolidayComponent,
   },
 
-  // Timekeeping Standard
   {
     path: getRelativePath(
       ROUTES_CONFIG.OPERATE_MANAGER.children.TIME_ATTENDANCE.children.TIMEKEEPING_STANDARD.path,
@@ -90,14 +88,12 @@ const routes: Routes = [
       ) + '/:id',
     component: AddOrUpdateTimekeepingStandardComponent,
   },
-  // Timekeeping
   {
     path: getRelativePath(
       ROUTES_CONFIG.OPERATE_MANAGER.children.TIME_ATTENDANCE.children.TIMEKEEPING_MANAGER.path,
     ),
     component: TimekeepingManagerComponent,
   },
-  // Shift
   {
     path: getRelativePath(ROUTES_CONFIG.OPERATE_MANAGER.children.SHIFT_MANAGER.path),
     component: ShiftManagerComponent,
@@ -115,7 +111,6 @@ const routes: Routes = [
       ) + '/:id',
     component: AddOrUpdateShiftComponent,
   },
-  // Work Schedule
   {
     path: getRelativePath(
       ROUTES_CONFIG.OPERATE_MANAGER.children.SHIFT_MANAGER.children.ADD_WORK_SCHEDULE.path,
@@ -129,7 +124,6 @@ const routes: Routes = [
       ) + '/:id',
     component: AddOrUpdateWorkScheduleComponent,
   },
-  // Leave Manager
   {
     path: getRelativePath(
       ROUTES_CONFIG.OPERATE_MANAGER.children.LEAVE_MANAGER.children.LEAVE_LIST.path,
@@ -154,6 +148,6 @@ const routes: Routes = [
     PublicHolidayManagerComponent,
     AddOrUpdatePublicHolidayComponent,
   ],
-  imports: [SharedModule, RouterModule.forChild(routes)],
+  imports: [SharedModule, NzTabsModule, RouterModule.forChild(routes)],
 })
 export class OperateModule {}

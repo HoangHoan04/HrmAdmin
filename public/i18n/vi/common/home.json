@@ -1,9 +1,37 @@
-{
+﻿{
   "home": {
     "welcome": "Trang chủ",
     "desc": "Chào mừng đến với hệ thống quản trị HOANG HOAN TECHNOLOGY.",
-    "cardTitle": "Hệ thống Quản trị",
-    "cardDesc": "Trang chủ chính của hệ thống quản trị dịch vụ.",
-    "cardHelp": "Vui lòng sử dụng thanh menu bên trái để truy cập các chức năng quản lý khác như Bảng điều khiển, Phân tích số liệu, Thành viên, hoặc Cài đặt hệ thống."
+    "cardTitle": "Bảng điều khiển Phân tích Điều hành Nhân sự",
+    "totalSalary": "Tổng lương cơ bản",
+    "totalBonus": "Tổng tiền thưởng",
+    "totalComp": "Tổng thu nhập (Compensation)",
+    "commission": "Hoa hồng",
+    "avgBase": "Lương cơ bản TB",
+    "sickDays": "Ngày nghỉ ốm (Tổng / TB)",
+    "compByLoc": "Cơ cấu thu nhập theo khu vực",
+    "compByDept": "Cơ cấu thu nhập theo phòng ban",
+    "empGrowth": "Tăng trưởng nhân sự qua các năm",
+    "deptHeadcount": "Số lượng nhân viên theo phòng ban",
+    "genderRatio": "Tỷ lệ giới tính",
+    "locationRatio": "Tỷ lệ theo khu vực",
+    "turnoverAnalysis": "Phân tích biến động nhân sự",
+    "voluntaryRate": "Tỷ lệ tự nguyện nghỉ",
+    "involuntaryRate": "Tỷ lệ bị sa thải",
+    "headcountFlow": "Luồng thay đổi nhân số",
+    "staffingTrends": "Xu hướng tuyển dụng và chấm dứt (Hires vs Terms)",
+    "hiringTargetTech": "Mục tiêu tuyển dụng kỹ thuật (Tech)",
+    "hiringTargetNonTech": "Mục tiêu tuyển dụng phi kỹ thuật (Non-Tech)",
+    "hiringPipeline": "Đường ống tuyển dụng hiện tại",
+    "hiringSources": "Nguồn tuyển dụng hàng đầu Q2",
+    "internalExternal": "Nhân sự tuyển dụng Nội bộ vs Bên ngoài",
+    "netChange": "Thay đổi ròng",
+    "hired": "Đã tuyển",
+    "terminated": "Đã nghỉ",
+    "active": "Hoạt động",
+    "voluntary": "Tự nguyện",
+    "involuntary": "Bắt buộc",
+    "male": "Nam",
+    "female": "Nữ"
   }
 }

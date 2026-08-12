@@ -1,0 +1,93 @@
+<app-filter-custom
+  [id]="'contract-filter'"
+  [fields]="filterFields"
+  [filters]="filters"
+  [config]="filterConfig"
+  [filterActions]="filterActions"
+  [loading]="loading"
+  (filtersChange)="onFiltersChange($event)"
+></app-filter-custom>
+
+<app-table-custom
+  [id]="'contract-table'"
+  [data]="data"
+  [columns]="columns"
+  [loading]="loading"
+  [showIndexList]="true"
+  [stripedRows]="true"
+  [rowActions]="rowActions"
+  [toolbarActions]="toolbarActions"
+  [pagination]="pagination"
+  (pageChange)="onPageChange($event)"
+  (sortChange)="onSortChange($event)"
+  (refresh)="loadData()"
+></app-table-custom>
+
+<nz-modal
+  [(nzVisible)]="signModalVisible"
+  [nzTitle]="'contract.signTitle' | translate"
+  [nzOkLoading]="actionSubmitting"
+  [nzOkText]="'contract.sign' | translate"
+  (nzOnCancel)="signModalVisible = false"
+  (nzOnOk)="submitSign()"
+>
+  <ng-container *nzModalContent>
+    <form nz-form [formGroup]="signForm" nzLayout="vertical">
+      <nz-form-item>
+        <nz-form-label [nzRequired]="true">{{ 'contract.signDate' | translate }}</nz-form-label>
+        <nz-form-control>
+          <nz-date-picker formControlName="signDate" style="width: 100%"></nz-date-picker>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label>{{ 'contract.signedByCompanyRepresentative' | translate }}</nz-form-label>
+        <nz-form-control>
+          <input nz-input formControlName="signedByCompanyRepresentative" />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label>{{ 'contract.signedByEmployeeName' | translate }}</nz-form-label>
+        <nz-form-control>
+          <input nz-input formControlName="signedByEmployeeName" />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label>{{ 'contract.fileUrl' | translate }}</nz-form-label>
+        <nz-form-control>
+          <input nz-input formControlName="fileUrl" />
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-container>
+</nz-modal>
+
+<nz-modal
+  [(nzVisible)]="terminateModalVisible"
+  [nzTitle]="'contract.terminateTitle' | translate"
+  [nzOkLoading]="actionSubmitting"
+  [nzOkText]="'contract.terminate' | translate"
+  nzOkDanger
+  (nzOnCancel)="terminateModalVisible = false"
+  (nzOnOk)="submitTerminate()"
+>
+  <ng-container *nzModalContent>
+    <form nz-form [formGroup]="terminateForm" nzLayout="vertical">
+      <nz-form-item>
+        <nz-form-label [nzRequired]="true">{{
+          'contract.terminationDate' | translate
+        }}</nz-form-label>
+        <nz-form-control>
+          <nz-date-picker formControlName="terminationDate" style="width: 100%"></nz-date-picker>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzRequired]="true">{{
+          'contract.terminationReason' | translate
+        }}</nz-form-label>
+        <nz-form-control [nzErrorTip]="'contract.terminationReasonRequired' | translate">
+          <textarea nz-input formControlName="terminationReason" rows="3"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-container>
+</nz-modal>

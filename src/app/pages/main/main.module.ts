@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { NgxEchartsDirective, provideEchartsCore } from 'ngx-echarts';
 import { ROUTES_CONFIG } from '../../core/constants/common/routes.config';
+import { echarts } from '../../shared/echarts';
 import { SharedModule } from '../../shared/shared.module';
 import { HomeComponent } from './home/home.component';
 
@@ -44,6 +46,7 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [HomeComponent],
-  imports: [SharedModule, RouterModule.forChild(routes)],
+  imports: [SharedModule, RouterModule.forChild(routes), NgxEchartsDirective],
+  providers: [provideEchartsCore({ echarts })],
 })
 export class MainModule {}

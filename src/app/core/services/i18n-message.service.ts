@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { isNetworkErrorPayload } from '../utils/http-network-error';
 
 @Injectable({
   providedIn: 'root',
@@ -9,6 +10,25 @@ export class I18nMessageService {
 
   instant(key: string, params?: Record<string, unknown>): string {
     return this.translate.instant(key, params);
+  }
+
+  /** Normalize API / network error payloads into a display string. */
+  resolveServerMessage(serverMessage?: unknown): string | undefined {
+    if (serverMessage == null || serverMessage === '') return undefined;
+    if (typeof serverMessage === 'string') {
+      const trimmed = serverMessage.trim();
+      return trimmed || undefined;
+    }
+    if (isNetworkErrorPayload(serverMessage)) {
+      return this.instant('common.messages.serverUnavailable');
+    }
+    if (typeof serverMessage === 'object') {
+      const body = serverMessage as { message?: unknown; title?: unknown; detail?: unknown };
+      for (const value of [body.message, body.detail, body.title]) {
+        if (typeof value === 'string' && value.trim()) return value.trim();
+      }
+    }
+    return undefined;
   }
 
   entityLabel(entityI18nKey: string): string {
@@ -21,14 +41,17 @@ export class I18nMessageService {
     });
   }
 
-  loadListFailed(entityI18nKey: string, serverMessage?: string): string {
-    return serverMessage || this.instant('common.messages.loadListFailedEntity', {
-      entity: this.entityLabel(entityI18nKey),
-    });
+  loadListFailed(entityI18nKey: string, serverMessage?: unknown): string {
+    return (
+      this.resolveServerMessage(serverMessage) ||
+      this.instant('common.messages.loadListFailedEntity', {
+        entity: this.entityLabel(entityI18nKey),
+      })
+    );
   }
 
-  loadDetailFailed(serverMessage?: string): string {
-    return serverMessage || this.instant('common.messages.loadDetailFailed');
+  loadDetailFailed(serverMessage?: unknown): string {
+    return this.resolveServerMessage(serverMessage) || this.instant('common.messages.loadDetailFailed');
   }
 
   activateSuccess(entityI18nKey: string, name: string): string {
@@ -57,16 +80,22 @@ export class I18nMessageService {
     });
   }
 
-  activateError(entityI18nKey: string, serverMessage?: string): string {
-    return serverMessage || this.instant('common.messages.activateErrorEntity', {
-      entity: this.entityLabel(entityI18nKey),
-    });
+  activateError(entityI18nKey: string, serverMessage?: unknown): string {
+    return (
+      this.resolveServerMessage(serverMessage) ||
+      this.instant('common.messages.activateErrorEntity', {
+        entity: this.entityLabel(entityI18nKey),
+      })
+    );
   }
 
-  deactivateError(entityI18nKey: string, serverMessage?: string): string {
-    return serverMessage || this.instant('common.messages.deactivateErrorEntity', {
-      entity: this.entityLabel(entityI18nKey),
-    });
+  deactivateError(entityI18nKey: string, serverMessage?: unknown): string {
+    return (
+      this.resolveServerMessage(serverMessage) ||
+      this.instant('common.messages.deactivateErrorEntity', {
+        entity: this.entityLabel(entityI18nKey),
+      })
+    );
   }
 
   excelTemplateFailed(): string {
@@ -85,8 +114,8 @@ export class I18nMessageService {
     return this.instant('common.messages.excelExportSuccess');
   }
 
-  excelImportFailed(serverMessage?: string): string {
-    return serverMessage || this.instant('common.messages.excelImportFailed');
+  excelImportFailed(serverMessage?: unknown): string {
+    return this.resolveServerMessage(serverMessage) || this.instant('common.messages.excelImportFailed');
   }
 
   excelImportPartial(success: number, total: number, errors: number): string {
@@ -116,7 +145,7 @@ export class I18nMessageService {
     return this.instant('common.messages.updateSuccess');
   }
 
-  genericError(serverMessage?: string): string {
-    return serverMessage || this.instant('common.messages.genericError');
+  genericError(serverMessage?: unknown): string {
+    return this.resolveServerMessage(serverMessage) || this.instant('common.messages.genericError');
   }
 }

@@ -1,0 +1,289 @@
+<nz-card [nzTitle]="titleTemplate" [nzExtra]="extraTemplate" [nzLoading]="loading">
+  @if (contract) {
+    <div style="margin-bottom: 16px; display: flex; gap: 8px; flex-wrap: wrap">
+      @if (canSign) {
+        <button nz-button nzType="primary" (click)="openSignModal()">
+          <i nz-icon nzType="form"></i>
+          {{ 'contract.sign' | translate }}
+        </button>
+      }
+      @if (canTerminate) {
+        <button nz-button nzDanger (click)="openTerminateModal()">
+          <i nz-icon nzType="stop"></i>
+          {{ 'contract.terminate' | translate }}
+        </button>
+      }
+      @if (canRenew) {
+        <button nz-button nzType="default" (click)="openRenewModal()">
+          <i nz-icon nzType="reload"></i>
+          {{ 'contract.renew' | translate }}
+        </button>
+      }
+      @if (canCreateReview) {
+        <button nz-button nzType="default" (click)="createReview()">
+          <i nz-icon nzType="audit"></i>
+          {{ 'contract.createReview' | translate }}
+        </button>
+      }
+    </div>
+
+    <nz-descriptions nzBordered [nzColumn]="{ xxl: 3, xl: 3, lg: 2, md: 2, sm: 1, xs: 1 }">
+      <nz-descriptions-item [nzTitle]="'contract.code' | translate">
+        {{ contract.code }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'contract.employeeName' | translate">
+        {{ contract.employeeCode ? contract.employeeCode + ' - ' : '' }}{{ contract.employeeName }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'contract.contractTypeName' | translate">
+        {{ contract.contractTypeName || '-' }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'contract.status' | translate">
+        {{ statusLabel(contract.status) }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'contract.startDate' | translate">
+        {{ contract.startDate | date: 'dd/MM/yyyy' }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'contract.endDate' | translate">
+        {{ contract.endDate ? (contract.endDate | date: 'dd/MM/yyyy') : '-' }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'contract.signDate' | translate">
+        {{ contract.signDate ? (contract.signDate | date: 'dd/MM/yyyy') : '-' }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'contract.basicSalary' | translate">
+        {{ contract.basicSalary ?? '-' }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'contract.allowance' | translate">
+        {{ contract.allowance ?? '-' }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'contract.insuranceSalary' | translate">
+        {{ contract.insuranceSalary ?? '-' }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'contract.paymentMethod' | translate">
+        {{ contract.paymentMethod || '-' }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'contract.jobTitle' | translate">
+        {{ contract.jobTitle || '-' }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'contract.workingLocation' | translate">
+        {{ contract.workingLocation || '-' }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'contract.companyName' | translate">
+        {{ contract.companyName || '-' }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'contract.isAutoRenew' | translate">
+        {{
+          contract.isAutoRenew ? ('common.yes' | translate) : ('common.no' | translate)
+        }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'contract.renewalTimes' | translate">
+        {{ contract.renewalTimes }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'contract.signedByCompanyRepresentative' | translate">
+        {{ contract.signedByCompanyRepresentative || '-' }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'contract.signedByEmployeeName' | translate">
+        {{ contract.signedByEmployeeName || '-' }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'contract.terminationDate' | translate">
+        {{ contract.terminationDate ? (contract.terminationDate | date: 'dd/MM/yyyy') : '-' }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'contract.terminationReason' | translate" [nzSpan]="2">
+        {{ contract.terminationReason || '-' }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'contract.note' | translate" [nzSpan]="3">
+        {{ contract.note || '-' }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'contract.fileUrl' | translate" [nzSpan]="3">
+        @if (contract.fileUrl) {
+          <a [href]="contract.fileUrl" target="_blank" rel="noopener noreferrer">{{
+            contract.fileUrl
+          }}</a>
+        } @else {
+          -
+        }
+      </nz-descriptions-item>
+    </nz-descriptions>
+
+    <nz-divider></nz-divider>
+    <h3 style="margin-bottom: 16px">{{ 'contract.historyTitle' | translate }}</h3>
+    <nz-timeline>
+      @for (item of history; track item.id) {
+        <nz-timeline-item>
+          <p>
+            <strong>{{ item.code }}</strong>
+            — {{ statusLabel(item.status) }}
+          </p>
+          <p>
+            {{ item.startDate | date: 'dd/MM/yyyy' }}
+            →
+            {{ item.endDate ? (item.endDate | date: 'dd/MM/yyyy') : ('contract.unlimited' | translate) }}
+          </p>
+          <p>{{ item.contractTypeName || '-' }} | {{ item.basicSalary ?? '-' }}</p>
+        </nz-timeline-item>
+      } @empty {
+        <nz-timeline-item>{{ 'contract.noHistory' | translate }}</nz-timeline-item>
+      }
+    </nz-timeline>
+  }
+</nz-card>
+
+<ng-template #titleTemplate>
+  <span style="font-size: 18px; font-weight: 600">
+    <i nz-icon nzType="file-text" style="margin-right: 8px"></i>
+    {{ 'contract.detailTitle' | translate }}
+    @if (contract?.code) {
+      <span> - {{ contract?.code }}</span>
+    }
+  </span>
+</ng-template>
+
+<ng-template #extraTemplate>
+  <button nz-button nzType="default" (click)="goBack()">
+    {{ 'contract.backToList' | translate }}
+  </button>
+</ng-template>
+
+<nz-modal
+  [(nzVisible)]="signModalVisible"
+  [nzTitle]="'contract.signTitle' | translate"
+  [nzOkLoading]="actionSubmitting"
+  [nzOkText]="'contract.sign' | translate"
+  (nzOnCancel)="signModalVisible = false"
+  (nzOnOk)="submitSign()"
+>
+  <ng-container *nzModalContent>
+    <form nz-form [formGroup]="signForm" nzLayout="vertical">
+      <nz-form-item>
+        <nz-form-label [nzRequired]="true">{{ 'contract.signDate' | translate }}</nz-form-label>
+        <nz-form-control>
+          <nz-date-picker formControlName="signDate" style="width: 100%"></nz-date-picker>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label>{{ 'contract.signedByCompanyRepresentative' | translate }}</nz-form-label>
+        <nz-form-control>
+          <input nz-input formControlName="signedByCompanyRepresentative" />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label>{{ 'contract.signedByEmployeeName' | translate }}</nz-form-label>
+        <nz-form-control>
+          <input nz-input formControlName="signedByEmployeeName" />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label>{{ 'contract.fileUrl' | translate }}</nz-form-label>
+        <nz-form-control>
+          <input nz-input formControlName="fileUrl" />
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-container>
+</nz-modal>
+
+<nz-modal
+  [(nzVisible)]="terminateModalVisible"
+  [nzTitle]="'contract.terminateTitle' | translate"
+  [nzOkLoading]="actionSubmitting"
+  [nzOkText]="'contract.terminate' | translate"
+  nzOkDanger
+  (nzOnCancel)="terminateModalVisible = false"
+  (nzOnOk)="submitTerminate()"
+>
+  <ng-container *nzModalContent>
+    <form nz-form [formGroup]="terminateForm" nzLayout="vertical">
+      <nz-form-item>
+        <nz-form-label [nzRequired]="true">{{
+          'contract.terminationDate' | translate
+        }}</nz-form-label>
+        <nz-form-control>
+          <nz-date-picker formControlName="terminationDate" style="width: 100%"></nz-date-picker>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzRequired]="true">{{
+          'contract.terminationReason' | translate
+        }}</nz-form-label>
+        <nz-form-control [nzErrorTip]="'contract.terminationReasonRequired' | translate">
+          <textarea nz-input formControlName="terminationReason" rows="3"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-container>
+</nz-modal>
+
+<nz-modal
+  [(nzVisible)]="renewModalVisible"
+  [nzTitle]="'contract.renewTitle' | translate"
+  [nzOkLoading]="actionSubmitting"
+  [nzOkText]="'contract.renew' | translate"
+  [nzWidth]="720"
+  (nzOnCancel)="renewModalVisible = false"
+  (nzOnOk)="submitRenew()"
+>
+  <ng-container *nzModalContent>
+    <form nz-form [formGroup]="renewForm" nzLayout="vertical">
+      <div nz-row [nzGutter]="16">
+        <div nz-col nzXs="24" nzMd="12">
+          <nz-form-item>
+            <nz-form-label>{{ 'contract.code' | translate }}</nz-form-label>
+            <nz-form-control>
+              <input
+                nz-input
+                formControlName="code"
+                [placeholder]="'contract.codeOptionalPlaceholder' | translate"
+              />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="12">
+          <nz-form-item>
+            <nz-form-label>{{ 'contract.contractTypeName' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-select formControlName="contractTypeId" nzAllowClear nzShowSearch>
+                @for (t of contractTypes; track t.id) {
+                  <nz-option
+                    [nzValue]="t.id"
+                    [nzLabel]="t.code ? t.code + ' - ' + t.name : t.name"
+                  ></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="12">
+          <nz-form-item>
+            <nz-form-label [nzRequired]="true">{{ 'contract.startDate' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-date-picker formControlName="startDate" style="width: 100%"></nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="12">
+          <nz-form-item>
+            <nz-form-label>{{ 'contract.endDate' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-date-picker
+                formControlName="endDate"
+                nzAllowClear
+                style="width: 100%"
+              ></nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="12">
+          <nz-form-item>
+            <nz-form-label>{{ 'contract.basicSalary' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-input-number
+                formControlName="basicSalary"
+                [nzMin]="0"
+                style="width: 100%"
+              ></nz-input-number>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+    </form>
+  </ng-container>
+</nz-modal>

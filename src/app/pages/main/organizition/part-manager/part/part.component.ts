@@ -186,7 +186,6 @@ export class PartComponent implements OnInit {
     },
     { field: 'branchName', header: 'organization.part.branchName', type: 'text', sortable: true },
     { field: 'status', header: 'organization.part.status', type: 'boolean', sortable: true },
-    { field: 'createdAt', header: 'organization.part.createdAt', type: 'date', sortable: true },
   ];
 
   rowActions: RowAction[] = [

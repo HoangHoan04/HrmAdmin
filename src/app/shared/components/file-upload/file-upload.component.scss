@@ -1,3 +1,7 @@
+:host {
+  display: block;
+}
+
 .file-upload-container {
   display: flex;
   flex-direction: column;
@@ -10,20 +14,44 @@
   }
 }
 
-::ng-deep .custom-uploader {
+:host ::ng-deep .custom-uploader {
+  display: inline-block;
+
+  &.ant-upload-picture-card-wrapper,
+  .ant-upload-select,
+  .ant-upload.ant-upload-select,
   .ant-upload.ant-upload-select-picture-card {
     width: 150px !important;
     height: 150px !important;
     margin: 0 !important;
-    border: 1px dashed #d9d9d9;
-    border-radius: 8px;
-    background-color: #fafafa;
-    transition: all 0.3s ease;
+  }
+
+  .ant-upload.ant-upload-select,
+  .ant-upload.ant-upload-select-picture-card {
+    border: 1px dashed var(--border, #d9d9d9) !important;
+    border-radius: 8px !important;
+    background-color: var(--background-elevated, #fafafa) !important;
+    transition: border-color 0.3s ease;
     overflow: hidden;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    vertical-align: top;
+    cursor: pointer;
 
     &:hover {
-      border-color: #1890ff;
+      border-color: var(--primary, #1890ff) !important;
     }
+  }
+
+  .ant-upload-select > .ant-upload,
+  .ant-upload.ant-upload-select-picture-card > .ant-upload,
+  [nz-upload-btn] {
+    width: 100% !important;
+    height: 100% !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
   }
 }
 
@@ -32,13 +60,16 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100%;
-  color: #666;
+  width: 150px;
+  height: 150px;
+  min-width: 150px;
+  min-height: 150px;
+  color: var(--foreground-muted, #666);
 
   .anticon {
     font-size: 20px;
     margin-bottom: 4px;
-    color: #8c8c8c;
+    color: var(--foreground-muted, #8c8c8c);
   }
 
   .upload-text {
@@ -46,13 +77,16 @@
     text-align: center;
     line-height: 1.2;
     padding: 0 4px;
+    color: var(--foreground, #666);
   }
 }
 
 .preview-wrapper {
   position: relative;
-  width: 100%;
-  height: 100%;
+  width: 150px;
+  height: 150px;
+  min-width: 150px;
+  min-height: 150px;
   border-radius: 8px;
   overflow: hidden;
 
@@ -60,6 +94,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    display: block;
   }
 
   .preview-actions {
@@ -81,7 +116,9 @@
       cursor: pointer;
       padding: 4px;
       line-height: 1;
-      transition: transform 0.2s, color 0.2s;
+      transition:
+        transform 0.2s,
+        color 0.2s;
 
       &:hover {
         transform: scale(1.2);

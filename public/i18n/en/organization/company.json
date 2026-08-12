@@ -31,7 +31,6 @@
       "parentCompany": "Parent Company",
       "sectionBasic": "Basic Information",
       "sectionContact": "Contact Information",
-      "sectionAddress": "Detailed Address",
       "sectionLegal": "Legal Information",
       "sectionEmployeeCode": "Employee Code Prefixes",
       "sectionPayroll": "Payroll Configuration",

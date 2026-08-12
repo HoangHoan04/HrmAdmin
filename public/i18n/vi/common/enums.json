@@ -20,6 +20,20 @@
       "sat": "Thứ 7",
       "sun": "Chủ nhật"
     },
+    "month": {
+      "january": "Tháng 1",
+      "february": "Tháng 2",
+      "march": "Tháng 3",
+      "april": "Tháng 4",
+      "may": "Tháng 5",
+      "june": "Tháng 6",
+      "july": "Tháng 7",
+      "august": "Tháng 8",
+      "september": "Tháng 9",
+      "october": "Tháng 10",
+      "november": "Tháng 11",
+      "december": "Tháng 12"
+    },
     "actionType": {
       "create": "Thêm mới",
       "approve": "Duyệt",
@@ -81,6 +95,60 @@
       "maternity": "Nghỉ thai sản",
       "paternity": "Nghỉ chế độ thai sản (cho chồng)",
       "other": "Khác"
+    },
+    "contractStatus": {
+      "draft": "Nháp",
+      "pendingSign": "Chờ ký",
+      "active": "Đang hiệu lực",
+      "expiringSoon": "Sắp hết hạn",
+      "expired": "Hết hạn",
+      "terminated": "Đã chấm dứt",
+      "liquidated": "Đã thanh lý"
+    },
+    "reviewRenewalStatus": {
+      "pendingReview": "Chờ đánh giá",
+      "pendingApproval": "Chờ duyệt",
+      "approved": "Đã duyệt",
+      "rejected": "Từ chối",
+      "applied": "Đã áp dụng"
+    },
+    "reviewRecommendation": {
+      "renew": "Gia hạn",
+      "convert": "Chuyển loại hợp đồng",
+      "increaseSalary": "Tăng lương",
+      "terminate": "Chấm dứt",
+      "noChange": "Không thay đổi"
+    },
+    "transferStatus": {
+      "pending": "Chờ duyệt",
+      "approved": "Đã duyệt",
+      "rejected": "Từ chối",
+      "cancelled": "Đã hủy",
+      "applied": "Đã áp dụng"
+    },
+    "transferType": {
+      "internalTransfer": "Điều chuyển nội bộ",
+      "secondment": "Biệt phái",
+      "rotation": "Luân chuyển",
+      "companyTransfer": "Chuyển công ty",
+      "branchTransfer": "Chuyển chi nhánh",
+      "promotion": "Thăng chức",
+      "demotion": "Giáng chức",
+      "dismissal": "Miễn nhiệm"
+    },
+    "attendanceStatus": {
+      "onTime": "Đúng giờ",
+      "late": "Đi muộn",
+      "early": "Về sớm",
+      "leave": "Nghỉ phép",
+      "absent": "Vắng",
+      "incomplete": "Chưa đủ"
+    },
+    "dayOffStatus": {
+      "pending": "Chờ duyệt",
+      "approved": "Đã duyệt",
+      "rejected": "Từ chối",
+      "cancelled": "Đã hủy"
     }
   }
 }

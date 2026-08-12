@@ -12,7 +12,7 @@
   <nz-spin [nzSpinning]="loading">
     <form nz-form [formGroup]="validateForm" nzLayout="vertical" (ngSubmit)="submitForm()">
       <div nz-row [nzGutter]="24">
-        <div nz-col nzXs="24" nzMd="12">
+        <div nz-col nzXs="24" nzMd="8">
           <nz-form-item>
             <nz-form-label [nzRequired]="true">{{
               'organization.partMaster.code' | translate
@@ -27,7 +27,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzXs="24" nzMd="12">
+        <div nz-col nzXs="24" nzMd="8">
           <nz-form-item>
             <nz-form-label [nzRequired]="true">{{
               'organization.partMaster.name' | translate
@@ -41,10 +41,8 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-      </div>
 
-      <div nz-row [nzGutter]="24">
-        <div nz-col nzXs="24" nzMd="12">
+        <div nz-col nzXs="24" nzMd="8">
           <nz-form-item>
             <nz-form-label>{{ 'organization.partMaster.companyName' | translate }}</nz-form-label>
             <nz-form-control>
@@ -63,7 +61,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzXs="24" nzMd="12">
+        <div nz-col nzXs="24" nzMd="8">
           <nz-form-item>
             <nz-form-label>{{ 'organization.partMaster.branchName' | translate }}</nz-form-label>
             <nz-form-control>
@@ -82,10 +80,8 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-      </div>
 
-      <div nz-row [nzGutter]="24">
-        <div nz-col nzXs="24" nzMd="12">
+        <div nz-col nzXs="24" nzMd="8">
           <nz-form-item>
             <nz-form-label>{{ 'organization.partMaster.type' | translate }}</nz-form-label>
             <nz-form-control>
@@ -97,7 +93,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzXs="24" nzMd="6">
+        <div nz-col nzXs="24" nzMd="8">
           <nz-form-item>
             <nz-form-label>{{ 'organization.partMaster.displayOrder' | translate }}</nz-form-label>
             <nz-form-control>
@@ -110,7 +106,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzXs="24" nzMd="6">
+        <div nz-col nzXs="24" nzMd="8">
           <nz-form-item>
             <nz-form-label>{{ 'organization.partMaster.isActive' | translate }}</nz-form-label>
             <nz-form-control>

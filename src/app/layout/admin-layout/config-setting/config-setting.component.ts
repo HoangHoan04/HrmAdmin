@@ -12,7 +12,6 @@ import { Subscription } from 'rxjs';
 })
 export class ConfigSettingComponent implements OnInit, OnDestroy {
   s: DashboardSettings;
-  /** Bound to nz-drawer; avoid async pipe to prevent NG0100 (zIndex 9 → -1). */
   configOpen = false;
   private sub = new Subscription();
 

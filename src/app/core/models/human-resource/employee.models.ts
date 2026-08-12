@@ -62,6 +62,8 @@ export interface Employee extends BaseDto {
   firstName: string;
   lastName: string;
   fullName?: string;
+  gender?: string;
+  avatarUrl?: string | null;
   phone: string;
   secondaryPhone?: string;
   email: string;

@@ -1,0 +1,32 @@
+{
+  "contractType": {
+    "entityName": "contract type",
+    "title": "Contract Type Management",
+    "code": "Type Code",
+    "name": "Type Name",
+    "description": "Description",
+    "companyName": "Company",
+    "isProbation": "Probation",
+    "isUnlimited": "Indefinite term",
+    "defaultDurationMonths": "Default duration (months)",
+    "maxRenewalTimes": "Max renewals",
+    "notifyBeforeExpiryDays": "Notify before expiry (days)",
+    "displayOrder": "Display order",
+    "isActive": "Active",
+    "status": "Status",
+    "searchCode": "Enter type code...",
+    "searchName": "Enter type name...",
+    "filterCompany": "Select company...",
+    "filterStatus": "Select status...",
+    "edit": "Edit contract type",
+    "activate": "Activate",
+    "deactivate": "Deactivate",
+    "addTitle": "Add contract type",
+    "editTitle": "Update contract type",
+    "backToList": "Back to list",
+    "codeRequired": "Please enter contract type code!",
+    "nameRequired": "Please enter contract type name!",
+    "codePlaceholder": "Ex: CT-PROB",
+    "namePlaceholder": "Ex: Probation contract"
+  }
+}

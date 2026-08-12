@@ -1,4 +1,5 @@
 import { ROUTES_CONFIG } from '@/app/core/constants/common';
+import { toDateOnly } from '@/app/core/constants/helpers';
 import {
   BranchSelectBoxDto,
   EmployeeSelectBoxDto,
@@ -109,7 +110,7 @@ export class AddOrUpdateWorkScheduleComponent implements OnInit {
     const payload = {
       employeeId: value.employeeId,
       shiftMasterId: value.shiftMasterId,
-      workDate: this.toDateOnly(value.workDate),
+      workDate: toDateOnly(value.workDate),
       branchId: value.branchId || null,
       note: value.note || null,
     };
@@ -129,12 +130,5 @@ export class AddOrUpdateWorkScheduleComponent implements OnInit {
         this.submitting = false;
       },
     });
-  }
-
-  private toDateOnly(d: Date): string {
-    const y = d.getFullYear();
-    const m = String(d.getMonth() + 1).padStart(2, '0');
-    const day = String(d.getDate()).padStart(2, '0');
-    return `${y}-${m}-${day}`;
   }
 }

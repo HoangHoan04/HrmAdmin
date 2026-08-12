@@ -40,6 +40,7 @@ export class EndpointService {
     EXCEL_TEMPLATE: `${this.baseUrl}/branch/excel/template`,
     EXCEL_EXPORT: `${this.baseUrl}/branch/excel/export`,
     EXCEL_IMPORT: `${this.baseUrl}/branch/excel/import`,
+    LOAD_BY_COMPANY: `${this.baseUrl}/branch/load-by-company`,
   };
 
   DEPARTMENT = {
@@ -53,6 +54,7 @@ export class EndpointService {
     EXCEL_TEMPLATE: `${this.baseUrl}/department/excel/template`,
     EXCEL_EXPORT: `${this.baseUrl}/department/excel/export`,
     EXCEL_IMPORT: `${this.baseUrl}/department/excel/import`,
+    LOAD_BY_BRANCH: `${this.baseUrl}/department/load-by-branch`,
   };
 
   PART = {
@@ -66,6 +68,7 @@ export class EndpointService {
     EXCEL_TEMPLATE: `${this.baseUrl}/part/excel/template`,
     EXCEL_EXPORT: `${this.baseUrl}/part/excel/export`,
     EXCEL_IMPORT: `${this.baseUrl}/part/excel/import`,
+    LOAD_BY_DEPARTMENT: `${this.baseUrl}/part/load-by-department`,
   };
 
   PART_MASTER = {
@@ -79,6 +82,7 @@ export class EndpointService {
     EXCEL_TEMPLATE: `${this.baseUrl}/part-master/excel/template`,
     EXCEL_EXPORT: `${this.baseUrl}/part-master/excel/export`,
     EXCEL_IMPORT: `${this.baseUrl}/part-master/excel/import`,
+    LOAD_BY_SCOPE: `${this.baseUrl}/part-master/load-by-scope`,
   };
 
   POSITION = {
@@ -105,6 +109,7 @@ export class EndpointService {
     EXCEL_TEMPLATE: `${this.baseUrl}/position-master/excel/template`,
     EXCEL_EXPORT: `${this.baseUrl}/position-master/excel/export`,
     EXCEL_IMPORT: `${this.baseUrl}/position-master/excel/import`,
+    LOAD_BY_SCOPE: `${this.baseUrl}/position-master/load-by-scope`,
   };
 
   EMPLOYEE = {
@@ -198,16 +203,53 @@ export class EndpointService {
     REJECT: `${this.baseUrl}/register-day-off/reject`,
   };
 
-  ACTION_LOG = {
-    BASE: `${this.baseUrl}/action-logs`,
+  CONTRACT_TYPE = {
+    PAGINATION: `${this.baseUrl}/contract-type/pagination`,
+    DETAIL: `${this.baseUrl}/contract-type/detail`,
+    CREATE: `${this.baseUrl}/contract-type/create`,
+    UPDATE: `${this.baseUrl}/contract-type/update`,
+    ACTIVATE: `${this.baseUrl}/contract-type/activate`,
+    DEACTIVATE: `${this.baseUrl}/contract-type/deactivate`,
+    SELECT_BOX: `${this.baseUrl}/contract-type/select-box`,
   };
 
-  ORGANIZATION = {
-    BRANCHES_BY_COMPANY: `${this.baseUrl}/branch/by-company`,
-    DEPARTMENTS_BY_BRANCH: `${this.baseUrl}/department/by-branch`,
-    PARTS_BY_DEPARTMENT: `${this.baseUrl}/part/by-department`,
-    PART_MASTERS_BY_SCOPE: `${this.baseUrl}/part-master/by-scope`,
-    POSITION_MASTERS_BY_SCOPE: `${this.baseUrl}/position-master/by-scope`,
+  CONTRACT = {
+    PAGINATION: `${this.baseUrl}/contract/pagination`,
+    DETAIL: `${this.baseUrl}/contract/detail`,
+    CREATE: `${this.baseUrl}/contract/create`,
+    UPDATE: `${this.baseUrl}/contract/update`,
+    SIGN: `${this.baseUrl}/contract/sign`,
+    TERMINATE: `${this.baseUrl}/contract/terminate`,
+    RENEW: `${this.baseUrl}/contract/renew`,
+    HISTORY: `${this.baseUrl}/contract/history`,
+    EXPIRING_SOON: `${this.baseUrl}/contract/expiring-soon`,
+  };
+
+  REVIEW_RENEWAL = {
+    PAGINATION: `${this.baseUrl}/review-renewal/pagination`,
+    DETAIL: `${this.baseUrl}/review-renewal/detail`,
+    CREATE: `${this.baseUrl}/review-renewal/create`,
+    UPDATE: `${this.baseUrl}/review-renewal/update`,
+    APPROVE: `${this.baseUrl}/review-renewal/approve`,
+    REJECT: `${this.baseUrl}/review-renewal/reject`,
+    APPLY: `${this.baseUrl}/review-renewal/apply`,
+  };
+
+  TRANSFER_EMPLOYEE = {
+    PAGINATION: `${this.baseUrl}/transfer-employee/pagination`,
+    DETAIL: `${this.baseUrl}/transfer-employee/detail`,
+    CREATE: `${this.baseUrl}/transfer-employee/create`,
+    UPDATE: `${this.baseUrl}/transfer-employee/update`,
+    APPROVE: `${this.baseUrl}/transfer-employee/approve`,
+    REJECT: `${this.baseUrl}/transfer-employee/reject`,
+    APPLY: `${this.baseUrl}/transfer-employee/apply`,
+    CANCEL: `${this.baseUrl}/transfer-employee/cancel`,
+    HISTORY: `${this.baseUrl}/transfer-employee/history`,
+    EMPLOYEE_ORG_SNAPSHOT: `${this.baseUrl}/transfer-employee/employee-org-snapshot`,
+  };
+
+  ACTION_LOG = {
+    BASE: `${this.baseUrl}/action-logs`,
   };
 
   UPLOAD_FILE = {

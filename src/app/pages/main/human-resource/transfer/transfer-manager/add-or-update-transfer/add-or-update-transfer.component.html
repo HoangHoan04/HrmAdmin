@@ -1,0 +1,307 @@
+<nz-card [nzTitle]="titleTemplate" [nzExtra]="extraTemplate">
+  <nz-spin [nzSpinning]="loading">
+    <form nz-form [formGroup]="validateForm" nzLayout="vertical" (ngSubmit)="submitForm()">
+      <div nz-row [nzGutter]="24">
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label [nzRequired]="true">{{
+              'transfer.employeeName' | translate
+            }}</nz-form-label>
+            <nz-form-control [nzErrorTip]="'transfer.employeeRequired' | translate">
+              <nz-select
+                formControlName="employeeId"
+                nzShowSearch
+                nzAllowClear
+                [nzPlaceHolder]="'transfer.filterEmployee' | translate"
+              >
+                @for (e of employees; track e.id) {
+                  <nz-option
+                    [nzValue]="e.id"
+                    [nzLabel]="e.code ? e.code + ' - ' + e.name : e.name"
+                  ></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label [nzRequired]="true">{{ 'transfer.code' | translate }}</nz-form-label>
+            <nz-form-control [nzErrorTip]="'transfer.codeRequired' | translate">
+              <input
+                nz-input
+                formControlName="code"
+                [placeholder]="'transfer.codePlaceholder' | translate"
+              />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label [nzRequired]="true">{{
+              'transfer.transferType' | translate
+            }}</nz-form-label>
+            <nz-form-control [nzErrorTip]="'transfer.transferTypeRequired' | translate">
+              <nz-select
+                formControlName="transferType"
+                nzShowSearch
+                nzAllowClear
+                [nzPlaceHolder]="'transfer.filterTransferType' | translate"
+              >
+                @for (t of transferTypeOptions; track t.value) {
+                  <nz-option [nzValue]="t.value" [nzLabel]="t.labelKey | translate"></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+
+      <div nz-row [nzGutter]="24">
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'transfer.requestDate' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-date-picker formControlName="requestDate" style="width: 100%"></nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label [nzRequired]="true">{{
+              'transfer.effectiveDate' | translate
+            }}</nz-form-label>
+            <nz-form-control [nzErrorTip]="'transfer.effectiveDateRequired' | translate">
+              <nz-date-picker formControlName="effectiveDate" style="width: 100%"></nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'transfer.expectedEndDate' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-date-picker
+                formControlName="expectedEndDate"
+                nzAllowClear
+                style="width: 100%"
+              ></nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+
+      <div nz-row [nzGutter]="24">
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'transfer.decisionNumber' | translate }}</nz-form-label>
+            <nz-form-control>
+              <input nz-input formControlName="decisionNumber" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'transfer.decisionDate' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-date-picker
+                formControlName="decisionDate"
+                nzAllowClear
+                style="width: 100%"
+              ></nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'transfer.reason' | translate }}</nz-form-label>
+            <nz-form-control>
+              <input nz-input formControlName="reason" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+
+      <nz-form-item>
+        <nz-form-label>{{ 'transfer.note' | translate }}</nz-form-label>
+        <nz-form-control>
+          <textarea nz-input formControlName="note" rows="2"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-divider></nz-divider>
+      <h3 style="margin-bottom: 16px">{{ 'transfer.detailSection' | translate }}</h3>
+
+      <div formGroupName="detail">
+        <div nz-row [nzGutter]="24">
+          <div nz-col nzXs="24" nzMd="12">
+            <h4 style="margin-bottom: 12px">{{ 'transfer.oldOrg' | translate }}</h4>
+            <nz-form-item>
+              <nz-form-label>{{ 'transfer.oldCompany' | translate }}</nz-form-label>
+              <nz-form-control>
+                <input nz-input formControlName="oldCompanyName" />
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label>{{ 'transfer.oldBranch' | translate }}</nz-form-label>
+              <nz-form-control>
+                <input nz-input formControlName="oldBranchName" />
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label>{{ 'transfer.oldDepartment' | translate }}</nz-form-label>
+              <nz-form-control>
+                <input nz-input formControlName="oldDepartmentName" />
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label>{{ 'transfer.oldPart' | translate }}</nz-form-label>
+              <nz-form-control>
+                <input nz-input formControlName="oldPartName" />
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label>{{ 'transfer.oldPosition' | translate }}</nz-form-label>
+              <nz-form-control>
+                <input nz-input formControlName="oldPositionName" />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+
+          <div nz-col nzXs="24" nzMd="12">
+            <h4 style="margin-bottom: 12px">{{ 'transfer.newOrg' | translate }}</h4>
+            <nz-form-item>
+              <nz-form-label>{{ 'transfer.newCompany' | translate }}</nz-form-label>
+              <nz-form-control>
+                <nz-select
+                  formControlName="newCompanyId"
+                  nzShowSearch
+                  nzAllowClear
+                  [nzPlaceHolder]="'transfer.selectCompany' | translate"
+                >
+                  @for (c of companies; track c.id) {
+                    <nz-option
+                      [nzValue]="c.id"
+                      [nzLabel]="c.code ? c.code + ' - ' + c.name : c.name"
+                    ></nz-option>
+                  }
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label>{{ 'transfer.newBranch' | translate }}</nz-form-label>
+              <nz-form-control>
+                <nz-select
+                  formControlName="newBranchId"
+                  nzShowSearch
+                  nzAllowClear
+                  [nzPlaceHolder]="'transfer.selectBranch' | translate"
+                  [nzDisabled]="!detailGroup.get('newCompanyId')?.value"
+                >
+                  @for (b of branches; track b.id) {
+                    <nz-option
+                      [nzValue]="b.id"
+                      [nzLabel]="b.code ? b.code + ' - ' + b.name : b.name"
+                    ></nz-option>
+                  }
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label>{{ 'transfer.newDepartment' | translate }}</nz-form-label>
+              <nz-form-control>
+                <nz-select
+                  formControlName="newDepartmentId"
+                  nzShowSearch
+                  nzAllowClear
+                  [nzPlaceHolder]="'transfer.selectDepartment' | translate"
+                  [nzDisabled]="!detailGroup.get('newBranchId')?.value"
+                >
+                  @for (d of departments; track d.id) {
+                    <nz-option
+                      [nzValue]="d.id"
+                      [nzLabel]="d.code ? d.code + ' - ' + d.name : d.name"
+                    ></nz-option>
+                  }
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label>{{ 'transfer.newPart' | translate }}</nz-form-label>
+              <nz-form-control>
+                <nz-select
+                  formControlName="newPartId"
+                  nzShowSearch
+                  nzAllowClear
+                  [nzPlaceHolder]="'transfer.selectPart' | translate"
+                  [nzDisabled]="!detailGroup.get('newDepartmentId')?.value"
+                >
+                  @for (p of parts; track p.id) {
+                    <nz-option
+                      [nzValue]="p.id"
+                      [nzLabel]="p.code ? p.code + ' - ' + p.name : p.name"
+                    ></nz-option>
+                  }
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label>{{ 'transfer.newPosition' | translate }}</nz-form-label>
+              <nz-form-control>
+                <nz-select
+                  formControlName="newPositionId"
+                  nzShowSearch
+                  nzAllowClear
+                  [nzPlaceHolder]="'transfer.selectPosition' | translate"
+                  [nzDisabled]="!detailGroup.get('newDepartmentId')?.value"
+                >
+                  @for (p of positions; track p.id) {
+                    <nz-option
+                      [nzValue]="p.id"
+                      [nzLabel]="p.code ? p.code + ' - ' + p.name : p.name"
+                    ></nz-option>
+                  }
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+
+        <nz-form-item>
+          <nz-form-label>{{ 'transfer.note' | translate }}</nz-form-label>
+          <nz-form-control>
+            <textarea nz-input formControlName="note" rows="2"></textarea>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <div class="form-actions" style="margin-top: 24px">
+        <button nz-button nzType="default" type="button" (click)="goBack()" [disabled]="submitting">
+          <i nz-icon nzType="arrow-left"></i>
+          {{ 'transfer.backToList' | translate }}
+        </button>
+        <button
+          nz-button
+          nzType="primary"
+          type="submit"
+          [nzLoading]="submitting"
+          style="margin-left: 12px"
+        >
+          <i nz-icon nzType="save"></i> {{ 'common.actions.save' | translate }}
+        </button>
+      </div>
+    </form>
+  </nz-spin>
+</nz-card>
+
+<ng-template #titleTemplate>
+  <span style="font-size: 18px; font-weight: 600">
+    <i nz-icon nzType="swap" style="margin-right: 8px"></i>
+    {{ isEdit ? ('transfer.editTitle' | translate) : ('transfer.addTitle' | translate) }}
+  </span>
+</ng-template>
+
+<ng-template #extraTemplate>
+  <button nz-button nzType="default" (click)="goBack()">
+    {{ 'transfer.backToList' | translate }}
+  </button>
+</ng-template>

@@ -6,7 +6,7 @@ import {
   withInterceptorsFromDi,
 } from '@angular/common/http';
 import vi from '@angular/common/locales/vi';
-import { APP_INITIALIZER, Injector, NgModule } from '@angular/core'; // 👈 thêm APP_INITIALIZER, Injector
+import { APP_INITIALIZER, Injector, NgModule } from '@angular/core'; 
 import { BrowserModule } from '@angular/platform-browser';
 import { IconDefinition } from '@ant-design/icons-angular';
 import * as AllIcons from '@ant-design/icons-angular/icons';
@@ -18,7 +18,8 @@ import { catchError, map, switchMap } from 'rxjs/operators';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
-import { StaticTranslateService } from './core/services/static-translate.service'; // 👈 thêm import
+import { ErrorInterceptor } from './core/interceptors/error.interceptor';
+import { StaticTranslateService } from './core/services/static-translate.service'; 
 import { AdminLayoutModule } from './layout/admin-layout/admin-layout.module';
 import { OtherModule } from './pages/other/other.module';
 import { SharedModule } from './shared/shared.module';
@@ -45,7 +46,7 @@ export class CustomTranslateLoader implements TranslateLoader {
   constructor(private readonly http: HttpClient) {}
 
   getTranslation(lang: string): Observable<any> {
-    return this.http.get<string[]>('./i18n/manifest.json').pipe(
+    return this.http.get<string[]>('/i18n/manifest.json').pipe(
       catchError(() => {
         console.error('Failed to load i18n manifest.json, falling back to empty translation.');
         return of([]);
@@ -55,9 +56,9 @@ export class CustomTranslateLoader implements TranslateLoader {
           return of({});
         }
         const requests = files.map((file) =>
-          this.http.get(`./i18n/${lang}/${file}`).pipe(
+          this.http.get(`/i18n/${lang}/${file}`).pipe(
             catchError(() => {
-              console.warn(`Translation file not found: ./i18n/${lang}/${file}`);
+              console.warn(`Translation file not found: /i18n/${lang}/${file}`);
               return of({});
             }),
           ),
@@ -70,10 +71,9 @@ export class CustomTranslateLoader implements TranslateLoader {
   }
 }
 
-// 👇 Factory function để khởi tạo StaticTranslateService trước mọi thứ khác
 export function initStaticTranslateFactory(injector: Injector) {
   return () => {
-    injector.get(StaticTranslateService); // trigger constructor -> gán static instance
+    injector.get(StaticTranslateService);
   };
 }
 
@@ -89,6 +89,11 @@ export function initStaticTranslateFactory(injector: Injector) {
       useClass: AuthInterceptor,
       multi: true,
     },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ErrorInterceptor,
+      multi: true,
+    },
     provideTranslateService({
       lang: 'vi',
       loader: {
@@ -97,7 +102,6 @@ export function initStaticTranslateFactory(injector: Injector) {
         deps: [HttpClient],
       },
     }),
-    // 👇 Thêm APP_INITIALIZER
     {
       provide: APP_INITIALIZER,
       useFactory: initStaticTranslateFactory,

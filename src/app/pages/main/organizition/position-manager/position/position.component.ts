@@ -178,7 +178,6 @@ export class PositionComponent implements OnInit {
       sortable: true,
     },
     { field: 'status', header: 'organization.position.status', type: 'boolean', sortable: true },
-    { field: 'createdAt', header: 'organization.position.createdAt', type: 'date', sortable: true },
   ];
 
   rowActions: RowAction[] = [

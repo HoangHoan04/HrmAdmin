@@ -1,13 +1,201 @@
-<div class="home-container">
-  <div class="home-header">
-    <h1 class="home-title">{{ 'home.welcome' | translate }}</h1>
-    <p class="home-subtitle">{{ 'home.desc' | translate }}</p>
+﻿<div class="analytics-dashboard">
+  <div class="dashboard-header">
+    <div class="header-left">
+      <div class="logo-icon">
+        <i nz-icon nzType="bar-chart" nzTheme="outline"></i>
+      </div>
+      <div class="header-text">
+        <h1>HR Dashboard</h1>
+        <p class="subtitle">Tổng quan nhân sự &amp; tuyển dụng</p>
+      </div>
+    </div>
+    <div class="header-right">
+      <nz-range-picker class="range-picker"></nz-range-picker>
+      <button nz-button nzType="primary" class="btn-export">
+        <i nz-icon nzType="download" nzTheme="outline"></i>
+        Export PDF
+      </button>
+    </div>
   </div>
 
-  <nz-card [nzTitle]="'home.cardTitle' | translate">
-    <p>{{ 'home.cardDesc' | translate }}</p>
-    <p class="home-description">
-      {{ 'home.cardHelp' | translate }}
-    </p>
-  </nz-card>
+  <div nz-row [nzGutter]="[16, 16]" class="stats-row">
+    <div nz-col nzXs="24" nzSm="12" nzMd="6" *ngFor="let stat of statsData">
+      <div class="stat-card" [attr.data-tone]="stat.tone">
+        <div class="stat-icon">
+          <i nz-icon [nzType]="stat.icon" nzTheme="outline"></i>
+        </div>
+        <div class="stat-info">
+          <div class="stat-top">
+            <span class="stat-value">{{ stat.value }}</span>
+            <span class="stat-change" [class.up]="stat.change > 0" [class.down]="stat.change < 0">
+              {{ stat.change > 0 ? '+' : '' }}{{ stat.change }}%
+            </span>
+          </div>
+          <span class="stat-label">{{ stat.label }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div nz-row [nzGutter]="[16, 16]" class="charts-row">
+    <div nz-col nzXs="24" nzLg="8">
+      <div nz-row [nzGutter]="[16, 16]">
+        <div nz-col nzSpan="24">
+          <nz-card [nzBordered]="false" class="dashboard-card">
+            <div class="card-header">
+              <span class="card-title">Tuyển dụng kỹ thuật</span>
+              <nz-tag class="pct-tag">85%</nz-tag>
+            </div>
+            <div echarts [options]="techGaugeOption" [autoResize]="true" class="chart-gauge"></div>
+            <div class="gauge-stats">
+              <div class="stat-item">
+                <span class="num">100</span>
+                <span class="lbl">Vị trí mở</span>
+              </div>
+              <div class="stat-item">
+                <span class="num">85</span>
+                <span class="lbl">Đã tuyển</span>
+              </div>
+            </div>
+          </nz-card>
+        </div>
+
+        <div nz-col nzSpan="24">
+          <nz-card [nzBordered]="false" class="dashboard-card">
+            <div class="card-header">
+              <span class="card-title">Tuyển dụng phi kỹ thuật</span>
+              <nz-tag class="pct-tag success">95%</nz-tag>
+            </div>
+            <div
+              echarts
+              [options]="nonTechGaugeOption"
+              [autoResize]="true"
+              class="chart-gauge"
+            ></div>
+            <div class="gauge-stats">
+              <div class="stat-item">
+                <span class="num">100</span>
+                <span class="lbl">Vị trí mở</span>
+              </div>
+              <div class="stat-item">
+                <span class="num">95</span>
+                <span class="lbl">Đã tuyển</span>
+              </div>
+            </div>
+          </nz-card>
+        </div>
+
+        <div nz-col nzSpan="24">
+          <nz-card [nzBordered]="false" class="dashboard-card">
+            <div class="card-header">
+              <span class="card-title">Xu hướng tuyển dụng tháng</span>
+              <div class="legend-inline">
+                <span><i class="dot external"></i> External</span>
+                <span><i class="dot internal"></i> Internal</span>
+              </div>
+            </div>
+            <div echarts [options]="barChartOption" [autoResize]="true" class="chart-bar"></div>
+          </nz-card>
+        </div>
+      </div>
+    </div>
+
+    <div nz-col nzXs="24" nzLg="8">
+      <div nz-row [nzGutter]="[16, 16]">
+        <div nz-col nzSpan="24">
+          <nz-card [nzBordered]="false" class="dashboard-card">
+            <div class="card-header">
+              <span class="card-title">Pipeline tuyển dụng</span>
+            </div>
+            <div echarts [options]="funnelOption" [autoResize]="true" class="chart-funnel"></div>
+          </nz-card>
+        </div>
+
+        <div nz-col nzSpan="24">
+          <nz-card [nzBordered]="false" class="dashboard-card">
+            <div class="card-header">
+              <span class="card-title">Nguồn tuyển dụng Q2</span>
+            </div>
+            <div echarts [options]="pieOption" [autoResize]="true" class="chart-pie"></div>
+            <div class="source-tags">
+              <nz-tag *ngFor="let tag of sourceTags" class="soft-tag">{{ tag }}</nz-tag>
+            </div>
+          </nz-card>
+        </div>
+
+        <div nz-col nzSpan="24">
+          <nz-card [nzBordered]="false" class="dashboard-card">
+            <div class="card-header">
+              <span class="card-title">Tăng trưởng nhân sự theo năm</span>
+            </div>
+            <div echarts [options]="growthOption" [autoResize]="true" class="chart-growth"></div>
+            <div class="growth-note">
+              <i nz-icon nzType="warning" nzTheme="fill" class="note-icon"></i>
+              <span
+                >Nhân viên có xu hướng nghỉ việc quanh mốc 2 năm làm việc.</span
+              >
+            </div>
+          </nz-card>
+        </div>
+      </div>
+    </div>
+
+    <div nz-col nzXs="24" nzLg="8">
+      <div nz-row [nzGutter]="[16, 16]">
+        <div nz-col nzSpan="24">
+          <nz-card [nzBordered]="false" class="dashboard-card">
+            <div class="card-header">
+              <span class="card-title">Hiệu suất kinh doanh</span>
+            </div>
+            <div class="metric-grid">
+              <div class="metric-box" *ngFor="let metric of businessMetrics">
+                <span class="metric-box-value">{{ metric.value }}</span>
+                <span class="metric-box-label">{{ metric.label }}</span>
+                <span
+                  class="metric-box-change"
+                  [class.up]="metric.change > 0"
+                  [class.down]="metric.change < 0"
+                >
+                  {{ metric.change > 0 ? '+' : '' }}{{ metric.change }}%
+                </span>
+              </div>
+            </div>
+          </nz-card>
+        </div>
+
+        <div nz-col nzSpan="24">
+          <nz-card [nzBordered]="false" class="dashboard-card">
+            <div class="card-header">
+              <span class="card-title">Hiệu suất phòng ban</span>
+            </div>
+            <div echarts [options]="deptOption" [autoResize]="true" class="chart-dept"></div>
+          </nz-card>
+        </div>
+
+        <div nz-col nzSpan="24">
+          <nz-card [nzBordered]="false" class="dashboard-card highlight-card">
+            <div class="card-header">
+              <span class="card-title">Doanh thu định kỳ</span>
+            </div>
+            <div
+              echarts
+              [options]="revenueGaugeOption"
+              [autoResize]="true"
+              class="chart-revenue"
+            ></div>
+            <div class="recurring-detail">
+              <div class="detail-item">
+                <span class="label">MRR</span>
+                <span class="value">$184K</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">ARR</span>
+                <span class="value">$2.2M</span>
+              </div>
+            </div>
+          </nz-card>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

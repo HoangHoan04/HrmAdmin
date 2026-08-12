@@ -1,5 +1,6 @@
 import { ROUTES_CONFIG } from '@/app/core/constants/common';
 import { enumData } from '@/app/core/constants/enums/enumData';
+import { toDateOnly } from '@/app/core/constants/helpers';
 import {
   BranchSelectBoxDto,
   EmployeeSelectBoxDto,
@@ -215,8 +216,8 @@ export class WorkScheduleManagerComponent implements OnInit {
 
     const range = this.filters['dateRange'] as Date[] | null;
     if (range?.length === 2 && range[0] && range[1]) {
-      payload['fromDate'] = this.toDateOnly(range[0]);
-      payload['toDate'] = this.toDateOnly(range[1]);
+      payload['fromDate'] = toDateOnly(range[0]);
+      payload['toDate'] = toDateOnly(range[1]);
     }
 
     this.apiService
@@ -297,13 +298,6 @@ export class WorkScheduleManagerComponent implements OnInit {
         error: (err: any) =>
           this.message.error(this.i18n.deactivateError(this.ENTITY_KEY, err.error)),
       });
-  }
-
-  private toDateOnly(d: Date): string {
-    const y = d.getFullYear();
-    const m = String(d.getMonth() + 1).padStart(2, '0');
-    const day = String(d.getDate()).padStart(2, '0');
-    return `${y}-${m}-${day}`;
   }
 
   private syncFilterActionsLoading(): void {

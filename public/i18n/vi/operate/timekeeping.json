@@ -4,6 +4,7 @@
     "title": "Quản lý chấm công",
     "employee": "Nhân viên",
     "employeeCode": "Mã NV",
+    "company": "Công ty",
     "branch": "Chi nhánh",
     "workDate": "Ngày công",
     "shiftMaster": "Ca",
@@ -16,6 +17,7 @@
     "note": "Ghi chú",
     "isManualAdjusted": "Điều chỉnh tay",
     "filterEmployee": "Chọn nhân viên...",
+    "filterCompany": "Chọn công ty...",
     "filterBranch": "Chọn chi nhánh...",
     "filterStatus": "Chọn trạng thái...",
     "filterDateRange": "Khoảng ngày",
@@ -29,8 +31,20 @@
     "statusLeave": "Nghỉ phép",
     "statusIncomplete": "Chưa đủ",
     "saveAdjust": "Lưu điều chỉnh",
+    "tabDaily": "Bảng công ngày",
+    "tabSummary": "Tổng hợp tháng",
     "summarize": "Tổng hợp tháng",
+    "summarizeTitle": "Chạy tổng hợp công tháng",
+    "summarizeRun": "Chạy tổng hợp",
+    "summarizeSuccess": "Đã tổng hợp {{count}} bản ghi công tháng.",
     "year": "Năm",
-    "month": "Tháng"
+    "month": "Tháng",
+    "workingDays": "Ngày công",
+    "onTimeDays": "Đúng giờ",
+    "lateDays": "Đi muộn",
+    "earlyDays": "Về sớm",
+    "leaveDays": "Nghỉ phép",
+    "absentDays": "Vắng",
+    "incompleteDays": "Chưa đủ"
   }
 }

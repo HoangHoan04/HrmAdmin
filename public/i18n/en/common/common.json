@@ -42,6 +42,7 @@
       "activateContent": "Are you sure you want to activate {{entity}} \"{{name}}\"?",
       "deactivateContent": "Are you sure you want to deactivate {{entity}} \"{{name}}\"?",
       "genericError": "An error occurred.",
+      "serverUnavailable": "Server is connecting or has an error, please try again later",
       "saveSuccess": "Saved successfully!",
       "createSuccess": "Created successfully!",
       "updateSuccess": "Updated successfully!",
@@ -82,6 +83,10 @@
       "uploadFailed": "File upload failed",
       "tooLarge": "File exceeds {{max}}MB",
       "urlPlaceholder": "Or paste file URL directly"
+    },
+    "switch": {
+      "on": "On",
+      "off": "Off"
     }
   }
 }

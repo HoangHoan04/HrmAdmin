@@ -253,6 +253,14 @@ export class DashboardService {
 
     root.style.setProperty('--primary', s.primaryColor);
     root.style.setProperty('--color-primary', s.primaryColor);
+    root.style.setProperty('--primary-hover', this.shadeColor(s.primaryColor, -12));
+    root.style.setProperty('--primary-active', this.shadeColor(s.primaryColor, -22));
+    root.style.setProperty(
+      '--primary-muted',
+      this.hexToRgba(s.primaryColor, isDark ? 0.18 : 0.12),
+    );
+    root.style.setProperty('--ring', this.hexToRgba(s.primaryColor, 0.4));
+    root.style.setProperty('--shadow-primary', `0 8px 20px ${this.hexToRgba(s.primaryColor, 0.28)}`);
     root.style.setProperty('--radius', `${s.borderRadius}px`);
     root.style.setProperty('--sidebar-width', `${s.sidebarWidth}px`);
     root.style.setProperty('--sidebar-collapsed-width', `${s.sidebarCollapsedWidth}px`);
@@ -302,5 +310,25 @@ export class DashboardService {
     root.classList.toggle('s-collapse-sidebar', s.collapseSidebar);
     root.classList.toggle('s-show-tabs', s.showTabs);
     root.classList.toggle('s-watermark', s.watermark);
+  }
+
+  private hexToRgba(hex: string, alpha: number): string {
+    const raw = (hex || '').replace('#', '').trim();
+    if (raw.length !== 6) return `rgba(59, 130, 246, ${alpha})`;
+    const r = parseInt(raw.slice(0, 2), 16);
+    const g = parseInt(raw.slice(2, 4), 16);
+    const b = parseInt(raw.slice(4, 6), 16);
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  }
+
+  private shadeColor(hex: string, percent: number): string {
+    const raw = (hex || '').replace('#', '').trim();
+    if (raw.length !== 6) return hex;
+    const num = parseInt(raw, 16);
+    const clamp = (v: number) => Math.max(0, Math.min(255, v));
+    const r = clamp((num >> 16) + Math.round(255 * (percent / 100)));
+    const g = clamp(((num >> 8) & 0xff) + Math.round(255 * (percent / 100)));
+    const b = clamp((num & 0xff) + Math.round(255 * (percent / 100)));
+    return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
   }
 }

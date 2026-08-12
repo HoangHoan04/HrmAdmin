@@ -1,4 +1,5 @@
 import { ROUTES_CONFIG } from '@/app/core/constants/common';
+import { toDateOnly } from '@/app/core/constants/helpers';
 import { CompanySelectBoxDto, PublicHoliday } from '@/app/core/models';
 import { ApiService, I18nMessageService } from '@/app/core/services';
 import { Component, OnInit } from '@angular/core';
@@ -45,9 +46,8 @@ export class AddOrUpdatePublicHolidayComponent implements OnInit {
       name: ['', [Validators.required, Validators.maxLength(255)]],
       description: [''],
       companyId: [null],
-      allowedRadiusMeters: [200, [Validators.required, Validators.min(1)]],
-      lateGraceMinutes: [0, [Validators.min(0)]],
-      earlyLeaveGraceMinutes: [0, [Validators.min(0)]],
+      holidayDate: [null, [Validators.required]],
+      isRecurringYearly: [false],
       isActive: [true],
     });
   }
@@ -68,8 +68,8 @@ export class AddOrUpdatePublicHolidayComponent implements OnInit {
           name: item.name,
           description: item.description,
           companyId: item.companyId,
-          holidayDate: item.holidayDate,
-          isRecurringYearly: item.isRecurringYearly,
+          holidayDate: item.holidayDate ? new Date(item.holidayDate) : null,
+          isRecurringYearly: item.isRecurringYearly ?? false,
           isActive: item.isActive ?? true,
         });
         this.loading = false;
@@ -101,8 +101,13 @@ export class AddOrUpdatePublicHolidayComponent implements OnInit {
     this.submitting = true;
     const value = this.validateForm.getRawValue();
     const payload = {
-      ...value,
+      code: value.code,
+      name: value.name,
+      description: value.description || null,
       companyId: value.companyId || null,
+      holidayDate: toDateOnly(value.holidayDate),
+      isRecurringYearly: !!value.isRecurringYearly,
+      isActive: value.isActive ?? true,
     };
     const endpoint = this.isEdit
       ? this.apiService.PUBLIC_HOLIDAY.UPDATE

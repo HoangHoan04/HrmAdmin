@@ -134,7 +134,6 @@ export class BranchManagerComponent implements OnInit {
       sortable: true,
     },
     { field: 'status', header: 'organization.branch.status', type: 'boolean', sortable: true },
-    { field: 'createdAt', header: 'organization.branch.createdAt', type: 'date', sortable: true },
   ];
 
   rowActions: RowAction[] = [
@@ -397,7 +396,9 @@ export class BranchManagerComponent implements OnInit {
       next: (result) => {
         this.excelLoading = false;
         if (result.errorCount > 0) {
-          this.message.warning(this.i18n.excelImportPartial(result.successCount, result.totalRows, result.errorCount));
+          this.message.warning(
+            this.i18n.excelImportPartial(result.successCount, result.totalRows, result.errorCount),
+          );
           if (result.errors?.length) {
             console.warn('Branch import errors:', result.errors);
           }

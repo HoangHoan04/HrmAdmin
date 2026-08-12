@@ -1,26 +1,59 @@
-<app-filter-custom
-  [id]="'timekeeping-filter'"
-  [fields]="filterFields"
-  [filters]="filters"
-  [config]="filterConfig"
-  [filterActions]="filterActions"
-  [loading]="loading"
-  (filtersChange)="onFiltersChange($event)"
-></app-filter-custom>
+<nz-tabs
+  [nzSelectedIndex]="activeTab === 'summary' ? 1 : 0"
+  (nzSelectedIndexChange)="onTabChange($event)"
+>
+  <nz-tab [nzTitle]="'timekeeping.tabDaily' | translate">
+    <app-filter-custom
+      [id]="'timekeeping-filter'"
+      [fields]="filterFields"
+      [filters]="filters"
+      [config]="filterConfig"
+      [filterActions]="filterActions"
+      [loading]="loading"
+      (filtersChange)="onFiltersChange($event)"
+    ></app-filter-custom>
 
-<app-table-custom
-  [id]="'timekeeping-table'"
-  [data]="data"
-  [columns]="columns"
-  [loading]="loading"
-  [showIndexList]="true"
-  [stripedRows]="true"
-  [rowActions]="rowActions"
-  [pagination]="pagination"
-  (pageChange)="onPageChange($event)"
-  (sortChange)="onSortChange($event)"
-  (refresh)="loadData()"
-></app-table-custom>
+    <app-table-custom
+      [id]="'timekeeping-table'"
+      [data]="data"
+      [columns]="columns"
+      [loading]="loading"
+      [showIndexList]="true"
+      [stripedRows]="true"
+      [toolbar]="toolbar"
+      [toolbarActions]="toolbarActions"
+      [rowActions]="rowActions"
+      [pagination]="pagination"
+      (pageChange)="onPageChange($event)"
+      (sortChange)="onSortChange($event)"
+      (refresh)="loadData()"
+    ></app-table-custom>
+  </nz-tab>
+
+  <nz-tab [nzTitle]="'timekeeping.tabSummary' | translate">
+    <app-filter-custom
+      [id]="'timekeeping-summary-filter'"
+      [fields]="summaryFilterFields"
+      [filters]="summaryFilters"
+      [config]="filterConfig"
+      [filterActions]="summaryFilterActions"
+      [loading]="summaryLoading"
+      (filtersChange)="onSummaryFiltersChange($event)"
+    ></app-filter-custom>
+
+    <app-table-custom
+      [id]="'timekeeping-summary-table'"
+      [data]="summaryData"
+      [columns]="summaryColumns"
+      [loading]="summaryLoading"
+      [showIndexList]="true"
+      [stripedRows]="true"
+      [pagination]="summaryPagination"
+      (pageChange)="onSummaryPageChange($event)"
+      (refresh)="loadSummaryData()"
+    ></app-table-custom>
+  </nz-tab>
+</nz-tabs>
 
 <nz-drawer
   [nzVisible]="drawerVisible"
@@ -77,30 +110,9 @@
             <nz-form-label>{{ 'timekeeping.status' | translate }}</nz-form-label>
             <nz-form-control>
               <nz-select formControlName="status" nzAllowClear>
-                <nz-option
-                  nzValue="ON_TIME"
-                  [nzLabel]="'timekeeping.statusOnTime' | translate"
-                ></nz-option>
-                <nz-option
-                  nzValue="LATE"
-                  [nzLabel]="'timekeeping.statusLate' | translate"
-                ></nz-option>
-                <nz-option
-                  nzValue="EARLY"
-                  [nzLabel]="'timekeeping.statusEarly' | translate"
-                ></nz-option>
-                <nz-option
-                  nzValue="ABSENT"
-                  [nzLabel]="'timekeeping.statusAbsent' | translate"
-                ></nz-option>
-                <nz-option
-                  nzValue="LEAVE"
-                  [nzLabel]="'timekeeping.statusLeave' | translate"
-                ></nz-option>
-                <nz-option
-                  nzValue="INCOMPLETE"
-                  [nzLabel]="'timekeeping.statusIncomplete' | translate"
-                ></nz-option>
+                @for (s of attendanceStatuses; track s.value) {
+                  <nz-option [nzValue]="s.value" [nzLabel]="s.labelKey | translate"></nz-option>
+                }
               </nz-select>
             </nz-form-control>
           </nz-form-item>
@@ -119,3 +131,79 @@
     </nz-spin>
   </ng-container>
 </nz-drawer>
+
+<nz-modal
+  [nzVisible]="summarizeVisible"
+  [nzTitle]="'timekeeping.summarizeTitle' | translate"
+  [nzOkText]="'timekeeping.summarizeRun' | translate"
+  [nzCancelText]="'common.actions.cancel' | translate"
+  [nzOkLoading]="summarizing"
+  (nzOnCancel)="closeSummarize()"
+  (nzOnOk)="submitSummarize()"
+>
+  <ng-container *nzModalContent>
+    <form nz-form [formGroup]="summarizeForm" nzLayout="vertical">
+      <div nz-row [nzGutter]="16">
+        <div nz-col nzSpan="12">
+          <nz-form-item>
+            <nz-form-label [nzRequired]="true">{{ 'timekeeping.year' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-input-number
+                formControlName="year"
+                [nzMin]="2000"
+                style="width: 100%"
+              ></nz-input-number>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="12">
+          <nz-form-item>
+            <nz-form-label [nzRequired]="true">{{ 'timekeeping.month' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-input-number
+                formControlName="month"
+                [nzMin]="1"
+                [nzMax]="12"
+                style="width: 100%"
+              ></nz-input-number>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <nz-form-item>
+        <nz-form-label>{{ 'timekeeping.company' | translate }}</nz-form-label>
+        <nz-form-control>
+          <nz-select
+            formControlName="companyId"
+            nzAllowClear
+            [nzPlaceHolder]="'timekeeping.filterCompany' | translate"
+          >
+            @for (c of companies; track c.id) {
+              <nz-option
+                [nzValue]="c.id"
+                [nzLabel]="c.code ? c.code + ' - ' + c.name : c.name"
+              ></nz-option>
+            }
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label>{{ 'timekeeping.branch' | translate }}</nz-form-label>
+        <nz-form-control>
+          <nz-select
+            formControlName="branchId"
+            nzAllowClear
+            [nzPlaceHolder]="'timekeeping.filterBranch' | translate"
+          >
+            @for (b of branches; track b.id) {
+              <nz-option
+                [nzValue]="b.id"
+                [nzLabel]="b.code ? b.code + ' - ' + b.name : b.name"
+              ></nz-option>
+            }
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-container>
+</nz-modal>

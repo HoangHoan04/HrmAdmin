@@ -1,4 +1,5 @@
 import { enumData } from '@/app/core/constants/enums/enumData';
+import { toDateOnly } from '@/app/core/constants/helpers';
 import {
   BranchSelectBoxDto,
   EmployeeSelectBoxDto,
@@ -22,6 +23,8 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
 
+type LeaveRow = RegisterDayOff & { statusLabel?: string };
+
 @Component({
   standalone: false,
   selector: 'app-leave-manager',
@@ -30,8 +33,9 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 })
 export class LeaveManagerComponent implements OnInit {
   private readonly ENTITY_KEY = 'leave.entityName';
+  readonly dayOffStatuses = Object.values(enumData.DAY_OFF_STATUS);
 
-  data: RegisterDayOff[] = [];
+  data: LeaveRow[] = [];
   loading = false;
 
   pagination: PaginationConfig = {
@@ -86,12 +90,10 @@ export class LeaveManagerComponent implements OnInit {
       placeholder: 'leave.filterStatus',
       col: 6,
       allowClear: true,
-      options: [
-        { label: 'leave.statusPending', value: 'PENDING' },
-        { label: 'leave.statusApproved', value: 'APPROVED' },
-        { label: 'leave.statusRejected', value: 'REJECTED' },
-        { label: 'leave.statusCancelled', value: 'CANCELLED' },
-      ],
+      options: Object.values(enumData.DAY_OFF_STATUS).map((item) => ({
+        label: item.labelKey,
+        value: item.value,
+      })),
     },
     {
       key: 'dateRange',
@@ -115,7 +117,7 @@ export class LeaveManagerComponent implements OnInit {
     { field: 'fromDate', header: 'leave.fromDate', type: 'date' },
     { field: 'toDate', header: 'leave.toDate', type: 'date' },
     { field: 'totalDays', header: 'leave.totalDays', type: 'text' },
-    { field: 'status', header: 'leave.status', type: 'text' },
+    { field: 'statusLabel', header: 'leave.status', type: 'text' },
     { field: 'branchName', header: 'leave.branch', type: 'text' },
     { field: 'reason', header: 'leave.reason', type: 'text' },
   ];
@@ -126,7 +128,7 @@ export class LeaveManagerComponent implements OnInit {
       icon: 'check-circle',
       tooltip: 'leave.approve',
       severity: 'success',
-      visible: (record) => record.status === 'PENDING',
+      visible: (record) => record.status === enumData.DAY_OFF_STATUS.PENDING.value,
       onClick: (record) => this.approve(record),
     },
     {
@@ -134,7 +136,7 @@ export class LeaveManagerComponent implements OnInit {
       icon: 'close-circle',
       tooltip: 'leave.reject',
       severity: 'danger',
-      visible: (record) => record.status === 'PENDING',
+      visible: (record) => record.status === enumData.DAY_OFF_STATUS.PENDING.value,
       onClick: (record) => this.reject(record),
     },
   ];
@@ -199,15 +201,18 @@ export class LeaveManagerComponent implements OnInit {
 
     const range = this.filters['dateRange'] as Date[] | null;
     if (range?.length === 2 && range[0] && range[1]) {
-      payload['fromDate'] = this.toDateOnly(range[0]);
-      payload['toDate'] = this.toDateOnly(range[1]);
+      payload['fromDate'] = toDateOnly(range[0]);
+      payload['toDate'] = toDateOnly(range[1]);
     }
 
     this.apiService
       .post<PagedResult<RegisterDayOff>>(this.apiService.REGISTER_DAY_OFF.PAGINATION, payload)
       .subscribe({
         next: (res) => {
-          this.data = res.items;
+          this.data = res.items.map((item) => ({
+            ...item,
+            statusLabel: this.getDayOffStatusLabel(item.status),
+          }));
           this.pagination.total = res.totalCount;
           this.loading = false;
           this.syncFilterActionsLoading();
@@ -311,11 +316,10 @@ export class LeaveManagerComponent implements OnInit {
     });
   }
 
-  private toDateOnly(d: Date): string {
-    const y = d.getFullYear();
-    const m = String(d.getMonth() + 1).padStart(2, '0');
-    const day = String(d.getDate()).padStart(2, '0');
-    return `${y}-${m}-${day}`;
+  private getDayOffStatusLabel(status?: string | null): string {
+    if (!status) return '-';
+    const meta = this.dayOffStatuses.find((item) => item.value === status);
+    return meta ? this.i18n.instant(meta.labelKey) : status;
   }
 
   private syncFilterActionsLoading(): void {

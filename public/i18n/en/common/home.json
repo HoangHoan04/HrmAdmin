@@ -1,9 +1,37 @@
-{
+﻿{
   "home": {
-    "welcome": "Home",
-    "desc": "Welcome to the HOANG HOAN TECHNOLOGY management system.",
-    "cardTitle": "Management System",
-    "cardDesc": "Main home page of the service management system.",
-    "cardHelp": "Please use the left sidebar menu to access other management features such as Dashboard, Analytics, Users, or System Settings."
+    "welcome": "Dashboard",
+    "desc": "Welcome to HOANG HOAN TECHNOLOGY Executive Analytics Dashboard.",
+    "cardTitle": "HR Executive Analytics Dashboard",
+    "totalSalary": "Total Salary",
+    "totalBonus": "Total Bonus",
+    "totalComp": "Total Compensation",
+    "commission": "Commission",
+    "avgBase": "Avg Base Salary",
+    "sickDays": "Sick Days (Total / Avg)",
+    "compByLoc": "Compensation Distribution by Location",
+    "compByDept": "Compensation Distribution by Department",
+    "empGrowth": "Employee Growth over Years",
+    "deptHeadcount": "Department Headcount Breakdown",
+    "genderRatio": "Gender Ratio",
+    "locationRatio": "Location Ratio",
+    "turnoverAnalysis": "Turnover Analysis",
+    "voluntaryRate": "Voluntary Rate",
+    "involuntaryRate": "Involuntary Rate",
+    "headcountFlow": "Headcount Flow",
+    "staffingTrends": "Staffing Trends (Hires vs Terms)",
+    "hiringTargetTech": "Tech Hiring Target",
+    "hiringTargetNonTech": "Non-Tech Hiring Target",
+    "hiringPipeline": "Current Hiring Pipeline",
+    "hiringSources": "Top Hiring Sources (Q2)",
+    "internalExternal": "Internal vs. External Hires",
+    "netChange": "Net Change",
+    "hired": "Hired",
+    "terminated": "Terminated",
+    "active": "Active",
+    "voluntary": "Voluntary",
+    "involuntary": "Involuntary",
+    "male": "Male",
+    "female": "Female"
   }
 }

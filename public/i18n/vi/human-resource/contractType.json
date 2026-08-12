@@ -1,0 +1,32 @@
+{
+  "contractType": {
+    "entityName": "loại hợp đồng",
+    "title": "Quản lý loại hợp đồng",
+    "code": "Mã loại hợp đồng",
+    "name": "Tên loại hợp đồng",
+    "description": "Mô tả",
+    "companyName": "Công ty",
+    "isProbation": "Thử việc",
+    "isUnlimited": "Không xác định thời hạn",
+    "defaultDurationMonths": "Thời hạn mặc định (tháng)",
+    "maxRenewalTimes": "Số lần gia hạn tối đa",
+    "notifyBeforeExpiryDays": "Báo trước hết hạn (ngày)",
+    "displayOrder": "Thứ tự hiển thị",
+    "isActive": "Kích hoạt",
+    "status": "Trạng thái",
+    "searchCode": "Nhập mã loại hợp đồng...",
+    "searchName": "Nhập tên loại hợp đồng...",
+    "filterCompany": "Chọn công ty...",
+    "filterStatus": "Chọn trạng thái...",
+    "edit": "Sửa loại hợp đồng",
+    "activate": "Kích hoạt",
+    "deactivate": "Ngưng hoạt động",
+    "addTitle": "Thêm loại hợp đồng",
+    "editTitle": "Cập nhật loại hợp đồng",
+    "backToList": "Danh sách loại hợp đồng",
+    "codeRequired": "Vui lòng nhập mã loại hợp đồng!",
+    "nameRequired": "Vui lòng nhập tên loại hợp đồng!",
+    "codePlaceholder": "Ví dụ: HD-TV",
+    "namePlaceholder": "Ví dụ: Hợp đồng thử việc"
+  }
+}

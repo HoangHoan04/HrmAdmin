@@ -3,12 +3,14 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { ROUTES_CONFIG } from '../../../../../core/constants/common/routes.config';
+import { enumData } from '../../../../../core/constants/enums/enumData';
 import {
   Employee,
   EmployeeCertificate,
   EmployeeDependent,
   EmployeeEducation,
   EmployeeSalaryHistory,
+  TransferEmployee,
 } from '../../../../../core/models';
 import { ApiService } from '../../../../../core/services/api.service';
 import { I18nMessageService } from '../../../../../core/services/i18n-message.service';
@@ -19,6 +21,10 @@ import {
 import { ActionConfirmService } from '../../../../../shared/services/action-confirm.service';
 
 type ChildType = 'dependent' | 'education' | 'certificate' | 'salaryHistory';
+type TransferHistoryRow = TransferEmployee & {
+  transferTypeLabel?: string;
+  statusLabel?: string;
+};
 
 @Component({
   standalone: false,
@@ -33,6 +39,8 @@ export class EmployeeDetailComponent implements OnInit {
   loading = false;
   employee: Employee | null = null;
   selectedTabIndex = 0;
+  transferHistories: TransferHistoryRow[] = [];
+  transferHistoryLoading = false;
 
   childModalVisible = false;
   childModalSubmitting = false;
@@ -112,6 +120,14 @@ export class EmployeeDetailComponent implements OnInit {
     { field: 'reason', header: 'humanResource.employee.salaryHistory.reason', type: 'text' },
   ];
 
+  transferHistoryColumns: TableColumn[] = [
+    { field: 'code', header: 'transfer.code', type: 'text' },
+    { field: 'transferTypeLabel', header: 'transfer.transferType', type: 'text' },
+    { field: 'effectiveDate', header: 'transfer.effectiveDate', type: 'date' },
+    { field: 'statusLabel', header: 'transfer.status', type: 'text' },
+    { field: 'reason', header: 'transfer.reason', type: 'text' },
+  ];
+
   dependentRowActions: RowAction[] = this.buildChildRowActions('dependent');
   educationRowActions: RowAction[] = this.buildChildRowActions('education');
   certificateRowActions: RowAction[] = this.buildChildRowActions('certificate');
@@ -122,6 +138,7 @@ export class EmployeeDetailComponent implements OnInit {
     { key: 'firstName', label: 'humanResource.employee.firstName' },
     { key: 'lastName', label: 'humanResource.employee.lastName' },
     { key: 'fullName', label: 'humanResource.employee.fullName' },
+    { key: 'gender', label: 'humanResource.employee.gender' },
     { key: 'phone', label: 'humanResource.employee.phone' },
     { key: 'secondaryPhone', label: 'humanResource.employee.secondaryPhone' },
     { key: 'email', label: 'humanResource.employee.email' },
@@ -219,6 +236,7 @@ export class EmployeeDetailComponent implements OnInit {
       next: (employee) => {
         this.employee = employee;
         this.loading = false;
+        this.loadTransferHistory(id);
         this.cdr.detectChanges();
       },
       error: (err: any) => {
@@ -228,6 +246,46 @@ export class EmployeeDetailComponent implements OnInit {
         this.goBack();
       },
     });
+  }
+
+  loadTransferHistory(employeeId: string): void {
+    this.transferHistoryLoading = true;
+    this.apiService
+      .post<TransferEmployee[]>(this.apiService.TRANSFER_EMPLOYEE.HISTORY, { employeeId })
+      .subscribe({
+        next: (items) => {
+          this.transferHistories = [...(items || [])]
+            .sort((a, b) => {
+              const aTime = a.effectiveDate ? new Date(a.effectiveDate).getTime() : 0;
+              const bTime = b.effectiveDate ? new Date(b.effectiveDate).getTime() : 0;
+              return bTime - aTime;
+            })
+            .map((item) => ({
+              ...item,
+              transferTypeLabel: this.resolveTransferTypeLabel(item.transferType),
+              statusLabel: this.resolveTransferStatusLabel(item.status),
+            }));
+          this.transferHistoryLoading = false;
+          this.cdr.detectChanges();
+        },
+        error: () => {
+          this.transferHistories = [];
+          this.transferHistoryLoading = false;
+          this.cdr.detectChanges();
+        },
+      });
+  }
+
+  private resolveTransferStatusLabel(status?: string): string {
+    if (!status) return '-';
+    const meta = Object.values(enumData.TRANSFER_STATUS).find((x) => x.value === status);
+    return meta ? this.i18n.instant(meta.labelKey) : status;
+  }
+
+  private resolveTransferTypeLabel(type?: string): string {
+    if (!type) return '-';
+    const meta = Object.values(enumData.TRANSFER_TYPE).find((x) => x.value === type);
+    return meta ? this.i18n.instant(meta.labelKey) : type;
   }
 
   onTabChange(index: number): void {

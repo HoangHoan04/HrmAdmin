@@ -8,17 +8,30 @@
       <div nz-row [nzGutter]="24">
         <div nz-col nzXs="24" nzMd="8">
           <nz-form-item>
-            <nz-form-label [nzRequired]="true">{{ 'organization.department.code' | translate }}</nz-form-label>
+            <nz-form-label [nzRequired]="true">{{
+              'organization.department.code' | translate
+            }}</nz-form-label>
             <nz-form-control [nzErrorTip]="'organization.department.codeRequired' | translate">
-              <input nz-input formControlName="code" [placeholder]="'organization.department.searchCode' | translate" [disabled]="isEdit" />
+              <input
+                nz-input
+                formControlName="code"
+                [placeholder]="'organization.department.searchCode' | translate"
+                [disabled]="isEdit"
+              />
             </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col nzXs="24" nzMd="8">
           <nz-form-item>
-            <nz-form-label [nzRequired]="true">{{ 'organization.department.name' | translate }}</nz-form-label>
+            <nz-form-label [nzRequired]="true">{{
+              'organization.department.name' | translate
+            }}</nz-form-label>
             <nz-form-control [nzErrorTip]="'organization.department.nameRequired' | translate">
-              <input nz-input formControlName="name" [placeholder]="'organization.department.searchName' | translate" />
+              <input
+                nz-input
+                formControlName="name"
+                [placeholder]="'organization.department.searchName' | translate"
+              />
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -30,43 +43,64 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-      </div>
 
-      <div nz-row [nzGutter]="24">
-        <div nz-col nzXs="24" nzMd="12">
-          <nz-form-item>
-            <nz-form-label [nzRequired]="true">{{ 'organization.department.companyName' | translate }}</nz-form-label>
-            <nz-form-control [nzErrorTip]="'organization.department.companyRequired' | translate">
-              <nz-select formControlName="companyId" [nzPlaceHolder]="'organization.department.filterCompany' | translate">
-                @for (c of companies; track c.id) {
-                  <nz-option [nzValue]="c.id" [nzLabel]="c.code ? c.code + ' - ' + c.name : c.name"></nz-option>
-                }
-              </nz-select>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col nzXs="24" nzMd="12">
-          <nz-form-item>
-            <nz-form-label [nzRequired]="true">{{ 'organization.department.branchName' | translate }}</nz-form-label>
-            <nz-form-control [nzErrorTip]="'organization.department.branchRequired' | translate">
-              <nz-select formControlName="branchId" [nzPlaceHolder]="'organization.department.filterBranch' | translate">
-                @for (b of branches; track b.id) {
-                  <nz-option [nzValue]="b.id" [nzLabel]="b.code ? b.code + ' - ' + b.name : b.name"></nz-option>
-                }
-              </nz-select>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-      </div>
-
-      <div nz-row [nzGutter]="24">
         <div nz-col nzXs="24" nzMd="8">
           <nz-form-item>
-            <nz-form-label>{{ 'organization.department.parentDepartment' | translate }}</nz-form-label>
+            <nz-form-label [nzRequired]="true">{{
+              'organization.department.companyName' | translate
+            }}</nz-form-label>
+            <nz-form-control [nzErrorTip]="'organization.department.companyRequired' | translate">
+              <nz-select
+                formControlName="companyId"
+                [nzPlaceHolder]="'organization.department.filterCompany' | translate"
+              >
+                @for (c of companies; track c.id) {
+                  <nz-option
+                    [nzValue]="c.id"
+                    [nzLabel]="c.code ? c.code + ' - ' + c.name : c.name"
+                  ></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label [nzRequired]="true">{{
+              'organization.department.branchName' | translate
+            }}</nz-form-label>
+            <nz-form-control [nzErrorTip]="'organization.department.branchRequired' | translate">
+              <nz-select
+                formControlName="branchId"
+                [nzPlaceHolder]="'organization.department.filterBranch' | translate"
+              >
+                @for (b of branches; track b.id) {
+                  <nz-option
+                    [nzValue]="b.id"
+                    [nzLabel]="b.code ? b.code + ' - ' + b.name : b.name"
+                  ></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{
+              'organization.department.parentDepartment' | translate
+            }}</nz-form-label>
             <nz-form-control>
-              <nz-select formControlName="parentDepartmentId" nzAllowClear [nzPlaceHolder]="'organization.department.filterParentDepartment' | translate">
+              <nz-select
+                formControlName="parentDepartmentId"
+                nzAllowClear
+                [nzPlaceHolder]="'organization.department.filterParentDepartment' | translate"
+              >
                 @for (d of parentDepartments; track d.id) {
-                  <nz-option [nzValue]="d.id" [nzLabel]="d.code ? d.code + ' - ' + d.name : d.name"></nz-option>
+                  <nz-option
+                    [nzValue]="d.id"
+                    [nzLabel]="d.code ? d.code + ' - ' + d.name : d.name"
+                  ></nz-option>
                 }
               </nz-select>
             </nz-form-control>
@@ -88,9 +122,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-      </div>
 
-      <div nz-row [nzGutter]="24">
         <div nz-col nzXs="24" nzMd="8">
           <nz-form-item>
             <nz-form-label>{{ 'organization.department.limit' | translate }}</nz-form-label>
@@ -109,16 +141,16 @@
         </div>
         <div nz-col nzXs="24" nzMd="8">
           <nz-form-item>
-            <nz-form-label>{{ 'organization.department.costCenterCode' | translate }}</nz-form-label>
+            <nz-form-label>{{
+              'organization.department.costCenterCode' | translate
+            }}</nz-form-label>
             <nz-form-control>
               <input nz-input formControlName="costCenterCode" />
             </nz-form-control>
           </nz-form-item>
         </div>
-      </div>
 
-      <div nz-row [nzGutter]="24">
-        <div nz-col nzXs="24" nzMd="12">
+        <div nz-col nzXs="24" nzMd="8">
           <nz-form-item>
             <nz-form-label>{{ 'organization.department.email' | translate }}</nz-form-label>
             <nz-form-control>
@@ -126,35 +158,56 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzXs="24" nzMd="12">
+        <div nz-col nzXs="24" nzMd="8">
           <nz-form-item>
-            <nz-form-label>{{ 'organization.department.phoneExtension' | translate }}</nz-form-label>
+            <nz-form-label>{{
+              'organization.department.phoneExtension' | translate
+            }}</nz-form-label>
             <nz-form-control>
               <input nz-input formControlName="phoneExtension" />
             </nz-form-control>
           </nz-form-item>
         </div>
+
+        <div nz-col nzXs="24" nzMd="24">
+          <nz-form-item>
+            <nz-form-label>{{ 'organization.department.description' | translate }}</nz-form-label>
+            <nz-form-control>
+              <textarea nz-input formControlName="description" rows="3"></textarea>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{
+              'organization.department.isNotifyMarketing' | translate
+            }}</nz-form-label>
+            <nz-form-control>
+              <label nz-checkbox formControlName="isNotifyMarketing"></label>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'organization.company.isActive' | translate }}</nz-form-label>
+            <nz-form-control> <nz-switch formControlName="isActive"></nz-switch></nz-form-control>
+          </nz-form-item>
+        </div>
       </div>
-
-      <nz-form-item>
-        <nz-form-label>{{ 'organization.department.description' | translate }}</nz-form-label>
-        <nz-form-control>
-          <textarea nz-input formControlName="description" rows="3"></textarea>
-        </nz-form-control>
-      </nz-form-item>
-
-      <nz-form-item>
-        <nz-form-control>
-          <label nz-checkbox formControlName="isActive">{{ 'organization.department.isActive' | translate }}</label>
-          <label nz-checkbox formControlName="isNotifyMarketing" style="margin-left: 16px">{{ 'organization.department.isNotifyMarketing' | translate }}</label>
-        </nz-form-control>
-      </nz-form-item>
 
       <div class="form-actions" style="margin-top: 24px">
         <button nz-button nzType="default" type="button" (click)="goBack()" [disabled]="submitting">
           <i nz-icon nzType="arrow-left"></i> {{ 'organization.department.backToList' | translate }}
         </button>
-        <button nz-button nzType="primary" type="submit" [nzLoading]="submitting" style="margin-left: 12px">
+        <button
+          nz-button
+          nzType="primary"
+          type="submit"
+          [nzLoading]="submitting"
+          style="margin-left: 12px"
+        >
           <i nz-icon nzType="save"></i> {{ 'common.actions.save' | translate }}
         </button>
       </div>
@@ -165,10 +218,16 @@
 <ng-template #titleTemplate>
   <span style="font-size: 18px; font-weight: 600">
     <i nz-icon nzType="cluster" style="margin-right: 8px"></i>
-    {{ isEdit ? ('organization.department.editTitle' | translate) : ('organization.department.addTitle' | translate) }}
+    {{
+      isEdit
+        ? ('organization.department.editTitle' | translate)
+        : ('organization.department.addTitle' | translate)
+    }}
   </span>
 </ng-template>
 
 <ng-template #extraTemplate>
-  <button nz-button nzType="default" (click)="goBack()">{{ 'organization.department.backToList' | translate }}</button>
+  <button nz-button nzType="default" (click)="goBack()">
+    {{ 'organization.department.backToList' | translate }}
+  </button>
 </ng-template>

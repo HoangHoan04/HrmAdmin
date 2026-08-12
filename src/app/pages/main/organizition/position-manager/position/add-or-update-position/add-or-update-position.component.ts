@@ -13,7 +13,6 @@ import {
 } from '../../../../../../core/models';
 import { ApiService } from '../../../../../../core/services/api.service';
 import { I18nMessageService } from '../../../../../../core/services/i18n-message.service';
-import { OrganizationCascadeService } from '../../../../../../core/services/organization-cascade.service';
 
 @Component({
   standalone: false,
@@ -40,7 +39,6 @@ export class AddOrUpdatePositionComponent implements OnInit {
     private readonly message: NzMessageService,
     private readonly i18n: I18nMessageService,
     private readonly apiService: ApiService,
-    private readonly cascade: OrganizationCascadeService,
   ) {}
 
   ngOnInit(): void {
@@ -69,7 +67,10 @@ export class AddOrUpdatePositionComponent implements OnInit {
       this.loadBranches(companyId);
       this.loadPositionMasters(companyId, null);
       if (!companyId) {
-        this.validateForm.patchValue({ branchId: null, departmentId: null, partId: null }, { emitEvent: false });
+        this.validateForm.patchValue(
+          { branchId: null, departmentId: null, partId: null },
+          { emitEvent: false },
+        );
         this.branches = [];
         this.departments = [];
         this.parts = [];
@@ -110,10 +111,12 @@ export class AddOrUpdatePositionComponent implements OnInit {
       this.branches = [];
       return;
     }
-    this.cascade.loadBranchesByCompany(companyId).subscribe({
-      next: (items) => (this.branches = items),
-      error: () => (this.branches = []),
-    });
+    this.apiService
+      .post<BranchSelectBoxDto[]>(this.apiService.BRANCH.LOAD_BY_COMPANY, { companyId })
+      .subscribe({
+        next: (items) => (this.branches = items),
+        error: () => (this.branches = []),
+      });
   }
 
   loadDepartments(branchId: string | null): void {
@@ -121,10 +124,12 @@ export class AddOrUpdatePositionComponent implements OnInit {
       this.departments = [];
       return;
     }
-    this.cascade.loadDepartmentsByBranch(branchId).subscribe({
-      next: (items) => (this.departments = items),
-      error: () => (this.departments = []),
-    });
+    this.apiService
+      .post<DepartmentSelectBoxDto[]>(this.apiService.DEPARTMENT.LOAD_BY_BRANCH, { branchId })
+      .subscribe({
+        next: (items) => (this.departments = items),
+        error: () => (this.departments = []),
+      });
   }
 
   loadParts(departmentId: string | null): void {
@@ -132,17 +137,24 @@ export class AddOrUpdatePositionComponent implements OnInit {
       this.parts = [];
       return;
     }
-    this.cascade.loadPartsByDepartment(departmentId).subscribe({
-      next: (items) => (this.parts = items),
-      error: () => (this.parts = []),
-    });
+    this.apiService
+      .post<PartSelectBoxDto[]>(this.apiService.PART.LOAD_BY_DEPARTMENT, { departmentId })
+      .subscribe({
+        next: (items) => (this.parts = items),
+        error: () => (this.parts = []),
+      });
   }
 
   loadPositionMasters(companyId: string | null, branchId: string | null): void {
-    this.cascade.loadPositionMastersByScope(companyId, branchId).subscribe({
-      next: (items) => (this.positionMasters = items),
-      error: () => (this.positionMasters = []),
-    });
+    this.apiService
+      .post<PositionMasterSelectBoxDto[]>(this.apiService.POSITION_MASTER.SELECT_BOX, {
+        companyId,
+        branchId,
+      })
+      .subscribe({
+        next: (items) => (this.positionMasters = items),
+        error: () => (this.positionMasters = []),
+      });
   }
 
   loadPositionDetail(id: string): void {
@@ -200,12 +212,16 @@ export class AddOrUpdatePositionComponent implements OnInit {
       displayOrder: value.displayOrder ?? 0,
     };
 
-    const endpoint = this.isEdit ? this.apiService.POSITION.UPDATE : this.apiService.POSITION.CREATE;
+    const endpoint = this.isEdit
+      ? this.apiService.POSITION.UPDATE
+      : this.apiService.POSITION.CREATE;
     const requestBody = this.isEdit ? { ...payload, id: this.id } : payload;
 
     this.apiService.post<any>(endpoint, requestBody).subscribe({
       next: () => {
-        this.message.success(this.isEdit ? 'Cập nhật chức vụ thành công!' : 'Thêm mới chức vụ thành công!');
+        this.message.success(
+          this.isEdit ? 'Cập nhật chức vụ thành công!' : 'Thêm mới chức vụ thành công!',
+        );
         this.goBack();
       },
       error: (err: any) => {

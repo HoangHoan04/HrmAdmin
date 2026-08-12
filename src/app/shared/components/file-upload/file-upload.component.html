@@ -4,8 +4,9 @@
     [nzDisabled]="disabled"
     [nzAccept]="accept"
     [nzFileList]="fileList"
-    [nzListType]="'picture-card'"
+    nzListType="picture-card"
     [nzShowUploadList]="false"
+    [nzShowButton]="true"
     [nzBeforeUpload]="beforeUpload"
     [nzCustomRequest]="customRequest"
   >
@@ -16,7 +17,6 @@
           {{ (uploading ? 'common.upload.uploading' : 'common.upload.selectFile') | translate }}
         </div>
       </div>
-
     } @else {
       <div class="preview-wrapper">
         <img [src]="fileUrl" alt="preview" class="preview-image" />

@@ -1,0 +1,185 @@
+<nz-card [nzTitle]="titleTemplate" [nzExtra]="extraTemplate">
+  <nz-spin [nzSpinning]="loading">
+    <form nz-form [formGroup]="validateForm" nzLayout="vertical" (ngSubmit)="submitForm()">
+      <div nz-row [nzGutter]="24">
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label [nzRequired]="true">{{
+              'reviewRenewal.contractId' | translate
+            }}</nz-form-label>
+            <nz-form-control [nzErrorTip]="'reviewRenewal.contractRequired' | translate">
+              <nz-select
+                formControlName="contractId"
+                nzShowSearch
+                nzAllowClear
+                [nzPlaceHolder]="'reviewRenewal.filterContract' | translate"
+              >
+                @for (c of contracts; track c.id) {
+                  <nz-option [nzValue]="c.id" [nzLabel]="c.label"></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label [nzRequired]="true">{{
+              'reviewRenewal.reviewDate' | translate
+            }}</nz-form-label>
+            <nz-form-control>
+              <nz-date-picker formControlName="reviewDate" style="width: 100%"></nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'reviewRenewal.reviewedBy' | translate }}</nz-form-label>
+            <nz-form-control>
+              <input nz-input formControlName="reviewedBy" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+
+      <div nz-row [nzGutter]="24">
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'reviewRenewal.performanceScore' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-input-number
+                formControlName="performanceScore"
+                [nzMin]="0"
+                [nzMax]="100"
+                style="width: 100%"
+              ></nz-input-number>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'reviewRenewal.recommendation' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-select
+                formControlName="recommendation"
+                nzAllowClear
+                [nzPlaceHolder]="'reviewRenewal.filterRecommendation' | translate"
+              >
+                @for (r of recommendationOptions; track r.value) {
+                  <nz-option [nzValue]="r.value" [nzLabel]="r.labelKey | translate"></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'reviewRenewal.proposedContractTypeId' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-select formControlName="proposedContractTypeId" nzAllowClear nzShowSearch>
+                @for (t of contractTypes; track t.id) {
+                  <nz-option
+                    [nzValue]="t.id"
+                    [nzLabel]="t.code ? t.code + ' - ' + t.name : t.name"
+                  ></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+
+      <div nz-row [nzGutter]="24">
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'reviewRenewal.proposedStartDate' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-date-picker
+                formControlName="proposedStartDate"
+                nzAllowClear
+                style="width: 100%"
+              ></nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'reviewRenewal.proposedEndDate' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-date-picker
+                formControlName="proposedEndDate"
+                nzAllowClear
+                style="width: 100%"
+              ></nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'reviewRenewal.proposedBasicSalary' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-input-number
+                formControlName="proposedBasicSalary"
+                [nzMin]="0"
+                style="width: 100%"
+              ></nz-input-number>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+
+      <nz-form-item>
+        <nz-form-label>{{ 'reviewRenewal.reviewResult' | translate }}</nz-form-label>
+        <nz-form-control>
+          <textarea nz-input formControlName="reviewResult" rows="2"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label>{{ 'reviewRenewal.reviewComment' | translate }}</nz-form-label>
+        <nz-form-control>
+          <textarea nz-input formControlName="reviewComment" rows="3"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label>{{ 'reviewRenewal.note' | translate }}</nz-form-label>
+        <nz-form-control>
+          <textarea nz-input formControlName="note" rows="2"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+
+      <div class="form-actions" style="margin-top: 24px">
+        <button nz-button nzType="default" type="button" (click)="goBack()" [disabled]="submitting">
+          <i nz-icon nzType="arrow-left"></i>
+          {{ 'reviewRenewal.backToList' | translate }}
+        </button>
+        <button
+          nz-button
+          nzType="primary"
+          type="submit"
+          [nzLoading]="submitting"
+          style="margin-left: 12px"
+        >
+          <i nz-icon nzType="save"></i> {{ 'common.actions.save' | translate }}
+        </button>
+      </div>
+    </form>
+  </nz-spin>
+</nz-card>
+
+<ng-template #titleTemplate>
+  <span style="font-size: 18px; font-weight: 600">
+    <i nz-icon nzType="audit" style="margin-right: 8px"></i>
+    {{
+      isEdit
+        ? ('reviewRenewal.editTitle' | translate)
+        : ('reviewRenewal.addTitle' | translate)
+    }}
+  </span>
+</ng-template>
+
+<ng-template #extraTemplate>
+  <button nz-button nzType="default" (click)="goBack()">
+    {{ 'reviewRenewal.backToList' | translate }}
+  </button>
+</ng-template>

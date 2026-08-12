@@ -60,9 +60,12 @@ export class FileUploadComponent implements ControlValueAccessor {
   }
 
   beforeUpload = (file: NzUploadFile): boolean => {
-    const rawFile = file as unknown as File;
+    const rawFile = (file as NzUploadFile & { size?: number })?.originFileObj
+      ? (file as NzUploadFile).originFileObj!
+      : (file as unknown as File);
+    const size = (rawFile as File)?.size ?? (file as NzUploadFile).size ?? 0;
     const maxBytes = this.maxSizeMb * 1024 * 1024;
-    if (rawFile.size > maxBytes) {
+    if (size > maxBytes) {
       this.message.error(this.translate.instant('common.upload.tooLarge', { max: this.maxSizeMb }));
       return false;
     }

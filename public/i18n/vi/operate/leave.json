@@ -3,7 +3,7 @@
     "entityName": "đơn nghỉ phép",
     "title": "Quản lý đơn nghỉ phép",
     "employee": "Nhân viên",
-    "employeeCode": "Mã NV",
+    "employeeCode": "Mã nhân viên",
     "branch": "Chi nhánh",
     "dayOffType": "Loại nghỉ",
     "dayOffConfig": "Cấu hình nghỉ",

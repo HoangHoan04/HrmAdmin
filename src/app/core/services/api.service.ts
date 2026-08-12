@@ -60,11 +60,20 @@ export class ApiService {
   get REGISTER_DAY_OFF() {
     return this.endpoints.REGISTER_DAY_OFF;
   }
+  get CONTRACT_TYPE() {
+    return this.endpoints.CONTRACT_TYPE;
+  }
+  get CONTRACT() {
+    return this.endpoints.CONTRACT;
+  }
+  get REVIEW_RENEWAL() {
+    return this.endpoints.REVIEW_RENEWAL;
+  }
+  get TRANSFER_EMPLOYEE() {
+    return this.endpoints.TRANSFER_EMPLOYEE;
+  }
   get ACTION_LOG() {
     return this.endpoints.ACTION_LOG;
-  }
-  get ORGANIZATION() {
-    return this.endpoints.ORGANIZATION;
   }
   get UPLOAD_FILE() {
     return this.endpoints.UPLOAD_FILE;

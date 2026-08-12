@@ -117,7 +117,6 @@ export class CompanyManagerComponent implements OnInit {
     { field: 'hotline', header: 'organization.company.hotline', type: 'text' },
     { field: 'taxCode', header: 'organization.company.taxCode', type: 'text' },
     { field: 'status', header: 'organization.company.status', type: 'boolean', sortable: true },
-    { field: 'createdAt', header: 'organization.company.createdAt', type: 'date', sortable: true },
   ];
 
   rowActions: RowAction[] = [

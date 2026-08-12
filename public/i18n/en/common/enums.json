@@ -20,6 +20,20 @@
       "sat": "Saturday",
       "sun": "Sunday"
     },
+    "month": {
+      "january": "January",
+      "february": "February",
+      "march": "March",
+      "april": "April",
+      "may": "May",
+      "june": "June",
+      "july": "July",
+      "august": "August",
+      "september": "September",
+      "october": "October",
+      "november": "November",
+      "december": "December"
+    },
     "actionType": {
       "create": "Create",
       "approve": "Approve",
@@ -81,6 +95,60 @@
       "maternity": "Maternity leave",
       "paternity": "Paternity leave",
       "other": "Other"
+    },
+    "contractStatus": {
+      "draft": "Draft",
+      "pendingSign": "Pending sign",
+      "active": "Active",
+      "expiringSoon": "Expiring soon",
+      "expired": "Expired",
+      "terminated": "Terminated",
+      "liquidated": "Liquidated"
+    },
+    "reviewRenewalStatus": {
+      "pendingReview": "Pending review",
+      "pendingApproval": "Pending approval",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "applied": "Applied"
+    },
+    "reviewRecommendation": {
+      "renew": "Renew",
+      "convert": "Convert type",
+      "increaseSalary": "Increase salary",
+      "terminate": "Terminate",
+      "noChange": "No change"
+    },
+    "transferStatus": {
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "cancelled": "Cancelled",
+      "applied": "Applied"
+    },
+    "transferType": {
+      "internalTransfer": "Internal transfer",
+      "secondment": "Secondment",
+      "rotation": "Rotation",
+      "companyTransfer": "Company transfer",
+      "branchTransfer": "Branch transfer",
+      "promotion": "Promotion",
+      "demotion": "Demotion",
+      "dismissal": "Dismissal"
+    },
+    "attendanceStatus": {
+      "onTime": "On time",
+      "late": "Late",
+      "early": "Early leave",
+      "leave": "Leave",
+      "absent": "Absent",
+      "incomplete": "Incomplete"
+    },
+    "dayOffStatus": {
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "cancelled": "Cancelled"
     }
   }
 }

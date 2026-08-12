@@ -1,11 +1,16 @@
 <nz-card [nzTitle]="titleTemplate" [nzExtra]="extraTemplate" [nzLoading]="loading">
   @if (employee) {
     <div class="detail-header">
-      <div>
-        <h2>{{ employee.fullName || employee.firstName + ' ' + employee.lastName }}</h2>
-        <p>
-          {{ 'humanResource.employee.code' | translate }}: <strong>{{ employee.code }}</strong>
-        </p>
+      <div class="detail-header-main">
+        @if (employee.avatarUrl) {
+          <img class="employee-avatar" [src]="employee.avatarUrl" [alt]="employee.fullName || employee.code" />
+        }
+        <div>
+          <h2>{{ employee.fullName || employee.firstName + ' ' + employee.lastName }}</h2>
+          <p>
+            {{ 'humanResource.employee.code' | translate }}: <strong>{{ employee.code }}</strong>
+          </p>
+        </div>
       </div>
       <span
         class="status-badge"
@@ -126,6 +131,21 @@
             [showIndexList]="true"
             [toolbar]="{ show: false }"
             [emptyText]="'humanResource.employee.noSalaryHistories' | translate"
+          ></app-table-custom>
+        </div>
+      </nz-tab>
+
+      <nz-tab [nzTitle]="'humanResource.employee.tabTransfers' | translate">
+        <div class="tab-content">
+          <app-table-custom
+            [id]="'employee-detail-transfers'"
+            [data]="transferHistories"
+            [columns]="transferHistoryColumns"
+            [loading]="transferHistoryLoading"
+            [stripedRows]="true"
+            [showIndexList]="true"
+            [toolbar]="{ show: false }"
+            [emptyText]="'humanResource.employee.noTransfers' | translate"
           ></app-table-custom>
         </div>
       </nz-tab>

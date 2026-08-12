@@ -4,6 +4,7 @@
     "title": "Timekeeping management",
     "employee": "Employee",
     "employeeCode": "Employee code",
+    "company": "Company",
     "branch": "Branch",
     "workDate": "Work date",
     "shiftMaster": "Shift",
@@ -16,6 +17,7 @@
     "note": "Note",
     "isManualAdjusted": "Manually adjusted",
     "filterEmployee": "Select employee...",
+    "filterCompany": "Select company...",
     "filterBranch": "Select branch...",
     "filterStatus": "Select status...",
     "filterDateRange": "Date range",
@@ -29,8 +31,20 @@
     "statusLeave": "Leave",
     "statusIncomplete": "Incomplete",
     "saveAdjust": "Save adjustment",
+    "tabDaily": "Daily records",
+    "tabSummary": "Monthly summary",
     "summarize": "Summarize month",
+    "summarizeTitle": "Run monthly timekeeping summary",
+    "summarizeRun": "Run summary",
+    "summarizeSuccess": "Summarized {{count}} monthly records.",
     "year": "Year",
-    "month": "Month"
+    "month": "Month",
+    "workingDays": "Working days",
+    "onTimeDays": "On time",
+    "lateDays": "Late",
+    "earlyDays": "Early",
+    "leaveDays": "Leave",
+    "absentDays": "Absent",
+    "incompleteDays": "Incomplete"
   }
 }

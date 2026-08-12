@@ -7,7 +7,9 @@ import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzCardModule } from 'ng-zorro-antd/card';
+import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
+import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
@@ -26,7 +28,9 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
+import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzTimePickerModule } from 'ng-zorro-antd/time-picker';
+import { NzTimelineModule } from 'ng-zorro-antd/timeline';
 import { NzTooltipModule } from 'ng-zorro-antd/tooltip';
 import { NzUploadModule } from 'ng-zorro-antd/upload';
 import { ActionLogComponent } from './components/action-log/action-log.component';
@@ -35,7 +39,12 @@ import { FilterCustomComponent } from './components/filter-custom/filter-custom.
 import { TableCustomComponent } from './components/table-custom/table-custom.component';
 
 @NgModule({
-  declarations: [FilterCustomComponent, TableCustomComponent, ActionLogComponent, FileUploadComponent],
+  declarations: [
+    FilterCustomComponent,
+    TableCustomComponent,
+    ActionLogComponent,
+    FileUploadComponent,
+  ],
   imports: [
     TranslatePipe,
     CommonModule,
@@ -68,6 +77,10 @@ import { TableCustomComponent } from './components/table-custom/table-custom.com
     NzPaginationModule,
     NzTabsModule,
     NzUploadModule,
+    NzDescriptionsModule,
+    NzTimelineModule,
+    NzCheckboxModule,
+    NzTagModule,
   ],
   exports: [
     FilterCustomComponent,
@@ -105,6 +118,10 @@ import { TableCustomComponent } from './components/table-custom/table-custom.com
     NzPaginationModule,
     NzTabsModule,
     NzUploadModule,
+    NzDescriptionsModule,
+    NzTimelineModule,
+    NzCheckboxModule,
+    NzTagModule,
   ],
 })
 export class SharedModule {}

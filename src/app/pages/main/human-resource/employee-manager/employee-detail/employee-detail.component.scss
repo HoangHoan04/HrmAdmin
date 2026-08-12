@@ -33,6 +33,23 @@ nz-card {
   }
 }
 
+.detail-header-main {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-width: 0;
+}
+
+.employee-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 2px solid var(--border);
+  background: var(--background);
+}
+
 .header-actions {
   display: flex;
   gap: 8px;

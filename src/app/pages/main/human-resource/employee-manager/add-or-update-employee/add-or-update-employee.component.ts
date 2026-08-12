@@ -70,6 +70,8 @@ export class AddOrUpdateEmployeeComponent implements OnInit, OnDestroy {
       firstName: ['', [Validators.required, Validators.maxLength(100)]],
       lastName: ['', [Validators.required, Validators.maxLength(100)]],
       fullName: ['', [Validators.maxLength(250)]],
+      gender: [null],
+      avatarUrl: [null],
       phone: ['', [Validators.required, Validators.maxLength(20)]],
       secondaryPhone: ['', [Validators.maxLength(20)]],
       email: ['', [Validators.required, Validators.maxLength(250), Validators.email]],
@@ -176,24 +178,20 @@ export class AddOrUpdateEmployeeComponent implements OnInit, OnDestroy {
   }
 
   loadBranches(companyId: string): void {
-    this.apiService
-      .post<any[]>(this.apiService.ORGANIZATION.BRANCHES_BY_COMPANY, { companyId })
-      .subscribe({
-        next: (res) => (this.branches = res),
-      });
+    this.apiService.post<any[]>(this.apiService.BRANCH.LOAD_BY_COMPANY, { companyId }).subscribe({
+      next: (res) => (this.branches = res),
+    });
   }
 
   loadDepartments(branchId: string): void {
-    this.apiService
-      .post<any[]>(this.apiService.ORGANIZATION.DEPARTMENTS_BY_BRANCH, { branchId })
-      .subscribe({
-        next: (res) => (this.departments = res),
-      });
+    this.apiService.post<any[]>(this.apiService.DEPARTMENT.LOAD_BY_BRANCH, { branchId }).subscribe({
+      next: (res) => (this.departments = res),
+    });
   }
 
   loadParts(departmentId: string): void {
     this.apiService
-      .post<any[]>(this.apiService.ORGANIZATION.PARTS_BY_DEPARTMENT, { departmentId })
+      .post<any[]>(this.apiService.PART.LOAD_BY_DEPARTMENT, { departmentId })
       .subscribe({
         next: (res) => (this.parts = res),
       });
@@ -216,6 +214,8 @@ export class AddOrUpdateEmployeeComponent implements OnInit, OnDestroy {
           firstName: employee.firstName,
           lastName: employee.lastName,
           fullName: employee.fullName,
+          gender: employee.gender ?? null,
+          avatarUrl: employee.avatarUrl ?? null,
           phone: employee.phone,
           secondaryPhone: employee.secondaryPhone,
           email: employee.email,

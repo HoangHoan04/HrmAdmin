@@ -12,7 +12,6 @@ import {
 } from '../../../../../../core/models';
 import { ApiService } from '../../../../../../core/services/api.service';
 import { I18nMessageService } from '../../../../../../core/services/i18n-message.service';
-import { OrganizationCascadeService } from '../../../../../../core/services/organization-cascade.service';
 
 @Component({
   standalone: false,
@@ -38,7 +37,6 @@ export class AddOrUpdatePartComponent implements OnInit {
     private readonly message: NzMessageService,
     private readonly i18n: I18nMessageService,
     private readonly apiService: ApiService,
-    private readonly cascade: OrganizationCascadeService,
   ) {}
 
   ngOnInit(): void {
@@ -69,7 +67,10 @@ export class AddOrUpdatePartComponent implements OnInit {
       this.loadBranches(companyId);
       this.loadPartMasters(companyId, null);
       if (!companyId) {
-        this.validateForm.patchValue({ branchId: null, departmentId: null, partMasterId: null }, { emitEvent: false });
+        this.validateForm.patchValue(
+          { branchId: null, departmentId: null, partMasterId: null },
+          { emitEvent: false },
+        );
         this.branches = [];
         this.departments = [];
       }
@@ -103,10 +104,12 @@ export class AddOrUpdatePartComponent implements OnInit {
       this.branches = [];
       return;
     }
-    this.cascade.loadBranchesByCompany(companyId).subscribe({
-      next: (items) => (this.branches = items),
-      error: () => (this.branches = []),
-    });
+    this.apiService
+      .post<BranchSelectBoxDto[]>(this.apiService.BRANCH.LOAD_BY_COMPANY, { companyId })
+      .subscribe({
+        next: (items) => (this.branches = items),
+        error: () => (this.branches = []),
+      });
   }
 
   loadDepartments(branchId: string | null): void {
@@ -114,17 +117,24 @@ export class AddOrUpdatePartComponent implements OnInit {
       this.departments = [];
       return;
     }
-    this.cascade.loadDepartmentsByBranch(branchId).subscribe({
-      next: (items) => (this.departments = items),
-      error: () => (this.departments = []),
-    });
+    this.apiService
+      .post<DepartmentSelectBoxDto[]>(this.apiService.DEPARTMENT.LOAD_BY_BRANCH, { branchId })
+      .subscribe({
+        next: (items) => (this.departments = items),
+        error: () => (this.departments = []),
+      });
   }
 
   loadPartMasters(companyId: string | null, branchId: string | null): void {
-    this.cascade.loadPartMastersByScope(companyId, branchId).subscribe({
-      next: (items) => (this.partMasters = items),
-      error: () => (this.partMasters = []),
-    });
+    this.apiService
+      .post<PartMasterSelectBoxDto[]>(this.apiService.PART_MASTER.SELECT_BOX, {
+        companyId,
+        branchId,
+      })
+      .subscribe({
+        next: (items) => (this.partMasters = items),
+        error: () => (this.partMasters = []),
+      });
   }
 
   loadPartDetail(id: string): void {
@@ -190,7 +200,9 @@ export class AddOrUpdatePartComponent implements OnInit {
 
     this.apiService.post<any>(endpoint, requestBody).subscribe({
       next: () => {
-        this.message.success(this.isEdit ? 'Cập nhật bộ phận thành công!' : 'Thêm mới bộ phận thành công!');
+        this.message.success(
+          this.isEdit ? 'Cập nhật bộ phận thành công!' : 'Thêm mới bộ phận thành công!',
+        );
         this.goBack();
       },
       error: (err: any) => {

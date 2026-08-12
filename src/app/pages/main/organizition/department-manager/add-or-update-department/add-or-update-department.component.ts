@@ -11,7 +11,6 @@ import {
 } from '../../../../../core/models';
 import { ApiService } from '../../../../../core/services/api.service';
 import { I18nMessageService } from '../../../../../core/services/i18n-message.service';
-import { OrganizationCascadeService } from '../../../../../core/services/organization-cascade.service';
 
 @Component({
   standalone: false,
@@ -38,7 +37,6 @@ export class AddOrUpdateDepartmentComponent implements OnInit {
     private readonly message: NzMessageService,
     private readonly i18n: I18nMessageService,
     private readonly apiService: ApiService,
-    private readonly cascade: OrganizationCascadeService,
   ) {}
 
   ngOnInit(): void {
@@ -78,7 +76,10 @@ export class AddOrUpdateDepartmentComponent implements OnInit {
     this.validateForm.get('companyId')?.valueChanges.subscribe((companyId) => {
       this.loadBranches(companyId);
       if (!companyId) {
-        this.validateForm.patchValue({ branchId: null, parentDepartmentId: null }, { emitEvent: false });
+        this.validateForm.patchValue(
+          { branchId: null, parentDepartmentId: null },
+          { emitEvent: false },
+        );
         this.branches = [];
         this.parentDepartments = [];
       }
@@ -112,17 +113,19 @@ export class AddOrUpdateDepartmentComponent implements OnInit {
       return;
     }
 
-    this.cascade.loadBranchesByCompany(companyId).subscribe({
-      next: (items) => {
-        this.branches = items;
-        this.applyBranchFromRoute();
-        onComplete?.();
-      },
-      error: () => {
-        this.branches = [];
-        onComplete?.();
-      },
-    });
+    this.apiService
+      .post<BranchSelectBoxDto[]>(this.apiService.BRANCH.LOAD_BY_COMPANY, { companyId })
+      .subscribe({
+        next: (items) => {
+          this.branches = items;
+          this.applyBranchFromRoute();
+          onComplete?.();
+        },
+        error: () => {
+          this.branches = [];
+          onComplete?.();
+        },
+      });
   }
 
   loadParentDepartments(branchId: string | null, excludeId?: string): void {
@@ -131,14 +134,19 @@ export class AddOrUpdateDepartmentComponent implements OnInit {
       return;
     }
 
-    this.cascade.loadDepartmentsByBranch(branchId, excludeId).subscribe({
-      next: (items) => {
-        this.parentDepartments = items;
-      },
-      error: () => {
-        this.parentDepartments = [];
-      },
-    });
+    this.apiService
+      .post<DepartmentSelectBoxDto[]>(this.apiService.DEPARTMENT.LOAD_BY_BRANCH, {
+        branchId,
+        excludeId,
+      })
+      .subscribe({
+        next: (items) => {
+          this.parentDepartments = items;
+        },
+        error: () => {
+          this.parentDepartments = [];
+        },
+      });
   }
 
   loadDepartmentDetail(id: string): void {
@@ -216,7 +224,9 @@ export class AddOrUpdateDepartmentComponent implements OnInit {
       isNotifyMarketing: value.isNotifyMarketing ?? false,
     };
 
-    const endpoint = this.isEdit ? this.apiService.DEPARTMENT.UPDATE : this.apiService.DEPARTMENT.CREATE;
+    const endpoint = this.isEdit
+      ? this.apiService.DEPARTMENT.UPDATE
+      : this.apiService.DEPARTMENT.CREATE;
     const requestBody = this.isEdit ? { ...payload, id: this.id } : payload;
 
     this.apiService.post<any>(endpoint, requestBody).subscribe({

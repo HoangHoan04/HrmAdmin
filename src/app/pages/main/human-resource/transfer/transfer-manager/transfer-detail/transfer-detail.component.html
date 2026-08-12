@@ -1,0 +1,152 @@
+<nz-card [nzTitle]="titleTemplate" [nzExtra]="extraTemplate" [nzLoading]="loading">
+  @if (transfer) {
+    <div style="margin-bottom: 16px; display: flex; gap: 8px; flex-wrap: wrap">
+      @if (canEdit) {
+        <button nz-button nzType="default" (click)="openEdit()">
+          <i nz-icon nzType="edit"></i>
+          {{ 'transfer.edit' | translate }}
+        </button>
+      }
+      @if (canApprove) {
+        <button nz-button nzType="primary" (click)="approve()">
+          <i nz-icon nzType="check"></i>
+          {{ 'transfer.approve' | translate }}
+        </button>
+      }
+      @if (canReject) {
+        <button nz-button nzDanger (click)="reject()">
+          <i nz-icon nzType="close"></i>
+          {{ 'transfer.reject' | translate }}
+        </button>
+      }
+      @if (canApply) {
+        <button nz-button nzType="primary" (click)="apply()">
+          <i nz-icon nzType="play-circle"></i>
+          {{ 'transfer.apply' | translate }}
+        </button>
+      }
+      @if (canCancel) {
+        <button nz-button nzType="default" nzDanger (click)="cancel()">
+          <i nz-icon nzType="stop"></i>
+          {{ 'transfer.cancel' | translate }}
+        </button>
+      }
+    </div>
+
+    <nz-descriptions nzBordered [nzColumn]="{ xxl: 3, xl: 3, lg: 2, md: 2, sm: 1, xs: 1 }">
+      <nz-descriptions-item [nzTitle]="'transfer.code' | translate">
+        {{ transfer.code }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'transfer.employeeName' | translate">
+        {{ transfer.employeeCode ? transfer.employeeCode + ' - ' : '' }}{{ transfer.employeeName }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'transfer.transferType' | translate">
+        {{ transferTypeLabel(transfer.transferType) }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'transfer.status' | translate">
+        {{ statusLabel(transfer.status) }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'transfer.requestDate' | translate">
+        {{ transfer.requestDate ? (transfer.requestDate | date: 'dd/MM/yyyy') : '-' }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'transfer.effectiveDate' | translate">
+        {{ transfer.effectiveDate | date: 'dd/MM/yyyy' }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'transfer.expectedEndDate' | translate">
+        {{ transfer.expectedEndDate ? (transfer.expectedEndDate | date: 'dd/MM/yyyy') : '-' }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'transfer.actualEndDate' | translate">
+        {{ transfer.actualEndDate ? (transfer.actualEndDate | date: 'dd/MM/yyyy') : '-' }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'transfer.decisionNumber' | translate">
+        {{ transfer.decisionNumber || '-' }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'transfer.decisionDate' | translate">
+        {{ transfer.decisionDate ? (transfer.decisionDate | date: 'dd/MM/yyyy') : '-' }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'transfer.approvedBy' | translate">
+        {{ transfer.approvedBy || '-' }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'transfer.approvedDate' | translate">
+        {{ transfer.approvedDate ? (transfer.approvedDate | date: 'dd/MM/yyyy') : '-' }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'transfer.reason' | translate" [nzSpan]="2">
+        {{ transfer.reason || '-' }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'transfer.note' | translate" [nzSpan]="3">
+        {{ transfer.note || '-' }}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzTitle]="'transfer.decisionFileUrl' | translate" [nzSpan]="3">
+        @if (transfer.decisionFileUrl) {
+          <a [href]="transfer.decisionFileUrl" target="_blank" rel="noopener noreferrer">{{
+            transfer.decisionFileUrl
+          }}</a>
+        } @else {
+          -
+        }
+      </nz-descriptions-item>
+    </nz-descriptions>
+
+    <nz-divider></nz-divider>
+    <h3 style="margin-bottom: 16px">{{ 'transfer.detailSection' | translate }}</h3>
+
+    @if (transfer.details?.length) {
+      <nz-table
+        [nzData]="transfer.details!"
+        [nzFrontPagination]="false"
+        [nzShowPagination]="false"
+        nzSize="middle"
+        nzBordered
+      >
+        <thead>
+          <tr>
+            <th>{{ 'transfer.oldCompany' | translate }}</th>
+            <th>{{ 'transfer.newCompany' | translate }}</th>
+            <th>{{ 'transfer.oldBranch' | translate }}</th>
+            <th>{{ 'transfer.newBranch' | translate }}</th>
+            <th>{{ 'transfer.oldDepartment' | translate }}</th>
+            <th>{{ 'transfer.newDepartment' | translate }}</th>
+            <th>{{ 'transfer.oldPart' | translate }}</th>
+            <th>{{ 'transfer.newPart' | translate }}</th>
+            <th>{{ 'transfer.oldPosition' | translate }}</th>
+            <th>{{ 'transfer.newPosition' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (d of transfer.details; track d.id || $index) {
+            <tr>
+              <td>{{ d.oldCompanyName || '-' }}</td>
+              <td>{{ d.newCompanyName || '-' }}</td>
+              <td>{{ d.oldBranchName || '-' }}</td>
+              <td>{{ d.newBranchName || '-' }}</td>
+              <td>{{ d.oldDepartmentName || '-' }}</td>
+              <td>{{ d.newDepartmentName || '-' }}</td>
+              <td>{{ d.oldPartName || '-' }}</td>
+              <td>{{ d.newPartName || '-' }}</td>
+              <td>{{ d.oldPositionName || '-' }}</td>
+              <td>{{ d.newPositionName || '-' }}</td>
+            </tr>
+          }
+        </tbody>
+      </nz-table>
+    } @else {
+      <p>{{ 'transfer.noDetails' | translate }}</p>
+    }
+  }
+</nz-card>
+
+<ng-template #titleTemplate>
+  <span style="font-size: 18px; font-weight: 600">
+    <i nz-icon nzType="swap" style="margin-right: 8px"></i>
+    {{ 'transfer.detailTitle' | translate }}
+    @if (transfer?.code) {
+      <span> - {{ transfer?.code }}</span>
+    }
+  </span>
+</ng-template>
+
+<ng-template #extraTemplate>
+  <button nz-button nzType="default" (click)="goBack()">
+    {{ 'transfer.backToList' | translate }}
+  </button>
+</ng-template>
