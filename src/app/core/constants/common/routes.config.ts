@@ -552,7 +552,6 @@ export const ROUTES_CONFIG = {
             key: 'PUNCH_IMPORT',
             label: 'routes.punchImport',
             translationKey: 'routes.punchImport',
-            icon: 'upload',
             path: '/integrations/punch-import',
             permission: PERMISSION_CODES.OPERATE_TIMEKEEPING_MANAGE,
           },

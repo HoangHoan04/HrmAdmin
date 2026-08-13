@@ -53,7 +53,13 @@ export class NavbarComponent implements OnInit, OnDestroy {
         this.s = settings;
       }),
     );
-    this.loadUserInfo();
+    // Wave B: paint từ session trước, /me lazy (không block shell)
+    const sessionUser = this.auth.currentUser;
+    if (sessionUser) {
+      this.username = sessionUser;
+      this.avatarText = sessionUser.substring(0, 2).toUpperCase();
+    }
+    setTimeout(() => this.loadUserInfo(), 0);
   }
 
   loadUserInfo(): void {
@@ -65,18 +71,20 @@ export class NavbarComponent implements OnInit, OnDestroy {
             this.email = user.email;
             this.avatarText = this.username ? this.username.substring(0, 2).toUpperCase() : 'US';
           } else {
-            this.username = 'User';
+            this.username = this.auth.currentUser || 'User';
             this.email = '';
-            this.avatarText = 'US';
+            this.avatarText = this.username.substring(0, 2).toUpperCase() || 'US';
           }
           this.cdr.markForCheck();
         });
       },
       error: () => {
         setTimeout(() => {
-          this.username = 'User';
+          this.username = this.auth.currentUser || 'User';
           this.email = '';
-          this.avatarText = 'US';
+          this.avatarText = this.username
+            ? this.username.substring(0, 2).toUpperCase()
+            : 'US';
           this.cdr.markForCheck();
         });
       },
