@@ -133,6 +133,72 @@
 
       <div nz-col [nzXs]="24" [nzMd]="8">
         <nz-form-item>
+          <nz-form-label nzFor="gradeCode">{{
+            'organization.positionMaster.gradeCode' | translate
+          }}</nz-form-label>
+          <nz-form-control>
+            <input
+              nz-input
+              formControlName="gradeCode"
+              id="gradeCode"
+              [placeholder]="'organization.positionMaster.gradeCodePlaceholder' | translate"
+            />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <div nz-col [nzXs]="24" [nzMd]="8">
+        <nz-form-item>
+          <nz-form-label nzFor="gradeName">{{
+            'organization.positionMaster.gradeName' | translate
+          }}</nz-form-label>
+          <nz-form-control>
+            <input
+              nz-input
+              formControlName="gradeName"
+              id="gradeName"
+              [placeholder]="'organization.positionMaster.gradeNamePlaceholder' | translate"
+            />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <div nz-col [nzXs]="24" [nzMd]="8">
+        <nz-form-item>
+          <nz-form-label nzFor="salaryMin">{{
+            'organization.positionMaster.salaryMin' | translate
+          }}</nz-form-label>
+          <nz-form-control>
+            <nz-input-number
+              formControlName="salaryMin"
+              id="salaryMin"
+              [nzMin]="0"
+              [nzStep]="1000"
+              style="width: 100%"
+            ></nz-input-number>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <div nz-col [nzXs]="24" [nzMd]="8">
+        <nz-form-item>
+          <nz-form-label nzFor="salaryMax">{{
+            'organization.positionMaster.salaryMax' | translate
+          }}</nz-form-label>
+          <nz-form-control>
+            <nz-input-number
+              formControlName="salaryMax"
+              id="salaryMax"
+              [nzMin]="0"
+              [nzStep]="1000"
+              style="width: 100%"
+            ></nz-input-number>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <div nz-col [nzXs]="24" [nzMd]="8">
+        <nz-form-item>
           <nz-form-label nzFor="displayOrder">{{
             'organization.positionMaster.displayOrder' | translate
           }}</nz-form-label>

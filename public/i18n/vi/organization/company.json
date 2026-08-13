@@ -62,6 +62,7 @@
       "timeZone": "Múi giờ",
       "defaultLanguage": "Ngôn ngữ mặc định",
       "logoUrl": "Logo URL",
+      "primaryColor": "Màu thương hiệu",
       "isActive": "Kích hoạt hệ thống",
       "socialInsuranceCode": "Mã BHXH",
       "timeKeepingStandardId": "Chuẩn chấm công",
@@ -76,7 +77,9 @@
       "manageBranches": "Quản lý chi nhánh theo công ty",
       "addBranch": "Thêm chi nhánh",
       "noBranches": "Chưa có chi nhánh thuộc công ty này.",
-      "noChildCompanies": "Chưa có công ty con."
+      "noChildCompanies": "Chưa có công ty con.",
+      "latitude": "Vĩ độ (GPS)",
+      "longitude": "Kinh độ (GPS)"
     }
   }
 }

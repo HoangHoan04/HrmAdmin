@@ -1,0 +1,59 @@
+{
+  "asset": {
+    "common": {
+      "company": "Company",
+      "branch": "Branch",
+      "employee": "Employee",
+      "status": "Status",
+      "isActive": "Active",
+      "filterCompany": "Select company...",
+      "filterStatus": "Select status...",
+      "backToList": "Back to list"
+    },
+    "type": {
+      "entityName": "asset type",
+      "code": "Code",
+      "name": "Name",
+      "description": "Description",
+      "search": "Search",
+      "searchPlaceholder": "Code or name...",
+      "addTitle": "Add asset type",
+      "editTitle": "Edit asset type",
+      "deleteConfirm": "Delete this asset type?"
+    },
+    "inventory": {
+      "entityName": "asset",
+      "code": "Code",
+      "name": "Name",
+      "assetType": "Asset type",
+      "serialNumber": "Serial number",
+      "purchaseDate": "Purchase date",
+      "purchaseCost": "Purchase cost",
+      "status": "Status",
+      "note": "Note",
+      "search": "Search",
+      "searchPlaceholder": "Code or name...",
+      "addTitle": "Add asset",
+      "editTitle": "Edit asset",
+      "detailTitle": "Asset detail",
+      "deleteConfirm": "Delete this asset?"
+    },
+    "ticket": {
+      "entityName": "asset ticket",
+      "code": "Code",
+      "asset": "Asset",
+      "employee": "Employee",
+      "ticketType": "Ticket type",
+      "status": "Status",
+      "ticketAt": "Ticket date",
+      "note": "Note",
+      "search": "Search",
+      "searchPlaceholder": "Code, asset, employee...",
+      "addTitle": "Add asset ticket",
+      "editTitle": "Edit asset ticket",
+      "deleteConfirm": "Delete this asset ticket?",
+      "completeConfirm": "Complete this asset ticket?",
+      "complete": "Complete"
+    }
+  }
+}

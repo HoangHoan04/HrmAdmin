@@ -152,8 +152,7 @@ export class CompanyManagerComponent implements OnInit {
       tooltip: 'organization.company.activate',
       severity: 'success',
       visible: (record) =>
-        record.isDeleted === true &&
-        this.permissionSvc.has(PERMISSION_CODES.ORG_COMPANY_ACTIVATE),
+        record.isDeleted === true && this.permissionSvc.has(PERMISSION_CODES.ORG_COMPANY_ACTIVATE),
       onClick: (record) => this.activateCompany(record),
     },
     {

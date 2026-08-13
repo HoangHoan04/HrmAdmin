@@ -31,8 +31,24 @@ const routes: Routes = [
       import('./system-settings/system-settings.module').then((m) => m.SystemSettingsModule),
   },
   {
+    path: getPath(ROUTES_CONFIG.REPORTS.path),
+    loadChildren: () => import('./reports/reports.module').then((m) => m.ReportsModule),
+  },
+  {
     path: getPath(ROUTES_CONFIG.RECRUITMENT.path),
     loadChildren: () => import('./recruitment/recruitment.module').then((m) => m.RecruitmentModule),
+  },
+  {
+    path: getPath(ROUTES_CONFIG.TALENT.children.DISCIPLINE.path),
+    loadChildren: () => import('./discipline/discipline.module').then((m) => m.DisciplineModule),
+  },
+  {
+    path: getPath(ROUTES_CONFIG.TALENT.children.PERFORMANCE.path),
+    loadChildren: () => import('./performance/performance.module').then((m) => m.PerformanceModule),
+  },
+  {
+    path: getPath(ROUTES_CONFIG.TALENT.children.TRAINING.path),
+    loadChildren: () => import('./training/training.module').then((m) => m.TrainingModule),
   },
   {
     path: getPath(ROUTES_CONFIG.PAYROLL.path),
@@ -41,6 +57,15 @@ const routes: Routes = [
   {
     path: getPath(ROUTES_CONFIG.ASSET.path),
     loadChildren: () => import('./asset/asset.module').then((m) => m.AssetModule),
+  },
+  {
+    path: getPath(ROUTES_CONFIG.WORKFLOW.path),
+    loadChildren: () => import('./workflow/workflow.module').then((m) => m.WorkflowModule),
+  },
+  {
+    path: getPath(ROUTES_CONFIG.INTEGRATIONS.path),
+    loadChildren: () =>
+      import('./integrations/integrations.module').then((m) => m.IntegrationsModule),
   },
   {
     path: getPath(ROUTES_CONFIG.ROLE_MANAGER.path),

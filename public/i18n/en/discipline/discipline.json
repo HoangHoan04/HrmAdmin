@@ -1,0 +1,47 @@
+{
+  "discipline": {
+    "common": {
+      "company": "Company",
+      "branch": "Branch",
+      "employee": "Employee",
+      "status": "Status",
+      "isActive": "Active",
+      "filterCompany": "Select company...",
+      "filterStatus": "Select status...",
+      "backToList": "Back to list"
+    },
+    "violationType": {
+      "entityName": "violation type",
+      "code": "Code",
+      "name": "Name",
+      "description": "Description",
+      "severity": "Severity",
+      "displayOrder": "Display order",
+      "search": "Search",
+      "searchPlaceholder": "Code or name...",
+      "addTitle": "Add violation type",
+      "editTitle": "Edit violation type",
+      "deleteConfirm": "Delete this violation type?"
+    },
+    "violation": {
+      "entityName": "disciplinary violation",
+      "code": "Code",
+      "violationType": "Violation type",
+      "employee": "Employee",
+      "occurredAt": "Occurred at",
+      "description": "Description",
+      "decision": "Decision",
+      "penaltyType": "Penalty type",
+      "status": "Status",
+      "note": "Note",
+      "search": "Search",
+      "searchPlaceholder": "Code, employee...",
+      "addTitle": "Add violation",
+      "editTitle": "Edit violation",
+      "detailTitle": "Violation detail",
+      "deleteConfirm": "Delete this violation?",
+      "confirmConfirm": "Confirm this violation?",
+      "cancelConfirm": "Cancel this violation?"
+    }
+  }
+}

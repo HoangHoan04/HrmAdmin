@@ -1,0 +1,111 @@
+<nz-tabs [nzSelectedIndex]="selectedTabIndex" (nzSelectedIndexChange)="onTabChange($event)">
+  <nz-tab [nzTitle]="'adjustment.deductionTab' | translate"></nz-tab>
+  <nz-tab [nzTitle]="'adjustment.additionTab' | translate"></nz-tab>
+</nz-tabs>
+
+<app-filter-custom
+  [id]="'adjustment-filter'"
+  [fields]="filterFields"
+  [filters]="filters"
+  [config]="filterConfig"
+  [filterActions]="filterActions"
+  [loading]="loading"
+  (filtersChange)="onFiltersChange($event)"
+></app-filter-custom>
+
+<app-table-custom
+  [id]="'adjustment-table'"
+  [data]="data"
+  [columns]="columns"
+  [loading]="loading"
+  [showIndexList]="true"
+  [stripedRows]="true"
+  [rowActions]="rowActions"
+  [toolbarActions]="toolbarActions"
+  [pagination]="pagination"
+  (pageChange)="onPageChange($event)"
+  (sortChange)="onSortChange($event)"
+  (refresh)="loadData()"
+></app-table-custom>
+
+<nz-modal
+  [nzVisible]="createVisible"
+  [nzTitle]="createTitle | translate"
+  [nzOkText]="'common.actions.save' | translate"
+  [nzCancelText]="'common.actions.cancel' | translate"
+  [nzOkLoading]="submitting"
+  (nzOnCancel)="closeCreate()"
+  (nzOnOk)="submitCreate()"
+>
+  <ng-container *nzModalContent>
+    <form nz-form [formGroup]="createForm" nzLayout="vertical">
+      <nz-form-item>
+        <nz-form-label nzRequired>{{ 'adjustment.employee' | translate }}</nz-form-label>
+        <nz-form-control [nzErrorTip]="'adjustment.employeeRequired' | translate">
+          <nz-select
+            formControlName="employeeId"
+            nzShowSearch
+            nzAllowClear
+            [nzPlaceHolder]="'adjustment.filterEmployee' | translate"
+            style="width: 100%"
+          >
+            @for (opt of employeeOptions; track opt.value) {
+              <nz-option [nzValue]="opt.value" [nzLabel]="opt.label"></nz-option>
+            }
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzRequired>{{ 'adjustment.amount' | translate }}</nz-form-label>
+        <nz-form-control [nzErrorTip]="'adjustment.amountRequired' | translate">
+          <nz-input-number formControlName="amount" [nzMin]="1" style="width: 100%"></nz-input-number>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label>{{ 'adjustment.slipDate' | translate }}</nz-form-label>
+        <nz-form-control>
+          <nz-date-picker formControlName="slipDate" style="width: 100%"></nz-date-picker>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label>{{ 'adjustment.slipType' | translate }}</nz-form-label>
+        <nz-form-control>
+          <input nz-input formControlName="slipType" />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzRequired>{{ 'adjustment.applyMonth' | translate }}</nz-form-label>
+        <nz-form-control [nzErrorTip]="'adjustment.applyMonthRequired' | translate">
+          <nz-select formControlName="applyMonth" style="width: 100%">
+            @for (m of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]; track m) {
+              <nz-option [nzValue]="m" [nzLabel]="'' + m"></nz-option>
+            }
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzRequired>{{ 'adjustment.applyYear' | translate }}</nz-form-label>
+        <nz-form-control [nzErrorTip]="'adjustment.applyYearRequired' | translate">
+          <nz-input-number formControlName="applyYear" [nzMin]="2000" style="width: 100%"></nz-input-number>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label>{{ 'adjustment.reason' | translate }}</nz-form-label>
+        <nz-form-control>
+          <textarea nz-input formControlName="reason" rows="2"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label>{{ 'adjustment.note' | translate }}</nz-form-label>
+        <nz-form-control>
+          <textarea nz-input formControlName="note" rows="2"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <label nz-checkbox formControlName="autoApprove">
+          {{ 'adjustment.autoApprove' | translate }}
+        </label>
+      </nz-form-item>
+    </form>
+  </ng-container>
+</nz-modal>

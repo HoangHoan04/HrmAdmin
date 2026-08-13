@@ -1,0 +1,74 @@
+<nz-card [nzTitle]="titleTemplate" [nzExtra]="extraTemplate" [nzLoading]="loading || reparenting">
+  <div class="org-chart-toolbar" nz-row [nzGutter]="16">
+    <div nz-col [nzXs]="24" [nzMd]="10" [nzLg]="8">
+      <label class="field-label">{{ 'organization.orgChart.company' | translate }}</label>
+      <nz-select
+        class="w-full"
+        [ngModel]="companyId"
+        (ngModelChange)="onCompanyChange($event)"
+        [nzPlaceHolder]="'organization.orgChart.selectCompany' | translate"
+        nzAllowClear
+        nzShowSearch
+      >
+        @for (c of companies; track c.id) {
+          <nz-option [nzValue]="c.id" [nzLabel]="c.code ? c.code + ' - ' + c.name : c.name"></nz-option>
+        }
+      </nz-select>
+    </div>
+    <div nz-col [nzXs]="24" [nzMd]="8" [nzLg]="6" class="include-parts">
+      <label nz-checkbox [ngModel]="includeParts" (ngModelChange)="onIncludePartsChange($event)">
+        {{ 'organization.orgChart.includeParts' | translate }}
+      </label>
+    </div>
+  </div>
+
+  @if (!companyId) {
+    <nz-empty [nzNotFoundContent]="'organization.orgChart.selectCompanyHint' | translate"></nz-empty>
+  } @else if (!loading && treeNodes.length === 0) {
+    <nz-empty [nzNotFoundContent]="'organization.orgChart.empty' | translate"></nz-empty>
+  } @else {
+    <div class="org-chart-tree">
+      <nz-tree
+        [nzData]="treeNodes"
+        [nzDraggable]="canManage()"
+        [nzBeforeDrop]="beforeDrop"
+        [nzBlockNode]="true"
+        [nzShowLine]="true"
+        [nzTreeTemplate]="nodeTpl"
+      ></nz-tree>
+    </div>
+  }
+</nz-card>
+
+<ng-template #titleTemplate>
+  <span class="card-title">
+    <i nz-icon nzType="apartment"></i>
+    {{ 'organization.orgChart.title' | translate }}
+  </span>
+</ng-template>
+
+<ng-template #extraTemplate>
+  <button nz-button nzType="default" [disabled]="!companyId || loading" (click)="loadTree()">
+    <i nz-icon nzType="reload"></i>
+    {{ 'common.actions.refresh' | translate }}
+  </button>
+</ng-template>
+
+<ng-template #nodeTpl let-node>
+  <span class="org-node">
+    <nz-tag [nzColor]="nodeTypeColor(node.origin.nodeType)">
+      {{ nodeTypeLabel(node.origin.nodeType) }}
+    </nz-tag>
+    <span class="org-node__title">{{ node.title }}</span>
+    @if (node.origin.employeeCount != null) {
+      <nz-tag nzColor="default">
+        {{ 'organization.orgChart.employeeCount' | translate }}: {{ node.origin.employeeCount }}
+      </nz-tag>
+    }
+    @if (node.origin.managerName) {
+      <nz-tag nzColor="gold">
+        {{ 'organization.orgChart.manager' | translate }}: {{ node.origin.managerName }}
+      </nz-tag>
+    }
+  </span>
+</ng-template>

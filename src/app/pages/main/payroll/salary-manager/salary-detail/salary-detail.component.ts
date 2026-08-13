@@ -17,6 +17,7 @@ export class SalaryDetailComponent implements OnInit {
   id: string | null = null;
   loading = false;
   actionSubmitting = false;
+  printing = false;
   salary: Salary | null = null;
   enumData = enumData;
 
@@ -94,6 +95,27 @@ export class SalaryDetailComponent implements OnInit {
       ROUTES_CONFIG.PAYROLL.children.PAYROLL_RUN_MANAGER.children.EDIT_SALARY.path,
       this.salary.id,
     ]);
+  }
+
+  printPayslip(): void {
+    if (!this.salary?.id) return;
+    this.printing = true;
+    const url = `${this.apiService.SALARY.PAYSLIP_HTML}?id=${this.salary.id}`;
+    this.apiService.getText(url).subscribe({
+      next: (html) => {
+        const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+        const blobUrl = URL.createObjectURL(blob);
+        window.open(blobUrl, '_blank');
+        setTimeout(() => URL.revokeObjectURL(blobUrl), 60_000);
+        this.printing = false;
+      },
+      error: (err: any) => {
+        this.message.error(
+          this.i18n.instant('salary.printPayslipFailed') || this.i18n.genericError(err.error),
+        );
+        this.printing = false;
+      },
+    });
   }
 
   async approve(): Promise<void> {

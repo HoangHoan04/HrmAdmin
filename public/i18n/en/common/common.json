@@ -32,7 +32,15 @@
       "exportPdf": "Export PDF",
       "save": "Save",
       "cancel": "Cancel",
-      "view": "View Details"
+      "view": "View Details",
+      "back": "Back"
+    },
+    "status": {
+      "label": "Status"
+    },
+    "fields": {
+      "note": "Note",
+      "createdAt": "Created at"
     },
     "messages": {
       "confirm": "Confirm",

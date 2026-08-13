@@ -17,7 +17,10 @@
           style="width: 100%; max-width: 480px"
         >
           @for (emp of employees; track emp.id) {
-            <nz-option [nzValue]="emp.id" [nzLabel]="(emp.code || '') + ' - ' + emp.name"></nz-option>
+            <nz-option
+              [nzValue]="emp.id"
+              [nzLabel]="(emp.code || '') + ' - ' + emp.name"
+            ></nz-option>
           }
         </nz-select>
       </nz-form-control>

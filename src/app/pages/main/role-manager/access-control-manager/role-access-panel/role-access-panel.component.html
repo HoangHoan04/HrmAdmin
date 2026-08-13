@@ -22,12 +22,7 @@
           </nz-select>
         </div>
         <div class="role-filter-actions">
-          <button
-            nz-button
-            nzType="default"
-            [disabled]="!selectedRoleId"
-            (click)="goEmployeeTab()"
-          >
+          <button nz-button nzType="default" [disabled]="!selectedRoleId" (click)="goEmployeeTab()">
             <span nz-icon nzType="team"></span>
             {{ 'role.viewEmployees' | translate }}
           </button>
@@ -41,12 +36,7 @@
       <nz-spin [nzSpinning]="permLoading">
         <div class="d-flex justify-content-between mb-3 align-items-center role-save-bar">
           @if (isDirty) {
-            <button
-              nz-button
-              nzType="primary"
-              [nzLoading]="permSaving"
-              (click)="savePermissions()"
-            >
+            <button nz-button nzType="primary" [nzLoading]="permSaving" (click)="savePermissions()">
               <span nz-icon nzType="save"></span>
               {{ 'role.savePermissions' | translate }}
             </button>

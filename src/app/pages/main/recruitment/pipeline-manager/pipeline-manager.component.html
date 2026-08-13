@@ -1,0 +1,464 @@
+<div class="pipeline-page">
+  <div class="pipeline-hero">
+    <div>
+      <h2>{{ 'recruitment.pipeline.title' | translate }}</h2>
+      @if (companyId) {
+        <div class="org-chip">
+          <span nz-icon nzType="bank"></span>
+          {{ orgLabel() }}
+          @if (selectedPlan) {
+            <span class="sep">·</span> {{ selectedPlan.code }}
+          }
+          @if (selectedCandidate) {
+            <span class="sep">·</span> {{ selectedCandidate.fullName }}
+          }
+        </div>
+      }
+    </div>
+    <button nz-button nzType="default" (click)="goManagePlans()">
+      <span nz-icon nzType="project"></span>
+      {{ 'routes.hiringPlan' | translate }}
+    </button>
+  </div>
+
+  <nz-steps
+    [nzCurrent]="currentStep"
+    nzSize="small"
+    (nzIndexChange)="onStepIndexChange($event)"
+    class="pipeline-steps"
+  >
+    <nz-step [nzTitle]="'recruitment.pipeline.stepOrg' | translate"></nz-step>
+    <nz-step [nzTitle]="'recruitment.pipeline.stepPlan' | translate"></nz-step>
+    <nz-step [nzTitle]="'recruitment.pipeline.stepCandidate' | translate"></nz-step>
+    <nz-step [nzTitle]="'recruitment.pipeline.stepInterview' | translate"></nz-step>
+    <nz-step [nzTitle]="'recruitment.pipeline.stepInterviewers' | translate"></nz-step>
+    <nz-step [nzTitle]="'recruitment.pipeline.stepWaitlist' | translate"></nz-step>
+  </nz-steps>
+
+  <nz-spin [nzSpinning]="loading">
+    <!-- STEP 0: Org -->
+    @if (currentStep === 0) {
+      <nz-card class="step-card">
+        <p class="muted">{{ 'recruitment.pipeline.orgHint' | translate }}</p>
+        <div nz-row [nzGutter]="16">
+          <div nz-col nzXs="24" nzMd="12">
+            <nz-form-item>
+              <nz-form-label nzRequired>{{
+                'recruitment.common.company' | translate
+              }}</nz-form-label>
+              <nz-select
+                [ngModel]="companyId"
+                (ngModelChange)="onCompanyChange($event)"
+                nzShowSearch
+                nzAllowClear
+                style="width: 100%"
+                [nzPlaceHolder]="'recruitment.common.filterCompany' | translate"
+              >
+                @for (c of companies; track c.id) {
+                  <nz-option
+                    [nzValue]="c.id"
+                    [nzLabel]="(c.code ? c.code + ' — ' : '') + c.name"
+                  ></nz-option>
+                }
+              </nz-select>
+            </nz-form-item>
+          </div>
+          <div nz-col nzXs="24" nzMd="12">
+            <nz-form-item>
+              <nz-form-label>{{ 'recruitment.common.branch' | translate }}</nz-form-label>
+              <nz-select
+                [ngModel]="branchId"
+                (ngModelChange)="onBranchChange($event)"
+                nzShowSearch
+                nzAllowClear
+                style="width: 100%"
+                [nzDisabled]="!companyId"
+                [nzPlaceHolder]="'recruitment.pipeline.branchOptional' | translate"
+              >
+                @for (b of branches; track b.id) {
+                  <nz-option
+                    [nzValue]="b.id"
+                    [nzLabel]="(b.code ? b.code + ' — ' : '') + b.name"
+                  ></nz-option>
+                }
+              </nz-select>
+            </nz-form-item>
+          </div>
+        </div>
+      </nz-card>
+    }
+
+    <!-- STEP 1: Plan -->
+    @if (currentStep === 1) {
+      <nz-card class="step-card">
+        <p class="muted">{{ 'recruitment.pipeline.pickOpenPlan' | translate }}</p>
+        <div class="plan-grid">
+          @for (p of plans; track p.id) {
+            <button
+              type="button"
+              class="plan-card"
+              [class.active]="selectedPlanId === p.id"
+              (click)="selectPlan(p)"
+            >
+              <div class="plan-code">{{ p.code }}</div>
+              <div class="plan-name">{{ p.name }}</div>
+              <div class="plan-meta">
+                {{ 'recruitment.plan.parentRequest' | translate }}:
+                {{ p.recruitmentRequestCode || '—' }}
+              </div>
+              <div class="plan-meta">
+                {{ p.branchName || ('recruitment.pipeline.companyLevel' | translate) }}
+                · {{ 'recruitment.pipeline.targetQuantity' | translate }}: {{ p.targetQuantity }}
+              </div>
+            </button>
+          } @empty {
+            <nz-empty [nzNotFoundContent]="'recruitment.pipeline.noOpenPlan' | translate">
+              <button nz-button nzType="primary" (click)="goManagePlans()">
+                {{ 'routes.addHiringPlan' | translate }}
+              </button>
+            </nz-empty>
+          }
+        </div>
+      </nz-card>
+    }
+
+    <!-- STEP 2: Candidate -->
+    @if (currentStep === 2 && selectedPlan) {
+      <nz-card [nzTitle]="selectedPlan.code" class="step-card">
+        <div class="toolbar-row">
+          <button nz-button nzType="default" (click)="goFullCandidateForm()">
+            {{ 'recruitment.pipeline.openFullCandidateForm' | translate }}
+          </button>
+        </div>
+
+        @if (canCreateCandidate) {
+          <div class="quick-add">
+            <div class="section-label">
+              {{ 'recruitment.pipeline.quickAddCandidate' | translate }}
+            </div>
+            <form
+              nz-form
+              [formGroup]="candidateForm"
+              nzLayout="vertical"
+              (ngSubmit)="createCandidate()"
+            >
+              <div nz-row [nzGutter]="12">
+                <div nz-col nzMd="6">
+                  <nz-form-item>
+                    <nz-form-label nzRequired>{{
+                      'recruitment.candidate.code' | translate
+                    }}</nz-form-label>
+                    <nz-form-control><input nz-input formControlName="code" /></nz-form-control>
+                  </nz-form-item>
+                </div>
+                <div nz-col nzMd="6">
+                  <nz-form-item>
+                    <nz-form-label nzRequired>{{
+                      'recruitment.candidate.fullName' | translate
+                    }}</nz-form-label>
+                    <nz-form-control><input nz-input formControlName="fullName" /></nz-form-control>
+                  </nz-form-item>
+                </div>
+                <div nz-col nzMd="6">
+                  <nz-form-item>
+                    <nz-form-label>{{ 'recruitment.candidate.email' | translate }}</nz-form-label>
+                    <nz-form-control><input nz-input formControlName="email" /></nz-form-control>
+                  </nz-form-item>
+                </div>
+                <div nz-col nzMd="6">
+                  <nz-form-item>
+                    <nz-form-label>{{ 'recruitment.candidate.phone' | translate }}</nz-form-label>
+                    <nz-form-control><input nz-input formControlName="phone" /></nz-form-control>
+                  </nz-form-item>
+                </div>
+              </div>
+              <button nz-button nzType="default" [nzLoading]="submitting" type="submit">
+                {{ 'common.actions.create' | translate }}
+              </button>
+            </form>
+          </div>
+        }
+
+        <nz-divider></nz-divider>
+        <div class="section-label">{{ 'recruitment.pipeline.pickCandidate' | translate }}</div>
+        <p class="muted">{{ 'recruitment.pipeline.pickCandidateHint' | translate }}</p>
+
+        <div class="candidate-grid">
+          @for (c of activeCandidates(); track c.id) {
+            <button
+              type="button"
+              class="candidate-card"
+              [class.active]="selectedCandidateId === c.id"
+              (click)="selectCandidate(c)"
+            >
+              <div class="cand-name">{{ c.fullName }}</div>
+              <div class="cand-meta">{{ c.code }} · {{ labelStatus(c.status) }}</div>
+              <div class="cand-meta">{{ c.email || c.phone || '—' }}</div>
+            </button>
+          } @empty {
+            <nz-empty
+              [nzNotFoundContent]="'recruitment.pipeline.noCandidates' | translate"
+            ></nz-empty>
+          }
+        </div>
+      </nz-card>
+    }
+
+    <!-- STEP 3: Interview (candidate locked) -->
+    @if (currentStep === 3 && selectedCandidate) {
+      <nz-card class="step-card">
+        <div class="selected-banner">
+          <span nz-icon nzType="user"></span>
+          <div>
+            <strong>{{ selectedCandidate.fullName }}</strong>
+            <div class="cand-meta">
+              {{ selectedCandidate.code }} · {{ labelStatus(selectedCandidate.status) }}
+            </div>
+          </div>
+        </div>
+
+        @if (canManageInterview) {
+          <form
+            nz-form
+            [formGroup]="interviewForm"
+            nzLayout="vertical"
+            (ngSubmit)="createInterview()"
+          >
+            <div nz-row [nzGutter]="12">
+              <div nz-col nzMd="4">
+                <nz-form-item>
+                  <nz-form-label nzRequired>{{
+                    'recruitment.interview.round' | translate
+                  }}</nz-form-label>
+                  <nz-form-control>
+                    <nz-input-number
+                      formControlName="round"
+                      [nzMin]="1"
+                      style="width: 100%"
+                    ></nz-input-number>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col nzMd="7">
+                <nz-form-item>
+                  <nz-form-label nzRequired>{{
+                    'recruitment.interview.startAt' | translate
+                  }}</nz-form-label>
+                  <nz-form-control>
+                    <nz-date-picker
+                      formControlName="startAt"
+                      nzShowTime
+                      style="width: 100%"
+                    ></nz-date-picker>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col nzMd="7">
+                <nz-form-item>
+                  <nz-form-label nzRequired>{{
+                    'recruitment.interview.endAt' | translate
+                  }}</nz-form-label>
+                  <nz-form-control>
+                    <nz-date-picker
+                      formControlName="endAt"
+                      nzShowTime
+                      style="width: 100%"
+                    ></nz-date-picker>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col nzMd="6">
+                <nz-form-item>
+                  <nz-form-label>{{ 'recruitment.interview.location' | translate }}</nz-form-label>
+                  <nz-form-control><input nz-input formControlName="location" /></nz-form-control>
+                </nz-form-item>
+              </div>
+            </div>
+            <button nz-button nzType="primary" [nzLoading]="submitting" type="submit">
+              {{ 'recruitment.pipeline.invite' | translate }}
+            </button>
+          </form>
+        }
+
+        <nz-divider></nz-divider>
+        <nz-table [nzData]="candidateInterviews()" nzSize="small" [nzFrontPagination]="true">
+          <thead>
+            <tr>
+              <th>{{ 'recruitment.interview.round' | translate }}</th>
+              <th>{{ 'recruitment.interview.startAt' | translate }}</th>
+              <th>{{ 'recruitment.common.status' | translate }}</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (iv of candidateInterviews(); track iv.id) {
+              <tr [class.row-active]="selectedInterviewId === iv.id">
+                <td>{{ iv.round }}</td>
+                <td>{{ iv.startAt | date: 'short' }}</td>
+                <td>{{ labelInterviewStatus(iv.status) }}</td>
+                <td>
+                  @if (canManageInterview && iv.status === 'SCHEDULED') {
+                    <button nz-button nzType="link" (click)="completeInterview(iv)">
+                      {{ 'recruitment.interview.complete' | translate }}
+                    </button>
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </nz-table>
+      </nz-card>
+    }
+
+    <!-- STEP 4: Interviewers (scoped to org) -->
+    @if (currentStep === 4) {
+      <nz-card class="step-card">
+        <p class="muted">
+          {{ 'recruitment.pipeline.interviewerOrgHint' | translate }}: {{ orgLabel() }}
+        </p>
+        @if (canManageInterview) {
+          <form
+            nz-form
+            [formGroup]="interviewerForm"
+            nzLayout="vertical"
+            (ngSubmit)="assignInterviewers()"
+          >
+            <div nz-row [nzGutter]="12">
+              <div nz-col nzMd="8">
+                <nz-form-item>
+                  <nz-form-label nzRequired>{{
+                    'recruitment.interview.schedule' | translate
+                  }}</nz-form-label>
+                  <nz-form-control>
+                    <nz-select formControlName="interviewScheduleId" style="width: 100%">
+                      @for (iv of candidateInterviews(); track iv.id) {
+                        <nz-option
+                          [nzValue]="iv.id"
+                          [nzLabel]="(iv.candidateName || iv.candidateCode || '') + ' #' + iv.round"
+                        ></nz-option>
+                      }
+                    </nz-select>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col nzMd="10">
+                <nz-form-item>
+                  <nz-form-label nzRequired>{{
+                    'recruitment.interview.interviewers' | translate
+                  }}</nz-form-label>
+                  <nz-form-control>
+                    <nz-select
+                      formControlName="employeeIds"
+                      nzMode="multiple"
+                      nzShowSearch
+                      style="width: 100%"
+                    >
+                      @for (e of employees; track e.id) {
+                        <nz-option
+                          [nzValue]="e.id"
+                          [nzLabel]="(e.code || '') + ' — ' + (e.name || '')"
+                        ></nz-option>
+                      }
+                    </nz-select>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+              <div nz-col nzMd="6">
+                <nz-form-item>
+                  <nz-form-label>{{ 'recruitment.interview.primary' | translate }}</nz-form-label>
+                  <nz-form-control>
+                    <nz-select formControlName="primaryEmployeeId" nzAllowClear style="width: 100%">
+                      @for (e of employees; track e.id) {
+                        <nz-option [nzValue]="e.id" [nzLabel]="e.name || e.code || ''"></nz-option>
+                      }
+                    </nz-select>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+            </div>
+            <button nz-button nzType="primary" [nzLoading]="submitting" type="submit">
+              {{ 'recruitment.pipeline.saveAndContinue' | translate }}
+            </button>
+          </form>
+        }
+        @if (!employees.length) {
+          <nz-empty
+            [nzNotFoundContent]="'recruitment.pipeline.noEmployeesInOrg' | translate"
+          ></nz-empty>
+        }
+      </nz-card>
+    }
+
+    <!-- STEP 5: Waitlist -->
+    @if (currentStep === 5 && selectedPlan) {
+      <nz-card class="step-card">
+        <nz-table [nzData]="waitlist" nzSize="middle" [nzFrontPagination]="true">
+          <thead>
+            <tr>
+              <th>{{ 'recruitment.candidate.code' | translate }}</th>
+              <th>{{ 'recruitment.candidate.fullName' | translate }}</th>
+              <th>{{ 'recruitment.common.status' | translate }}</th>
+              <th>{{ 'recruitment.pipeline.actions' | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (c of waitlist; track c.id) {
+              <tr>
+                <td>{{ c.code }}</td>
+                <td>{{ c.fullName }}</td>
+                <td>
+                  <nz-tag>{{ labelStatus(c.status) }}</nz-tag>
+                </td>
+                <td>
+                  @if (canUpdateCandidate) {
+                    @if (c.status === 'WAITLIST') {
+                      <button nz-button nzType="link" (click)="changeCandidateStatus(c, 'OFFER')">
+                        {{ 'recruitment.pipeline.toOffer' | translate }}
+                      </button>
+                    }
+                    @if (c.status === 'OFFER' || c.status === 'WAITLIST') {
+                      <button nz-button nzType="link" (click)="changeCandidateStatus(c, 'HIRED')">
+                        {{ 'recruitment.pipeline.toHired' | translate }}
+                      </button>
+                      <button
+                        nz-button
+                        nzType="link"
+                        nzDanger
+                        (click)="changeCandidateStatus(c, 'REJECTED')"
+                      >
+                        {{ 'recruitment.pipeline.toReject' | translate }}
+                      </button>
+                    }
+                  }
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="4">
+                  <nz-empty
+                    [nzNotFoundContent]="'recruitment.pipeline.waitlistEmpty' | translate"
+                  ></nz-empty>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </nz-table>
+      </nz-card>
+    }
+  </nz-spin>
+
+  <div class="wizard-footer">
+    <button nz-button type="button" [disabled]="currentStep === 0" (click)="goBack()">
+      {{ 'recruitment.pipeline.btnBack' | translate }}
+    </button>
+    <button
+      nz-button
+      nzType="primary"
+      type="button"
+      [disabled]="!canGoNext && currentStep < TOTAL_STEPS - 1"
+      (click)="goNext()"
+    >
+      {{ nextLabelKey | translate }}
+    </button>
+  </div>
+</div>

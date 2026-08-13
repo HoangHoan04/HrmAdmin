@@ -1,0 +1,248 @@
+<div class="calendar-page">
+  <div class="calendar-hint">{{ 'recruitment.interview.calendarHint' | translate }}</div>
+  <nz-spin [nzSpinning]="loading" class="calendar-spin">
+    <full-calendar #calendar [options]="calendarOptions"></full-calendar>
+  </nz-spin>
+</div>
+
+<nz-modal
+  [nzVisible]="modalVisible"
+  [nzTitle]="'recruitment.interview.addTitle' | translate"
+  [nzOkLoading]="submitting"
+  [nzOkDisabled]="!canManage"
+  (nzOnCancel)="closeModal()"
+  (nzOnOk)="submitCreate()"
+  [nzOkText]="'common.actions.save' | translate"
+  [nzCancelText]="'common.actions.cancel' | translate"
+  [nzWidth]="640"
+>
+  <ng-container *nzModalContent>
+    <form nz-form [formGroup]="createForm" nzLayout="vertical">
+      <nz-form-item>
+        <nz-form-label nzRequired>{{
+          'recruitment.interview.candidate' | translate
+        }}</nz-form-label>
+        <nz-form-control>
+          <nz-select formControlName="candidateId" nzShowSearch style="width: 100%">
+            @for (c of candidates; track c.id) {
+              <nz-option [nzValue]="c.id" [nzLabel]="c.code + ' — ' + c.fullName"></nz-option>
+            }
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <div nz-row [nzGutter]="12">
+        <div nz-col nzSpan="8">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{
+              'recruitment.interview.round' | translate
+            }}</nz-form-label>
+            <nz-form-control>
+              <nz-input-number
+                formControlName="round"
+                [nzMin]="1"
+                style="width: 100%"
+              ></nz-input-number>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="8">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{
+              'recruitment.interview.startAt' | translate
+            }}</nz-form-label>
+            <nz-form-control>
+              <nz-date-picker
+                formControlName="startAt"
+                nzShowTime
+                style="width: 100%"
+              ></nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="8">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{
+              'recruitment.interview.endAt' | translate
+            }}</nz-form-label>
+            <nz-form-control>
+              <nz-date-picker
+                formControlName="endAt"
+                nzShowTime
+                style="width: 100%"
+              ></nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <nz-form-item>
+        <nz-form-label>{{ 'recruitment.interview.location' | translate }}</nz-form-label>
+        <nz-form-control><input nz-input formControlName="location" /></nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-container>
+</nz-modal>
+
+<nz-drawer
+  [nzVisible]="drawerVisible"
+  [nzTitle]="'recruitment.interview.detailTitle' | translate"
+  [nzWidth]="560"
+  (nzOnClose)="closeDrawer()"
+>
+  <ng-container *nzDrawerContent>
+    <nz-spin [nzSpinning]="detailLoading">
+      @if (selected) {
+        <nz-descriptions nzBordered [nzColumn]="1" nzSize="small">
+          <nz-descriptions-item [nzTitle]="'recruitment.interview.candidate' | translate">
+            {{ selected.candidateName || selected.candidateCode }}
+          </nz-descriptions-item>
+          <nz-descriptions-item [nzTitle]="'recruitment.interview.round' | translate">
+            {{ selected.round }}
+          </nz-descriptions-item>
+          <nz-descriptions-item [nzTitle]="'recruitment.interview.startAt' | translate">
+            {{ selected.startAt | date: 'short' }}
+          </nz-descriptions-item>
+          <nz-descriptions-item [nzTitle]="'recruitment.interview.endAt' | translate">
+            {{ selected.endAt | date: 'short' }}
+          </nz-descriptions-item>
+          <nz-descriptions-item [nzTitle]="'recruitment.interview.location' | translate">
+            {{ selected.location || '-' }}
+          </nz-descriptions-item>
+          <nz-descriptions-item [nzTitle]="'recruitment.common.status' | translate">
+            {{ labelInterviewStatus(selected.status) }}
+          </nz-descriptions-item>
+          <nz-descriptions-item [nzTitle]="'recruitment.interview.interviewers' | translate">
+            {{ interviewerNames }}
+          </nz-descriptions-item>
+          <nz-descriptions-item [nzTitle]="'recruitment.candidate.notes' | translate">
+            {{ selected.notes || '-' }}
+          </nz-descriptions-item>
+        </nz-descriptions>
+
+        <nz-divider></nz-divider>
+        <h4 style="margin-bottom: 8px">{{ 'recruitment.interview.scoreTitle' | translate }}</h4>
+
+        @if (!selected.interviewers.length) {
+          <p style="color: rgba(0, 0, 0, 0.45)">
+            {{ 'recruitment.interview.scoreNeedInterviewers' | translate }}
+          </p>
+        } @else if (!planCriteria.length && !existingEvaluations.length) {
+          <p style="color: rgba(0, 0, 0, 0.45)">
+            {{ 'recruitment.interview.scoreNeedCriteria' | translate }}
+          </p>
+        } @else {
+          <nz-form-item>
+            <nz-form-label nzRequired>{{
+              'recruitment.interview.scoreAsInterviewer' | translate
+            }}</nz-form-label>
+            <nz-form-control>
+              <nz-select
+                [(ngModel)]="scoreInterviewerId"
+                [ngModelOptions]="{ standalone: true }"
+                style="width: 100%"
+                [nzDisabled]="!canManage"
+                (ngModelChange)="onScoreInterviewerChange()"
+              >
+                @for (iv of selected.interviewers; track iv.employeeId) {
+                  <nz-option
+                    [nzValue]="iv.employeeId"
+                    [nzLabel]="
+                      (iv.employeeName || iv.employeeCode || iv.employeeId) +
+                      (iv.isPrimary ? ' ★' : '')
+                    "
+                  ></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+
+          @for (row of scoreRows; track row.evaluationCriteriaId) {
+            <div class="score-row">
+              <div class="score-row-title">
+                {{ row.evaluationCriteriaName || row.evaluationCriteriaCode }}
+                <span class="score-max"
+                  >(max {{ row.maxScore }})</span
+                >
+              </div>
+              <div nz-row [nzGutter]="8">
+                <div nz-col nzSpan="8">
+                  <nz-input-number
+                    [(ngModel)]="row.score"
+                    [ngModelOptions]="{ standalone: true }"
+                    [nzMin]="0"
+                    [nzMax]="row.maxScore"
+                    [nzStep]="0.5"
+                    [nzDisabled]="!canManage || selected.status === 'CANCELLED'"
+                    style="width: 100%"
+                  ></nz-input-number>
+                </div>
+                <div nz-col nzSpan="16">
+                  <input
+                    nz-input
+                    [(ngModel)]="row.comment"
+                    [ngModelOptions]="{ standalone: true }"
+                    [disabled]="!canManage || selected.status === 'CANCELLED'"
+                    [placeholder]="'recruitment.interview.scoreComment' | translate"
+                  />
+                </div>
+              </div>
+            </div>
+          }
+
+          @if (canManage && selected.status !== 'CANCELLED') {
+            <button
+              nz-button
+              nzType="primary"
+              [nzLoading]="evalSaving"
+              [disabled]="!canScore"
+              style="margin-top: 8px"
+              (click)="saveEvaluations()"
+            >
+              {{ 'recruitment.interview.saveScores' | translate }}
+            </button>
+          }
+        }
+
+        @if (existingEvaluations.length) {
+          <nz-divider></nz-divider>
+          <h4>{{ 'recruitment.interview.scoreHistory' | translate }}</h4>
+          <nz-table
+            [nzData]="existingEvaluations"
+            [nzFrontPagination]="false"
+            nzSize="small"
+            [nzShowPagination]="false"
+          >
+            <thead>
+              <tr>
+                <th>{{ 'recruitment.interview.interviewers' | translate }}</th>
+                <th>{{ 'recruitment.criteria.name' | translate }}</th>
+                <th>{{ 'recruitment.interview.score' | translate }}</th>
+                <th>{{ 'recruitment.interview.scoreComment' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (e of existingEvaluations; track e.id) {
+                <tr>
+                  <td>{{ e.interviewerEmployeeName || '-' }}</td>
+                  <td>{{ e.evaluationCriteriaName || e.evaluationCriteriaCode }}</td>
+                  <td>{{ e.score }}</td>
+                  <td>{{ e.comment || '-' }}</td>
+                </tr>
+              }
+            </tbody>
+          </nz-table>
+        }
+
+        @if (canManage && selected.status === 'SCHEDULED') {
+          <div class="drawer-actions">
+            <button nz-button nzType="primary" (click)="completeSelected()">
+              {{ 'recruitment.interview.complete' | translate }}
+            </button>
+            <button nz-button nzDanger (click)="cancelSelected()">
+              {{ 'recruitment.interview.cancel' | translate }}
+            </button>
+          </div>
+        }
+      }
+    </nz-spin>
+  </ng-container>
+</nz-drawer>

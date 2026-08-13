@@ -1,5 +1,5 @@
-import { PERMISSION_CODES } from '@/app/core/constants/common/permission-codes';
 import { ROUTES_CONFIG } from '@/app/core/constants/common';
+import { PERMISSION_CODES } from '@/app/core/constants/common/permission-codes';
 import { enumData } from '@/app/core/constants/enums/enumData';
 import {
   CompanySelectBoxDto,
@@ -154,8 +154,7 @@ export class RoleListManagerComponent implements OnInit {
       icon: 'delete',
       tooltip: 'common.actions.delete',
       severity: 'danger',
-      visible: (record) =>
-        !record.isSystem && this.permissionSvc.has(PERMISSION_CODES.ROLE_DELETE),
+      visible: (record) => !record.isSystem && this.permissionSvc.has(PERMISSION_CODES.ROLE_DELETE),
       onClick: (record) => this.deleteRole(record),
     },
   ];

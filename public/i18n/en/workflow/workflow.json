@@ -1,0 +1,64 @@
+{
+  "workflow": {
+    "common": {
+      "entityType": "Entity type",
+      "status": "Status",
+      "filterStatus": "Filter by status",
+      "isActive": "Active"
+    },
+    "definition": {
+      "entityName": "workflow definition",
+      "search": "Search",
+      "searchPlaceholder": "Search by code or name",
+      "code": "Code",
+      "name": "Name",
+      "addTitle": "Add workflow definition",
+      "editTitle": "Edit workflow definition",
+      "deleteConfirm": "Delete this workflow definition?",
+      "stepsTitle": "Approval steps",
+      "addStep": "Add step",
+      "stepOrder": "Order",
+      "stepName": "Step name",
+      "approverResolver": "Approver",
+      "requiredRoleCode": "Required role",
+      "isFinal": "Final",
+      "minOneStep": "At least one step is required.",
+      "oneFinalRequired": "Exactly one step must be marked final.",
+      "lastMustBeFinal": "The last step must be final.",
+      "roleCodeRequired": "ROLE resolver requires a role code."
+    },
+    "inbox": {
+      "entityName": "inbox task",
+      "title": "Workflow inbox",
+      "stepName": "Step",
+      "instanceStatus": "Instance status",
+      "startedAt": "Started at",
+      "approve": "Approve",
+      "reject": "Reject",
+      "approveConfirm": "Approve this task?",
+      "rejectConfirm": "Reject this task?",
+      "notePlaceholder": "Optional note",
+      "rejectNotePlaceholder": "Rejection reason",
+      "rejectNoteRequired": "Rejection note is required."
+    },
+    "dashboard": {
+      "title": "Workflow dashboard",
+      "pendingTasks": "Pending tasks",
+      "totalInstances": "Total instances",
+      "entityTypes": "Entity types",
+      "byStatus": "Instances by status",
+      "byEntityType": "Instances by entity type"
+    },
+    "formTemplate": {
+      "entityName": "form template",
+      "search": "Search",
+      "searchPlaceholder": "Search by name or entity type",
+      "name": "Name",
+      "schemaJson": "Schema JSON",
+      "addTitle": "Add form template",
+      "editTitle": "Edit form template",
+      "deleteConfirm": "Delete this form template?",
+      "invalidJson": "Schema JSON is invalid."
+    }
+  }
+}

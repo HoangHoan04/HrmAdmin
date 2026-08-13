@@ -14,6 +14,8 @@
     "lateMinutes": "Late (min)",
     "earlyMinutes": "Early (min)",
     "workedMinutes": "Worked (min)",
+    "otMinutes": "OT (min)",
+    "nightMinutes": "Night (min)",
     "note": "Note",
     "isManualAdjusted": "Manually adjusted",
     "filterEmployee": "Select employee...",
@@ -45,6 +47,8 @@
     "earlyDays": "Early",
     "leaveDays": "Leave",
     "absentDays": "Absent",
-    "incompleteDays": "Incomplete"
+    "incompleteDays": "Incomplete",
+    "totalOtMinutes": "Total OT (min)",
+    "totalNightMinutes": "Total night (min)"
   }
 }

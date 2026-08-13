@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
+import { NzAlertModule } from 'ng-zorro-antd/alert';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzCardModule } from 'ng-zorro-antd/card';
@@ -27,6 +28,7 @@ import { NzPaginationModule } from 'ng-zorro-antd/pagination';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzSliderModule } from 'ng-zorro-antd/slider';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { NzStepsModule } from 'ng-zorro-antd/steps';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
@@ -34,6 +36,7 @@ import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzTimePickerModule } from 'ng-zorro-antd/time-picker';
 import { NzTimelineModule } from 'ng-zorro-antd/timeline';
 import { NzTooltipModule } from 'ng-zorro-antd/tooltip';
+import { NzTreeModule } from 'ng-zorro-antd/tree';
 import { NzUploadModule } from 'ng-zorro-antd/upload';
 import { ActionLogComponent } from './components/action-log/action-log.component';
 import { FileUploadComponent } from './components/file-upload/file-upload.component';
@@ -57,6 +60,7 @@ import { TableCustomComponent } from './components/table-custom/table-custom.com
     NzIconModule,
     NzDropDownModule,
     NzAvatarModule,
+    NzAlertModule,
     NzBreadCrumbModule,
     NzMenuModule,
     NzCardModule,
@@ -78,6 +82,7 @@ import { TableCustomComponent } from './components/table-custom/table-custom.com
     NzDatePickerModule,
     NzTimePickerModule,
     NzSpinModule,
+    NzStepsModule,
     NzPaginationModule,
     NzTabsModule,
     NzUploadModule,
@@ -85,6 +90,7 @@ import { TableCustomComponent } from './components/table-custom/table-custom.com
     NzTimelineModule,
     NzCheckboxModule,
     NzTagModule,
+    NzTreeModule,
   ],
   exports: [
     FilterCustomComponent,
@@ -100,6 +106,7 @@ import { TableCustomComponent } from './components/table-custom/table-custom.com
     NzIconModule,
     NzDropDownModule,
     NzAvatarModule,
+    NzAlertModule,
     NzBreadCrumbModule,
     NzMenuModule,
     NzCardModule,
@@ -121,6 +128,7 @@ import { TableCustomComponent } from './components/table-custom/table-custom.com
     NzDatePickerModule,
     NzTimePickerModule,
     NzSpinModule,
+    NzStepsModule,
     NzPaginationModule,
     NzTabsModule,
     NzUploadModule,
@@ -128,6 +136,7 @@ import { TableCustomComponent } from './components/table-custom/table-custom.com
     NzTimelineModule,
     NzCheckboxModule,
     NzTagModule,
+    NzTreeModule,
   ],
 })
 export class SharedModule {}

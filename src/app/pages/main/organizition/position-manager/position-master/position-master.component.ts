@@ -155,6 +155,30 @@ export class PositionMasterComponent implements OnInit {
       sortable: true,
     },
     {
+      field: 'gradeCode',
+      header: 'organization.positionMaster.gradeCode',
+      type: 'text',
+      sortable: true,
+    },
+    {
+      field: 'gradeName',
+      header: 'organization.positionMaster.gradeName',
+      type: 'text',
+      sortable: true,
+    },
+    {
+      field: 'salaryMin',
+      header: 'organization.positionMaster.salaryMin',
+      type: 'text',
+      sortable: true,
+    },
+    {
+      field: 'salaryMax',
+      header: 'organization.positionMaster.salaryMax',
+      type: 'text',
+      sortable: true,
+    },
+    {
       field: 'status',
       header: 'organization.positionMaster.status',
       type: 'boolean',

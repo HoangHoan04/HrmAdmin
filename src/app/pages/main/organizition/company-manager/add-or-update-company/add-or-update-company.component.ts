@@ -83,10 +83,13 @@ export class AddOrUpdateCompanyComponent implements OnInit {
       timeZone: ['', [Validators.maxLength(100)]],
       defaultLanguage: ['', [Validators.maxLength(20)]],
       logoUrl: ['', [Validators.maxLength(500)]],
+      primaryColor: ['', [Validators.maxLength(20)]],
       isActive: [true],
       socialInsuranceCode: ['', [Validators.maxLength(50)]],
       timeKeepingStandardId: [null],
       saturdayPolicy: ['Work'],
+      latitude: [null],
+      longitude: [null],
     });
   }
 
@@ -156,10 +159,13 @@ export class AddOrUpdateCompanyComponent implements OnInit {
           timeZone: company.timeZone,
           defaultLanguage: company.defaultLanguage,
           logoUrl: company.logoUrl,
+          primaryColor: company.primaryColor,
           isActive: company.isActive ?? true,
           socialInsuranceCode: company.socialInsuranceCode,
           timeKeepingStandardId: company.timeKeepingStandardId,
           saturdayPolicy: company.saturdayPolicy || 'Work',
+          latitude: company.latitude ?? null,
+          longitude: company.longitude ?? null,
         });
         this.loading = false;
       },
@@ -195,6 +201,8 @@ export class AddOrUpdateCompanyComponent implements OnInit {
       parentId: raw.parentId || null,
       timeKeepingStandardId: raw.timeKeepingStandardId || null,
       saturdayPolicy: raw.saturdayPolicy || 'Work',
+      latitude: raw.latitude ?? null,
+      longitude: raw.longitude ?? null,
     };
 
     const endpoint = this.isEdit ? this.apiService.COMPANY.UPDATE : this.apiService.COMPANY.CREATE;

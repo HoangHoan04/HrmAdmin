@@ -1,0 +1,91 @@
+{
+  "training": {
+    "common": {
+      "company": "Công ty",
+      "branch": "Chi nhánh",
+      "employee": "Nhân viên",
+      "status": "Trạng thái",
+      "filterCompany": "Chọn công ty...",
+      "filterStatus": "Chọn trạng thái...",
+      "backToList": "Quay lại danh sách"
+    },
+    "course": {
+      "entityName": "khóa đào tạo",
+      "code": "Mã",
+      "name": "Tên khóa",
+      "provider": "Đơn vị đào tạo",
+      "hours": "Số giờ",
+      "budgetAmount": "Ngân sách",
+      "status": "Trạng thái",
+      "description": "Mô tả",
+      "search": "Tìm kiếm",
+      "searchPlaceholder": "Mã hoặc tên...",
+      "addTitle": "Thêm khóa đào tạo",
+      "editTitle": "Cập nhật khóa đào tạo",
+      "detailTitle": "Chi tiết khóa đào tạo",
+      "deleteConfirm": "Xóa khóa đào tạo này?"
+    },
+    "progress": {
+      "title": "Tiến độ đào tạo",
+      "courseName": "Khóa học",
+      "enrolledCount": "Đã ghi danh",
+      "completedCount": "Hoàn thành",
+      "droppedCount": "Hủy/bỏ",
+      "completionPercent": "% hoàn thành"
+    },
+    "material": {
+      "entityName": "tài liệu khóa học",
+      "course": "Khóa học",
+      "name": "Tên tài liệu",
+      "fileUrl": "Đường dẫn file",
+      "displayOrder": "Thứ tự hiển thị",
+      "search": "Tìm kiếm",
+      "searchPlaceholder": "Tên...",
+      "addTitle": "Thêm tài liệu khóa học",
+      "editTitle": "Cập nhật tài liệu khóa học",
+      "deleteConfirm": "Xóa tài liệu này?"
+    },
+    "quiz": {
+      "entityName": "câu hỏi trắc nghiệm",
+      "course": "Khóa học",
+      "question": "Câu hỏi",
+      "optionA": "Đáp án A",
+      "optionB": "Đáp án B",
+      "optionC": "Đáp án C",
+      "optionD": "Đáp án D",
+      "correctOption": "Đáp án đúng",
+      "search": "Tìm kiếm",
+      "searchPlaceholder": "Câu hỏi...",
+      "addTitle": "Thêm câu hỏi",
+      "editTitle": "Cập nhật câu hỏi",
+      "deleteConfirm": "Xóa câu hỏi này?"
+    },
+    "enrollment": {
+      "entityName": "ghi danh đào tạo",
+      "course": "Khóa đào tạo",
+      "employee": "Nhân viên",
+      "enrolledAt": "Ngày ghi danh",
+      "status": "Trạng thái",
+      "note": "Ghi chú",
+      "search": "Tìm kiếm",
+      "searchPlaceholder": "Khóa học, nhân viên...",
+      "addTitle": "Thêm ghi danh",
+      "editTitle": "Cập nhật ghi danh",
+      "deleteConfirm": "Xóa ghi danh này?"
+    },
+    "result": {
+      "entityName": "kết quả đào tạo",
+      "enrollment": "Ghi danh",
+      "score": "Điểm",
+      "grade": "Xếp loại",
+      "completedAt": "Ngày hoàn thành",
+      "certificateUrl": "Link chứng chỉ",
+      "note": "Ghi chú",
+      "search": "Tìm kiếm",
+      "searchPlaceholder": "Khóa học, nhân viên...",
+      "addTitle": "Thêm kết quả đào tạo",
+      "editTitle": "Cập nhật kết quả đào tạo",
+      "deleteConfirm": "Xóa kết quả đào tạo này?"
+    }
+  }
+}

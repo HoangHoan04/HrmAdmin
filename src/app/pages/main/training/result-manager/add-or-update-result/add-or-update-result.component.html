@@ -1,0 +1,74 @@
+<nz-card
+  [nzTitle]="(isEdit ? 'training.result.editTitle' : 'training.result.addTitle') | translate"
+>
+  <nz-spin [nzSpinning]="loading">
+    <form nz-form [formGroup]="validateForm" nzLayout="vertical" (ngSubmit)="submitForm()">
+      <div nz-row [nzGutter]="16">
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{ 'training.result.enrollment' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-select formControlName="enrollmentId" style="width: 100%" nzShowSearch>
+                @for (e of enrollments; track e.id) {
+                  <nz-option [nzValue]="e.id" [nzLabel]="enrollmentLabel(e)"></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'training.result.score' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-input-number formControlName="score" style="width: 100%"></nz-input-number>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'training.result.grade' | translate }}</nz-form-label>
+            <nz-form-control><input nz-input formControlName="grade" /></nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'training.result.completedAt' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-date-picker
+                formControlName="completedAt"
+                style="width: 100%"
+                nzShowTime
+              ></nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'training.result.certificateUrl' | translate }}</nz-form-label>
+            <nz-form-control><input nz-input formControlName="certificateUrl" /></nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <nz-form-item>
+        <nz-form-label>{{ 'training.result.note' | translate }}</nz-form-label>
+        <nz-form-control>
+          <textarea nz-input rows="3" formControlName="note"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+      <div style="margin-top: 16px">
+        <button nz-button type="button" (click)="goBack()">
+          {{ 'common.actions.cancel' | translate }}
+        </button>
+        <button
+          nz-button
+          nzType="primary"
+          type="submit"
+          [nzLoading]="submitting"
+          style="margin-left: 8px"
+        >
+          {{ 'common.actions.save' | translate }}
+        </button>
+      </div>
+    </form>
+  </nz-spin>
+</nz-card>

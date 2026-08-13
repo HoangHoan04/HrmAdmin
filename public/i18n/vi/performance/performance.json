@@ -1,0 +1,93 @@
+{
+  "performance": {
+    "common": {
+      "company": "Công ty",
+      "branch": "Chi nhánh",
+      "employee": "Nhân viên",
+      "status": "Trạng thái",
+      "isActive": "Đang hoạt động",
+      "filterCompany": "Chọn công ty...",
+      "filterStatus": "Chọn trạng thái...",
+      "backToList": "Quay lại danh sách"
+    },
+    "competency": {
+      "entityName": "khung năng lực",
+      "code": "Mã",
+      "name": "Tên",
+      "description": "Mô tả",
+      "search": "Tìm kiếm",
+      "searchPlaceholder": "Mã hoặc tên...",
+      "addTitle": "Thêm khung năng lực",
+      "editTitle": "Cập nhật khung năng lực",
+      "deleteConfirm": "Xóa khung năng lực này?"
+    },
+    "reviewCycle": {
+      "entityName": "chu kỳ đánh giá",
+      "code": "Mã",
+      "name": "Tên",
+      "periodFrom": "Từ ngày",
+      "periodTo": "Đến ngày",
+      "status": "Trạng thái",
+      "note": "Ghi chú",
+      "search": "Tìm kiếm",
+      "searchPlaceholder": "Mã hoặc tên...",
+      "addTitle": "Thêm chu kỳ đánh giá",
+      "editTitle": "Cập nhật chu kỳ đánh giá",
+      "deleteConfirm": "Xóa chu kỳ đánh giá này?"
+    },
+    "kpiGoal": {
+      "entityName": "mục tiêu KPI",
+      "cycle": "Chu kỳ đánh giá",
+      "employee": "Nhân viên",
+      "title": "Tiêu đề",
+      "targetValue": "Giá trị mục tiêu",
+      "unit": "Đơn vị",
+      "weight": "Trọng số",
+      "search": "Tìm kiếm",
+      "searchPlaceholder": "Tiêu đề...",
+      "addTitle": "Thêm mục tiêu KPI",
+      "editTitle": "Cập nhật mục tiêu KPI",
+      "deleteConfirm": "Xóa mục tiêu KPI này?"
+    },
+    "kpiResult": {
+      "entityName": "kết quả KPI",
+      "goal": "Mục tiêu KPI",
+      "actualValue": "Giá trị thực tế",
+      "score": "Điểm",
+      "comment": "Nhận xét",
+      "ratedBy": "Người đánh giá",
+      "ratedAt": "Thời điểm đánh giá",
+      "search": "Tìm kiếm",
+      "searchPlaceholder": "Mục tiêu...",
+      "addTitle": "Thêm kết quả KPI",
+      "editTitle": "Cập nhật kết quả KPI",
+      "deleteConfirm": "Xóa kết quả KPI này?"
+    },
+    "dashboard": {
+      "title": "Bảng điều khiển hiệu suất",
+      "cycle": "Chu kỳ đánh giá",
+      "cyclePlaceholder": "Tất cả chu kỳ",
+      "avgScore": "Điểm trung bình",
+      "metTargetPercent": "% đạt mục tiêu",
+      "goalCount": "Số mục tiêu",
+      "resultCount": "Số kết quả",
+      "scoreBands": "Phân bố điểm",
+      "deptAvg": "Điểm TB theo phòng ban"
+    },
+    "review360": {
+      "entityName": "đánh giá 360",
+      "cycle": "Chu kỳ đánh giá",
+      "subject": "Nhân viên được đánh giá",
+      "reviewer": "Người đánh giá",
+      "reviewerType": "Loại đánh giá",
+      "score": "Điểm",
+      "comment": "Nhận xét",
+      "search": "Tìm kiếm",
+      "searchPlaceholder": "Nhân viên, chu kỳ...",
+      "filterType": "Chọn loại...",
+      "addTitle": "Thêm đánh giá 360",
+      "editTitle": "Cập nhật đánh giá 360",
+      "deleteConfirm": "Xóa đánh giá 360 này?"
+    }
+  }
+}

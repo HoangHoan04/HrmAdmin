@@ -66,12 +66,11 @@
         </div>
         <div nz-col nzXs="24" nzMd="8">
           <nz-form-item>
-            <nz-form-label [nzRequired]="true">{{
-              'organization.department.branchName' | translate
-            }}</nz-form-label>
-            <nz-form-control [nzErrorTip]="'organization.department.branchRequired' | translate">
+            <nz-form-label>{{ 'organization.department.branchName' | translate }}</nz-form-label>
+            <nz-form-control>
               <nz-select
                 formControlName="branchId"
+                nzAllowClear
                 [nzPlaceHolder]="'organization.department.filterBranch' | translate"
               >
                 @for (b of branches; track b.id) {

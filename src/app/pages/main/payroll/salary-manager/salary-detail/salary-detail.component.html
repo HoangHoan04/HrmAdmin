@@ -1,6 +1,10 @@
 <nz-card [nzTitle]="titleTemplate" [nzExtra]="extraTemplate" [nzLoading]="loading">
   @if (salary) {
     <div style="margin-bottom: 16px; display: flex; gap: 8px; flex-wrap: wrap">
+      <button nz-button nzType="default" [nzLoading]="printing" (click)="printPayslip()">
+        <i nz-icon nzType="printer"></i>
+        {{ 'salary.printPayslip' | translate }}
+      </button>
       @if (canEdit) {
         <button nz-button nzType="default" (click)="openEdit()">
           <i nz-icon nzType="edit"></i>

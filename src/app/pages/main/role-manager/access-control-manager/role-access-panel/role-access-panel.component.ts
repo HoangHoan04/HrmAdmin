@@ -11,7 +11,14 @@ import {
   SetRolePermissionsRequest,
 } from '@/app/core/models';
 import { ApiService, I18nMessageService } from '@/app/core/services';
-import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 

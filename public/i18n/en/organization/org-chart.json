@@ -1,0 +1,26 @@
+{
+  "organization": {
+    "orgChart": {
+      "title": "Organization Chart",
+      "company": "Company",
+      "selectCompany": "Select company...",
+      "selectCompanyHint": "Please select a company to view the organization chart",
+      "includeParts": "Include parts",
+      "empty": "No organization chart data",
+      "loadFailed": "Failed to load organization chart",
+      "reparentSuccess": "Organization structure updated successfully",
+      "reparentFailed": "Failed to update organization structure",
+      "noManagePermission": "You do not have permission to reparent organization nodes",
+      "cannotMoveCompany": "Company node cannot be moved",
+      "partNeedsDepartment": "A part must belong to a department",
+      "employeeCount": "Employees",
+      "manager": "Manager",
+      "nodeType": {
+        "company": "Company",
+        "branch": "Branch",
+        "department": "Department",
+        "part": "Part"
+      }
+    }
+  }
+}

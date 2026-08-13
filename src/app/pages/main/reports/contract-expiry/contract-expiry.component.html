@@ -1,0 +1,20 @@
+<app-filter-custom
+  [id]="'contract-expiry-filter'"
+  [fields]="filterFields"
+  [filters]="filters"
+  [config]="filterConfig"
+  [filterActions]="filterActions"
+  [loading]="loading"
+  (filtersChange)="onFiltersChange($event)"
+></app-filter-custom>
+
+<app-table-custom
+  [id]="'contract-expiry-table'"
+  [data]="data"
+  [columns]="columns"
+  [loading]="loading"
+  [showIndexList]="true"
+  [stripedRows]="true"
+  [pagination]="{ current: 1, pageSize: data.length || 20, total: data.length, showTotal: true }"
+  (refresh)="loadData()"
+></app-table-custom>

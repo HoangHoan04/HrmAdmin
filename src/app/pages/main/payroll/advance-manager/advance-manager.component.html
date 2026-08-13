@@ -1,0 +1,98 @@
+<app-filter-custom
+  [id]="'advance-filter'"
+  [fields]="filterFields"
+  [filters]="filters"
+  [config]="filterConfig"
+  [filterActions]="filterActions"
+  [loading]="loading"
+  (filtersChange)="onFiltersChange($event)"
+></app-filter-custom>
+
+<app-table-custom
+  [id]="'advance-table'"
+  [data]="data"
+  [columns]="columns"
+  [loading]="loading"
+  [showIndexList]="true"
+  [stripedRows]="true"
+  [rowActions]="rowActions"
+  [toolbarActions]="toolbarActions"
+  [pagination]="pagination"
+  (pageChange)="onPageChange($event)"
+  (sortChange)="onSortChange($event)"
+  (refresh)="loadData()"
+></app-table-custom>
+
+<nz-modal
+  [nzVisible]="createVisible"
+  [nzTitle]="'advance.createTitle' | translate"
+  [nzOkText]="'common.actions.save' | translate"
+  [nzCancelText]="'common.actions.cancel' | translate"
+  [nzOkLoading]="submitting"
+  (nzOnCancel)="closeCreate()"
+  (nzOnOk)="submitCreate()"
+>
+  <ng-container *nzModalContent>
+    <form nz-form [formGroup]="createForm" nzLayout="vertical">
+      <nz-form-item>
+        <nz-form-label nzRequired>{{ 'advance.employee' | translate }}</nz-form-label>
+        <nz-form-control [nzErrorTip]="'advance.employeeRequired' | translate">
+          <nz-select
+            formControlName="employeeId"
+            nzShowSearch
+            nzAllowClear
+            [nzPlaceHolder]="'advance.filterEmployee' | translate"
+            style="width: 100%"
+          >
+            @for (opt of employeeOptions; track opt.value) {
+              <nz-option [nzValue]="opt.value" [nzLabel]="opt.label"></nz-option>
+            }
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzRequired>{{ 'advance.amount' | translate }}</nz-form-label>
+        <nz-form-control [nzErrorTip]="'advance.amountRequired' | translate">
+          <nz-input-number formControlName="amount" [nzMin]="1" style="width: 100%"></nz-input-number>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label>{{ 'advance.requestDate' | translate }}</nz-form-label>
+        <nz-form-control>
+          <nz-date-picker formControlName="requestDate" style="width: 100%"></nz-date-picker>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzRequired>{{ 'advance.deductMonth' | translate }}</nz-form-label>
+        <nz-form-control [nzErrorTip]="'advance.deductMonthRequired' | translate">
+          <nz-select formControlName="deductMonth" style="width: 100%">
+            @for (m of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]; track m) {
+              <nz-option [nzValue]="m" [nzLabel]="'' + m"></nz-option>
+            }
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzRequired>{{ 'advance.deductYear' | translate }}</nz-form-label>
+        <nz-form-control [nzErrorTip]="'advance.deductYearRequired' | translate">
+          <nz-input-number formControlName="deductYear" [nzMin]="2000" style="width: 100%"></nz-input-number>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label>{{ 'advance.reason' | translate }}</nz-form-label>
+        <nz-form-control>
+          <textarea nz-input formControlName="reason" rows="2"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label>{{ 'advance.note' | translate }}</nz-form-label>
+        <nz-form-control>
+          <textarea nz-input formControlName="note" rows="2"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <label nz-checkbox formControlName="submit">{{ 'advance.submit' | translate }}</label>
+      </nz-form-item>
+    </form>
+  </ng-container>
+</nz-modal>

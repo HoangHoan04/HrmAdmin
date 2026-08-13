@@ -15,11 +15,264 @@
   [loading]="loading"
   [showIndexList]="true"
   [stripedRows]="true"
+  [enableSelection]="true"
+  [selectedRows]="selectedRows"
   [rowActions]="rowActions"
   [pagination]="pagination"
   [toolbar]="toolbar"
   [toolbarActions]="toolbarActions"
+  (selectionChange)="onSelectionChange($event)"
   (pageChange)="onPageChange($event)"
   (sortChange)="onSortChange($event)"
   (refresh)="loadData()"
 ></app-table-custom>
+
+<nz-modal
+  [(nzVisible)]="bulkManagerVisible"
+  [nzTitle]="'humanResource.employee.bulkChangeManagerTitle' | translate"
+  [nzOkLoading]="bulkManagerSubmitting"
+  [nzWidth]="640"
+  (nzOnCancel)="closeBulkManagerModal()"
+  (nzOnOk)="submitBulkManager()"
+>
+  <ng-container *nzModalContent>
+    <form nz-form [formGroup]="bulkManagerForm" nzLayout="vertical">
+      <nz-form-item>
+        <nz-form-label [nzRequired]="true">{{
+          'humanResource.employee.selectEmployees' | translate
+        }}</nz-form-label>
+        <nz-form-control [nzErrorTip]="'humanResource.employee.selectEmployeesRequired' | translate">
+          <nz-select
+            formControlName="employeeIds"
+            nzMode="multiple"
+            nzShowSearch
+            nzAllowClear
+            [nzPlaceHolder]="'humanResource.employee.selectEmployees' | translate"
+          >
+            @for (e of employeeOptions; track e.id) {
+              <nz-option
+                [nzValue]="e.id"
+                [nzLabel]="e.code ? e.code + ' - ' + e.name : e.name"
+              ></nz-option>
+            }
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label>{{ 'humanResource.employee.directManager' | translate }}</nz-form-label>
+        <nz-form-control>
+          <nz-select
+            formControlName="directManagerId"
+            nzShowSearch
+            nzAllowClear
+            [nzPlaceHolder]="'humanResource.employee.directManagerPlaceholder' | translate"
+          >
+            @for (e of employeeOptions; track e.id) {
+              <nz-option
+                [nzValue]="e.id"
+                [nzLabel]="e.code ? e.code + ' - ' + e.name : e.name"
+              ></nz-option>
+            }
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-container>
+</nz-modal>
+
+<nz-modal
+  [(nzVisible)]="bulkTransferVisible"
+  [nzTitle]="'humanResource.employee.bulkTransferTitle' | translate"
+  [nzOkLoading]="bulkTransferSubmitting"
+  [nzWidth]="760"
+  (nzOnCancel)="closeBulkTransferModal()"
+  (nzOnOk)="submitBulkTransfer()"
+>
+  <ng-container *nzModalContent>
+    <form nz-form [formGroup]="bulkTransferForm" nzLayout="vertical">
+      <div nz-row [nzGutter]="16">
+        <div nz-col nzXs="24">
+          <nz-form-item>
+            <nz-form-label [nzRequired]="true">{{
+              'humanResource.employee.selectEmployees' | translate
+            }}</nz-form-label>
+            <nz-form-control
+              [nzErrorTip]="'humanResource.employee.selectEmployeesRequired' | translate"
+            >
+              <nz-select
+                formControlName="employeeIds"
+                nzMode="multiple"
+                nzShowSearch
+                nzAllowClear
+                [nzPlaceHolder]="'humanResource.employee.selectEmployees' | translate"
+              >
+                @for (e of employeeOptions; track e.id) {
+                  <nz-option
+                    [nzValue]="e.id"
+                    [nzLabel]="e.code ? e.code + ' - ' + e.name : e.name"
+                  ></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="12">
+          <nz-form-item>
+            <nz-form-label [nzRequired]="true">{{ 'transfer.transferType' | translate }}</nz-form-label>
+            <nz-form-control [nzErrorTip]="'transfer.transferTypeRequired' | translate">
+              <nz-select formControlName="transferType" nzShowSearch nzAllowClear>
+                @for (t of transferTypeOptions; track t.value) {
+                  <nz-option [nzValue]="t.value" [nzLabel]="t.labelKey | translate"></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="12">
+          <nz-form-item>
+            <nz-form-label [nzRequired]="true">{{
+              'transfer.effectiveDate' | translate
+            }}</nz-form-label>
+            <nz-form-control [nzErrorTip]="'transfer.effectiveDateRequired' | translate">
+              <nz-date-picker
+                formControlName="effectiveDate"
+                nzFormat="dd/MM/yyyy"
+                style="width: 100%"
+              ></nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="12">
+          <nz-form-item>
+            <nz-form-label>{{ 'humanResource.employee.codePrefix' | translate }}</nz-form-label>
+            <nz-form-control>
+              <input nz-input formControlName="codePrefix" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="12">
+          <nz-form-item>
+            <nz-form-label>{{ 'transfer.reason' | translate }}</nz-form-label>
+            <nz-form-control>
+              <input nz-input formControlName="reason" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="12">
+          <nz-form-item>
+            <nz-form-label>{{ 'transfer.newCompany' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-select formControlName="newCompanyId" nzShowSearch nzAllowClear>
+                @for (c of companies; track c.id) {
+                  <nz-option
+                    [nzValue]="c.id"
+                    [nzLabel]="c.code ? c.code + ' - ' + c.name : c.name"
+                  ></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="12">
+          <nz-form-item>
+            <nz-form-label>{{ 'transfer.newBranch' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-select
+                formControlName="newBranchId"
+                nzShowSearch
+                nzAllowClear
+                [nzDisabled]="!bulkTransferForm.get('newCompanyId')?.value"
+              >
+                @for (b of branches; track b.id) {
+                  <nz-option
+                    [nzValue]="b.id"
+                    [nzLabel]="b.code ? b.code + ' - ' + b.name : b.name"
+                  ></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="12">
+          <nz-form-item>
+            <nz-form-label>{{ 'transfer.newDepartment' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-select formControlName="newDepartmentId" nzShowSearch nzAllowClear>
+                @for (d of departments; track d.id) {
+                  <nz-option
+                    [nzValue]="d.id"
+                    [nzLabel]="d.code ? d.code + ' - ' + d.name : d.name"
+                  ></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="12">
+          <nz-form-item>
+            <nz-form-label>{{ 'transfer.newPart' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-select
+                formControlName="newPartId"
+                nzShowSearch
+                nzAllowClear
+                [nzDisabled]="!bulkTransferForm.get('newDepartmentId')?.value"
+              >
+                @for (p of parts; track p.id) {
+                  <nz-option
+                    [nzValue]="p.id"
+                    [nzLabel]="p.code ? p.code + ' - ' + p.name : p.name"
+                  ></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="12">
+          <nz-form-item>
+            <nz-form-label>{{ 'transfer.newPosition' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-select
+                formControlName="newPositionId"
+                nzShowSearch
+                nzAllowClear
+                [nzDisabled]="!bulkTransferForm.get('newDepartmentId')?.value"
+              >
+                @for (pos of positions; track pos.id) {
+                  <nz-option
+                    [nzValue]="pos.id"
+                    [nzLabel]="pos.code ? pos.code + ' - ' + pos.name : pos.name"
+                  ></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+    </form>
+  </ng-container>
+</nz-modal>
+
+<nz-modal
+  [(nzVisible)]="expiringVisible"
+  [nzTitle]="
+    ('humanResource.employee.expiringFilesTitle'
+      | translate: { days: expiringDaysAhead })
+  "
+  [nzFooter]="null"
+  [nzWidth]="960"
+  (nzOnCancel)="closeExpiringFilesModal()"
+>
+  <ng-container *nzModalContent>
+    <app-table-custom
+      [id]="'employee-expiring-files'"
+      [data]="expiringFiles"
+      [columns]="expiringColumns"
+      [loading]="expiringLoading"
+      [stripedRows]="true"
+      [showIndexList]="true"
+      [toolbar]="{ show: false }"
+      [emptyText]="'humanResource.employee.expiringFilesEmpty' | translate"
+    ></app-table-custom>
+  </ng-container>
+</nz-modal>

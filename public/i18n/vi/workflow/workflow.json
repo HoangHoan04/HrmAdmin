@@ -1,0 +1,64 @@
+{
+  "workflow": {
+    "common": {
+      "entityType": "Loại nghiệp vụ",
+      "status": "Trạng thái",
+      "filterStatus": "Lọc theo trạng thái",
+      "isActive": "Đang hoạt động"
+    },
+    "definition": {
+      "entityName": "định nghĩa quy trình",
+      "search": "Tìm kiếm",
+      "searchPlaceholder": "Tìm theo mã hoặc tên",
+      "code": "Mã",
+      "name": "Tên",
+      "addTitle": "Thêm định nghĩa quy trình",
+      "editTitle": "Cập nhật định nghĩa quy trình",
+      "deleteConfirm": "Xóa định nghĩa quy trình này?",
+      "stepsTitle": "Các bước duyệt",
+      "addStep": "Thêm bước",
+      "stepOrder": "Thứ tự",
+      "stepName": "Tên bước",
+      "approverResolver": "Người duyệt",
+      "requiredRoleCode": "Mã vai trò",
+      "isFinal": "Bước cuối",
+      "minOneStep": "Cần ít nhất một bước.",
+      "oneFinalRequired": "Phải có đúng một bước cuối.",
+      "lastMustBeFinal": "Bước cuối phải là bước IsFinal.",
+      "roleCodeRequired": "Resolver ROLE yêu cầu mã vai trò."
+    },
+    "inbox": {
+      "entityName": "task duyệt",
+      "title": "Hộp thư duyệt",
+      "stepName": "Bước",
+      "instanceStatus": "Trạng thái instance",
+      "startedAt": "Bắt đầu",
+      "approve": "Duyệt",
+      "reject": "Từ chối",
+      "approveConfirm": "Duyệt task này?",
+      "rejectConfirm": "Từ chối task này?",
+      "notePlaceholder": "Ghi chú (tuỳ chọn)",
+      "rejectNotePlaceholder": "Lý do từ chối",
+      "rejectNoteRequired": "Vui lòng nhập lý do từ chối."
+    },
+    "dashboard": {
+      "title": "Tổng quan quy trình",
+      "pendingTasks": "Task đang chờ",
+      "totalInstances": "Tổng instance",
+      "entityTypes": "Số loại nghiệp vụ",
+      "byStatus": "Instance theo trạng thái",
+      "byEntityType": "Instance theo loại nghiệp vụ"
+    },
+    "formTemplate": {
+      "entityName": "mẫu biểu mẫu",
+      "search": "Tìm kiếm",
+      "searchPlaceholder": "Tìm theo tên hoặc loại nghiệp vụ",
+      "name": "Tên",
+      "schemaJson": "Schema JSON",
+      "addTitle": "Thêm mẫu biểu mẫu",
+      "editTitle": "Cập nhật mẫu biểu mẫu",
+      "deleteConfirm": "Xóa mẫu biểu mẫu này?",
+      "invalidJson": "Schema JSON không hợp lệ."
+    }
+  }
+}

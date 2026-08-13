@@ -1,0 +1,125 @@
+<nz-card
+  [nzTitle]="
+    (isDetail
+      ? 'training.course.detailTitle'
+      : isEdit
+        ? 'training.course.editTitle'
+        : 'training.course.addTitle'
+    ) | translate
+  "
+>
+  <nz-spin [nzSpinning]="loading">
+    <form nz-form [formGroup]="validateForm" nzLayout="vertical" (ngSubmit)="submitForm()">
+      <div nz-row [nzGutter]="16">
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{ 'training.course.code' | translate }}</nz-form-label>
+            <nz-form-control
+              ><input nz-input formControlName="code" [disabled]="isEdit || isDetail"
+            /></nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{ 'training.course.name' | translate }}</nz-form-label>
+            <nz-form-control><input nz-input formControlName="name" /></nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{ 'training.common.company' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-select formControlName="companyId" style="width: 100%" nzShowSearch>
+                @for (c of companies; track c.id) {
+                  <nz-option
+                    [nzValue]="c.id"
+                    [nzLabel]="c.code ? c.code + ' - ' + c.name : c.name"
+                  ></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'training.common.branch' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-select formControlName="branchId" nzAllowClear style="width: 100%" nzShowSearch>
+                @for (b of branches; track b.id) {
+                  <nz-option
+                    [nzValue]="b.id"
+                    [nzLabel]="b.code ? b.code + ' - ' + b.name : b.name"
+                  ></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'training.course.provider' | translate }}</nz-form-label>
+            <nz-form-control><input nz-input formControlName="provider" /></nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{ 'training.course.hours' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-input-number
+                formControlName="hours"
+                [nzMin]="0"
+                style="width: 100%"
+              ></nz-input-number>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'training.course.budgetAmount' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-input-number
+                formControlName="budgetAmount"
+                [nzMin]="0"
+                style="width: 100%"
+              ></nz-input-number>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{ 'training.course.status' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-select formControlName="status" style="width: 100%">
+                @for (o of statusOptions; track o.value) {
+                  <nz-option [nzValue]="o.value" [nzLabel]="o.labelKey | translate"></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <nz-form-item>
+        <nz-form-label>{{ 'training.course.description' | translate }}</nz-form-label>
+        <nz-form-control>
+          <textarea nz-input rows="3" formControlName="description"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+      <div style="margin-top: 16px">
+        <button nz-button type="button" (click)="goBack()">
+          {{ 'common.actions.cancel' | translate }}
+        </button>
+        @if (!isDetail) {
+          <button
+            nz-button
+            nzType="primary"
+            type="submit"
+            [nzLoading]="submitting"
+            style="margin-left: 8px"
+          >
+            {{ 'common.actions.save' | translate }}
+          </button>
+        }
+      </div>
+    </form>
+  </nz-spin>
+</nz-card>

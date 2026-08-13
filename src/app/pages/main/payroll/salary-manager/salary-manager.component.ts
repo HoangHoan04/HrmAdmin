@@ -1,6 +1,14 @@
 import { ROUTES_CONFIG } from '@/app/core/constants/common';
 import { enumData } from '@/app/core/constants/enums';
-import { CompanySelectBoxDto, EmployeeSelectBoxDto, PagedResult, Salary } from '@/app/core/models';
+import {
+  CompanySelectBoxDto,
+  EmployeeSelectBoxDto,
+  PagedResult,
+  PayrollPreviewResult,
+  PayrollRunRequest,
+  PayrollRunResult,
+  Salary,
+} from '@/app/core/models';
 import { ApiService, I18nMessageService } from '@/app/core/services';
 import {
   CommonFilterActions,
@@ -18,10 +26,12 @@ import {
 } from '@/app/shared/components/table-custom/table-custom.types';
 import { ActionConfirmService } from '@/app/shared/services/action-confirm.service';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 
 type SalaryRow = Salary & { statusLabel?: string; employeeDisplay?: string };
+type PeriodAction = 'preview' | 'run' | 'finalize';
 
 @Component({
   standalone: false,
@@ -51,7 +61,17 @@ export class SalaryManagerComponent implements OnInit {
 
   data: SalaryRow[] = [];
   loading = false;
+  periodSubmitting = false;
   enumData = enumData;
+
+  periodModalVisible = false;
+  periodAction: PeriodAction = 'preview';
+  periodForm: FormGroup;
+  companyOptions: { label: string; value: string }[] = [];
+
+  previewVisible = false;
+  previewLoading = false;
+  previewResult: PayrollPreviewResult | null = null;
 
   pagination: PaginationConfig = {
     current: enumData.PAGE.PAGE_INDEX,
@@ -63,7 +83,30 @@ export class SalaryManagerComponent implements OnInit {
   sortField = 'createdAt';
   sortOrder = 'desc';
   toolbar: ToolbarConfig = { show: true };
-  toolbarActions: TableAction[] = [CommonActions.create(() => this.openCreate())];
+  toolbarActions: TableAction[] = [
+    CommonActions.create(() => this.openCreate()),
+    {
+      key: 'previewRun',
+      label: 'salary.previewRun',
+      icon: 'eye',
+      severity: 'info',
+      onClick: () => this.openPeriodModal('preview'),
+    },
+    {
+      key: 'runPayroll',
+      label: 'salary.runPayroll',
+      icon: 'play-circle',
+      severity: 'success',
+      onClick: () => this.openPeriodModal('run'),
+    },
+    {
+      key: 'finalizePeriod',
+      label: 'salary.finalizePeriod',
+      icon: 'check-circle',
+      severity: 'primary',
+      onClick: () => this.openPeriodModal('finalize'),
+    },
+  ];
 
   filters: Record<string, any> = {
     employeeId: null,
@@ -208,11 +251,37 @@ export class SalaryManagerComponent implements OnInit {
     private readonly apiService: ApiService,
     private readonly cdr: ChangeDetectorRef,
     private readonly actionConfirm: ActionConfirmService,
-  ) {}
+    private readonly fb: FormBuilder,
+  ) {
+    const now = new Date();
+    this.periodForm = this.fb.group({
+      year: [now.getFullYear(), [Validators.required, Validators.min(2000)]],
+      month: [now.getMonth() + 1, [Validators.required]],
+      companyId: [null],
+      overwriteDrafts: [true],
+      includeDefaultAllowances: [true],
+      computePit: [true],
+    });
+  }
 
   ngOnInit(): void {
     this.loadSelectBoxes();
     this.loadData();
+  }
+
+  get periodModalTitle(): string {
+    switch (this.periodAction) {
+      case 'run':
+        return 'salary.runPayroll';
+      case 'finalize':
+        return 'salary.finalizePeriod';
+      default:
+        return 'salary.previewRun';
+    }
+  }
+
+  get showRunOptions(): boolean {
+    return this.periodAction === 'preview' || this.periodAction === 'run';
   }
 
   loadSelectBoxes(): void {
@@ -233,13 +302,12 @@ export class SalaryManagerComponent implements OnInit {
 
     this.apiService.post<CompanySelectBoxDto[]>(this.apiService.COMPANY.SELECT_BOX, {}).subscribe({
       next: (items) => {
+        this.companyOptions = items.map((item) => ({
+          label: item.code ? `${item.code} - ${item.name}` : item.name,
+          value: item.id,
+        }));
         const field = this.filterFields.find((f) => f.key === 'companyId');
-        if (field) {
-          field.options = items.map((item) => ({
-            label: item.code ? `${item.code} - ${item.name}` : item.name,
-            value: item.id,
-          }));
-        }
+        if (field) field.options = this.companyOptions;
         this.cdr.markForCheck();
       },
     });
@@ -342,6 +410,85 @@ export class SalaryManagerComponent implements OnInit {
     ]);
   }
 
+  openPeriodModal(action: PeriodAction): void {
+    this.periodAction = action;
+    const now = new Date();
+    this.periodForm.patchValue({
+      year: this.filters['year'] || now.getFullYear(),
+      month: this.filters['month'] || now.getMonth() + 1,
+      companyId: this.filters['companyId'] || null,
+      overwriteDrafts: true,
+      includeDefaultAllowances: true,
+      computePit: true,
+    });
+    this.periodModalVisible = true;
+    this.cdr.markForCheck();
+  }
+
+  closePeriodModal(): void {
+    this.periodModalVisible = false;
+    this.periodSubmitting = false;
+    this.cdr.markForCheck();
+  }
+
+  async submitPeriodModal(): Promise<void> {
+    if (this.periodForm.invalid) {
+      this.periodForm.markAllAsTouched();
+      this.message.warning(this.i18n.instant('salary.yearMonthRequired'));
+      return;
+    }
+
+    const raw = this.periodForm.getRawValue();
+    const body: PayrollRunRequest = {
+      year: Number(raw.year),
+      month: Number(raw.month),
+      companyId: raw.companyId || null,
+      overwriteDrafts: !!raw.overwriteDrafts,
+      includeDefaultAllowances: !!raw.includeDefaultAllowances,
+      computePit: !!raw.computePit,
+    };
+
+    if (this.periodAction === 'preview') {
+      this.runPreview(body);
+      return;
+    }
+
+    if (this.periodAction === 'run') {
+      const confirmed = await this.actionConfirm.confirm({
+        title: this.i18n.instant('salary.runConfirmTitle'),
+        content: this.i18n.instant('salary.runConfirmContent', {
+          month: body.month,
+          year: body.year,
+        }),
+        okText: this.i18n.instant('salary.runPayroll'),
+        okType: 'primary',
+        icon: 'confirm',
+      });
+      if (!confirmed) return;
+      this.runPayroll(body);
+      return;
+    }
+
+    const confirmed = await this.actionConfirm.confirm({
+      title: this.i18n.instant('salary.finalizeConfirmTitle'),
+      content: this.i18n.instant('salary.finalizeConfirmContent', {
+        month: body.month,
+        year: body.year,
+      }),
+      okText: this.i18n.instant('salary.finalizePeriod'),
+      okType: 'primary',
+      icon: 'confirm',
+    });
+    if (!confirmed) return;
+    this.finalizePeriod(body);
+  }
+
+  closePreview(): void {
+    this.previewVisible = false;
+    this.previewResult = null;
+    this.cdr.markForCheck();
+  }
+
   async approve(item: SalaryRow): Promise<void> {
     if (!item.id) return;
     const confirmed = await this.actionConfirm.confirm({
@@ -418,6 +565,76 @@ export class SalaryManagerComponent implements OnInit {
       },
       error: (err: any) => this.message.error(this.i18n.genericError(err.error)),
     });
+  }
+
+  private runPreview(body: PayrollRunRequest): void {
+    this.periodSubmitting = true;
+    this.previewLoading = true;
+    this.apiService
+      .post<PayrollPreviewResult>(this.apiService.SALARY.PREVIEW_RUN, body)
+      .subscribe({
+        next: (res) => {
+          this.previewResult = res;
+          this.periodModalVisible = false;
+          this.periodSubmitting = false;
+          this.previewLoading = false;
+          this.previewVisible = true;
+          this.cdr.markForCheck();
+        },
+        error: (err: any) => {
+          this.message.error(this.i18n.genericError(err.error));
+          this.periodSubmitting = false;
+          this.previewLoading = false;
+          this.cdr.markForCheck();
+        },
+      });
+  }
+
+  private runPayroll(body: PayrollRunRequest): void {
+    this.periodSubmitting = true;
+    this.apiService.post<PayrollRunResult>(this.apiService.SALARY.RUN, body).subscribe({
+      next: (res) => {
+        this.message.success(
+          this.i18n.instant('salary.runSuccess', {
+            created: res.createdOrUpdated,
+            skipped: res.skipped,
+          }),
+        );
+        if (res.warnings?.length) {
+          res.warnings.slice(0, 3).forEach((w) => this.message.warning(w));
+        }
+        this.closePeriodModal();
+        this.loadData();
+      },
+      error: (err: any) => {
+        this.message.error(this.i18n.genericError(err.error));
+        this.periodSubmitting = false;
+        this.cdr.markForCheck();
+      },
+    });
+  }
+
+  private finalizePeriod(body: PayrollRunRequest): void {
+    this.periodSubmitting = true;
+    this.apiService
+      .post<number>(this.apiService.SALARY.FINALIZE_PERIOD, {
+        year: body.year,
+        month: body.month,
+        companyId: body.companyId || null,
+        generatePayslipHtml: true,
+      })
+      .subscribe({
+        next: (count) => {
+          this.message.success(this.i18n.instant('salary.finalizeSuccess', { count }));
+          this.closePeriodModal();
+          this.loadData();
+        },
+        error: (err: any) => {
+          this.message.error(this.i18n.genericError(err.error));
+          this.periodSubmitting = false;
+          this.cdr.markForCheck();
+        },
+      });
   }
 
   private resolveStatusLabel(status?: string): string {

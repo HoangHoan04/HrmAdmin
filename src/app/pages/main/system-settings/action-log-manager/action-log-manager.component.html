@@ -1,0 +1,64 @@
+<app-filter-custom
+  [id]="'action-log-filter'"
+  [fields]="filterFields"
+  [filters]="filters"
+  [config]="filterConfig"
+  [filterActions]="filterActions"
+  [loading]="loading"
+  (filtersChange)="onFiltersChange($event)"
+></app-filter-custom>
+
+<app-table-custom
+  [id]="'action-log-table'"
+  [data]="data"
+  [columns]="columns"
+  [loading]="loading"
+  [showIndexList]="true"
+  [stripedRows]="true"
+  [rowActions]="rowActions"
+  [pagination]="pagination"
+  (pageChange)="onPageChange($event)"
+  (refresh)="loadData()"
+></app-table-custom>
+
+<ng-template #actionTypeTpl let-row>
+  <nz-tag>{{ getActionTypeLabel(row.actionType) }}</nz-tag>
+</ng-template>
+
+<nz-modal
+  [nzVisible]="modalVisible"
+  [nzTitle]="'actionLog.modalTitle' | translate"
+  [nzFooter]="null"
+  (nzOnCancel)="closeModal()"
+  nzWidth="720px"
+>
+  @if (selectedLog) {
+    <div class="action-log-detail">
+      <p>
+        <strong>{{ 'actionLog.performedBy' | translate }}:</strong>
+        {{ selectedLog.createdByName }}
+      </p>
+      <p>
+        <strong>{{ 'actionLog.timestamp' | translate }}:</strong>
+        {{ selectedLog.createdAt | date: 'dd/MM/yyyy HH:mm:ss' }}
+      </p>
+      <p>
+        <strong>{{ 'actionLog.action' | translate }}:</strong>
+        {{ getActionTypeLabel(selectedLog.actionType) }}
+      </p>
+      <p>
+        <strong>{{ 'system.actionLog.entityName' | translate }}:</strong>
+        {{ selectedLog.entityName || '-' }}
+      </p>
+      <nz-divider></nz-divider>
+      <h4>{{ 'actionLog.oldValue' | translate }}</h4>
+      <pre>{{
+        formatJsonValue(selectedLog.oldValueObj, 'actionLog.noOldValue' | translate)
+      }}</pre>
+      <h4>{{ 'actionLog.newValue' | translate }}</h4>
+      <pre>{{
+        formatJsonValue(selectedLog.newValueObj, 'actionLog.noNewValue' | translate)
+      }}</pre>
+    </div>
+  }
+</nz-modal>

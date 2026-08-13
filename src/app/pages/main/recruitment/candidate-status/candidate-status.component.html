@@ -1,0 +1,105 @@
+<nz-spin [nzSpinning]="loading">
+  <div class="status-dashboard">
+    <div class="hero">
+      <div>
+        <p class="hero-eyebrow">{{ 'routes.candidateStatus' | translate }}</p>
+        <h1 class="hero-title">{{ 'recruitment.status.dashboardTitle' | translate }}</h1>
+        <p class="hero-sub">{{ 'recruitment.status.dashboardSubtitle' | translate }}</p>
+      </div>
+      <button nz-button nzType="default" (click)="openCandidateList()">
+        <span nz-icon nzType="unordered-list"></span>
+        {{ 'routes.candidateList' | translate }}
+      </button>
+    </div>
+
+    <div nz-row [nzGutter]="[16, 16]" class="kpi-row">
+      <div nz-col nzXs="12" nzMd="6">
+        <div class="kpi-card kpi-total">
+          <div class="kpi-label">{{ 'recruitment.status.total' | translate }}</div>
+          <div class="kpi-value">{{ total }}</div>
+        </div>
+      </div>
+      <div nz-col nzXs="12" nzMd="6">
+        <div class="kpi-card kpi-active">
+          <div class="kpi-label">{{ 'recruitment.status.inPipeline' | translate }}</div>
+          <div class="kpi-value">{{ activeInPipeline }}</div>
+        </div>
+      </div>
+      <div nz-col nzXs="12" nzMd="6">
+        <div class="kpi-card kpi-hired">
+          <div class="kpi-label">{{ 'enums.candidateStatus.hired' | translate }}</div>
+          <div class="kpi-value">{{ hiredCount }}</div>
+        </div>
+      </div>
+      <div nz-col nzXs="12" nzMd="6">
+        <div class="kpi-card kpi-rejected">
+          <div class="kpi-label">{{ 'recruitment.status.closed' | translate }}</div>
+          <div class="kpi-value">{{ rejectedCount }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div nz-row [nzGutter]="[16, 16]" class="charts-row">
+      <div nz-col nzXs="24" nzLg="8">
+        <div class="panel">
+          <div class="panel-title">{{ 'recruitment.status.funnelTitle' | translate }}</div>
+          <div echarts [options]="funnelOption" [autoResize]="true" class="chart"></div>
+        </div>
+      </div>
+      <div nz-col nzXs="24" nzLg="8">
+        <div class="panel">
+          <div class="panel-title">{{ 'recruitment.status.pieTitle' | translate }}</div>
+          <div echarts [options]="pieOption" [autoResize]="true" class="chart"></div>
+        </div>
+      </div>
+      <div nz-col nzXs="24" nzLg="8">
+        <div class="panel">
+          <div class="panel-title">{{ 'recruitment.status.barTitle' | translate }}</div>
+          <div echarts [options]="barOption" [autoResize]="true" class="chart"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="summary-grid">
+      @for (col of columns; track col.value) {
+        <div class="summary-card" [style.--accent]="col.color">
+          <div class="summary-top">
+            <span class="dot"></span>
+            <span class="summary-label">{{ labelOf(col.value) }}</span>
+          </div>
+          <div class="summary-count">{{ countOf(col.value) }}</div>
+          <div class="summary-pct">{{ pctOf(col.value) }}%</div>
+          <div class="summary-bar">
+            <span [style.width.%]="pctOf(col.value)"></span>
+          </div>
+        </div>
+      }
+    </div>
+
+    <div class="kanban-wrap">
+      <div class="section-title">{{ 'recruitment.status.boardTitle' | translate }}</div>
+      <div class="kanban">
+        @for (col of columns; track col.value) {
+          <div class="kanban-col" [style.--accent]="col.color">
+            <div class="kanban-header">
+              <span class="kanban-dot"></span>
+              <span class="kanban-name">{{ labelOf(col.value) }}</span>
+              <span class="kanban-badge">{{ (candidatesByStatus[col.value] || []).length }}</span>
+            </div>
+            <div class="kanban-body">
+              @for (c of candidatesByStatus[col.value] || []; track c.id) {
+                <button type="button" class="kanban-card" (click)="openCandidate(c)">
+                  <div class="name">{{ c.fullName }}</div>
+                  <div class="meta">{{ c.code }}</div>
+                  <div class="meta">{{ c.email || c.phone || '-' }}</div>
+                </button>
+              } @empty {
+                <div class="kanban-empty">{{ 'recruitment.status.emptyColumn' | translate }}</div>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</nz-spin>

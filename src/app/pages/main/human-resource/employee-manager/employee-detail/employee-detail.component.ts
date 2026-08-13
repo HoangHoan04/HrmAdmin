@@ -7,8 +7,10 @@ import { enumData } from '../../../../../core/constants/enums/enumData';
 import {
   Employee,
   EmployeeCertificate,
+  EmployeeChangeTimelineItem,
   EmployeeDependent,
   EmployeeEducation,
+  EmployeeFile,
   EmployeeSalaryHistory,
   TransferEmployee,
 } from '../../../../../core/models';
@@ -20,7 +22,7 @@ import {
 } from '../../../../../shared/components/table-custom/table-custom.types';
 import { ActionConfirmService } from '../../../../../shared/services/action-confirm.service';
 
-type ChildType = 'dependent' | 'education' | 'certificate' | 'salaryHistory';
+type ChildType = 'dependent' | 'education' | 'certificate' | 'file' | 'salaryHistory';
 type TransferHistoryRow = TransferEmployee & {
   transferTypeLabel?: string;
   statusLabel?: string;
@@ -42,11 +44,21 @@ export class EmployeeDetailComponent implements OnInit {
   transferHistories: TransferHistoryRow[] = [];
   transferHistoryLoading = false;
 
+  changeTimeline: EmployeeChangeTimelineItem[] = [];
+  changeTimelineLoading = false;
+
+  workStatusOptions = Object.values(enumData.WORK_STATUS);
+
   childModalVisible = false;
   childModalSubmitting = false;
   childType: ChildType = 'dependent';
   childIsEdit = false;
   childForm!: FormGroup;
+
+  resignationModalVisible = false;
+  resignationSubmitting = false;
+  resignationForm!: FormGroup;
+  pendingLifecycleStatus: string | null = null;
 
   dependentColumns: TableColumn[] = [
     { field: 'fullName', header: 'humanResource.employee.dependent.fullName', type: 'text' },
@@ -95,6 +107,32 @@ export class EmployeeDetailComponent implements OnInit {
     },
   ];
 
+  fileColumns: TableColumn[] = [
+    {
+      field: 'fileCategory',
+      header: 'humanResource.employee.file.fileCategory',
+      type: 'text',
+    },
+    { field: 'fileName', header: 'humanResource.employee.file.fileName', type: 'text' },
+    { field: 'expiryDate', header: 'humanResource.employee.file.expiryDate', type: 'date' },
+    { field: 'versionNo', header: 'humanResource.employee.file.versionNo', type: 'number' },
+    {
+      field: 'isCurrent',
+      header: 'humanResource.employee.file.isCurrent',
+      type: 'boolean',
+    },
+    {
+      field: 'isExpired',
+      header: 'humanResource.employee.file.isExpired',
+      type: 'boolean',
+    },
+    {
+      field: 'description',
+      header: 'humanResource.employee.file.description',
+      type: 'text',
+    },
+  ];
+
   salaryHistoryColumns: TableColumn[] = [
     {
       field: 'effectiveDate',
@@ -131,6 +169,7 @@ export class EmployeeDetailComponent implements OnInit {
   dependentRowActions: RowAction[] = this.buildChildRowActions('dependent');
   educationRowActions: RowAction[] = this.buildChildRowActions('education');
   certificateRowActions: RowAction[] = this.buildChildRowActions('certificate');
+  fileRowActions: RowAction[] = this.buildChildRowActions('file');
   salaryHistoryRowActions: RowAction[] = this.buildChildRowActions('salaryHistory');
 
   detailFields: { key: string; label: string; type?: 'date' | 'boolean' | 'text' }[] = [
@@ -165,6 +204,7 @@ export class EmployeeDetailComponent implements OnInit {
     { key: 'workingMode', label: 'humanResource.employee.workingMode' },
     { key: 'contractType', label: 'humanResource.employee.contractType' },
     { key: 'status', label: 'humanResource.employee.status' },
+    { key: 'directManagerName', label: 'humanResource.employee.directManager' },
     { key: 'joinDate', label: 'humanResource.employee.joinDate', type: 'date' },
     { key: 'resignationDate', label: 'humanResource.employee.resignationDate', type: 'date' },
     { key: 'resignationReason', label: 'humanResource.employee.resignationReason' },
@@ -186,6 +226,11 @@ export class EmployeeDetailComponent implements OnInit {
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id');
     this.initChildForm();
+    this.resignationForm = this.fb.group({
+      resignationDate: [new Date(), [Validators.required]],
+      resignationReason: ['', [Validators.maxLength(500)]],
+      note: ['', [Validators.maxLength(500)]],
+    });
     if (this.id) {
       this.loadEmployeeDetail(this.id);
     }
@@ -204,6 +249,10 @@ export class EmployeeDetailComponent implements OnInit {
       certificate: {
         add: 'humanResource.employee.addCertificate',
         edit: 'humanResource.employee.editCertificate',
+      },
+      file: {
+        add: 'humanResource.employee.addFile',
+        edit: 'humanResource.employee.editFile',
       },
       salaryHistory: {
         add: 'humanResource.employee.addSalaryHistory',
@@ -225,6 +274,10 @@ export class EmployeeDetailComponent implements OnInit {
     return this.employee?.certificates ?? [];
   }
 
+  get files(): EmployeeFile[] {
+    return this.employee?.files ?? [];
+  }
+
   get salaryHistories(): EmployeeSalaryHistory[] {
     return this.employee?.salaryHistories ?? [];
   }
@@ -237,6 +290,7 @@ export class EmployeeDetailComponent implements OnInit {
         this.employee = employee;
         this.loading = false;
         this.loadTransferHistory(id);
+        this.loadChangeTimeline(id);
         this.cdr.detectChanges();
       },
       error: (err: any) => {
@@ -246,6 +300,27 @@ export class EmployeeDetailComponent implements OnInit {
         this.goBack();
       },
     });
+  }
+
+  loadChangeTimeline(employeeId: string): void {
+    this.changeTimelineLoading = true;
+    this.apiService
+      .post<EmployeeChangeTimelineItem[]>(this.apiService.EMPLOYEE.CHANGE_TIMELINE, {
+        employeeId,
+        take: 50,
+      })
+      .subscribe({
+        next: (items) => {
+          this.changeTimeline = items || [];
+          this.changeTimelineLoading = false;
+          this.cdr.detectChanges();
+        },
+        error: () => {
+          this.changeTimeline = [];
+          this.changeTimelineLoading = false;
+          this.cdr.detectChanges();
+        },
+      });
   }
 
   loadTransferHistory(employeeId: string): void {
@@ -306,6 +381,11 @@ export class EmployeeDetailComponent implements OnInit {
       return new Date(value).toLocaleDateString('vi-VN');
     }
 
+    if (field.key === 'status') {
+      const meta = Object.values(enumData.WORK_STATUS).find((x) => x.value === value);
+      return meta ? this.i18n.instant(meta.labelKey) : String(value);
+    }
+
     return String(value);
   }
 
@@ -350,6 +430,97 @@ export class EmployeeDetailComponent implements OnInit {
         this.message.error(err.error || this.i18n.genericError());
       },
     });
+  }
+
+  async onLifecycleStatusClick(status: string): Promise<void> {
+    if (!this.employee?.id || this.employee.status === status) return;
+
+    if (status === enumData.WORK_STATUS.RESIGNED.value || status === enumData.WORK_STATUS.RETIRED.value) {
+      this.pendingLifecycleStatus = status;
+      this.resignationForm.reset({
+        resignationDate: this.employee.resignationDate
+          ? new Date(this.employee.resignationDate)
+          : new Date(),
+        resignationReason: this.employee.resignationReason || '',
+        note: '',
+      });
+      this.resignationModalVisible = true;
+      return;
+    }
+
+    const statusLabel = this.resolveWorkStatusLabel(status);
+    const confirmed = await this.actionConfirm.confirm({
+      title: this.i18n.instant('common.messages.confirm'),
+      content: this.i18n.instant('humanResource.employee.lifecycleConfirm', {
+        status: statusLabel,
+      }),
+      okText: this.i18n.instant('common.messages.confirm'),
+      okType: 'primary',
+      icon: 'confirm',
+    });
+    if (!confirmed) return;
+
+    this.submitLifecycleStatus(status);
+  }
+
+  closeResignationModal(): void {
+    this.resignationModalVisible = false;
+    this.resignationSubmitting = false;
+    this.pendingLifecycleStatus = null;
+  }
+
+  submitResignationLifecycle(): void {
+    if (!this.pendingLifecycleStatus) return;
+    if (this.resignationForm.invalid) {
+      this.resignationForm.markAllAsTouched();
+      return;
+    }
+    const raw = this.resignationForm.getRawValue();
+    this.resignationSubmitting = true;
+    this.submitLifecycleStatus(this.pendingLifecycleStatus, {
+      resignationDate: raw.resignationDate ? new Date(raw.resignationDate).toISOString() : null,
+      resignationReason: raw.resignationReason || undefined,
+      note: raw.note || undefined,
+    });
+  }
+
+  private submitLifecycleStatus(
+    status: string,
+    extra?: {
+      resignationDate?: string | null;
+      resignationReason?: string;
+      note?: string;
+    },
+  ): void {
+    if (!this.employee?.id) return;
+
+    this.apiService
+      .post<boolean>(this.apiService.EMPLOYEE.SET_LIFECYCLE_STATUS, {
+        id: this.employee.id,
+        status,
+        ...extra,
+      })
+      .subscribe({
+        next: (success) => {
+          if (success) {
+            this.message.success(this.i18n.instant('humanResource.employee.lifecycleSuccess'));
+            this.closeResignationModal();
+            this.loadEmployeeDetail(this.employee!.id!);
+          } else {
+            this.message.error(this.i18n.genericError());
+            this.resignationSubmitting = false;
+          }
+        },
+        error: (err: any) => {
+          this.message.error(this.i18n.genericError(err.error));
+          this.resignationSubmitting = false;
+        },
+      });
+  }
+
+  private resolveWorkStatusLabel(status: string): string {
+    const meta = Object.values(enumData.WORK_STATUS).find((x) => x.value === status);
+    return meta ? this.i18n.instant(meta.labelKey) : status;
   }
 
   openChildCreate(type: ChildType): void {
@@ -492,7 +663,16 @@ export class EmployeeDetailComponent implements OnInit {
           imageUrl: [null],
         });
         break;
-
+      case 'file':
+        this.childForm = this.fb.group({
+          id: [null],
+          fileCategory: ['', [Validators.required, Validators.maxLength(100)]],
+          fileName: ['', [Validators.required, Validators.maxLength(250)]],
+          fileUrl: ['', [Validators.required, Validators.maxLength(1000)]],
+          expiryDate: [null],
+          description: ['', [Validators.maxLength(500)]],
+        });
+        break;
       case 'salaryHistory':
         this.childForm = this.fb.group({
           id: [null],
@@ -551,7 +731,16 @@ export class EmployeeDetailComponent implements OnInit {
           imageUrl: record.imageUrl,
         });
         break;
-
+      case 'file':
+        this.childForm.patchValue({
+          id: record.id,
+          fileCategory: record.fileCategory,
+          fileName: record.fileName,
+          fileUrl: record.fileUrl,
+          expiryDate: toDate(record.expiryDate),
+          description: record.description,
+        });
+        break;
       case 'salaryHistory':
         this.childForm.patchValue({
           id: record.id,
@@ -595,6 +784,11 @@ export class EmployeeDetailComponent implements OnInit {
           issueDate: toIso(raw.issueDate),
           expiryDate: toIso(raw.expiryDate),
         };
+      case 'file':
+        return {
+          ...base,
+          expiryDate: toIso(raw.expiryDate),
+        };
       case 'salaryHistory':
         return {
           ...base,
@@ -618,6 +812,8 @@ export class EmployeeDetailComponent implements OnInit {
           return e.EDUCATION_DELETE;
         case 'certificate':
           return e.CERTIFICATE_DELETE;
+        case 'file':
+          return e.FILE_DELETE;
         case 'salaryHistory':
           return e.SALARY_HISTORY_DELETE;
       }
@@ -631,6 +827,8 @@ export class EmployeeDetailComponent implements OnInit {
           return e.EDUCATION_UPDATE;
         case 'certificate':
           return e.CERTIFICATE_UPDATE;
+        case 'file':
+          return e.FILE_UPDATE;
         case 'salaryHistory':
           return e.SALARY_HISTORY_UPDATE;
       }
@@ -643,6 +841,8 @@ export class EmployeeDetailComponent implements OnInit {
         return e.EDUCATION_CREATE;
       case 'certificate':
         return e.CERTIFICATE_CREATE;
+      case 'file':
+        return e.FILE_CREATE;
       case 'salaryHistory':
         return e.SALARY_HISTORY_CREATE;
     }

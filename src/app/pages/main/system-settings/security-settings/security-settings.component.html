@@ -1,0 +1,109 @@
+<nz-spin [nzSpinning]="loading">
+  <div nz-row [nzGutter]="16">
+    <div nz-col nzXs="24" nzLg="12">
+      <nz-card [nzTitle]="'system.security.twoFactorTitle' | translate">
+        <p>{{ 'system.security.twoFactorDesc' | translate }}</p>
+        <button
+          nz-button
+          nzType="primary"
+          type="button"
+          [nzLoading]="setupLoading"
+          (click)="startSetup()"
+        >
+          {{ 'system.security.setup' | translate }}
+        </button>
+
+        @if (setup) {
+          <div style="margin-top: 16px">
+            <p>
+              <strong>{{ 'system.security.secret' | translate }}:</strong>
+              <code>{{ setup.secret }}</code>
+            </p>
+            <p style="word-break: break-all">
+              <strong>{{ 'system.security.otpAuthUri' | translate }}:</strong>
+              <code>{{ setup.otpAuthUri }}</code>
+            </p>
+            <nz-form-item>
+              <nz-form-label nzRequired>{{ 'system.security.code' | translate }}</nz-form-label>
+              <nz-form-control>
+                <input
+                  nz-input
+                  [(ngModel)]="enableCode"
+                  maxlength="6"
+                  [placeholder]="'system.security.codePlaceholder' | translate"
+                />
+              </nz-form-control>
+            </nz-form-item>
+            <button
+              nz-button
+              nzType="primary"
+              type="button"
+              [nzLoading]="enableLoading"
+              (click)="enable()"
+            >
+              {{ 'system.security.enable' | translate }}
+            </button>
+          </div>
+        }
+
+        <nz-divider></nz-divider>
+        <p>{{ 'system.security.disableDesc' | translate }}</p>
+        <nz-form-item>
+          <nz-form-label>{{ 'system.security.code' | translate }}</nz-form-label>
+          <nz-form-control>
+            <input nz-input [(ngModel)]="disableCode" maxlength="6" />
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label>{{ 'auth.password' | translate }}</nz-form-label>
+          <nz-form-control>
+            <input nz-input type="password" [(ngModel)]="disablePassword" />
+          </nz-form-control>
+        </nz-form-item>
+        <button
+          nz-button
+          nzDanger
+          type="button"
+          [nzLoading]="disableLoading"
+          (click)="disable()"
+        >
+          {{ 'system.security.disable' | translate }}
+        </button>
+      </nz-card>
+    </div>
+
+    <div nz-col nzXs="24" nzLg="12">
+      <nz-card [nzTitle]="'system.security.ssoTitle' | translate">
+        <p>{{ 'system.security.ssoDesc' | translate }}</p>
+        @if (ssoStatus) {
+          <nz-descriptions nzBordered [nzColumn]="1" nzSize="small">
+            <nz-descriptions-item [nzTitle]="'Google'">
+              {{
+                (ssoStatus.google.enabled && ssoStatus.google.configured
+                  ? 'system.security.ssoConfigured'
+                  : 'system.security.ssoNotConfigured'
+                ) | translate
+              }}
+              @if (ssoStatus.google.clientIdMasked) {
+                <span> ({{ ssoStatus.google.clientIdMasked }})</span>
+              }
+            </nz-descriptions-item>
+            <nz-descriptions-item [nzTitle]="'Microsoft'">
+              {{
+                (ssoStatus.microsoft.enabled && ssoStatus.microsoft.configured
+                  ? 'system.security.ssoConfigured'
+                  : 'system.security.ssoNotConfigured'
+                ) | translate
+              }}
+              @if (ssoStatus.microsoft.clientIdMasked) {
+                <span> ({{ ssoStatus.microsoft.clientIdMasked }})</span>
+              }
+            </nz-descriptions-item>
+          </nz-descriptions>
+        } @else {
+          <nz-empty [nzNotFoundContent]="'system.security.ssoUnavailable' | translate"></nz-empty>
+        }
+      </nz-card>
+    </div>
+  </div>
+</nz-spin>

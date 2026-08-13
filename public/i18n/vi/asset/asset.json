@@ -1,0 +1,59 @@
+{
+  "asset": {
+    "common": {
+      "company": "Công ty",
+      "branch": "Chi nhánh",
+      "employee": "Nhân viên",
+      "status": "Trạng thái",
+      "isActive": "Đang hoạt động",
+      "filterCompany": "Chọn công ty...",
+      "filterStatus": "Chọn trạng thái...",
+      "backToList": "Quay lại danh sách"
+    },
+    "type": {
+      "entityName": "loại tài sản",
+      "code": "Mã",
+      "name": "Tên",
+      "description": "Mô tả",
+      "search": "Tìm kiếm",
+      "searchPlaceholder": "Mã hoặc tên...",
+      "addTitle": "Thêm loại tài sản",
+      "editTitle": "Cập nhật loại tài sản",
+      "deleteConfirm": "Xóa loại tài sản này?"
+    },
+    "inventory": {
+      "entityName": "tài sản",
+      "code": "Mã",
+      "name": "Tên",
+      "assetType": "Loại tài sản",
+      "serialNumber": "Số serial",
+      "purchaseDate": "Ngày mua",
+      "purchaseCost": "Giá mua",
+      "status": "Trạng thái",
+      "note": "Ghi chú",
+      "search": "Tìm kiếm",
+      "searchPlaceholder": "Mã hoặc tên...",
+      "addTitle": "Thêm tài sản",
+      "editTitle": "Cập nhật tài sản",
+      "detailTitle": "Chi tiết tài sản",
+      "deleteConfirm": "Xóa tài sản này?"
+    },
+    "ticket": {
+      "entityName": "phiếu tài sản",
+      "code": "Mã",
+      "asset": "Tài sản",
+      "employee": "Nhân viên",
+      "ticketType": "Loại phiếu",
+      "status": "Trạng thái",
+      "ticketAt": "Thời điểm",
+      "note": "Ghi chú",
+      "search": "Tìm kiếm",
+      "searchPlaceholder": "Mã, tài sản, nhân viên...",
+      "addTitle": "Thêm phiếu tài sản",
+      "editTitle": "Cập nhật phiếu tài sản",
+      "deleteConfirm": "Xóa phiếu tài sản này?",
+      "completeConfirm": "Hoàn tất phiếu tài sản này?",
+      "complete": "Hoàn tất"
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "allowance": {
+    "entityName": "phụ cấp",
+    "code": "Mã",
+    "name": "Tên",
+    "description": "Mô tả",
+    "companyName": "Công ty",
+    "defaultAmount": "Số tiền mặc định",
+    "isTaxable": "Chịu thuế",
+    "isInsurable": "Tính BHXH",
+    "isActive": "Đang dùng",
+    "displayOrder": "Thứ tự",
+    "status": "Trạng thái",
+    "filterCompany": "Chọn công ty...",
+    "filterStatus": "Chọn trạng thái...",
+    "searchPlaceholder": "Tìm mã hoặc tên...",
+    "search": "Tìm kiếm",
+    "edit": "Sửa phụ cấp",
+    "activate": "Kích hoạt",
+    "deactivate": "Ngưng dùng",
+    "createTitle": "Thêm phụ cấp",
+    "editTitle": "Cập nhật phụ cấp",
+    "codeRequired": "Vui lòng nhập mã!",
+    "nameRequired": "Vui lòng nhập tên!",
+    "saveSuccess": "Lưu phụ cấp thành công",
+    "activateSuccess": "Kích hoạt phụ cấp thành công",
+    "deactivateSuccess": "Ngưng dùng phụ cấp thành công"
+  }
+}

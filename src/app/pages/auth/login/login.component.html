@@ -11,62 +11,93 @@
     </div>
   }
 
-  <div class="login-field">
-    <label class="login-label" for="username">{{ 'auth.emailAddress' | translate }}</label>
-    <input
-      nz-input
-      id="username"
-      [(ngModel)]="username"
-      name="username"
-      type="email"
-      [placeholder]="'auth.emailPlaceholder' | translate"
-      autocomplete="email"
-      required
-      class="login-input-wrap"
-    />
-  </div>
-
-  <div class="login-field">
-    <label class="login-label" for="password">{{ 'auth.password' | translate }}</label>
-    <div class="password-wrap">
+  @if (!requiresTwoFactor) {
+    <div class="login-field">
+      <label class="login-label" for="username">{{ 'auth.emailAddress' | translate }}</label>
       <input
         nz-input
-        id="password"
-        [type]="passwordVisible ? 'text' : 'password'"
-        [(ngModel)]="password"
-        name="password"
-        [placeholder]="'auth.passwordPlaceholder' | translate"
-        autocomplete="current-password"
+        id="username"
+        [(ngModel)]="username"
+        name="username"
+        type="email"
+        [placeholder]="'auth.emailPlaceholder' | translate"
+        autocomplete="email"
         required
         class="login-input-wrap"
       />
-      <span
-        nz-icon
-        class="password-toggle-icon"
-        [nzType]="passwordVisible ? 'eye-invisible' : 'eye'"
-        nzTheme="outline"
-        (click)="passwordVisible = !passwordVisible"
-      ></span>
     </div>
-  </div>
-  <div class="login-options">
-    <label class="login-remember" [class.checked]="rememberMe" (click)="rememberMe = !rememberMe">
-      <span class="login-checkbox">
-        <span nz-icon nzType="check" nzTheme="outline"></span>
-      </span>
-      <span>{{ 'auth.rememberMe' | translate }}</span>
-    </label>
-    <a routerLink="/auth/forgot-password" class="login-forgot">{{
-      'auth.forgotPassword' | translate
-    }}</a>
-  </div>
 
-  <button nz-button nzType="primary" nzBlock [nzLoading]="loading" class="login-btn">
-    @if (!loading) {
-      <span nz-icon nzType="login" nzTheme="outline"></span>
-    }
-    <span>{{ 'auth.signIn' | translate }}</span>
-  </button>
+    <div class="login-field">
+      <label class="login-label" for="password">{{ 'auth.password' | translate }}</label>
+      <div class="password-wrap">
+        <input
+          nz-input
+          id="password"
+          [type]="passwordVisible ? 'text' : 'password'"
+          [(ngModel)]="password"
+          name="password"
+          [placeholder]="'auth.passwordPlaceholder' | translate"
+          autocomplete="current-password"
+          required
+          class="login-input-wrap"
+        />
+        <span
+          nz-icon
+          class="password-toggle-icon"
+          [nzType]="passwordVisible ? 'eye-invisible' : 'eye'"
+          nzTheme="outline"
+          (click)="passwordVisible = !passwordVisible"
+        ></span>
+      </div>
+    </div>
+    <div class="login-options">
+      <label class="login-remember" [class.checked]="rememberMe" (click)="rememberMe = !rememberMe">
+        <span class="login-checkbox">
+          <span nz-icon nzType="check" nzTheme="outline"></span>
+        </span>
+        <span>{{ 'auth.rememberMe' | translate }}</span>
+      </label>
+      <a routerLink="/auth/forgot-password" class="login-forgot">{{
+        'auth.forgotPassword' | translate
+      }}</a>
+    </div>
+
+    <button nz-button nzType="primary" nzBlock [nzLoading]="loading" class="login-btn">
+      @if (!loading) {
+        <span nz-icon nzType="login" nzTheme="outline"></span>
+      }
+      <span>{{ 'auth.signIn' | translate }}</span>
+    </button>
+  } @else {
+    <p class="login-subtitle">{{ 'auth.twoFactorPrompt' | translate }}</p>
+    <div class="login-field">
+      <label class="login-label" for="twoFactorCode">{{ 'auth.twoFactorCode' | translate }}</label>
+      <input
+        nz-input
+        id="twoFactorCode"
+        [(ngModel)]="twoFactorCode"
+        name="twoFactorCode"
+        maxlength="6"
+        [placeholder]="'auth.twoFactorCodePlaceholder' | translate"
+        autocomplete="one-time-code"
+        required
+        class="login-input-wrap"
+      />
+    </div>
+    <button nz-button nzType="primary" nzBlock [nzLoading]="loading" class="login-btn">
+      <span>{{ 'auth.twoFactorVerify' | translate }}</span>
+    </button>
+    <button
+      nz-button
+      nzType="link"
+      nzBlock
+      type="button"
+      (click)="backToPassword()"
+      style="margin-top: 8px"
+    >
+      {{ 'auth.backToLogin' | translate }}
+    </button>
+  }
 
   <div class="login-footer-text">
     {{ 'auth.dontHaveAccount' | translate }}

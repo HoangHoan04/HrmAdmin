@@ -22,3 +22,143 @@
   (sortChange)="onSortChange($event)"
   (refresh)="loadData()"
 ></app-table-custom>
+
+<nz-modal
+  [nzVisible]="periodModalVisible"
+  [nzTitle]="periodModalTitle | translate"
+  [nzOkText]="'common.messages.confirm' | translate"
+  [nzCancelText]="'common.actions.cancel' | translate"
+  [nzOkLoading]="periodSubmitting"
+  (nzOnCancel)="closePeriodModal()"
+  (nzOnOk)="submitPeriodModal()"
+>
+  <ng-container *nzModalContent>
+    <form nz-form [formGroup]="periodForm" nzLayout="vertical">
+      <nz-form-item>
+        <nz-form-label nzRequired>{{ 'salary.year' | translate }}</nz-form-label>
+        <nz-form-control>
+          <nz-input-number formControlName="year" [nzMin]="2000" style="width: 100%"></nz-input-number>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label nzRequired>{{ 'salary.month' | translate }}</nz-form-label>
+        <nz-form-control>
+          <nz-select formControlName="month" style="width: 100%">
+            @for (m of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]; track m) {
+              <nz-option [nzValue]="m" [nzLabel]="'' + m"></nz-option>
+            }
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label>{{ 'salary.companyName' | translate }}</nz-form-label>
+        <nz-form-control>
+          <nz-select
+            formControlName="companyId"
+            nzAllowClear
+            nzShowSearch
+            [nzPlaceHolder]="'salary.filterCompany' | translate"
+            style="width: 100%"
+          >
+            @for (opt of companyOptions; track opt.value) {
+              <nz-option [nzValue]="opt.value" [nzLabel]="opt.label"></nz-option>
+            }
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      @if (showRunOptions) {
+        <nz-form-item>
+          <label nz-checkbox formControlName="overwriteDrafts">
+            {{ 'salary.overwriteDrafts' | translate }}
+          </label>
+        </nz-form-item>
+        <nz-form-item>
+          <label nz-checkbox formControlName="includeDefaultAllowances">
+            {{ 'salary.includeDefaultAllowances' | translate }}
+          </label>
+        </nz-form-item>
+        <nz-form-item>
+          <label nz-checkbox formControlName="computePit">
+            {{ 'salary.computePit' | translate }}
+          </label>
+        </nz-form-item>
+      }
+    </form>
+  </ng-container>
+</nz-modal>
+
+<nz-drawer
+  [nzVisible]="previewVisible"
+  [nzTitle]="'salary.previewTitle' | translate"
+  [nzWidth]="960"
+  (nzOnClose)="closePreview()"
+>
+  <ng-container *nzDrawerContent>
+    <nz-spin [nzSpinning]="previewLoading">
+      @if (previewResult) {
+        <p>
+          {{
+            'salary.previewSummary'
+              | translate
+                : {
+                    total: previewResult.totalEmployees,
+                    ready: previewResult.readyCount,
+                    skipped: previewResult.skippedCount,
+                  }
+          }}
+        </p>
+        <p>
+          {{
+            'salary.previewTotals'
+              | translate
+                : {
+                    gross: previewResult.totalGross | number,
+                    net: previewResult.totalNet | number,
+                  }
+          }}
+          · {{ previewResult.periodCode }}
+        </p>
+        <nz-table
+          [nzData]="previewResult.items || []"
+          [nzScroll]="{ x: '1100px', y: '60vh' }"
+          [nzShowPagination]="false"
+          nzSize="small"
+          nzBordered
+        >
+          <thead>
+            <tr>
+              <th>{{ 'salary.employeeName' | translate }}</th>
+              <th>{{ 'salary.canCreate' | translate }}</th>
+              <th>{{ 'salary.skipReason' | translate }}</th>
+              <th>{{ 'salary.basicSalaryPaid' | translate }}</th>
+              <th>{{ 'salary.grossSalary' | translate }}</th>
+              <th>{{ 'salary.totalDeduction' | translate }}</th>
+              <th>{{ 'salary.pitAmount' | translate }}</th>
+              <th>{{ 'salary.netSalary' | translate }}</th>
+              <th>{{ 'salary.status' | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (item of previewResult.items || []; track item.employeeId) {
+              <tr>
+                <td>
+                  {{ item.employeeCode ? item.employeeCode + ' - ' : '' }}{{ item.employeeName }}
+                </td>
+                <td>{{ item.canCreate ? '✓' : '—' }}</td>
+                <td>{{ item.skipReason || '-' }}</td>
+                <td>{{ item.basicSalaryPaid | number }}</td>
+                <td>{{ item.grossSalary | number }}</td>
+                <td>{{ item.totalDeduction | number }}</td>
+                <td>{{ item.pitAmount | number }}</td>
+                <td>{{ item.netSalary | number }}</td>
+                <td>{{ item.existingStatus || '-' }}</td>
+              </tr>
+            }
+          </tbody>
+        </nz-table>
+      } @else {
+        <p>{{ 'salary.previewEmpty' | translate }}</p>
+      }
+    </nz-spin>
+  </ng-container>
+</nz-drawer>

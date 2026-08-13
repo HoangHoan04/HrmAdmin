@@ -11,6 +11,7 @@ import { CompanyManagerComponent } from './company-manager/company-manager.compo
 import { AddOrUpdateDepartmentComponent } from './department-manager/add-or-update-department/add-or-update-department.component';
 import { DepartmentDetailComponent } from './department-manager/department-detail/department-detail.component';
 import { DepartmentManagerComponent } from './department-manager/department-manager.component';
+import { OrgChartComponent } from './org-chart/org-chart.component';
 import { PartManagerComponent } from './part-manager/part-manager.component';
 import { AddOrUpdatePartMasterComponent } from './part-manager/part-master/add-or-update-part-master/add-or-update-part-master.component';
 import { PartMasterDetailComponent } from './part-manager/part-master/part-master-detail/part-master-detail.component';
@@ -31,6 +32,10 @@ const getRelativePath = (p: string) => {
 };
 
 const routes: Routes = [
+  {
+    path: getRelativePath(ROUTES_CONFIG.ORGANIZATION.children.ORG_CHART.path),
+    component: OrgChartComponent,
+  },
   {
     path: getRelativePath(ROUTES_CONFIG.ORGANIZATION.children.COMPANY_MANAGER.path),
     component: CompanyManagerComponent,
@@ -195,6 +200,7 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [
+    OrgChartComponent,
     CompanyManagerComponent,
     AddOrUpdateCompanyComponent,
     CompanyDetailComponent,

@@ -62,6 +62,7 @@
       "timeZone": "Time Zone",
       "defaultLanguage": "Default Language",
       "logoUrl": "Logo URL",
+      "primaryColor": "Brand color",
       "isActive": "System Active",
       "socialInsuranceCode": "Social Insurance Code",
       "timeKeepingStandardId": "Timekeeping Standard",
@@ -76,7 +77,9 @@
       "manageBranches": "Manage branches by company",
       "addBranch": "Add branch",
       "noBranches": "No branches under this company.",
-      "noChildCompanies": "No child companies."
+      "noChildCompanies": "No child companies.",
+      "latitude": "Latitude (GPS)",
+      "longitude": "Longitude (GPS)"
     }
   }
 }

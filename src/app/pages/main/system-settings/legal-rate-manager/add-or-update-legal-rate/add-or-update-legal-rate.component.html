@@ -1,0 +1,122 @@
+<nz-card
+  [nzTitle]="
+    (isEdit ? 'system.legalRate.editTitle' : 'system.legalRate.addTitle') | translate
+  "
+>
+  <nz-spin [nzSpinning]="loading">
+    <form nz-form [formGroup]="validateForm" nzLayout="vertical" (ngSubmit)="submitForm()">
+      <div nz-row [nzGutter]="16">
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{ 'system.legalRate.year' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-input-number formControlName="year" [nzMin]="2000" style="width: 100%"></nz-input-number>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{ 'system.legalRate.siEmployee' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-input-number
+                formControlName="socialInsuranceEmployeeRate"
+                [nzMin]="0"
+                [nzStep]="0.01"
+                style="width: 100%"
+              ></nz-input-number>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{ 'system.legalRate.siEmployer' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-input-number
+                formControlName="socialInsuranceEmployerRate"
+                [nzMin]="0"
+                [nzStep]="0.01"
+                style="width: 100%"
+              ></nz-input-number>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{ 'system.legalRate.health' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-input-number
+                formControlName="healthInsuranceRate"
+                [nzMin]="0"
+                [nzStep]="0.01"
+                style="width: 100%"
+              ></nz-input-number>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{
+              'system.legalRate.unemployment' | translate
+            }}</nz-form-label>
+            <nz-form-control>
+              <nz-input-number
+                formControlName="unemploymentRate"
+                [nzMin]="0"
+                [nzStep]="0.01"
+                style="width: 100%"
+              ></nz-input-number>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{
+              'system.legalRate.personalDeduction' | translate
+            }}</nz-form-label>
+            <nz-form-control>
+              <nz-input-number
+                formControlName="personalDeduction"
+                [nzMin]="0"
+                style="width: 100%"
+              ></nz-input-number>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{
+              'system.legalRate.dependentDeduction' | translate
+            }}</nz-form-label>
+            <nz-form-control>
+              <nz-input-number
+                formControlName="dependentDeduction"
+                [nzMin]="0"
+                style="width: 100%"
+              ></nz-input-number>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <nz-form-item>
+        <nz-form-label>{{ 'common.fields.note' | translate }}</nz-form-label>
+        <nz-form-control>
+          <textarea nz-input rows="3" formControlName="note"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+      <div style="margin-top: 16px">
+        <button nz-button type="button" (click)="goBack()">
+          {{ 'common.actions.cancel' | translate }}
+        </button>
+        <button
+          nz-button
+          nzType="primary"
+          type="submit"
+          [nzLoading]="submitting"
+          style="margin-left: 8px"
+        >
+          {{ 'common.actions.save' | translate }}
+        </button>
+      </div>
+    </form>
+  </nz-spin>
+</nz-card>

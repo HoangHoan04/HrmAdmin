@@ -1,0 +1,88 @@
+<nz-card
+  [nzTitle]="
+    (isEdit ? 'system.reportSchedule.editTitle' : 'system.reportSchedule.addTitle') | translate
+  "
+>
+  <nz-spin [nzSpinning]="loading">
+    <form nz-form [formGroup]="validateForm" nzLayout="vertical" (ngSubmit)="submitForm()">
+      <div nz-row [nzGutter]="16">
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{ 'system.reportSchedule.code' | translate }}</nz-form-label>
+            <nz-form-control>
+              <input nz-input formControlName="code" [disabled]="isEdit" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{ 'system.reportSchedule.name' | translate }}</nz-form-label>
+            <nz-form-control><input nz-input formControlName="name" /></nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{
+              'system.reportSchedule.reportType' | translate
+            }}</nz-form-label>
+            <nz-form-control>
+              <nz-select formControlName="reportType" style="width: 100%">
+                @for (o of reportTypeOptions; track o.value) {
+                  <nz-option [nzValue]="o.value" [nzLabel]="o.labelKey | translate"></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{
+              'system.reportSchedule.cronHint' | translate
+            }}</nz-form-label>
+            <nz-form-control>
+              <nz-select formControlName="cronHint" style="width: 100%">
+                @for (o of cronOptions; track o.value) {
+                  <nz-option [nzValue]="o.value" [nzLabel]="o.labelKey | translate"></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{
+              'system.reportSchedule.emailTo' | translate
+            }}</nz-form-label>
+            <nz-form-control><input nz-input formControlName="emailTo" /></nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'common.status.label' | translate }}</nz-form-label>
+            <nz-form-control><nz-switch formControlName="isActive"></nz-switch></nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <nz-form-item>
+        <nz-form-label>{{ 'common.fields.note' | translate }}</nz-form-label>
+        <nz-form-control>
+          <textarea nz-input rows="3" formControlName="note"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+      <div style="margin-top: 16px">
+        <button nz-button type="button" (click)="goBack()">
+          {{ 'common.actions.cancel' | translate }}
+        </button>
+        <button
+          nz-button
+          nzType="primary"
+          type="submit"
+          [nzLoading]="submitting"
+          style="margin-left: 8px"
+        >
+          {{ 'common.actions.save' | translate }}
+        </button>
+      </div>
+    </form>
+  </nz-spin>
+</nz-card>

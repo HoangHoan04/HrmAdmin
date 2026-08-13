@@ -1,0 +1,117 @@
+<nz-card
+  [nzTitle]="
+    (isEdit ? 'performance.review360.editTitle' : 'performance.review360.addTitle') | translate
+  "
+>
+  <nz-spin [nzSpinning]="loading">
+    <form nz-form [formGroup]="validateForm" nzLayout="vertical" (ngSubmit)="submitForm()">
+      <div nz-row [nzGutter]="16">
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{ 'performance.review360.cycle' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-select formControlName="cycleId" style="width: 100%" nzShowSearch>
+                @for (c of cycles; track c.id) {
+                  <nz-option [nzValue]="c.id" [nzLabel]="c.code + ' - ' + c.name"></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{
+              'performance.review360.subject' | translate
+            }}</nz-form-label>
+            <nz-form-control>
+              <nz-select formControlName="subjectEmployeeId" style="width: 100%" nzShowSearch>
+                @for (e of employees; track e.id) {
+                  <nz-option
+                    [nzValue]="e.id"
+                    [nzLabel]="e.code ? e.code + ' - ' + e.name : e.name"
+                  ></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{
+              'performance.review360.reviewer' | translate
+            }}</nz-form-label>
+            <nz-form-control>
+              <nz-select formControlName="reviewerEmployeeId" style="width: 100%" nzShowSearch>
+                @for (e of employees; track e.id) {
+                  <nz-option
+                    [nzValue]="e.id"
+                    [nzLabel]="e.code ? e.code + ' - ' + e.name : e.name"
+                  ></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{
+              'performance.review360.reviewerType' | translate
+            }}</nz-form-label>
+            <nz-form-control>
+              <nz-select formControlName="reviewerType" style="width: 100%">
+                @for (o of reviewerTypes; track o.value) {
+                  <nz-option [nzValue]="o.value" [nzLabel]="o.labelKey | translate"></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{ 'performance.review360.score' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-input-number
+                formControlName="score"
+                [nzMin]="0"
+                [nzMax]="100"
+                style="width: 100%"
+              ></nz-input-number>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{ 'performance.common.status' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-select formControlName="status" style="width: 100%">
+                @for (o of statusOptions; track o.value) {
+                  <nz-option [nzValue]="o.value" [nzLabel]="o.labelKey | translate"></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <nz-form-item>
+        <nz-form-label>{{ 'performance.review360.comment' | translate }}</nz-form-label>
+        <nz-form-control>
+          <textarea nz-input rows="3" formControlName="comment"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+      <div style="margin-top: 16px">
+        <button nz-button type="button" (click)="goBack()">
+          {{ 'common.actions.cancel' | translate }}
+        </button>
+        <button
+          nz-button
+          nzType="primary"
+          type="submit"
+          [nzLoading]="submitting"
+          style="margin-left: 8px"
+        >
+          {{ 'common.actions.save' | translate }}
+        </button>
+      </div>
+    </form>
+  </nz-spin>
+</nz-card>

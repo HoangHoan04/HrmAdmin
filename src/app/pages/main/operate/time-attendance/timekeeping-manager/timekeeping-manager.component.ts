@@ -222,6 +222,8 @@ export class TimekeepingManagerComponent implements OnInit {
     { field: 'statusLabel', header: 'timekeeping.status', type: 'text' },
     { field: 'lateMinutes', header: 'timekeeping.lateMinutes', type: 'text' },
     { field: 'workedMinutes', header: 'timekeeping.workedMinutes', type: 'text' },
+    { field: 'otMinutes', header: 'timekeeping.otMinutes', type: 'text' },
+    { field: 'nightMinutes', header: 'timekeeping.nightMinutes', type: 'text' },
     { field: 'branchName', header: 'timekeeping.branch', type: 'text' },
   ];
 
@@ -237,6 +239,8 @@ export class TimekeepingManagerComponent implements OnInit {
     { field: 'leaveDays', header: 'timekeeping.leaveDays', type: 'text' },
     { field: 'absentDays', header: 'timekeeping.absentDays', type: 'text' },
     { field: 'incompleteDays', header: 'timekeeping.incompleteDays', type: 'text' },
+    { field: 'totalOtMinutes', header: 'timekeeping.totalOtMinutes', type: 'text' },
+    { field: 'totalNightMinutes', header: 'timekeeping.totalNightMinutes', type: 'text' },
     { field: 'branchName', header: 'timekeeping.branch', type: 'text' },
   ];
 

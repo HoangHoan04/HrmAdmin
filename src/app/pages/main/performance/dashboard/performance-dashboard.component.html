@@ -1,0 +1,65 @@
+<nz-spin [nzSpinning]="loading">
+  <nz-card [nzTitle]="'performance.dashboard.title' | translate">
+    <div nz-row [nzGutter]="16" style="margin-bottom: 16px">
+      <div nz-col nzXs="24" nzMd="8">
+        <nz-form-item>
+          <nz-form-label>{{ 'performance.dashboard.cycle' | translate }}</nz-form-label>
+          <nz-form-control>
+            <nz-select
+              [ngModel]="cycleId"
+              (ngModelChange)="onCycleChange($event)"
+              nzAllowClear
+              nzShowSearch
+              style="width: 100%"
+              [nzPlaceHolder]="'performance.dashboard.cyclePlaceholder' | translate"
+            >
+              @for (c of cycles; track c.id) {
+                <nz-option [nzValue]="c.id" [nzLabel]="c.code + ' - ' + c.name"></nz-option>
+              }
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+
+    <div nz-row [nzGutter]="[16, 16]" class="kpi-row">
+      <div nz-col nzXs="12" nzMd="6">
+        <nz-card>
+          <div class="kpi-label">{{ 'performance.dashboard.avgScore' | translate }}</div>
+          <div class="kpi-value">{{ summary?.avgScore ?? 0 | number: '1.0-2' }}</div>
+        </nz-card>
+      </div>
+      <div nz-col nzXs="12" nzMd="6">
+        <nz-card>
+          <div class="kpi-label">{{ 'performance.dashboard.metTargetPercent' | translate }}</div>
+          <div class="kpi-value">{{ summary?.metTargetPercent ?? 0 | number: '1.0-1' }}%</div>
+        </nz-card>
+      </div>
+      <div nz-col nzXs="12" nzMd="6">
+        <nz-card>
+          <div class="kpi-label">{{ 'performance.dashboard.goalCount' | translate }}</div>
+          <div class="kpi-value">{{ summary?.goalCount ?? 0 }}</div>
+        </nz-card>
+      </div>
+      <div nz-col nzXs="12" nzMd="6">
+        <nz-card>
+          <div class="kpi-label">{{ 'performance.dashboard.resultCount' | translate }}</div>
+          <div class="kpi-value">{{ summary?.resultCount ?? 0 }}</div>
+        </nz-card>
+      </div>
+    </div>
+
+    <div nz-row [nzGutter]="[16, 16]" style="margin-top: 16px">
+      <div nz-col nzXs="24" nzLg="12">
+        <nz-card [nzTitle]="'performance.dashboard.scoreBands' | translate">
+          <div echarts [options]="pieOption" [autoResize]="true" class="chart"></div>
+        </nz-card>
+      </div>
+      <div nz-col nzXs="24" nzLg="12">
+        <nz-card [nzTitle]="'performance.dashboard.deptAvg' | translate">
+          <div echarts [options]="barOption" [autoResize]="true" class="chart"></div>
+        </nz-card>
+      </div>
+    </div>
+  </nz-card>
+</nz-spin>

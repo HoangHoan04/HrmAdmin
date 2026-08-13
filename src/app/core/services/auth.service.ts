@@ -9,6 +9,7 @@ export class AuthService {
   private readonly KEY_USER = 'auth_user';
   private readonly KEY_TOKEN = 'auth_token';
   private readonly KEY_REFRESH_TOKEN = 'auth_refresh_token';
+  private readonly KEY_TEMP_2FA = 'auth_2fa_temp';
 
   constructor(
     private readonly apiService: ApiService,
@@ -31,27 +32,51 @@ export class AuthService {
     return sessionStorage.getItem(this.KEY_REFRESH_TOKEN);
   }
 
+  get twoFactorTempToken(): string | null {
+    return sessionStorage.getItem(this.KEY_TEMP_2FA);
+  }
+
   login(username: string, password: string): Observable<any> {
     return this.apiService.post<any>(this.apiService.AUTH.LOGIN, { username, password }).pipe(
-      tap((res) => {
-        if (res && res.token) {
-          sessionStorage.setItem(this.KEY_TOKEN, res.token);
-          sessionStorage.setItem(this.KEY_REFRESH_TOKEN, res.refreshToken);
-          sessionStorage.setItem(this.KEY_USER, res.username);
-          this.permissionService.setAuthContext({
-            roles: Array.isArray(res.roles) ? res.roles : [],
-            permissions: Array.isArray(res.permissions) ? res.permissions : [],
-            type: res.type ?? null,
-          });
-        }
-      }),
+      tap((res) => this.applyLoginResponse(res)),
     );
+  }
+
+  verifyTwoFactor(tempToken: string, code: string): Observable<any> {
+    return this.apiService
+      .post<any>(this.apiService.AUTH.TWO_FA_VERIFY, { tempToken, code })
+      .pipe(tap((res) => this.applyLoginResponse(res)));
+  }
+
+  setupTwoFactor(): Observable<any> {
+    return this.apiService.post<any>(this.apiService.AUTH.TWO_FA_SETUP, {});
+  }
+
+  enableTwoFactor(code: string): Observable<any> {
+    return this.apiService.post<any>(this.apiService.AUTH.TWO_FA_ENABLE, { code });
+  }
+
+  disableTwoFactor(code: string, password?: string): Observable<any> {
+    return this.apiService.post<any>(this.apiService.AUTH.TWO_FA_DISABLE, { code, password });
+  }
+
+  getSsoStatus(): Observable<any> {
+    return this.apiService.get<any>(this.apiService.AUTH.SSO_STATUS);
+  }
+
+  listSessions(body: { includeRevoked?: boolean; allUsers?: boolean } = {}): Observable<any> {
+    return this.apiService.post<any>(this.apiService.AUTH.SESSIONS_LIST, body);
+  }
+
+  revokeSession(id: string): Observable<any> {
+    return this.apiService.post<any>(this.apiService.AUTH.SESSIONS_REVOKE, { id });
   }
 
   logout(): void {
     sessionStorage.removeItem(this.KEY_TOKEN);
     sessionStorage.removeItem(this.KEY_REFRESH_TOKEN);
     sessionStorage.removeItem(this.KEY_USER);
+    sessionStorage.removeItem(this.KEY_TEMP_2FA);
     this.permissionService.clear();
   }
 
@@ -89,5 +114,25 @@ export class AuthService {
 
   getInfoUser(): Observable<any> {
     return this.apiService.get<any>(this.apiService.AUTH.ME);
+  }
+
+  private applyLoginResponse(res: any): void {
+    if (!res) return;
+    if (res.requiresTwoFactor && res.tempToken) {
+      sessionStorage.setItem(this.KEY_TEMP_2FA, res.tempToken);
+      if (res.username) sessionStorage.setItem(this.KEY_USER, res.username);
+      return;
+    }
+    if (res.token) {
+      sessionStorage.removeItem(this.KEY_TEMP_2FA);
+      sessionStorage.setItem(this.KEY_TOKEN, res.token);
+      sessionStorage.setItem(this.KEY_REFRESH_TOKEN, res.refreshToken);
+      sessionStorage.setItem(this.KEY_USER, res.username);
+      this.permissionService.setAuthContext({
+        roles: Array.isArray(res.roles) ? res.roles : [],
+        permissions: Array.isArray(res.permissions) ? res.permissions : [],
+        type: res.type ?? null,
+      });
+    }
   }
 }

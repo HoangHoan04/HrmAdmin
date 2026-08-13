@@ -1,0 +1,101 @@
+<nz-card
+  [nzTitle]="
+    (isEdit ? 'recruitment.criteria.editTitle' : 'recruitment.criteria.addTitle') | translate
+  "
+>
+  <nz-spin [nzSpinning]="loading">
+    <form nz-form [formGroup]="validateForm" nzLayout="vertical" (ngSubmit)="submitForm()">
+      <div nz-row [nzGutter]="16">
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{ 'recruitment.criteria.code' | translate }}</nz-form-label>
+            <nz-form-control
+              ><input nz-input formControlName="code" [disabled]="isEdit"
+            /></nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{ 'recruitment.criteria.name' | translate }}</nz-form-label>
+            <nz-form-control><input nz-input formControlName="name" /></nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'recruitment.criteria.category' | translate }}</nz-form-label>
+            <nz-form-control><input nz-input formControlName="category" /></nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{
+              'recruitment.criteria.defaultWeight' | translate
+            }}</nz-form-label>
+            <nz-form-control>
+              <nz-input-number
+                formControlName="defaultWeight"
+                [nzMin]="0"
+                style="width: 100%"
+              ></nz-input-number>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{
+              'recruitment.criteria.maxScore' | translate
+            }}</nz-form-label>
+            <nz-form-control>
+              <nz-input-number
+                formControlName="maxScore"
+                [nzMin]="0"
+                style="width: 100%"
+              ></nz-input-number>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'recruitment.common.company' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-select formControlName="companyId" nzAllowClear style="width: 100%">
+                @for (c of companies; track c.id) {
+                  <nz-option
+                    [nzValue]="c.id"
+                    [nzLabel]="c.code ? c.code + ' - ' + c.name : c.name"
+                  ></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'recruitment.common.isActive' | translate }}</nz-form-label>
+            <nz-form-control><nz-switch formControlName="isActive"></nz-switch></nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <nz-form-item>
+        <nz-form-label>{{ 'recruitment.criteria.description' | translate }}</nz-form-label>
+        <nz-form-control>
+          <textarea nz-input rows="3" formControlName="description"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+      <div style="margin-top: 16px">
+        <button nz-button type="button" (click)="goBack()">
+          {{ 'common.actions.cancel' | translate }}
+        </button>
+        <button
+          nz-button
+          nzType="primary"
+          type="submit"
+          [nzLoading]="submitting"
+          style="margin-left: 8px"
+        >
+          {{ 'common.actions.save' | translate }}
+        </button>
+      </div>
+    </form>
+  </nz-spin>
+</nz-card>

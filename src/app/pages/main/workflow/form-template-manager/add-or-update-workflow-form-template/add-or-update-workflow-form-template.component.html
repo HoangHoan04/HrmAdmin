@@ -1,0 +1,55 @@
+<nz-card
+  [nzTitle]="
+    (isEdit ? 'workflow.formTemplate.editTitle' : 'workflow.formTemplate.addTitle') | translate
+  "
+>
+  <nz-spin [nzSpinning]="loading">
+    <form nz-form [formGroup]="validateForm" nzLayout="vertical" (ngSubmit)="submitForm()">
+      <div nz-row [nzGutter]="16">
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{ 'workflow.common.entityType' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-select formControlName="entityType" style="width: 100%">
+                @for (o of entityTypeOptions; track o.value) {
+                  <nz-option [nzValue]="o.value" [nzLabel]="o.labelKey | translate"></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="16">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{ 'workflow.formTemplate.name' | translate }}</nz-form-label>
+            <nz-form-control><input nz-input formControlName="name" /></nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <nz-form-item>
+        <nz-form-label nzRequired>{{ 'workflow.formTemplate.schemaJson' | translate }}</nz-form-label>
+        <nz-form-control>
+          <textarea
+            nz-input
+            rows="12"
+            formControlName="schemaJson"
+            style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace"
+          ></textarea>
+        </nz-form-control>
+      </nz-form-item>
+      <div style="margin-top: 16px">
+        <button nz-button type="button" (click)="goBack()">
+          {{ 'common.actions.cancel' | translate }}
+        </button>
+        <button
+          nz-button
+          nzType="primary"
+          type="submit"
+          [nzLoading]="submitting"
+          style="margin-left: 8px"
+        >
+          {{ 'common.actions.save' | translate }}
+        </button>
+      </div>
+    </form>
+  </nz-spin>
+</nz-card>

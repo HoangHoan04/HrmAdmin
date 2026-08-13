@@ -1,0 +1,93 @@
+{
+  "performance": {
+    "common": {
+      "company": "Company",
+      "branch": "Branch",
+      "employee": "Employee",
+      "status": "Status",
+      "isActive": "Active",
+      "filterCompany": "Select company...",
+      "filterStatus": "Select status...",
+      "backToList": "Back to list"
+    },
+    "competency": {
+      "entityName": "competency framework",
+      "code": "Code",
+      "name": "Name",
+      "description": "Description",
+      "search": "Search",
+      "searchPlaceholder": "Code or name...",
+      "addTitle": "Add competency framework",
+      "editTitle": "Edit competency framework",
+      "deleteConfirm": "Delete this competency framework?"
+    },
+    "reviewCycle": {
+      "entityName": "review cycle",
+      "code": "Code",
+      "name": "Name",
+      "periodFrom": "Period from",
+      "periodTo": "Period to",
+      "status": "Status",
+      "note": "Note",
+      "search": "Search",
+      "searchPlaceholder": "Code or name...",
+      "addTitle": "Add review cycle",
+      "editTitle": "Edit review cycle",
+      "deleteConfirm": "Delete this review cycle?"
+    },
+    "kpiGoal": {
+      "entityName": "KPI goal",
+      "cycle": "Review cycle",
+      "employee": "Employee",
+      "title": "Title",
+      "targetValue": "Target value",
+      "unit": "Unit",
+      "weight": "Weight",
+      "search": "Search",
+      "searchPlaceholder": "Title...",
+      "addTitle": "Add KPI goal",
+      "editTitle": "Edit KPI goal",
+      "deleteConfirm": "Delete this KPI goal?"
+    },
+    "kpiResult": {
+      "entityName": "KPI result",
+      "goal": "KPI goal",
+      "actualValue": "Actual value",
+      "score": "Score",
+      "comment": "Comment",
+      "ratedBy": "Rated by",
+      "ratedAt": "Rated at",
+      "search": "Search",
+      "searchPlaceholder": "Goal...",
+      "addTitle": "Add KPI result",
+      "editTitle": "Edit KPI result",
+      "deleteConfirm": "Delete this KPI result?"
+    },
+    "dashboard": {
+      "title": "Performance dashboard",
+      "cycle": "Review cycle",
+      "cyclePlaceholder": "All cycles",
+      "avgScore": "Average score",
+      "metTargetPercent": "Met target %",
+      "goalCount": "Goals",
+      "resultCount": "Results",
+      "scoreBands": "Score distribution",
+      "deptAvg": "Department average"
+    },
+    "review360": {
+      "entityName": "360 review",
+      "cycle": "Review cycle",
+      "subject": "Subject employee",
+      "reviewer": "Reviewer",
+      "reviewerType": "Reviewer type",
+      "score": "Score",
+      "comment": "Comment",
+      "search": "Search",
+      "searchPlaceholder": "Employee, cycle...",
+      "filterType": "Select type...",
+      "addTitle": "Add 360 review",
+      "editTitle": "Edit 360 review",
+      "deleteConfirm": "Delete this 360 review?"
+    }
+  }
+}

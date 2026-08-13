@@ -1,0 +1,13 @@
+<nz-card [nzTitle]="'training.progress.title' | translate">
+  <app-table-custom
+    [id]="'training-progress-table'"
+    [data]="data"
+    [columns]="columns"
+    [loading]="loading"
+    [showIndexList]="true"
+    [stripedRows]="true"
+    [toolbar]="toolbar"
+    [pagination]="pagination"
+    (refresh)="loadData()"
+  ></app-table-custom>
+</nz-card>

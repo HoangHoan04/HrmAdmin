@@ -29,10 +29,10 @@ export class AddOrUpdateSalaryComponent implements OnInit {
   salaryConfigs: SalaryConfigSelectBoxDto[] = [];
   statusOptions = Object.values(enumData.SALARY_STATUS);
   currencyOptions = Object.values(enumData.CURRENCY);
-  itemTypeOptions = [
-    { label: 'salary.itemTypeIncome', value: 'INCOME' },
-    { label: 'salary.itemTypeDeduction', value: 'DEDUCTION' },
-  ];
+  itemTypeOptions = Object.values(enumData.SALARY_ITEM_TYPE).map((x) => ({
+    label: x.labelKey,
+    value: x.value,
+  }));
   enumData = enumData;
 
   constructor(

@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { Subject, takeUntil } from 'rxjs';
 import { ROUTES_CONFIG } from '../../../../../core/constants/common/routes.config';
-import { Employee } from '../../../../../core/models';
+import { CandidateHirePrefill, Employee } from '../../../../../core/models';
 import { ApiService } from '../../../../../core/services/api.service';
 import { I18nMessageService } from '../../../../../core/services/i18n-message.service';
 
@@ -33,6 +33,10 @@ export class AddOrUpdateEmployeeComponent implements OnInit, OnDestroy {
   departments: any[] = [];
   parts: any[] = [];
   positions: any[] = [];
+  managerOptions: any[] = [];
+
+  hireCandidateId: string | null = null;
+  hireCandidateLabel: string | null = null;
 
   private readonly destroy$ = new Subject<void>();
   private fullNameManuallyEdited = false;
@@ -50,11 +54,15 @@ export class AddOrUpdateEmployeeComponent implements OnInit, OnDestroy {
     this.initForm();
     this.id = this.route.snapshot.paramMap.get('id');
     this.isEdit = !!this.id;
+    this.hireCandidateId = this.route.snapshot.queryParamMap.get('candidateId');
 
     this.loadCompanies();
+    this.loadManagerOptions();
 
     if (this.isEdit && this.id) {
       this.loadEmployeeDetail(this.id);
+    } else if (this.hireCandidateId) {
+      this.loadHirePrefill(this.hireCandidateId);
     }
   }
 
@@ -97,7 +105,7 @@ export class AddOrUpdateEmployeeComponent implements OnInit, OnDestroy {
       level: ['', [Validators.maxLength(100)]],
       workingMode: ['', [Validators.maxLength(100)]],
       contractType: ['', [Validators.maxLength(100)]],
-      status: ['Đang làm việc', [Validators.maxLength(100)]],
+      status: [enumData.WORK_STATUS.WORKING.value, [Validators.maxLength(100)]],
       joinDate: [null, [Validators.required]],
       resignationDate: [null],
       resignationReason: ['', [Validators.maxLength(500)]],
@@ -106,6 +114,7 @@ export class AddOrUpdateEmployeeComponent implements OnInit, OnDestroy {
       departmentId: [null],
       partId: [null],
       positionId: [null],
+      directManagerId: [null],
     });
 
     this.validateForm
@@ -138,6 +147,7 @@ export class AddOrUpdateEmployeeComponent implements OnInit, OnDestroy {
         );
         if (companyId) {
           this.loadBranches(companyId);
+          this.loadDepartments(companyId, null);
         }
       });
 
@@ -152,8 +162,9 @@ export class AddOrUpdateEmployeeComponent implements OnInit, OnDestroy {
           { departmentId: null, partId: null, positionId: null },
           { emitEvent: false },
         );
-        if (branchId) {
-          this.loadDepartments(branchId);
+        const companyId = this.validateForm.get('companyId')?.value ?? null;
+        if (companyId || branchId) {
+          this.loadDepartments(companyId, branchId);
         }
       });
 
@@ -177,16 +188,42 @@ export class AddOrUpdateEmployeeComponent implements OnInit, OnDestroy {
     });
   }
 
+  loadManagerOptions(): void {
+    this.apiService.post<any[]>(this.apiService.EMPLOYEE.SELECT_BOX, {}).subscribe({
+      next: (res) => {
+        this.managerOptions = (res || []).filter((e) => !this.id || e.id !== this.id);
+      },
+    });
+  }
+
   loadBranches(companyId: string): void {
     this.apiService.post<any[]>(this.apiService.BRANCH.LOAD_BY_COMPANY, { companyId }).subscribe({
       next: (res) => (this.branches = res),
     });
   }
 
-  loadDepartments(branchId: string): void {
-    this.apiService.post<any[]>(this.apiService.DEPARTMENT.LOAD_BY_BRANCH, { branchId }).subscribe({
-      next: (res) => (this.departments = res),
-    });
+  loadDepartments(companyId: string | null, branchId: string | null): void {
+    if (!companyId && !branchId) {
+      this.departments = [];
+      return;
+    }
+
+    if (branchId) {
+      this.apiService
+        .post<any[]>(this.apiService.DEPARTMENT.LOAD_BY_BRANCH, { branchId })
+        .subscribe({
+          next: (res) => (this.departments = res),
+          error: () => (this.departments = []),
+        });
+      return;
+    }
+
+    this.apiService
+      .post<any[]>(this.apiService.DEPARTMENT.LOAD_BY_COMPANY, { companyId })
+      .subscribe({
+        next: (res) => (this.departments = res),
+        error: () => (this.departments = []),
+      });
   }
 
   loadParts(departmentId: string): void {
@@ -241,7 +278,7 @@ export class AddOrUpdateEmployeeComponent implements OnInit, OnDestroy {
           level: employee.level,
           workingMode: employee.workingMode,
           contractType: employee.contractType,
-          status: employee.status || 'Đang làm việc',
+          status: employee.status || enumData.WORK_STATUS.WORKING.value,
           joinDate: employee.joinDate ? new Date(employee.joinDate) : null,
           resignationDate: employee.resignationDate ? new Date(employee.resignationDate) : null,
           resignationReason: employee.resignationReason,
@@ -250,13 +287,16 @@ export class AddOrUpdateEmployeeComponent implements OnInit, OnDestroy {
           departmentId: employee.departmentId,
           partId: employee.partId,
           positionId: employee.positionId,
+          directManagerId: employee.directManagerId ?? null,
         });
+
+        this.managerOptions = (this.managerOptions || []).filter((e) => e.id !== employee.id);
 
         if (employee.companyId) {
           this.loadBranches(employee.companyId);
         }
-        if (employee.branchId) {
-          this.loadDepartments(employee.branchId);
+        if (employee.companyId || employee.branchId) {
+          this.loadDepartments(employee.companyId ?? null, employee.branchId ?? null);
         }
         if (employee.departmentId) {
           this.loadParts(employee.departmentId);
@@ -269,6 +309,64 @@ export class AddOrUpdateEmployeeComponent implements OnInit, OnDestroy {
         this.goBack();
       },
     });
+  }
+
+  loadHirePrefill(candidateId: string): void {
+    this.loading = true;
+    this.apiService
+      .post<CandidateHirePrefill>(this.apiService.CANDIDATE.HIRE_PREFILL, { id: candidateId })
+      .subscribe({
+        next: (prefill) => {
+          if (prefill.employeeId) {
+            this.message.warning(this.i18n.instant('humanResource.employee.hireAlreadyLinked'));
+            this.router.navigate([
+              ROUTES_CONFIG.HUMAN_RESOURCE.children.EMPLOYEE_MANAGER.children.DETAIL_EMPLOYEE.path,
+              prefill.employeeId,
+            ]);
+            return;
+          }
+
+          this.hireCandidateLabel = `${prefill.candidateCode} — ${prefill.fullName}`;
+          const gender = (prefill.gender || '').toUpperCase();
+          const genderValue = ['MALE', 'FEMALE', 'OTHER'].includes(gender) ? gender : null;
+
+          this.validateForm.patchValue({
+            code: prefill.suggestedEmployeeCode || '',
+            firstName: prefill.firstName || '',
+            lastName: prefill.lastName || '',
+            fullName: prefill.fullName || '',
+            gender: genderValue,
+            phone: prefill.phone || '',
+            email: prefill.email || '',
+            dayOfBirth: prefill.dateOfBirth ? new Date(prefill.dateOfBirth) : null,
+            companyId: prefill.companyId || null,
+            branchId: prefill.branchId || null,
+            departmentId: prefill.departmentId || null,
+            partId: prefill.partId || null,
+            positionId: prefill.positionId || null,
+            joinDate: new Date(),
+            status: enumData.WORK_STATUS.WORKING.value,
+          });
+          this.fullNameManuallyEdited = true;
+
+          if (prefill.companyId) {
+            this.loadBranches(prefill.companyId);
+          }
+          if (prefill.companyId || prefill.branchId) {
+            this.loadDepartments(prefill.companyId ?? null, prefill.branchId ?? null);
+          }
+          if (prefill.departmentId) {
+            this.loadParts(prefill.departmentId);
+            this.loadPositions(prefill.departmentId);
+          }
+          this.loading = false;
+        },
+        error: (err: any) => {
+          this.message.error(this.i18n.genericError(err.error));
+          this.hireCandidateId = null;
+          this.loading = false;
+        },
+      });
   }
 
   goBack(): void {
@@ -307,7 +405,33 @@ export class AddOrUpdateEmployeeComponent implements OnInit, OnDestroy {
       : this.apiService.EMPLOYEE.CREATE;
 
     this.apiService.post<any>(endpoint, payload).subscribe({
-      next: () => {
+      next: (res) => {
+        if (!this.isEdit && this.hireCandidateId) {
+          const employeeId = typeof res === 'string' ? res : res?.id || res?.data || res;
+          if (employeeId) {
+            this.apiService
+              .post(this.apiService.CANDIDATE.LINK_EMPLOYEE, {
+                candidateId: this.hireCandidateId,
+                employeeId,
+                setStatusHired: true,
+              })
+              .subscribe({
+                next: () => {
+                  this.message.success(this.i18n.createSuccess());
+                  this.goBack();
+                },
+                error: (err: any) => {
+                  this.message.warning(
+                    this.i18n.instant('humanResource.employee.hireLinkFailed', {
+                      detail: err?.error || '',
+                    }),
+                  );
+                  this.goBack();
+                },
+              });
+            return;
+          }
+        }
         this.message.success(this.isEdit ? this.i18n.updateSuccess() : this.i18n.createSuccess());
         this.goBack();
       },

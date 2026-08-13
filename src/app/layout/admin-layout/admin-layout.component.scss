@@ -230,6 +230,14 @@ app-sidebar .ant-layout-sider {
   flex-shrink: 0;
 }
 
+.admin-layout .admin-sidebar .sidebar-logo-img {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  flex-shrink: 0;
+  border-radius: 8px;
+}
+
 .admin-layout .admin-sidebar .sidebar-brand-wrap {
   overflow: hidden;
   transition:

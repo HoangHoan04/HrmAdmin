@@ -1,0 +1,62 @@
+<nz-card [nzTitle]="'system.integrations.hubTitle' | translate">
+  <p class="hub-desc">{{ 'system.integrations.hubDesc' | translate }}</p>
+
+  <div style="margin-bottom: 12px">
+    <button nz-button nzType="default" (click)="refresh()" [nzLoading]="loading">
+      <i nz-icon nzType="reload"></i>
+      {{ 'common.actions.refresh' | translate }}
+    </button>
+    @if (checkedAt) {
+      <span style="margin-left: 12px; color: #888">
+        {{ 'system.integrations.checkedAt' | translate }}: {{ checkedAt | date: 'short' }}
+      </span>
+    }
+  </div>
+
+  <nz-spin [nzSpinning]="loading">
+    <nz-table [nzData]="adapters" [nzFrontPagination]="false" nzSize="middle">
+      <thead>
+        <tr>
+          <th>{{ 'system.integrations.adapter' | translate }}</th>
+          <th>{{ 'system.integrations.enabled' | translate }}</th>
+          <th>{{ 'system.integrations.configured' | translate }}</th>
+          <th>{{ 'system.integrations.detail' | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of adapters; track row.code) {
+          <tr>
+            <td>{{ row.name }}</td>
+            <td>
+              <nz-tag [nzColor]="row.enabled ? 'green' : 'default'">{{
+                row.enabled ? ('system.integrations.yes' | translate) : ('system.integrations.no' | translate)
+              }}</nz-tag>
+            </td>
+            <td>
+              <nz-tag [nzColor]="row.configured ? 'blue' : 'orange'">{{
+                row.configured
+                  ? ('system.integrations.yes' | translate)
+                  : ('system.integrations.no' | translate)
+              }}</nz-tag>
+            </td>
+            <td>{{ row.detail }}</td>
+          </tr>
+        }
+      </tbody>
+    </nz-table>
+  </nz-spin>
+
+  <nz-divider></nz-divider>
+
+  <div nz-row [nzGutter]="16">
+    @for (card of cards; track card.key) {
+      <div nz-col nzXs="24" nzMd="12" style="margin-bottom: 16px">
+        <div class="report-card" (click)="open(card.path)">
+          <i nz-icon [nzType]="card.icon" class="report-card__icon"></i>
+          <h3>{{ card.titleKey | translate }}</h3>
+          <p>{{ card.descKey | translate }}</p>
+        </div>
+      </div>
+    }
+  </div>
+</nz-card>

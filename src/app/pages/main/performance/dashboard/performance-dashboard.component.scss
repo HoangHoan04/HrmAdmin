@@ -1,0 +1,17 @@
+.kpi-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted-foreground, #6b7280);
+}
+
+.kpi-value {
+  margin-top: 6px;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.chart {
+  width: 100%;
+  height: 280px;
+}

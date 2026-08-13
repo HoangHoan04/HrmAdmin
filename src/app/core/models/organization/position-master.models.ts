@@ -24,6 +24,10 @@ export interface PositionMaster extends BaseDto {
   isHadASecondInterview?: boolean;
   isApprovedDayOff?: boolean;
   quantityStandard?: number;
+  gradeCode?: string | null;
+  gradeName?: string | null;
+  salaryMin?: number | null;
+  salaryMax?: number | null;
   isActive?: boolean;
   displayOrder?: number;
 }

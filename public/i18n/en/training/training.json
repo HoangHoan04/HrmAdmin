@@ -1,0 +1,91 @@
+{
+  "training": {
+    "common": {
+      "company": "Company",
+      "branch": "Branch",
+      "employee": "Employee",
+      "status": "Status",
+      "filterCompany": "Select company...",
+      "filterStatus": "Select status...",
+      "backToList": "Back to list"
+    },
+    "course": {
+      "entityName": "training course",
+      "code": "Code",
+      "name": "Course name",
+      "provider": "Provider",
+      "hours": "Hours",
+      "budgetAmount": "Budget amount",
+      "status": "Status",
+      "description": "Description",
+      "search": "Search",
+      "searchPlaceholder": "Code or name...",
+      "addTitle": "Add training course",
+      "editTitle": "Edit training course",
+      "detailTitle": "Training course detail",
+      "deleteConfirm": "Delete this training course?"
+    },
+    "progress": {
+      "title": "Training progress",
+      "courseName": "Course",
+      "enrolledCount": "Enrolled",
+      "completedCount": "Completed",
+      "droppedCount": "Dropped",
+      "completionPercent": "Completion %"
+    },
+    "material": {
+      "entityName": "course material",
+      "course": "Course",
+      "name": "Material name",
+      "fileUrl": "File URL",
+      "displayOrder": "Display order",
+      "search": "Search",
+      "searchPlaceholder": "Name...",
+      "addTitle": "Add course material",
+      "editTitle": "Edit course material",
+      "deleteConfirm": "Delete this course material?"
+    },
+    "quiz": {
+      "entityName": "training quiz",
+      "course": "Course",
+      "question": "Question",
+      "optionA": "Option A",
+      "optionB": "Option B",
+      "optionC": "Option C",
+      "optionD": "Option D",
+      "correctOption": "Correct option",
+      "search": "Search",
+      "searchPlaceholder": "Question...",
+      "addTitle": "Add quiz question",
+      "editTitle": "Edit quiz question",
+      "deleteConfirm": "Delete this quiz question?"
+    },
+    "enrollment": {
+      "entityName": "training enrollment",
+      "course": "Course",
+      "employee": "Employee",
+      "enrolledAt": "Enrolled at",
+      "status": "Status",
+      "note": "Note",
+      "search": "Search",
+      "searchPlaceholder": "Course, employee...",
+      "addTitle": "Add enrollment",
+      "editTitle": "Edit enrollment",
+      "deleteConfirm": "Delete this enrollment?"
+    },
+    "result": {
+      "entityName": "training result",
+      "enrollment": "Enrollment",
+      "score": "Score",
+      "grade": "Grade",
+      "completedAt": "Completed at",
+      "certificateUrl": "Certificate URL",
+      "note": "Note",
+      "search": "Search",
+      "searchPlaceholder": "Course, employee...",
+      "addTitle": "Add training result",
+      "editTitle": "Edit training result",
+      "deleteConfirm": "Delete this training result?"
+    }
+  }
+}

@@ -1,5 +1,7 @@
 {
   "error": {
+    "403Title": "Không có quyền truy cập",
+    "403Desc": "Bạn không có quyền hạn để vào trang này. Vui lòng liên hệ quản trị viên nếu cần cấp quyền.",
     "404Title": "Không tìm thấy trang",
     "404Desc": "Trang bạn đang tìm kiếm không tồn tại hoặc đã bị di chuyển.",
     "500Title": "Lỗi máy chủ",

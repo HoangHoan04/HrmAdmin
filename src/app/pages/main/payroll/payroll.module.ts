@@ -2,6 +2,9 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ROUTES_CONFIG } from '../../../core/constants/common/routes.config';
 import { SharedModule } from '../../../shared/shared.module';
+import { AdvanceManagerComponent } from './advance-manager/advance-manager.component';
+import { AllowanceManagerComponent } from './allowance-manager/allowance-manager.component';
+import { PayrollAdjustmentManagerComponent } from './payroll-adjustment-manager/payroll-adjustment-manager.component';
 import { AddOrUpdateSalaryConfigComponent } from './salary-config-manager/add-or-update-salary-config/add-or-update-salary-config.component';
 import { SalaryConfigManagerComponent } from './salary-config-manager/salary-config-manager.component';
 import { AddOrUpdateSalaryComponent } from './salary-manager/add-or-update-salary/add-or-update-salary.component';
@@ -40,6 +43,18 @@ const routes: Routes = [
     component: SalaryDetailComponent,
   },
   {
+    path: getRelativePath(ROUTES_CONFIG.PAYROLL.children.PAYROLL_ALLOWANCE.path),
+    component: AllowanceManagerComponent,
+  },
+  {
+    path: getRelativePath(ROUTES_CONFIG.PAYROLL.children.PAYROLL_ADVANCE.path),
+    component: AdvanceManagerComponent,
+  },
+  {
+    path: getRelativePath(ROUTES_CONFIG.PAYROLL.children.PAYROLL_ADJUSTMENT.path),
+    component: PayrollAdjustmentManagerComponent,
+  },
+  {
     path: getRelativePath(ROUTES_CONFIG.PAYROLL.children.PAYROLL_CONFIG.path),
     component: SalaryConfigManagerComponent,
   },
@@ -63,6 +78,9 @@ const routes: Routes = [
     SalaryManagerComponent,
     AddOrUpdateSalaryComponent,
     SalaryDetailComponent,
+    AllowanceManagerComponent,
+    AdvanceManagerComponent,
+    PayrollAdjustmentManagerComponent,
     SalaryConfigManagerComponent,
     AddOrUpdateSalaryConfigComponent,
   ],

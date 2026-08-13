@@ -1,0 +1,116 @@
+<nz-card
+  [nzTitle]="
+    (isEdit ? 'workflow.definition.editTitle' : 'workflow.definition.addTitle') | translate
+  "
+>
+  <nz-spin [nzSpinning]="loading">
+    <form nz-form [formGroup]="validateForm" nzLayout="vertical" (ngSubmit)="submitForm()">
+      <div nz-row [nzGutter]="16">
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{ 'workflow.definition.code' | translate }}</nz-form-label>
+            <nz-form-control>
+              <input nz-input formControlName="code" [disabled]="isEdit" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{ 'workflow.definition.name' | translate }}</nz-form-label>
+            <nz-form-control><input nz-input formControlName="name" /></nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{ 'workflow.common.entityType' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-select formControlName="entityType" style="width: 100%">
+                @for (o of entityTypeOptions; track o.value) {
+                  <nz-option [nzValue]="o.value" [nzLabel]="o.labelKey | translate"></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'workflow.common.isActive' | translate }}</nz-form-label>
+            <nz-form-control><nz-switch formControlName="isActive"></nz-switch></nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; margin: 8px 0 12px">
+        <h4 style="margin: 0">{{ 'workflow.definition.stepsTitle' | translate }}</h4>
+        <button nz-button type="button" nzType="dashed" (click)="addStep()">
+          {{ 'workflow.definition.addStep' | translate }}
+        </button>
+      </div>
+
+      <div formArrayName="steps">
+        <nz-table
+          [nzData]="steps.controls"
+          [nzFrontPagination]="false"
+          [nzShowPagination]="false"
+          nzSize="middle"
+          nzBordered
+        >
+          <thead>
+            <tr>
+              <th style="width: 80px">{{ 'workflow.definition.stepOrder' | translate }}</th>
+              <th>{{ 'workflow.definition.stepName' | translate }}</th>
+              <th style="width: 160px">{{ 'workflow.definition.approverResolver' | translate }}</th>
+              <th style="width: 160px">{{ 'workflow.definition.requiredRoleCode' | translate }}</th>
+              <th style="width: 90px">{{ 'workflow.definition.isFinal' | translate }}</th>
+              <th style="width: 70px"></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (ctrl of steps.controls; track $index; let i = $index) {
+              <tr [formGroupName]="i">
+                <td>
+                  <nz-input-number formControlName="stepOrder" [nzMin]="1" style="width: 100%"></nz-input-number>
+                </td>
+                <td><input nz-input formControlName="name" /></td>
+                <td>
+                  <nz-select formControlName="approverResolver" style="width: 100%">
+                    @for (o of resolverOptions; track o.value) {
+                      <nz-option [nzValue]="o.value" [nzLabel]="o.labelKey | translate"></nz-option>
+                    }
+                  </nz-select>
+                </td>
+                <td><input nz-input formControlName="requiredRoleCode" /></td>
+                <td>
+                  <nz-switch
+                    formControlName="isFinal"
+                    (ngModelChange)="onFinalChange(i, $event)"
+                  ></nz-switch>
+                </td>
+                <td>
+                  <button nz-button type="button" nzDanger nzType="text" (click)="removeStep(i)">
+                    <span nz-icon nzType="delete"></span>
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </nz-table>
+      </div>
+
+      <div style="margin-top: 16px">
+        <button nz-button type="button" (click)="goBack()">
+          {{ 'common.actions.cancel' | translate }}
+        </button>
+        <button
+          nz-button
+          nzType="primary"
+          type="submit"
+          [nzLoading]="submitting"
+          style="margin-left: 8px"
+        >
+          {{ 'common.actions.save' | translate }}
+        </button>
+      </div>
+    </form>
+  </nz-spin>
+</nz-card>

@@ -69,6 +69,10 @@ export class AddOrUpdatePositionMasterComponent implements OnInit {
       isHadASecondInterview: [false],
       isApprovedDayOff: [false],
       quantityStandard: [null],
+      gradeCode: [''],
+      gradeName: [''],
+      salaryMin: [null],
+      salaryMax: [null],
       isActive: [true],
       displayOrder: [0],
     });
@@ -139,6 +143,10 @@ export class AddOrUpdatePositionMasterComponent implements OnInit {
           isHadASecondInterview: item.isHadASecondInterview ?? false,
           isApprovedDayOff: item.isApprovedDayOff ?? false,
           quantityStandard: item.quantityStandard,
+          gradeCode: item.gradeCode ?? '',
+          gradeName: item.gradeName ?? '',
+          salaryMin: item.salaryMin ?? null,
+          salaryMax: item.salaryMax ?? null,
           isActive: item.isActive ?? true,
           displayOrder: item.displayOrder ?? 0,
         });
@@ -192,6 +200,10 @@ export class AddOrUpdatePositionMasterComponent implements OnInit {
       isHadASecondInterview: value.isHadASecondInterview ?? false,
       isApprovedDayOff: value.isApprovedDayOff ?? false,
       quantityStandard: value.quantityStandard ?? null,
+      gradeCode: value.gradeCode?.trim() || null,
+      gradeName: value.gradeName?.trim() || null,
+      salaryMin: value.salaryMin ?? null,
+      salaryMax: value.salaryMax ?? null,
       isActive: value.isActive ?? true,
       displayOrder: value.displayOrder ?? 0,
     };

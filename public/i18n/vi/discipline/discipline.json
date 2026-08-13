@@ -1,0 +1,47 @@
+{
+  "discipline": {
+    "common": {
+      "company": "Công ty",
+      "branch": "Chi nhánh",
+      "employee": "Nhân viên",
+      "status": "Trạng thái",
+      "isActive": "Đang hoạt động",
+      "filterCompany": "Chọn công ty...",
+      "filterStatus": "Chọn trạng thái...",
+      "backToList": "Quay lại danh sách"
+    },
+    "violationType": {
+      "entityName": "loại vi phạm",
+      "code": "Mã",
+      "name": "Tên",
+      "description": "Mô tả",
+      "severity": "Mức độ",
+      "displayOrder": "Thứ tự",
+      "search": "Tìm kiếm",
+      "searchPlaceholder": "Mã hoặc tên...",
+      "addTitle": "Thêm loại vi phạm",
+      "editTitle": "Cập nhật loại vi phạm",
+      "deleteConfirm": "Xóa loại vi phạm này?"
+    },
+    "violation": {
+      "entityName": "vi phạm kỷ luật",
+      "code": "Mã",
+      "violationType": "Loại vi phạm",
+      "employee": "Nhân viên",
+      "occurredAt": "Thời điểm xảy ra",
+      "description": "Mô tả",
+      "decision": "Quyết định",
+      "penaltyType": "Hình thức xử lý",
+      "status": "Trạng thái",
+      "note": "Ghi chú",
+      "search": "Tìm kiếm",
+      "searchPlaceholder": "Mã, nhân viên...",
+      "addTitle": "Thêm vi phạm",
+      "editTitle": "Cập nhật vi phạm",
+      "detailTitle": "Chi tiết vi phạm",
+      "deleteConfirm": "Xóa vi phạm này?",
+      "confirmConfirm": "Xác nhận vi phạm này?",
+      "cancelConfirm": "Hủy vi phạm này?"
+    }
+  }
+}

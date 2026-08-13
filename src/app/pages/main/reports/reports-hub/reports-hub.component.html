@@ -1,0 +1,40 @@
+<nz-card [nzTitle]="'system.reports.hubTitle' | translate">
+  <p class="hub-desc">{{ 'system.reports.hubDesc' | translate }}</p>
+
+  <nz-spin [nzSpinning]="loading">
+    <div class="kpi-row" nz-row [nzGutter]="16">
+      <div nz-col nzXs="24" nzMd="8">
+        <div class="kpi-item">
+          <div class="kpi-item__label">{{ 'system.reports.expiringContracts' | translate }}</div>
+          <div class="kpi-item__value">{{ summary?.expiringContractCount ?? 0 }}</div>
+        </div>
+      </div>
+      <div nz-col nzXs="24" nzMd="8">
+        <div class="kpi-item">
+          <div class="kpi-item__label">{{ 'system.reports.expiringFiles' | translate }}</div>
+          <div class="kpi-item__value">{{ summary?.expiringFileCount ?? 0 }}</div>
+        </div>
+      </div>
+      <div nz-col nzXs="24" nzMd="8">
+        <div class="kpi-item">
+          <div class="kpi-item__label">{{ 'system.reports.pendingTransfers' | translate }}</div>
+          <div class="kpi-item__value">{{ summary?.pendingTransferCount ?? 0 }}</div>
+        </div>
+      </div>
+    </div>
+  </nz-spin>
+
+  <nz-divider></nz-divider>
+
+  <div nz-row [nzGutter]="16">
+    @for (card of cards; track card.key) {
+      <div nz-col nzXs="24" nzMd="8" style="margin-bottom: 16px">
+        <div class="report-card" (click)="open(card.path)">
+          <i nz-icon [nzType]="card.icon" class="report-card__icon"></i>
+          <h3>{{ card.titleKey | translate }}</h3>
+          <p>{{ card.descKey | translate }}</p>
+        </div>
+      </div>
+    }
+  </div>
+</nz-card>

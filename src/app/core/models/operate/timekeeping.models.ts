@@ -23,6 +23,8 @@ export interface Timekeeping extends BaseDto {
   lateMinutes: number;
   earlyMinutes: number;
   workedMinutes: number;
+  otMinutes: number;
+  nightMinutes: number;
   note?: string;
   isManualAdjusted: boolean;
 }
@@ -46,6 +48,8 @@ export interface TimekeepingSummary extends BaseDto {
   totalWorkedMinutes: number;
   totalLateMinutes: number;
   totalEarlyMinutes: number;
+  totalOtMinutes: number;
+  totalNightMinutes: number;
 }
 
 export interface ManualAdjustTimekeepingRequest {

@@ -55,7 +55,7 @@ export class AddOrUpdatePositionComponent implements OnInit {
     this.validateForm = this.fb.group({
       positionMasterId: [null, [Validators.required]],
       companyId: [null, [Validators.required]],
-      branchId: [null, [Validators.required]],
+      branchId: [null],
       departmentId: [null, [Validators.required]],
       partId: [null],
       quantityStandard: [null],
@@ -74,15 +74,18 @@ export class AddOrUpdatePositionComponent implements OnInit {
         this.branches = [];
         this.departments = [];
         this.parts = [];
+        return;
       }
+      const branchId = this.validateForm.value.branchId ?? null;
+      this.loadDepartments(companyId, branchId);
     });
 
     this.validateForm.get('branchId')?.valueChanges.subscribe((branchId) => {
-      const companyId = this.validateForm.value.companyId;
-      this.loadDepartments(branchId);
+      const companyId = this.validateForm.value.companyId ?? null;
       this.loadPositionMasters(companyId, branchId);
       this.validateForm.patchValue({ departmentId: null, partId: null }, { emitEvent: false });
       this.parts = [];
+      this.loadDepartments(companyId, branchId);
     });
 
     this.validateForm.get('departmentId')?.valueChanges.subscribe((departmentId) => {
@@ -119,13 +122,24 @@ export class AddOrUpdatePositionComponent implements OnInit {
       });
   }
 
-  loadDepartments(branchId: string | null): void {
-    if (!branchId) {
+  loadDepartments(companyId: string | null, branchId: string | null): void {
+    if (!companyId && !branchId) {
       this.departments = [];
       return;
     }
+
+    if (branchId) {
+      this.apiService
+        .post<DepartmentSelectBoxDto[]>(this.apiService.DEPARTMENT.LOAD_BY_BRANCH, { branchId })
+        .subscribe({
+          next: (items) => (this.departments = items),
+          error: () => (this.departments = []),
+        });
+      return;
+    }
+
     this.apiService
-      .post<DepartmentSelectBoxDto[]>(this.apiService.DEPARTMENT.LOAD_BY_BRANCH, { branchId })
+      .post<DepartmentSelectBoxDto[]>(this.apiService.DEPARTMENT.LOAD_BY_COMPANY, { companyId })
       .subscribe({
         next: (items) => (this.departments = items),
         error: () => (this.departments = []),
@@ -172,7 +186,7 @@ export class AddOrUpdatePositionComponent implements OnInit {
           displayOrder: position.displayOrder ?? 0,
         });
         this.loadBranches(position.companyId ?? null);
-        this.loadDepartments(position.branchId ?? null);
+        this.loadDepartments(position.companyId ?? null, position.branchId ?? null);
         this.loadParts(position.departmentId ?? null);
         this.loadPositionMasters(position.companyId ?? null, position.branchId ?? null);
         this.loading = false;

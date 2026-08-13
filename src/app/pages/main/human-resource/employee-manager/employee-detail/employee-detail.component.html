@@ -45,8 +45,35 @@
         </div>
       </nz-tab>
 
-      <nz-tab [nzTitle]="'humanResource.employee.tabActivityLog' | translate">
+      <nz-tab [nzTitle]="'humanResource.employee.tabChangeTimeline' | translate">
         <div class="tab-content">
+          <h3 style="margin-bottom: 16px">
+            {{ 'humanResource.employee.changeTimeline' | translate }}
+          </h3>
+          <nz-spin [nzSpinning]="changeTimelineLoading">
+            <nz-timeline>
+              @for (item of changeTimeline; track item.at + item.kind + (item.refId || '')) {
+                <nz-timeline-item>
+                  <p>
+                    <strong>{{ item.title }}</strong>
+                    <span style="margin-left: 8px; color: #8c8c8c">{{
+                      item.at | date: 'dd/MM/yyyy HH:mm'
+                    }}</span>
+                  </p>
+                  @if (item.summary) {
+                    <p>{{ item.summary }}</p>
+                  }
+                  <p style="color: #8c8c8c; font-size: 12px">{{ item.kind }}</p>
+                </nz-timeline-item>
+              } @empty {
+                <nz-timeline-item>{{
+                  'humanResource.employee.noChangeTimeline' | translate
+                }}</nz-timeline-item>
+              }
+            </nz-timeline>
+          </nz-spin>
+
+          <nz-divider></nz-divider>
           <app-action-log
             entityName="EmployeeEntity"
             [entityId]="id ?? undefined"
@@ -114,6 +141,27 @@
             [showIndexList]="true"
             [toolbar]="{ show: false }"
             [emptyText]="'humanResource.employee.noCertificates' | translate"
+          ></app-table-custom>
+        </div>
+      </nz-tab>
+
+      <nz-tab [nzTitle]="'humanResource.employee.tabFiles' | translate">
+        <div class="tab-content">
+          <div class="tab-toolbar">
+            <button nz-button nzType="primary" (click)="openChildCreate('file')">
+              <i nz-icon nzType="plus"></i>
+              {{ 'humanResource.employee.addFile' | translate }}
+            </button>
+          </div>
+          <app-table-custom
+            [id]="'employee-detail-files'"
+            [data]="files"
+            [columns]="fileColumns"
+            [rowActions]="fileRowActions"
+            [stripedRows]="true"
+            [showIndexList]="true"
+            [toolbar]="{ show: false }"
+            [emptyText]="'humanResource.employee.noFiles' | translate"
           ></app-table-custom>
         </div>
       </nz-tab>
@@ -445,6 +493,76 @@
           </div>
         }
 
+        @if (childType === 'file') {
+          <div nz-row [nzGutter]="16">
+            <div nz-col nzXs="24" nzMd="12">
+              <nz-form-item>
+                <nz-form-label [nzRequired]="true">{{
+                  'humanResource.employee.file.fileCategory' | translate
+                }}</nz-form-label>
+                <nz-form-control
+                  [nzErrorTip]="'humanResource.employee.file.fileCategoryRequired' | translate"
+                >
+                  <input nz-input formControlName="fileCategory" />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzXs="24" nzMd="12">
+              <nz-form-item>
+                <nz-form-label [nzRequired]="true">{{
+                  'humanResource.employee.file.fileName' | translate
+                }}</nz-form-label>
+                <nz-form-control
+                  [nzErrorTip]="'humanResource.employee.file.fileNameRequired' | translate"
+                >
+                  <input nz-input formControlName="fileName" />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzXs="24" nzMd="12">
+              <nz-form-item>
+                <nz-form-label>{{
+                  'humanResource.employee.file.expiryDate' | translate
+                }}</nz-form-label>
+                <nz-form-control>
+                  <nz-date-picker
+                    formControlName="expiryDate"
+                    nzFormat="dd/MM/yyyy"
+                    style="width: 100%"
+                  ></nz-date-picker>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzXs="24" nzMd="12">
+              <nz-form-item>
+                <nz-form-label>{{
+                  'humanResource.employee.file.description' | translate
+                }}</nz-form-label>
+                <nz-form-control>
+                  <input nz-input formControlName="description" />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzXs="24">
+              <nz-form-item>
+                <nz-form-label [nzRequired]="true">{{
+                  'humanResource.employee.file.fileUrl' | translate
+                }}</nz-form-label>
+                <nz-form-control
+                  [nzErrorTip]="'humanResource.employee.file.fileUrlRequired' | translate"
+                >
+                  <app-file-upload
+                    formControlName="fileUrl"
+                    mode="document"
+                    accept="*/*"
+                    [showUrlInput]="true"
+                  ></app-file-upload>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+          </div>
+        }
+
         @if (childType === 'salaryHistory') {
           <div nz-row [nzGutter]="16">
             <div nz-col nzXs="24" nzMd="12">
@@ -572,6 +690,44 @@
   </span>
 </ng-template>
 
+<nz-modal
+  [(nzVisible)]="resignationModalVisible"
+  [nzTitle]="'humanResource.employee.lifecycleResignationTitle' | translate"
+  [nzOkLoading]="resignationSubmitting"
+  [nzWidth]="520"
+  (nzOnCancel)="closeResignationModal()"
+  (nzOnOk)="submitResignationLifecycle()"
+>
+  <ng-container *nzModalContent>
+    <form nz-form [formGroup]="resignationForm" nzLayout="vertical">
+      <nz-form-item>
+        <nz-form-label [nzRequired]="true">{{
+          'humanResource.employee.resignationDate' | translate
+        }}</nz-form-label>
+        <nz-form-control>
+          <nz-date-picker
+            formControlName="resignationDate"
+            nzFormat="dd/MM/yyyy"
+            style="width: 100%"
+          ></nz-date-picker>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label>{{ 'humanResource.employee.resignationReason' | translate }}</nz-form-label>
+        <nz-form-control>
+          <textarea nz-input formControlName="resignationReason" rows="2"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label>{{ 'humanResource.employee.dependent.note' | translate }}</nz-form-label>
+        <nz-form-control>
+          <textarea nz-input formControlName="note" rows="2"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-container>
+</nz-modal>
+
 <ng-template #extraTemplate>
   <div class="header-actions">
     <button nz-button nzType="default" (click)="goBack()">
@@ -580,6 +736,24 @@
     <button nz-button nzType="primary" (click)="goEdit()">
       <i nz-icon nzType="edit"></i> {{ 'common.actions.update' | translate }}
     </button>
+    <button nz-button nzType="default" nz-dropdown [nzDropdownMenu]="lifecycleMenu">
+      <i nz-icon nzType="apartment"></i>
+      {{ 'humanResource.employee.lifecycleActions' | translate }}
+      <i nz-icon nzType="down"></i>
+    </button>
+    <nz-dropdown-menu #lifecycleMenu="nzDropdownMenu">
+      <ul nz-menu>
+        @for (opt of workStatusOptions; track opt.value) {
+          <li
+            nz-menu-item
+            [nzDisabled]="employee?.status === opt.value"
+            (click)="onLifecycleStatusClick(opt.value)"
+          >
+            {{ opt.labelKey | translate }}
+          </li>
+        }
+      </ul>
+    </nz-dropdown-menu>
     <button
       nz-button
       [nzType]="employee?.isDeleted ? 'primary' : 'default'"

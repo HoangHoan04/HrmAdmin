@@ -1,0 +1,227 @@
+<app-filter-custom
+  [id]="'overtime-request-filter'"
+  [fields]="filterFields"
+  [filters]="filters"
+  [config]="filterConfig"
+  [filterActions]="filterActions"
+  [loading]="loading"
+  (filtersChange)="onFiltersChange($event)"
+></app-filter-custom>
+
+<app-table-custom
+  [id]="'overtime-request-table'"
+  [data]="data"
+  [columns]="columns"
+  [loading]="loading"
+  [showIndexList]="true"
+  [stripedRows]="true"
+  [enableSelection]="true"
+  [selectedRows]="selectedRows"
+  [rowActions]="rowActions"
+  [toolbarActions]="toolbarActions"
+  [pagination]="pagination"
+  (pageChange)="onPageChange($event)"
+  (sortChange)="onSortChange($event)"
+  (selectionChange)="onSelectionChange($event)"
+  (refresh)="loadData()"
+></app-table-custom>
+
+<nz-drawer
+  [nzVisible]="drawerVisible"
+  [nzWidth]="560"
+  [nzTitle]="'overtimeRequest.detailTitle' | translate"
+  (nzOnClose)="closeDrawer()"
+>
+  <ng-container *nzDrawerContent>
+    <nz-spin [nzSpinning]="drawerLoading">
+      @if (selected) {
+        <div class="overtime-request-detail">
+          <p>
+            <strong>{{ 'overtimeRequest.code' | translate }}:</strong>
+            {{ selected.code || '-' }}
+          </p>
+          <p>
+            <strong>{{ 'overtimeRequest.employee' | translate }}:</strong>
+            {{ formatEmployee(selected.employeeCode, selected.employeeName) }}
+          </p>
+          <p>
+            <strong>{{ 'overtimeRequest.branch' | translate }}:</strong>
+            {{ selected.branchName || '-' }}
+          </p>
+          <p>
+            <strong>{{ 'overtimeRequest.workDate' | translate }}:</strong>
+            {{ selected.workDate }}
+          </p>
+          <p>
+            <strong>{{ 'overtimeRequest.fromTime' | translate }}:</strong>
+            {{ formatTime(selected.fromTime) }}
+          </p>
+          <p>
+            <strong>{{ 'overtimeRequest.toTime' | translate }}:</strong>
+            {{ formatTime(selected.toTime) }}
+          </p>
+          <p>
+            <strong>{{ 'overtimeRequest.requestedMinutes' | translate }}:</strong>
+            {{ selected.requestedMinutes }}
+          </p>
+          <p>
+            <strong>{{ 'overtimeRequest.approvedMinutes' | translate }}:</strong>
+            {{ selected.approvedMinutes ?? '-' }}
+          </p>
+          <p>
+            <strong>{{ 'overtimeRequest.otType' | translate }}:</strong>
+            {{ getOtTypeLabel(selected.otType) }}
+          </p>
+          <p>
+            <strong>{{ 'overtimeRequest.reason' | translate }}:</strong>
+            {{ selected.reason || '-' }}
+          </p>
+          <p>
+            <strong>{{ 'overtimeRequest.attachmentUrl' | translate }}:</strong>
+            @if (selected.attachmentUrl) {
+              <a [href]="selected.attachmentUrl" target="_blank" rel="noopener">
+                {{ selected.attachmentUrl }}
+              </a>
+            } @else {
+              -
+            }
+          </p>
+          <p>
+            <strong>{{ 'overtimeRequest.status' | translate }}:</strong>
+            {{ getStatusLabel(selected.status) }}
+          </p>
+          <p>
+            <strong>{{ 'overtimeRequest.approverName' | translate }}:</strong>
+            {{ selected.approverName || '-' }}
+          </p>
+          <p>
+            <strong>{{ 'overtimeRequest.reviewedAt' | translate }}:</strong>
+            {{ formatDateTime(selected.reviewedAt) }}
+          </p>
+          <p>
+            <strong>{{ 'overtimeRequest.approverNote' | translate }}:</strong>
+            {{ selected.approverNote || '-' }}
+          </p>
+          <p>
+            <strong>{{ 'overtimeRequest.createdAt' | translate }}:</strong>
+            {{ formatDateTime(selected.createdAt) }}
+          </p>
+
+          <div style="display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap">
+            @if (selected.status === 'DRAFT') {
+              <button nz-button nzType="primary" (click)="submit(selected)">
+                {{ 'overtimeRequest.submit' | translate }}
+              </button>
+            }
+            @if (selected.status === 'SUBMITTED') {
+              <button nz-button nzType="primary" (click)="approve(selected)">
+                {{ 'overtimeRequest.approve' | translate }}
+              </button>
+              <button nz-button nzDanger (click)="reject(selected)">
+                {{ 'overtimeRequest.reject' | translate }}
+              </button>
+            }
+            @if (selected.status === 'DRAFT' || selected.status === 'SUBMITTED') {
+              <button nz-button nzType="default" nzDanger (click)="cancel(selected)">
+                {{ 'overtimeRequest.cancel' | translate }}
+              </button>
+            }
+          </div>
+        </div>
+      }
+    </nz-spin>
+  </ng-container>
+</nz-drawer>
+
+<nz-modal
+  [nzVisible]="createVisible"
+  [nzTitle]="'overtimeRequest.createTitle' | translate"
+  [nzOkText]="'common.actions.save' | translate"
+  [nzCancelText]="'common.actions.cancel' | translate"
+  [nzOkLoading]="submitting"
+  (nzOnCancel)="closeCreate()"
+  (nzOnOk)="submitCreate()"
+>
+  <ng-container *nzModalContent>
+    <form nz-form [formGroup]="createForm" nzLayout="vertical">
+      <nz-form-item>
+        <nz-form-label nzRequired>{{ 'overtimeRequest.employee' | translate }}</nz-form-label>
+        <nz-form-control>
+          <nz-select
+            formControlName="employeeId"
+            nzShowSearch
+            nzAllowClear
+            [nzPlaceHolder]="'overtimeRequest.filterEmployee' | translate"
+          >
+            @for (opt of employeeOptions; track opt.value) {
+              <nz-option [nzValue]="opt.value" [nzLabel]="opt.label"></nz-option>
+            }
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired>{{ 'overtimeRequest.workDate' | translate }}</nz-form-label>
+        <nz-form-control>
+          <nz-date-picker formControlName="workDate" style="width: 100%"></nz-date-picker>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired>{{ 'overtimeRequest.fromTime' | translate }}</nz-form-label>
+        <nz-form-control>
+          <nz-time-picker formControlName="fromTime" nzFormat="HH:mm" style="width: 100%"></nz-time-picker>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired>{{ 'overtimeRequest.toTime' | translate }}</nz-form-label>
+        <nz-form-control>
+          <nz-time-picker formControlName="toTime" nzFormat="HH:mm" style="width: 100%"></nz-time-picker>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired>{{ 'overtimeRequest.otType' | translate }}</nz-form-label>
+        <nz-form-control>
+          <nz-select formControlName="otType">
+            @for (t of otTypes; track t.value) {
+              <nz-option [nzValue]="t.value" [nzLabel]="t.labelKey | translate"></nz-option>
+            }
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired>{{ 'overtimeRequest.reason' | translate }}</nz-form-label>
+        <nz-form-control>
+          <textarea
+            nz-input
+            formControlName="reason"
+            rows="3"
+            [placeholder]="'overtimeRequest.reasonPlaceholder' | translate"
+          ></textarea>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label>{{ 'overtimeRequest.attachmentUrl' | translate }}</nz-form-label>
+        <nz-form-control>
+          <input
+            nz-input
+            formControlName="attachmentUrl"
+            [placeholder]="'overtimeRequest.attachmentPlaceholder' | translate"
+          />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-control>
+          <label nz-checkbox formControlName="submit">
+            {{ 'overtimeRequest.submitOnCreate' | translate }}
+          </label>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-container>
+</nz-modal>

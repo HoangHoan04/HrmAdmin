@@ -1,0 +1,154 @@
+<nz-card [nzTitle]="titleTemplate" [nzExtra]="extraTemplate">
+  <nz-spin [nzSpinning]="loading">
+    <form nz-form [formGroup]="validateForm" nzLayout="vertical" (ngSubmit)="submitForm()">
+      <div nz-row [nzGutter]="16">
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{ 'recruitment.jd.code' | translate }}</nz-form-label>
+            <nz-form-control [nzErrorTip]="'recruitment.jd.codeRequired' | translate">
+              <input nz-input formControlName="code" [disabled]="isEdit || isDetail" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{ 'recruitment.jd.title' | translate }}</nz-form-label>
+            <nz-form-control [nzErrorTip]="'recruitment.jd.titleRequired' | translate">
+              <input nz-input formControlName="title" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{ 'recruitment.common.company' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-select formControlName="companyId" nzAllowClear style="width: 100%">
+                @for (c of companies; track c.id) {
+                  <nz-option
+                    [nzValue]="c.id"
+                    [nzLabel]="c.code ? c.code + ' - ' + c.name : c.name"
+                  ></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'recruitment.common.branch' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-select formControlName="branchId" nzAllowClear style="width: 100%">
+                @for (b of branches; track b.id) {
+                  <nz-option
+                    [nzValue]="b.id"
+                    [nzLabel]="b.code ? b.code + ' - ' + b.name : b.name"
+                  ></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'recruitment.common.department' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-select formControlName="departmentId" nzAllowClear style="width: 100%">
+                @for (d of departments; track d.id) {
+                  <nz-option
+                    [nzValue]="d.id"
+                    [nzLabel]="d.code ? d.code + ' - ' + d.name : d.name"
+                  ></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'recruitment.common.part' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-select formControlName="partId" nzAllowClear style="width: 100%">
+                @for (p of parts; track p.id) {
+                  <nz-option
+                    [nzValue]="p.id"
+                    [nzLabel]="p.code ? p.code + ' - ' + p.name : p.name"
+                  ></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'recruitment.common.position' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-select formControlName="positionId" nzAllowClear style="width: 100%">
+                @for (p of positions; track p.id) {
+                  <nz-option
+                    [nzValue]="p.id"
+                    [nzLabel]="p.code ? p.code + ' - ' + p.name : p.name"
+                  ></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'recruitment.common.isActive' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-switch formControlName="isActive"></nz-switch>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <nz-form-item>
+        <nz-form-label>{{ 'recruitment.jd.responsibilities' | translate }}</nz-form-label>
+        <nz-form-control>
+          <textarea nz-input rows="3" formControlName="responsibilities"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label>{{ 'recruitment.jd.requirements' | translate }}</nz-form-label>
+        <nz-form-control>
+          <textarea nz-input rows="3" formControlName="requirements"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label>{{ 'recruitment.jd.benefits' | translate }}</nz-form-label>
+        <nz-form-control>
+          <textarea nz-input rows="3" formControlName="benefits"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+      @if (!isDetail) {
+        <div style="margin-top: 16px">
+          <button nz-button type="button" (click)="goBack()">
+            {{ 'common.actions.cancel' | translate }}
+          </button>
+          <button
+            nz-button
+            nzType="primary"
+            type="submit"
+            [nzLoading]="submitting"
+            style="margin-left: 8px"
+          >
+            {{ 'common.actions.save' | translate }}
+          </button>
+        </div>
+      }
+    </form>
+  </nz-spin>
+</nz-card>
+
+<ng-template #titleTemplate>
+  {{
+    isDetail
+      ? ('recruitment.jd.detailTitle' | translate)
+      : isEdit
+        ? ('recruitment.jd.editTitle' | translate)
+        : ('recruitment.jd.addTitle' | translate)
+  }}
+</ng-template>
+<ng-template #extraTemplate>
+  <button nz-button (click)="goBack()">{{ 'recruitment.common.backToList' | translate }}</button>
+</ng-template>

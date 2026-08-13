@@ -344,11 +344,17 @@ export const enumData = {
       value: 'WORKING',
       color: '#52c41a',
     },
-    RESIGNED: {
-      code: 'RESIGNED',
-      labelKey: 'enums.workStatus.resigned',
-      value: 'RESIGNED',
-      color: '#f5222d',
+    PROBATION: {
+      code: 'PROBATION',
+      labelKey: 'enums.workStatus.probation',
+      value: 'PROBATION',
+      color: '#1890ff',
+    },
+    OFFICIAL: {
+      code: 'OFFICIAL',
+      labelKey: 'enums.workStatus.official',
+      value: 'OFFICIAL',
+      color: '#13c2c2',
     },
     ON_LEAVE: {
       code: 'ON_LEAVE',
@@ -361,6 +367,12 @@ export const enumData = {
       labelKey: 'enums.workStatus.suspended',
       value: 'SUSPENDED',
       color: '#722ed1',
+    },
+    RESIGNED: {
+      code: 'RESIGNED',
+      labelKey: 'enums.workStatus.resigned',
+      value: 'RESIGNED',
+      color: '#f5222d',
     },
     RETIRED: {
       code: 'RETIRED',
@@ -589,6 +601,145 @@ export const enumData = {
     },
   },
 
+  SLIP_STATUS: {
+    DRAFT: {
+      code: 'DRAFT',
+      labelKey: 'enums.slipStatus.draft',
+      value: 'DRAFT',
+      color: '#8c8c8c',
+    },
+    PENDING: {
+      code: 'PENDING',
+      labelKey: 'enums.slipStatus.pending',
+      value: 'PENDING',
+      color: '#faad14',
+    },
+    APPROVED: {
+      code: 'APPROVED',
+      labelKey: 'enums.slipStatus.approved',
+      value: 'APPROVED',
+      color: '#52c41a',
+    },
+    APPLIED: {
+      code: 'APPLIED',
+      labelKey: 'enums.slipStatus.applied',
+      value: 'APPLIED',
+      color: '#13c2c2',
+    },
+    REJECTED: {
+      code: 'REJECTED',
+      labelKey: 'enums.slipStatus.rejected',
+      value: 'REJECTED',
+      color: '#f5222d',
+    },
+    CANCELLED: {
+      code: 'CANCELLED',
+      labelKey: 'enums.slipStatus.cancelled',
+      value: 'CANCELLED',
+      color: '#bfbfbf',
+    },
+  },
+
+  SLIP_KIND: {
+    DEDUCTION: {
+      code: 'DEDUCTION',
+      labelKey: 'enums.slipKind.deduction',
+      value: 'DEDUCTION',
+      color: '#f5222d',
+    },
+    ADDITION: {
+      code: 'ADDITION',
+      labelKey: 'enums.slipKind.addition',
+      value: 'ADDITION',
+      color: '#52c41a',
+    },
+  },
+
+  SALARY_ITEM_TYPE: {
+    INCOME: {
+      code: 'INCOME',
+      labelKey: 'enums.salaryItemType.income',
+      value: 'INCOME',
+      color: '#52c41a',
+    },
+    DEDUCTION: {
+      code: 'DEDUCTION',
+      labelKey: 'enums.salaryItemType.deduction',
+      value: 'DEDUCTION',
+      color: '#f5222d',
+    },
+  },
+
+  DEDUCTION_SLIP_TYPE: {
+    FINE: {
+      code: 'FINE',
+      labelKey: 'enums.deductionSlipType.fine',
+      value: 'FINE',
+    },
+    COMPENSATION: {
+      code: 'COMPENSATION',
+      labelKey: 'enums.deductionSlipType.compensation',
+      value: 'COMPENSATION',
+    },
+    OTHER: {
+      code: 'OTHER',
+      labelKey: 'enums.deductionSlipType.other',
+      value: 'OTHER',
+    },
+  },
+
+  ADDITION_SLIP_TYPE: {
+    BONUS: {
+      code: 'BONUS',
+      labelKey: 'enums.additionSlipType.bonus',
+      value: 'BONUS',
+    },
+    SUPPORT: {
+      code: 'SUPPORT',
+      labelKey: 'enums.additionSlipType.support',
+      value: 'SUPPORT',
+    },
+    OTHER: {
+      code: 'OTHER',
+      labelKey: 'enums.additionSlipType.other',
+      value: 'OTHER',
+    },
+  },
+
+  PUNCH_TYPE: {
+    IN: { code: 'IN', labelKey: 'enums.punchType.in', value: 'IN' },
+    OUT: { code: 'OUT', labelKey: 'enums.punchType.out', value: 'OUT' },
+    CHECKIN: { code: 'CHECKIN', labelKey: 'enums.punchType.checkIn', value: 'CHECKIN' },
+    CHECKOUT: { code: 'CHECKOUT', labelKey: 'enums.punchType.checkOut', value: 'CHECKOUT' },
+  },
+
+  LEAVE_CALENDAR_EVENT_TYPE: {
+    LEAVE: { code: 'LEAVE', labelKey: 'enums.leaveCalendarEventType.leave', value: 'LEAVE' },
+    HOLIDAY: {
+      code: 'HOLIDAY',
+      labelKey: 'enums.leaveCalendarEventType.holiday',
+      value: 'HOLIDAY',
+    },
+  },
+
+  ATTENDANCE_SCHEDULE_SOURCE: {
+    DAY_OVERRIDE: {
+      code: 'DAY_OVERRIDE',
+      labelKey: 'enums.attendanceScheduleSource.dayOverride',
+      value: 'DAY_OVERRIDE',
+    },
+    WORK_PATTERN: {
+      code: 'WORK_PATTERN',
+      labelKey: 'enums.attendanceScheduleSource.workPattern',
+      value: 'WORK_PATTERN',
+    },
+    POSITION: {
+      code: 'POSITION',
+      labelKey: 'enums.attendanceScheduleSource.position',
+      value: 'POSITION',
+    },
+  },
+
   TRANSFER_STATUS: {
     PENDING: {
       code: 'PENDING',
@@ -812,11 +963,67 @@ export const enumData = {
     },
   },
 
+  OVERTIME_REQUEST_STATUS: {
+    DRAFT: {
+      code: 'DRAFT',
+      labelKey: 'enums.overtimeRequestStatus.draft',
+      value: 'DRAFT',
+      color: '#8c8c8c',
+    },
+    SUBMITTED: {
+      code: 'SUBMITTED',
+      labelKey: 'enums.overtimeRequestStatus.submitted',
+      value: 'SUBMITTED',
+      color: '#faad14',
+    },
+    APPROVED: {
+      code: 'APPROVED',
+      labelKey: 'enums.overtimeRequestStatus.approved',
+      value: 'APPROVED',
+      color: '#52c41a',
+    },
+    REJECTED: {
+      code: 'REJECTED',
+      labelKey: 'enums.overtimeRequestStatus.rejected',
+      value: 'REJECTED',
+      color: '#f5222d',
+    },
+    CANCELLED: {
+      code: 'CANCELLED',
+      labelKey: 'enums.overtimeRequestStatus.cancelled',
+      value: 'CANCELLED',
+      color: '#8c8c8c',
+    },
+  },
+
+  OVERTIME_TYPE: {
+    AFTER_SHIFT: {
+      code: 'AFTER_SHIFT',
+      labelKey: 'enums.overtimeType.afterShift',
+      value: 'AFTER_SHIFT',
+    },
+    DAY_OFF: {
+      code: 'DAY_OFF',
+      labelKey: 'enums.overtimeType.dayOff',
+      value: 'DAY_OFF',
+    },
+    HOLIDAY: {
+      code: 'HOLIDAY',
+      labelKey: 'enums.overtimeType.holiday',
+      value: 'HOLIDAY',
+    },
+  },
+
   DATA_SCOPE: {
     ALL: {
       code: 'ALL',
       labelKey: 'enums.dataScope.all',
       value: 'ALL',
+    },
+    COMPANY: {
+      code: 'COMPANY',
+      labelKey: 'enums.dataScope.company',
+      value: 'COMPANY',
     },
     BRANCH: {
       code: 'BRANCH',
@@ -828,10 +1035,331 @@ export const enumData = {
       labelKey: 'enums.dataScope.department',
       value: 'DEPARTMENT',
     },
+    PART: {
+      code: 'PART',
+      labelKey: 'enums.dataScope.part',
+      value: 'PART',
+    },
     OWN: {
       code: 'OWN',
       labelKey: 'enums.dataScope.own',
       value: 'OWN',
+    },
+  },
+
+  USER_TYPE: {
+    ADMIN: { code: 'ADMIN', labelKey: 'enums.userType.admin', value: 'ADMIN' },
+    HR: { code: 'HR', labelKey: 'enums.userType.hr', value: 'HR' },
+    MANAGER: { code: 'MANAGER', labelKey: 'enums.userType.manager', value: 'MANAGER' },
+    EMPLOYEE: { code: 'EMPLOYEE', labelKey: 'enums.userType.employee', value: 'EMPLOYEE' },
+  },
+
+  RECRUITMENT_REQUEST_STATUS: {
+    DRAFT: { code: 'DRAFT', labelKey: 'enums.recruitmentRequestStatus.draft', value: 'DRAFT' },
+    PENDING: {
+      code: 'PENDING',
+      labelKey: 'enums.recruitmentRequestStatus.pending',
+      value: 'PENDING',
+    },
+    APPROVED: {
+      code: 'APPROVED',
+      labelKey: 'enums.recruitmentRequestStatus.approved',
+      value: 'APPROVED',
+    },
+    REJECTED: {
+      code: 'REJECTED',
+      labelKey: 'enums.recruitmentRequestStatus.rejected',
+      value: 'REJECTED',
+    },
+    CLOSED: { code: 'CLOSED', labelKey: 'enums.recruitmentRequestStatus.closed', value: 'CLOSED' },
+  },
+
+  RECRUITMENT_REQUEST_LEVEL: {
+    COMPANY: {
+      code: 'COMPANY',
+      labelKey: 'enums.recruitmentRequestLevel.company',
+      value: 'COMPANY',
+    },
+    BRANCH: { code: 'BRANCH', labelKey: 'enums.recruitmentRequestLevel.branch', value: 'BRANCH' },
+    DEPARTMENT: {
+      code: 'DEPARTMENT',
+      labelKey: 'enums.recruitmentRequestLevel.department',
+      value: 'DEPARTMENT',
+    },
+    PART: { code: 'PART', labelKey: 'enums.recruitmentRequestLevel.part', value: 'PART' },
+  },
+
+  HIRING_PLAN_STATUS: {
+    DRAFT: { code: 'DRAFT', labelKey: 'enums.hiringPlanStatus.draft', value: 'DRAFT' },
+    OPEN: { code: 'OPEN', labelKey: 'enums.hiringPlanStatus.open', value: 'OPEN' },
+    CLOSED: { code: 'CLOSED', labelKey: 'enums.hiringPlanStatus.closed', value: 'CLOSED' },
+    CANCELLED: {
+      code: 'CANCELLED',
+      labelKey: 'enums.hiringPlanStatus.cancelled',
+      value: 'CANCELLED',
+    },
+  },
+
+  CANDIDATE_STATUS: {
+    NEW: { code: 'NEW', labelKey: 'enums.candidateStatus.new', value: 'NEW' },
+    SCREENING: {
+      code: 'SCREENING',
+      labelKey: 'enums.candidateStatus.screening',
+      value: 'SCREENING',
+    },
+    INTERVIEW: {
+      code: 'INTERVIEW',
+      labelKey: 'enums.candidateStatus.interview',
+      value: 'INTERVIEW',
+    },
+    WAITLIST: { code: 'WAITLIST', labelKey: 'enums.candidateStatus.waitlist', value: 'WAITLIST' },
+    OFFER: { code: 'OFFER', labelKey: 'enums.candidateStatus.offer', value: 'OFFER' },
+    HIRED: { code: 'HIRED', labelKey: 'enums.candidateStatus.hired', value: 'HIRED' },
+    REJECTED: { code: 'REJECTED', labelKey: 'enums.candidateStatus.rejected', value: 'REJECTED' },
+    WITHDRAWN: {
+      code: 'WITHDRAWN',
+      labelKey: 'enums.candidateStatus.withdrawn',
+      value: 'WITHDRAWN',
+    },
+  },
+
+  INTERVIEW_STATUS: {
+    SCHEDULED: {
+      code: 'SCHEDULED',
+      labelKey: 'enums.interviewStatus.scheduled',
+      value: 'SCHEDULED',
+    },
+    COMPLETED: {
+      code: 'COMPLETED',
+      labelKey: 'enums.interviewStatus.completed',
+      value: 'COMPLETED',
+    },
+    CANCELLED: {
+      code: 'CANCELLED',
+      labelKey: 'enums.interviewStatus.cancelled',
+      value: 'CANCELLED',
+    },
+    NO_SHOW: { code: 'NO_SHOW', labelKey: 'enums.interviewStatus.noShow', value: 'NO_SHOW' },
+  },
+
+  HIRING_SOURCE_CHANNEL: {
+    REFERRAL: {
+      code: 'REFERRAL',
+      labelKey: 'enums.hiringSourceChannel.referral',
+      value: 'REFERRAL',
+    },
+    EMAIL: { code: 'EMAIL', labelKey: 'enums.hiringSourceChannel.email', value: 'EMAIL' },
+    CAREERS_SITE: {
+      code: 'CAREERS_SITE',
+      labelKey: 'enums.hiringSourceChannel.careersSite',
+      value: 'CAREERS_SITE',
+    },
+    JOBBOARD: {
+      code: 'JOBBOARD',
+      labelKey: 'enums.hiringSourceChannel.jobboard',
+      value: 'JOBBOARD',
+    },
+    SOCIAL: { code: 'SOCIAL', labelKey: 'enums.hiringSourceChannel.social', value: 'SOCIAL' },
+    AGENCY: { code: 'AGENCY', labelKey: 'enums.hiringSourceChannel.agency', value: 'AGENCY' },
+    WALK_IN: { code: 'WALK_IN', labelKey: 'enums.hiringSourceChannel.walkIn', value: 'WALK_IN' },
+    OTHER: { code: 'OTHER', labelKey: 'enums.hiringSourceChannel.other', value: 'OTHER' },
+  },
+
+  VIOLATION_SEVERITY: {
+    LOW: { code: 'LOW', labelKey: 'enums.violationSeverity.low', value: 'LOW' },
+    MEDIUM: { code: 'MEDIUM', labelKey: 'enums.violationSeverity.medium', value: 'MEDIUM' },
+    HIGH: { code: 'HIGH', labelKey: 'enums.violationSeverity.high', value: 'HIGH' },
+    CRITICAL: {
+      code: 'CRITICAL',
+      labelKey: 'enums.violationSeverity.critical',
+      value: 'CRITICAL',
+    },
+  },
+
+  VIOLATION_STATUS: {
+    DRAFT: { code: 'DRAFT', labelKey: 'enums.violationStatus.draft', value: 'DRAFT' },
+    CONFIRMED: {
+      code: 'CONFIRMED',
+      labelKey: 'enums.violationStatus.confirmed',
+      value: 'CONFIRMED',
+    },
+    CANCELLED: {
+      code: 'CANCELLED',
+      labelKey: 'enums.violationStatus.cancelled',
+      value: 'CANCELLED',
+    },
+  },
+
+  PENALTY_TYPE: {
+    WARNING: { code: 'WARNING', labelKey: 'enums.penaltyType.warning', value: 'WARNING' },
+    WRITTEN_WARNING: {
+      code: 'WRITTEN_WARNING',
+      labelKey: 'enums.penaltyType.writtenWarning',
+      value: 'WRITTEN_WARNING',
+    },
+    FINE: { code: 'FINE', labelKey: 'enums.penaltyType.fine', value: 'FINE' },
+    SUSPENSION: {
+      code: 'SUSPENSION',
+      labelKey: 'enums.penaltyType.suspension',
+      value: 'SUSPENSION',
+    },
+    TERMINATION: {
+      code: 'TERMINATION',
+      labelKey: 'enums.penaltyType.termination',
+      value: 'TERMINATION',
+    },
+    NONE: { code: 'NONE', labelKey: 'enums.penaltyType.none', value: 'NONE' },
+  },
+
+  REVIEW_CYCLE_STATUS: {
+    DRAFT: { code: 'DRAFT', labelKey: 'enums.reviewCycleStatus.draft', value: 'DRAFT' },
+    OPEN: { code: 'OPEN', labelKey: 'enums.reviewCycleStatus.open', value: 'OPEN' },
+    CLOSED: { code: 'CLOSED', labelKey: 'enums.reviewCycleStatus.closed', value: 'CLOSED' },
+  },
+
+  TRAINING_COURSE_STATUS: {
+    DRAFT: { code: 'DRAFT', labelKey: 'enums.trainingCourseStatus.draft', value: 'DRAFT' },
+    OPEN: { code: 'OPEN', labelKey: 'enums.trainingCourseStatus.open', value: 'OPEN' },
+    CLOSED: { code: 'CLOSED', labelKey: 'enums.trainingCourseStatus.closed', value: 'CLOSED' },
+  },
+
+  TRAINING_ENROLLMENT_STATUS: {
+    ENROLLED: {
+      code: 'ENROLLED',
+      labelKey: 'enums.trainingEnrollmentStatus.enrolled',
+      value: 'ENROLLED',
+    },
+    COMPLETED: {
+      code: 'COMPLETED',
+      labelKey: 'enums.trainingEnrollmentStatus.completed',
+      value: 'COMPLETED',
+    },
+    DROPPED: {
+      code: 'DROPPED',
+      labelKey: 'enums.trainingEnrollmentStatus.dropped',
+      value: 'DROPPED',
+    },
+  },
+
+  PERFORMANCE_360_REVIEWER_TYPE: {
+    SELF: { code: 'SELF', labelKey: 'enums.performance360ReviewerType.self', value: 'SELF' },
+    PEER: { code: 'PEER', labelKey: 'enums.performance360ReviewerType.peer', value: 'PEER' },
+    MANAGER: {
+      code: 'MANAGER',
+      labelKey: 'enums.performance360ReviewerType.manager',
+      value: 'MANAGER',
+    },
+  },
+
+  PERFORMANCE_360_STATUS: {
+    DRAFT: { code: 'DRAFT', labelKey: 'enums.performance360Status.draft', value: 'DRAFT' },
+    SUBMITTED: {
+      code: 'SUBMITTED',
+      labelKey: 'enums.performance360Status.submitted',
+      value: 'SUBMITTED',
+    },
+  },
+
+  TRAINING_QUIZ_OPTION: {
+    A: { code: 'A', labelKey: 'enums.trainingQuizOption.a', value: 'A' },
+    B: { code: 'B', labelKey: 'enums.trainingQuizOption.b', value: 'B' },
+    C: { code: 'C', labelKey: 'enums.trainingQuizOption.c', value: 'C' },
+    D: { code: 'D', labelKey: 'enums.trainingQuizOption.d', value: 'D' },
+  },
+
+  ASSET_STATUS: {
+    AVAILABLE: {
+      code: 'AVAILABLE',
+      labelKey: 'enums.assetStatus.available',
+      value: 'AVAILABLE',
+    },
+    ASSIGNED: {
+      code: 'ASSIGNED',
+      labelKey: 'enums.assetStatus.assigned',
+      value: 'ASSIGNED',
+    },
+    MAINTENANCE: {
+      code: 'MAINTENANCE',
+      labelKey: 'enums.assetStatus.maintenance',
+      value: 'MAINTENANCE',
+    },
+    RETIRED: {
+      code: 'RETIRED',
+      labelKey: 'enums.assetStatus.retired',
+      value: 'RETIRED',
+    },
+  },
+
+  ASSET_TICKET_TYPE: {
+    ISSUE: { code: 'ISSUE', labelKey: 'enums.assetTicketType.issue', value: 'ISSUE' },
+    RETURN: { code: 'RETURN', labelKey: 'enums.assetTicketType.return', value: 'RETURN' },
+  },
+
+  ASSET_TICKET_STATUS: {
+    DRAFT: { code: 'DRAFT', labelKey: 'enums.assetTicketStatus.draft', value: 'DRAFT' },
+    DONE: { code: 'DONE', labelKey: 'enums.assetTicketStatus.done', value: 'DONE' },
+    CANCELLED: {
+      code: 'CANCELLED',
+      labelKey: 'enums.assetTicketStatus.cancelled',
+      value: 'CANCELLED',
+    },
+  },
+
+  WORKFLOW_ENTITY_TYPE: {
+    LEAVE: { code: 'LEAVE', labelKey: 'enums.workflowEntityType.leave', value: 'LEAVE' },
+    OT: { code: 'OT', labelKey: 'enums.workflowEntityType.ot', value: 'OT' },
+    TRANSFER: {
+      code: 'TRANSFER',
+      labelKey: 'enums.workflowEntityType.transfer',
+      value: 'TRANSFER',
+    },
+    DISCIPLINE: {
+      code: 'DISCIPLINE',
+      labelKey: 'enums.workflowEntityType.discipline',
+      value: 'DISCIPLINE',
+    },
+    RECRUITMENT_REQUEST: {
+      code: 'RECRUITMENT_REQUEST',
+      labelKey: 'enums.workflowEntityType.recruitmentRequest',
+      value: 'RECRUITMENT_REQUEST',
+    },
+    COMPLAINT: {
+      code: 'COMPLAINT',
+      labelKey: 'enums.workflowEntityType.complaint',
+      value: 'COMPLAINT',
+    },
+  },
+
+  WORKFLOW_APPROVER_RESOLVER: {
+    MANAGER: {
+      code: 'MANAGER',
+      labelKey: 'enums.workflowApproverResolver.manager',
+      value: 'MANAGER',
+    },
+    HR: { code: 'HR', labelKey: 'enums.workflowApproverResolver.hr', value: 'HR' },
+    ROLE: { code: 'ROLE', labelKey: 'enums.workflowApproverResolver.role', value: 'ROLE' },
+  },
+
+  WORKFLOW_INSTANCE_STATUS: {
+    RUNNING: {
+      code: 'RUNNING',
+      labelKey: 'enums.workflowInstanceStatus.running',
+      value: 'RUNNING',
+    },
+    APPROVED: {
+      code: 'APPROVED',
+      labelKey: 'enums.workflowInstanceStatus.approved',
+      value: 'APPROVED',
+    },
+    REJECTED: {
+      code: 'REJECTED',
+      labelKey: 'enums.workflowInstanceStatus.rejected',
+      value: 'REJECTED',
+    },
+    CANCELLED: {
+      code: 'CANCELLED',
+      labelKey: 'enums.workflowInstanceStatus.cancelled',
+      value: 'CANCELLED',
     },
   },
 };

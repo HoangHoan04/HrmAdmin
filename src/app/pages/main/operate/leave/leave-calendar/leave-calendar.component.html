@@ -1,0 +1,152 @@
+<div class="calendar-filters">
+  <div nz-row [nzGutter]="12" class="filter-row">
+    <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="6">
+      <label class="filter-label">{{ 'leaveCalendar.company' | translate }}</label>
+      <nz-select
+        [(ngModel)]="filters.companyId"
+        (ngModelChange)="onFilterChange()"
+        nzAllowClear
+        nzShowSearch
+        [nzPlaceHolder]="'leaveCalendar.filterCompany' | translate"
+        style="width: 100%"
+      >
+        @for (opt of companyOptions; track opt.value) {
+          <nz-option [nzValue]="opt.value" [nzLabel]="opt.label"></nz-option>
+        }
+      </nz-select>
+    </div>
+    <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="6">
+      <label class="filter-label">{{ 'leaveCalendar.branch' | translate }}</label>
+      <nz-select
+        [(ngModel)]="filters.branchId"
+        (ngModelChange)="onFilterChange()"
+        nzAllowClear
+        nzShowSearch
+        [nzPlaceHolder]="'leaveCalendar.filterBranch' | translate"
+        style="width: 100%"
+      >
+        @for (opt of branchOptions; track opt.value) {
+          <nz-option [nzValue]="opt.value" [nzLabel]="opt.label"></nz-option>
+        }
+      </nz-select>
+    </div>
+    <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="6">
+      <label class="filter-label">{{ 'leaveCalendar.status' | translate }}</label>
+      <nz-select
+        [(ngModel)]="filters.status"
+        (ngModelChange)="onFilterChange()"
+        nzAllowClear
+        [nzPlaceHolder]="'leaveCalendar.filterStatus' | translate"
+        style="width: 100%"
+      >
+        @for (opt of statusOptions; track opt.labelKey) {
+          <nz-option [nzValue]="opt.value" [nzLabel]="opt.labelKey | translate"></nz-option>
+        }
+      </nz-select>
+    </div>
+    <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="6" class="filter-checkbox-col">
+      <label nz-checkbox [(ngModel)]="filters.includeHolidays" (ngModelChange)="onFilterChange()">
+        {{ 'leaveCalendar.includeHolidays' | translate }}
+      </label>
+    </div>
+  </div>
+</div>
+
+<div class="calendar-page">
+  <div class="calendar-hint">{{ 'leaveCalendar.hint' | translate }}</div>
+  <nz-spin [nzSpinning]="loading" class="calendar-spin">
+    <full-calendar #calendar [options]="calendarOptions"></full-calendar>
+  </nz-spin>
+</div>
+
+<nz-drawer
+  [nzVisible]="drawerVisible"
+  [nzTitle]="
+    (selectedEvent?.eventType === 'HOLIDAY'
+      ? 'leaveCalendar.holidayTitle'
+      : 'leaveCalendar.detailTitle'
+    ) | translate
+  "
+  [nzWidth]="480"
+  (nzOnClose)="closeDrawer()"
+>
+  <ng-container *nzDrawerContent>
+    <nz-spin [nzSpinning]="detailLoading">
+      @if (selectedEvent) {
+        @if (selectedEvent.eventType === 'HOLIDAY') {
+          <nz-descriptions nzBordered [nzColumn]="1" nzSize="small">
+            <nz-descriptions-item [nzTitle]="'leaveCalendar.holidayTitle' | translate">
+              {{ selectedEvent.title }}
+            </nz-descriptions-item>
+            <nz-descriptions-item [nzTitle]="'leaveCalendar.holidayDate' | translate">
+              {{ selectedEvent.startDate }}
+              @if (selectedEvent.endDate && selectedEvent.endDate !== selectedEvent.startDate) {
+                — {{ selectedEvent.endDate }}
+              }
+            </nz-descriptions-item>
+          </nz-descriptions>
+        } @else if (selectedDetail) {
+          <nz-descriptions nzBordered [nzColumn]="1" nzSize="small">
+            <nz-descriptions-item [nzTitle]="'leaveCalendar.employee' | translate">
+              {{ selectedDetail.employeeCode }} — {{ selectedDetail.employeeName }}
+            </nz-descriptions-item>
+            <nz-descriptions-item [nzTitle]="'leaveCalendar.branch' | translate">
+              {{ selectedDetail.branchName || selectedEvent.branchName || '-' }}
+            </nz-descriptions-item>
+            <nz-descriptions-item [nzTitle]="'leaveCalendar.dayOffType' | translate">
+              {{ getDayOffTypeLabel(selectedDetail.dayOffType) }}
+            </nz-descriptions-item>
+            <nz-descriptions-item [nzTitle]="'leaveCalendar.dayOffConfig' | translate">
+              {{ selectedDetail.dayOffConfigName || '-' }}
+            </nz-descriptions-item>
+            <nz-descriptions-item [nzTitle]="'leaveCalendar.fromDate' | translate">
+              {{ selectedDetail.fromDate }}
+            </nz-descriptions-item>
+            <nz-descriptions-item [nzTitle]="'leaveCalendar.toDate' | translate">
+              {{ selectedDetail.toDate }}
+            </nz-descriptions-item>
+            <nz-descriptions-item [nzTitle]="'leaveCalendar.session' | translate">
+              {{ getLeaveSessionLabel(selectedDetail.session) }}
+            </nz-descriptions-item>
+            <nz-descriptions-item [nzTitle]="'leaveCalendar.totalDays' | translate">
+              {{ selectedDetail.totalDays }}
+            </nz-descriptions-item>
+            <nz-descriptions-item [nzTitle]="'leaveCalendar.statusLabel' | translate">
+              {{ getDayOffStatusLabel(selectedDetail.status) }}
+            </nz-descriptions-item>
+            <nz-descriptions-item [nzTitle]="'leaveCalendar.reason' | translate">
+              {{ selectedDetail.reason || '-' }}
+            </nz-descriptions-item>
+          </nz-descriptions>
+        } @else {
+          <nz-descriptions nzBordered [nzColumn]="1" nzSize="small">
+            <nz-descriptions-item [nzTitle]="'leaveCalendar.employee' | translate">
+              {{ selectedEvent.employeeCode }} — {{ selectedEvent.employeeName }}
+            </nz-descriptions-item>
+            <nz-descriptions-item [nzTitle]="'leaveCalendar.branch' | translate">
+              {{ selectedEvent.branchName || '-' }}
+            </nz-descriptions-item>
+            <nz-descriptions-item [nzTitle]="'leaveCalendar.dayOffConfig' | translate">
+              {{ selectedEvent.dayOffConfigName || '-' }}
+            </nz-descriptions-item>
+            <nz-descriptions-item [nzTitle]="'leaveCalendar.fromDate' | translate">
+              {{ selectedEvent.startDate }}
+            </nz-descriptions-item>
+            <nz-descriptions-item [nzTitle]="'leaveCalendar.toDate' | translate">
+              {{ selectedEvent.endDate }}
+            </nz-descriptions-item>
+            <nz-descriptions-item [nzTitle]="'leaveCalendar.totalDays' | translate">
+              {{ selectedEvent.totalDays ?? '-' }}
+            </nz-descriptions-item>
+            <nz-descriptions-item [nzTitle]="'leaveCalendar.statusLabel' | translate">
+              {{ getDayOffStatusLabel(selectedEvent.status) }}
+            </nz-descriptions-item>
+            <nz-descriptions-item [nzTitle]="'leaveCalendar.reason' | translate">
+              {{ selectedEvent.reason || '-' }}
+            </nz-descriptions-item>
+          </nz-descriptions>
+        }
+      }
+    </nz-spin>
+  </ng-container>
+</nz-drawer>

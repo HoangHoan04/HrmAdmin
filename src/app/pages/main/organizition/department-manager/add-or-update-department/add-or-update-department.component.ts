@@ -64,7 +64,7 @@ export class AddOrUpdateDepartmentComponent implements OnInit {
       description: [''],
       type: [''],
       companyId: [null, [Validators.required]],
-      branchId: [null, [Validators.required]],
+      branchId: [null],
       parentDepartmentId: [null],
       managerId: [null],
       deputyManagerId: [null],
@@ -87,15 +87,16 @@ export class AddOrUpdateDepartmentComponent implements OnInit {
         );
         this.branches = [];
         this.parentDepartments = [];
+        return;
       }
+      const branchId = this.validateForm.get('branchId')?.value ?? null;
+      this.loadParentDepartments(companyId, branchId);
     });
 
     this.validateForm.get('branchId')?.valueChanges.subscribe((branchId) => {
-      this.loadParentDepartments(branchId);
-      if (!branchId) {
-        this.validateForm.patchValue({ parentDepartmentId: null }, { emitEvent: false });
-        this.parentDepartments = [];
-      }
+      const companyId = this.validateForm.get('companyId')?.value ?? null;
+      this.validateForm.patchValue({ parentDepartmentId: null }, { emitEvent: false });
+      this.loadParentDepartments(companyId, branchId);
     });
   }
 
@@ -142,15 +143,36 @@ export class AddOrUpdateDepartmentComponent implements OnInit {
       });
   }
 
-  loadParentDepartments(branchId: string | null, excludeId?: string): void {
-    if (!branchId) {
+  loadParentDepartments(
+    companyId: string | null,
+    branchId: string | null,
+    excludeId?: string,
+  ): void {
+    if (!companyId && !branchId) {
       this.parentDepartments = [];
       return;
     }
 
+    if (branchId) {
+      this.apiService
+        .post<DepartmentSelectBoxDto[]>(this.apiService.DEPARTMENT.LOAD_BY_BRANCH, {
+          branchId,
+          excludeId,
+        })
+        .subscribe({
+          next: (items) => {
+            this.parentDepartments = items;
+          },
+          error: () => {
+            this.parentDepartments = [];
+          },
+        });
+      return;
+    }
+
     this.apiService
-      .post<DepartmentSelectBoxDto[]>(this.apiService.DEPARTMENT.LOAD_BY_BRANCH, {
-        branchId,
+      .post<DepartmentSelectBoxDto[]>(this.apiService.DEPARTMENT.SELECT_BOX, {
+        companyId,
         excludeId,
       })
       .subscribe({
@@ -188,7 +210,7 @@ export class AddOrUpdateDepartmentComponent implements OnInit {
           isNotifyMarketing: department.isNotifyMarketing ?? false,
         });
         this.loadBranches(department.companyId ?? null, () => {
-          this.loadParentDepartments(department.branchId ?? null, id);
+          this.loadParentDepartments(department.companyId ?? null, department.branchId ?? null, id);
         });
         this.loading = false;
       },

@@ -1,0 +1,41 @@
+<nz-spin [nzSpinning]="loading">
+  <nz-card [nzTitle]="'workflow.dashboard.title' | translate">
+    <div nz-row [nzGutter]="[16, 16]" class="kpi-row">
+      <div nz-col nzXs="12" nzMd="8">
+        <nz-card>
+          <div class="kpi-label">{{ 'workflow.dashboard.pendingTasks' | translate }}</div>
+          <div class="kpi-value">{{ summary?.pendingTaskCount ?? 0 }}</div>
+        </nz-card>
+      </div>
+      <div nz-col nzXs="12" nzMd="8">
+        <nz-card>
+          <div class="kpi-label">{{ 'workflow.dashboard.totalInstances' | translate }}</div>
+          <div class="kpi-value">
+            {{
+              summary?.byStatus?.reduce((sum, x) => sum + x.count, 0) ?? 0
+            }}
+          </div>
+        </nz-card>
+      </div>
+      <div nz-col nzXs="12" nzMd="8">
+        <nz-card>
+          <div class="kpi-label">{{ 'workflow.dashboard.entityTypes' | translate }}</div>
+          <div class="kpi-value">{{ summary?.byEntityType?.length ?? 0 }}</div>
+        </nz-card>
+      </div>
+    </div>
+
+    <div nz-row [nzGutter]="[16, 16]" style="margin-top: 16px">
+      <div nz-col nzXs="24" nzLg="12">
+        <nz-card [nzTitle]="'workflow.dashboard.byStatus' | translate">
+          <div echarts [options]="pieOption" [autoResize]="true" class="chart"></div>
+        </nz-card>
+      </div>
+      <div nz-col nzXs="24" nzLg="12">
+        <nz-card [nzTitle]="'workflow.dashboard.byEntityType' | translate">
+          <div echarts [options]="barOption" [autoResize]="true" class="chart"></div>
+        </nz-card>
+      </div>
+    </div>
+  </nz-card>
+</nz-spin>

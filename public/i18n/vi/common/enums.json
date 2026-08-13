@@ -92,9 +92,11 @@
     },
     "workStatus": {
       "working": "Đang làm việc",
-      "resigned": "Đã nghỉ việc",
+      "probation": "Thử việc",
+      "official": "Chính thức",
       "onLeave": "Đang nghỉ phép",
       "suspended": "Tạm ngưng công tác",
+      "resigned": "Đã nghỉ việc",
       "retired": "Đã nghỉ hưu"
     },
     "dayOffConfigType": {
@@ -120,6 +122,57 @@
       "approved": "Đã duyệt",
       "paid": "Đã chi trả",
       "cancelled": "Đã hủy"
+    },
+    "slipStatus": {
+      "draft": "Nháp",
+      "pending": "Chờ duyệt",
+      "approved": "Đã duyệt",
+      "applied": "Đã áp dụng",
+      "rejected": "Từ chối",
+      "cancelled": "Đã hủy"
+    },
+    "slipKind": {
+      "deduction": "Khấu trừ",
+      "addition": "Thu nhập thêm"
+    },
+    "salaryItemType": {
+      "income": "Thu nhập",
+      "deduction": "Khấu trừ"
+    },
+    "deductionSlipType": {
+      "fine": "Phạt",
+      "compensation": "Bồi thường",
+      "other": "Khác"
+    },
+    "additionSlipType": {
+      "bonus": "Thưởng",
+      "support": "Hỗ trợ",
+      "other": "Khác"
+    },
+    "userType": {
+      "admin": "Admin",
+      "hr": "HR",
+      "manager": "Quản lý",
+      "employee": "Nhân viên"
+    },
+    "punchType": {
+      "in": "Vào",
+      "out": "Ra",
+      "checkIn": "Check-in",
+      "checkOut": "Check-out"
+    },
+    "leaveCalendarEventType": {
+      "leave": "Nghỉ phép",
+      "holiday": "Ngày lễ"
+    },
+    "attendanceScheduleSource": {
+      "dayOverride": "Lịch ngày",
+      "workPattern": "Ca mặc định",
+      "position": "Theo vị trí"
+    },
+    "currencyCode": {
+      "vnd": "VND",
+      "usd": "USD"
     },
     "reviewRenewalStatus": {
       "pendingReview": "Chờ đánh giá",
@@ -179,6 +232,18 @@
       "wrongTime": "Sai giờ",
       "other": "Khác"
     },
+    "overtimeRequestStatus": {
+      "draft": "Nháp",
+      "submitted": "Chờ duyệt",
+      "approved": "Đã duyệt",
+      "rejected": "Từ chối",
+      "cancelled": "Đã hủy"
+    },
+    "overtimeType": {
+      "afterShift": "Sau ca",
+      "dayOff": "Ngày nghỉ",
+      "holiday": "Ngày lễ"
+    },
     "leaveSession": {
       "full": "Cả ngày",
       "am": "Buổi sáng",
@@ -186,9 +251,139 @@
     },
     "dataScope": {
       "all": "Toàn hệ thống",
+      "company": "Công ty",
       "branch": "Chi nhánh",
       "department": "Phòng ban",
+      "part": "Bộ phận",
       "own": "Cá nhân"
+    },
+    "recruitmentRequestStatus": {
+      "draft": "Nháp",
+      "pending": "Chờ duyệt",
+      "approved": "Đã duyệt",
+      "rejected": "Từ chối",
+      "closed": "Đã đóng"
+    },
+    "recruitmentRequestLevel": {
+      "company": "Công ty",
+      "branch": "Chi nhánh",
+      "department": "Phòng ban",
+      "part": "Bộ phận"
+    },
+    "hiringPlanStatus": {
+      "draft": "Nháp",
+      "open": "Đang mở",
+      "closed": "Đã đóng",
+      "cancelled": "Đã hủy"
+    },
+    "candidateStatus": {
+      "new": "Mới",
+      "screening": "Sàng lọc",
+      "interview": "Phỏng vấn",
+      "waitlist": "Danh sách chờ",
+      "offer": "Thư mời nhận việc",
+      "hired": "Đã tuyển",
+      "rejected": "Từ chối",
+      "withdrawn": "Rút hồ sơ"
+    },
+    "interviewStatus": {
+      "scheduled": "Đã lên lịch",
+      "completed": "Hoàn thành",
+      "cancelled": "Đã hủy",
+      "noShow": "Vắng mặt"
+    },
+    "hiringSourceChannel": {
+      "referral": "Giới thiệu nội bộ",
+      "email": "Mail HR",
+      "careersSite": "Website tuyển dụng",
+      "jobboard": "Cổng việc làm",
+      "social": "Mạng xã hội",
+      "agency": "Công ty môi giới",
+      "walkIn": "Ứng tuyển trực tiếp",
+      "other": "Khác"
+    },
+    "violationSeverity": {
+      "low": "Thấp",
+      "medium": "Trung bình",
+      "high": "Cao",
+      "critical": "Nghiêm trọng"
+    },
+    "violationStatus": {
+      "draft": "Nháp",
+      "confirmed": "Đã xác nhận",
+      "cancelled": "Đã hủy"
+    },
+    "penaltyType": {
+      "warning": "Cảnh cáo miệng",
+      "writtenWarning": "Cảnh cáo bằng văn bản",
+      "fine": "Phạt tiền",
+      "suspension": "Tạm đình chỉ",
+      "termination": "Sa thải",
+      "none": "Không xử lý"
+    },
+    "reviewCycleStatus": {
+      "draft": "Nháp",
+      "open": "Đang mở",
+      "closed": "Đã đóng"
+    },
+    "trainingCourseStatus": {
+      "draft": "Nháp",
+      "open": "Đang mở",
+      "closed": "Đã đóng"
+    },
+    "trainingEnrollmentStatus": {
+      "enrolled": "Đã ghi danh",
+      "completed": "Hoàn thành",
+      "dropped": "Hủy ghi danh"
+    },
+    "performance360ReviewerType": {
+      "self": "Tự đánh giá",
+      "peer": "Đồng nghiệp",
+      "manager": "Quản lý"
+    },
+    "performance360Status": {
+      "draft": "Nháp",
+      "submitted": "Đã nộp"
+    },
+    "trainingQuizOption": {
+      "a": "A",
+      "b": "B",
+      "c": "C",
+      "d": "D"
+    },
+    "assetStatus": {
+      "available": "Sẵn sàng",
+      "assigned": "Đã cấp phát",
+      "maintenance": "Bảo trì",
+      "retired": "Ngừng sử dụng"
+    },
+    "assetTicketType": {
+      "issue": "Cấp phát",
+      "return": "Thu hồi"
+    },
+    "assetTicketStatus": {
+      "draft": "Nháp",
+      "done": "Hoàn tất",
+      "cancelled": "Đã hủy"
+    },
+    "workflowEntityType": {
+      "leave": "Nghỉ phép",
+      "ot": "Làm thêm giờ",
+      "transfer": "Điều chuyển",
+      "discipline": "Kỷ luật",
+      "recruitmentRequest": "Yêu cầu tuyển dụng",
+      "complaint": "Khiếu nại chấm công"
+    },
+    "workflowApproverResolver": {
+      "manager": "Quản lý",
+      "hr": "HR",
+      "role": "Theo vai trò"
+    },
+    "workflowInstanceStatus": {
+      "running": "Đang chạy",
+      "approved": "Đã duyệt",
+      "rejected": "Từ chối",
+      "cancelled": "Đã hủy"
     }
   }
 }

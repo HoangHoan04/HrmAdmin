@@ -1,0 +1,26 @@
+{
+  "organization": {
+    "orgChart": {
+      "title": "Sơ đồ tổ chức",
+      "company": "Công ty",
+      "selectCompany": "Chọn công ty...",
+      "selectCompanyHint": "Vui lòng chọn công ty để xem sơ đồ tổ chức",
+      "includeParts": "Bao gồm bộ phận",
+      "empty": "Không có dữ liệu sơ đồ tổ chức",
+      "loadFailed": "Không tải được sơ đồ tổ chức",
+      "reparentSuccess": "Cập nhật cấu trúc tổ chức thành công",
+      "reparentFailed": "Không thể cập nhật cấu trúc tổ chức",
+      "noManagePermission": "Bạn không có quyền kéo thả sơ đồ tổ chức",
+      "cannotMoveCompany": "Không thể di chuyển nút công ty",
+      "partNeedsDepartment": "Bộ phận phải thuộc một phòng ban",
+      "employeeCount": "Nhân sự",
+      "manager": "Quản lý",
+      "nodeType": {
+        "company": "Công ty",
+        "branch": "Chi nhánh",
+        "department": "Phòng ban",
+        "part": "Bộ phận"
+      }
+    }
+  }
+}

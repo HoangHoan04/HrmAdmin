@@ -1,0 +1,193 @@
+<section class="hc-page">
+  <header class="hc-hero">
+    <div class="hc-hero-copy">
+      <h1>{{ 'recruitment.headcount.title' | translate }}</h1>
+      <p>{{ 'recruitment.headcount.subtitle' | translate }}</p>
+    </div>
+    <div class="hc-hero-actions">
+      <nz-select
+        class="hc-select"
+        nzAllowClear
+        nzShowSearch
+        [nzPlaceHolder]="'recruitment.common.filterCompany' | translate"
+        [ngModel]="companyId"
+        (ngModelChange)="onCompanyChange($event)"
+      >
+        @for (c of companies; track c.id) {
+          <nz-option
+            [nzValue]="c.id"
+            [nzLabel]="c.code ? c.code + ' - ' + c.name : c.name"
+          ></nz-option>
+        }
+      </nz-select>
+      <nz-select
+        class="hc-select"
+        nzAllowClear
+        nzShowSearch
+        [nzPlaceHolder]="'recruitment.common.filterBranch' | translate"
+        [ngModel]="branchId"
+        (ngModelChange)="onBranchChange($event)"
+        [nzDisabled]="!companyId"
+      >
+        @for (b of branches; track b.id) {
+          <nz-option
+            [nzValue]="b.id"
+            [nzLabel]="b.code ? b.code + ' - ' + b.name : b.name"
+          ></nz-option>
+        }
+      </nz-select>
+      <button nz-button nzType="default" (click)="loadData()" [nzLoading]="loading">
+        <span nz-icon nzType="reload"></span>
+        {{ 'common.actions.refresh' | translate }}
+      </button>
+    </div>
+  </header>
+
+  <div class="hc-summary">
+    <article class="hc-stat" data-tone="planned">
+      <span class="hc-stat-label">{{ 'recruitment.headcount.summaryPlanned' | translate }}</span>
+      <strong>{{ summary.totalPlanned }}</strong>
+    </article>
+    <article class="hc-stat" data-tone="actual">
+      <span class="hc-stat-label">{{ 'recruitment.headcount.summaryActual' | translate }}</span>
+      <strong>{{ summary.totalActual }}</strong>
+    </article>
+    <article class="hc-stat" data-tone="vacancy">
+      <span class="hc-stat-label">{{ 'recruitment.headcount.summaryVacancy' | translate }}</span>
+      <strong>{{ summary.totalVacancy }}</strong>
+    </article>
+    <article class="hc-stat" data-tone="over">
+      <span class="hc-stat-label">{{ 'recruitment.headcount.summaryOver' | translate }}</span>
+      <strong>{{ summary.overstaffedRows }}</strong>
+    </article>
+  </div>
+
+  <div class="hc-table-wrap">
+    <nz-table
+      #tbl
+      [nzData]="data"
+      [nzLoading]="loading"
+      [nzFrontPagination]="false"
+      [nzShowPagination]="false"
+      nzSize="middle"
+      [nzScroll]="{ x: '1100px', y: '62vh' }"
+      nzTableLayout="fixed"
+    >
+      <thead>
+        <tr>
+          <th nzWidth="280px">{{ 'recruitment.headcount.orgUnit' | translate }}</th>
+          <th nzWidth="130px">{{ 'recruitment.headcount.nodeType' | translate }}</th>
+          <th nzWidth="120px">{{ 'recruitment.headcount.code' | translate }}</th>
+          <th nzWidth="150px">{{ 'recruitment.headcount.plannedLimit' | translate }}</th>
+          <th nzWidth="90px">{{ 'recruitment.headcount.actualCount' | translate }}</th>
+          <th nzWidth="100px">{{ 'recruitment.headcount.vacancy' | translate }}</th>
+          <th nzWidth="180px">{{ 'recruitment.headcount.fillPercent' | translate }}</th>
+          @if (canUpdate) {
+            <th nzWidth="90px" nzAlign="center">{{ 'common.actions.save' | translate }}</th>
+          }
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of tbl.data; track row.id + row.nodeType) {
+          <tr [attr.data-tone]="typeTone(row.nodeType)" [class.is-dirty]="row.dirty">
+            <td>
+              <div class="hc-org" [class.is-root]="row.depth === 0" [style.--depth]="row.depth">
+                <span class="hc-org-guide" aria-hidden="true"></span>
+                <span class="hc-org-icon" [attr.data-tone]="typeTone(row.nodeType)">
+                  <span nz-icon [nzType]="typeIcon(row.nodeType)"></span>
+                </span>
+                <div class="hc-org-text">
+                  <strong>{{ row.name }}</strong>
+                  <small>{{ row.code }}</small>
+                </div>
+              </div>
+            </td>
+            <td>
+              <span class="hc-type" [attr.data-tone]="typeTone(row.nodeType)">
+                {{ typeLabelKey(row.nodeType) | translate }}
+              </span>
+            </td>
+            <td class="hc-mono">{{ row.code }}</td>
+            <td>
+              <div class="hc-planned">
+                <nz-input-number
+                  class="hc-input"
+                  [(ngModel)]="row.plannedLimit"
+                  [nzMin]="0"
+                  [nzStep]="1"
+                  [nzDisabled]="!canEditRow(row)"
+                  [nzPlaceHolder]="'—'"
+                  (ngModelChange)="onPlannedChange(row)"
+                  (nzBlur)="saveRow(row)"
+                ></nz-input-number>
+                @if (row.isAggregated) {
+                  <small class="hc-hint">{{
+                    'recruitment.headcount.aggregatedHint' | translate
+                  }}</small>
+                }
+              </div>
+            </td>
+            <td>
+              <span class="hc-num">{{ row.actualCount }}</span>
+            </td>
+            <td>
+              @if (row.overstaffed > 0) {
+                <span class="hc-badge over">+{{ row.overstaffed }}</span>
+              } @else if (row.vacancy != null) {
+                <span
+                  class="hc-badge"
+                  [class.warn]="row.vacancy > 0"
+                  [class.ok]="row.vacancy === 0"
+                >
+                  {{ row.vacancy }}
+                </span>
+              } @else {
+                <span class="hc-muted">—</span>
+              }
+            </td>
+            <td>
+              <div class="hc-fill" [attr.data-status]="fillStatus(row)">
+                <div class="hc-fill-track">
+                  <div class="hc-fill-bar" [style.width.%]="fillBarWidth(row)"></div>
+                </div>
+                <span class="hc-fill-label">
+                  @if (row.plannedLimit == null || row.plannedLimit <= 0) {
+                    {{ 'recruitment.headcount.noPlan' | translate }}
+                  } @else {
+                    {{ row.fillPercent }}%
+                  }
+                </span>
+              </div>
+            </td>
+            @if (canUpdate) {
+              <td nzAlign="center">
+                @if (canEditRow(row)) {
+                  <button
+                    nz-button
+                    nzType="text"
+                    nzSize="small"
+                    class="hc-save"
+                    [class.active]="row.dirty"
+                    [nzLoading]="row.saving"
+                    [disabled]="!row.dirty && !row.saving"
+                    (click)="saveRow(row)"
+                    [attr.title]="'common.actions.save' | translate"
+                  >
+                    <span nz-icon nzType="save"></span>
+                  </button>
+                } @else {
+                  <span
+                    class="hc-muted"
+                    nz-icon
+                    nzType="lock"
+                    [attr.title]="'recruitment.headcount.readOnly' | translate"
+                  ></span>
+                }
+              </td>
+            }
+          </tr>
+        }
+      </tbody>
+    </nz-table>
+  </div>
+</section>

@@ -49,3 +49,47 @@ export interface DayOffAllocation {
   pendingDays: number;
   note?: string | null;
 }
+
+export interface LeaveCalendarEvent {
+  eventType: 'LEAVE' | 'HOLIDAY' | string;
+  leaveId?: string | null;
+  holidayId?: string | null;
+  title: string;
+  startDate: string;
+  endDate: string;
+  status?: string | null;
+  dayOffType?: string | null;
+  session?: string | null;
+  totalDays?: number | null;
+  employeeId?: string | null;
+  employeeName?: string | null;
+  employeeCode?: string | null;
+  companyId?: string | null;
+  branchId?: string | null;
+  branchName?: string | null;
+  dayOffConfigName?: string | null;
+  reason?: string | null;
+}
+
+export interface LeaveBalanceReport {
+  id: string;
+  dayOffConfigId?: string;
+  dayOffConfigName?: string;
+  dayOffType?: string;
+  employeeId?: string;
+  employeeName?: string;
+  employeeCode?: string;
+  companyId?: string | null;
+  branchId?: string | null;
+  branchName?: string;
+  departmentId?: string | null;
+  departmentName?: string;
+  year: number;
+  allocatedDays: number;
+  usedDays: number;
+  remainingDays: number;
+  pendingDays: number;
+  expiresOn: string;
+  isExpiringSoon: boolean;
+  note?: string | null;
+}

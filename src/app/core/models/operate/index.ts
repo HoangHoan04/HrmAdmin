@@ -1,4 +1,5 @@
 export * from './attendance-complaint.models';
+export * from './overtime-request.models';
 export * from './day-off-config.models';
 export * from './leave.models';
 export * from './public-holiday.models';

@@ -1,0 +1,29 @@
+{
+  "allowance": {
+    "entityName": "allowance",
+    "code": "Code",
+    "name": "Name",
+    "description": "Description",
+    "companyName": "Company",
+    "defaultAmount": "Default Amount",
+    "isTaxable": "Taxable",
+    "isInsurable": "Insurable",
+    "isActive": "Active",
+    "displayOrder": "Display Order",
+    "status": "Status",
+    "filterCompany": "Select company...",
+    "filterStatus": "Select status...",
+    "searchPlaceholder": "Search code or name...",
+    "search": "Search",
+    "edit": "Edit allowance",
+    "activate": "Activate",
+    "deactivate": "Deactivate",
+    "createTitle": "Add Allowance",
+    "editTitle": "Update Allowance",
+    "codeRequired": "Please enter code!",
+    "nameRequired": "Please enter name!",
+    "saveSuccess": "Allowance saved successfully",
+    "activateSuccess": "Allowance activated successfully",
+    "deactivateSuccess": "Allowance deactivated successfully"
+  }
+}

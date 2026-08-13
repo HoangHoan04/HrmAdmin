@@ -1,0 +1,56 @@
+.hub-desc {
+  margin-bottom: 16px;
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.kpi-row {
+  margin-bottom: 8px;
+}
+
+.kpi-item {
+  padding: 12px 0;
+
+  &__label {
+    color: rgba(0, 0, 0, 0.55);
+    font-size: 13px;
+    margin-bottom: 4px;
+  }
+
+  &__value {
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+}
+
+.report-card {
+  border: 1px solid #f0f0f0;
+  border-radius: 8px;
+  padding: 20px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  min-height: 140px;
+  background: #fafafa;
+
+  &:hover {
+    border-color: #1890ff;
+    box-shadow: 0 2px 8px rgba(24, 144, 255, 0.12);
+  }
+
+  &__icon {
+    font-size: 22px;
+    color: #1890ff;
+    margin-bottom: 8px;
+  }
+
+  h3 {
+    margin: 0 0 8px;
+    font-size: 16px;
+  }
+
+  p {
+    margin: 0;
+    color: rgba(0, 0, 0, 0.55);
+    font-size: 13px;
+  }
+}

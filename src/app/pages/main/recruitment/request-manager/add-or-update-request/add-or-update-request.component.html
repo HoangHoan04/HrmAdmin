@@ -1,0 +1,184 @@
+<nz-card [nzTitle]="titleTemplate">
+  <nz-spin [nzSpinning]="loading">
+    <form nz-form [formGroup]="validateForm" nzLayout="vertical" (ngSubmit)="submitForm()">
+      <div nz-row [nzGutter]="16">
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{ 'recruitment.request.code' | translate }}</nz-form-label>
+            <nz-form-control
+              ><input nz-input formControlName="code" [disabled]="isEdit || isDetail"
+            /></nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{ 'recruitment.request.title' | translate }}</nz-form-label>
+            <nz-form-control><input nz-input formControlName="title" /></nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{
+              'recruitment.request.requestLevel' | translate
+            }}</nz-form-label>
+            <nz-form-control>
+              <nz-select formControlName="requestLevel" style="width: 100%">
+                @for (lv of levelOptions; track lv.value) {
+                  <nz-option [nzValue]="lv.value" [nzLabel]="lv.labelKey | translate"></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{ 'recruitment.common.company' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-select formControlName="companyId" nzAllowClear style="width: 100%">
+                @for (c of companies; track c.id) {
+                  <nz-option
+                    [nzValue]="c.id"
+                    [nzLabel]="c.code ? c.code + ' - ' + c.name : c.name"
+                  ></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'recruitment.common.branch' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-select formControlName="branchId" nzAllowClear style="width: 100%">
+                @for (b of branches; track b.id) {
+                  <nz-option
+                    [nzValue]="b.id"
+                    [nzLabel]="b.code ? b.code + ' - ' + b.name : b.name"
+                  ></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'recruitment.common.department' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-select formControlName="departmentId" nzAllowClear style="width: 100%">
+                @for (d of departments; track d.id) {
+                  <nz-option
+                    [nzValue]="d.id"
+                    [nzLabel]="d.code ? d.code + ' - ' + d.name : d.name"
+                  ></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'recruitment.common.part' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-select formControlName="partId" nzAllowClear style="width: 100%">
+                @for (p of parts; track p.id) {
+                  <nz-option
+                    [nzValue]="p.id"
+                    [nzLabel]="p.code ? p.code + ' - ' + p.name : p.name"
+                  ></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'recruitment.common.position' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-select formControlName="positionId" nzAllowClear style="width: 100%">
+                @for (p of positions; track p.id) {
+                  <nz-option
+                    [nzValue]="p.id"
+                    [nzLabel]="p.code ? p.code + ' - ' + p.name : p.name"
+                  ></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'recruitment.request.jobDescription' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-select formControlName="jobDescriptionId" nzAllowClear style="width: 100%">
+                @for (jd of jobDescriptions; track jd.id) {
+                  <nz-option [nzValue]="jd.id" [nzLabel]="jd.code + ' - ' + jd.title"></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{
+              'recruitment.request.quantity' | translate
+            }}</nz-form-label>
+            <nz-form-control>
+              <nz-input-number
+                formControlName="quantity"
+                [nzMin]="1"
+                style="width: 100%"
+              ></nz-input-number>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'recruitment.request.expectedStartDate' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-date-picker
+                formControlName="expectedStartDate"
+                style="width: 100%"
+              ></nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <nz-form-item>
+        <nz-form-label>{{ 'recruitment.request.reason' | translate }}</nz-form-label>
+        <nz-form-control>
+          <textarea nz-input rows="3" formControlName="reason"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+      @if (!isDetail) {
+        <div style="margin-top: 16px">
+          <button nz-button type="button" (click)="goBack()">
+            {{ 'common.actions.cancel' | translate }}
+          </button>
+          <button
+            nz-button
+            nzType="primary"
+            type="submit"
+            [nzLoading]="submitting"
+            style="margin-left: 8px"
+          >
+            {{ 'common.actions.save' | translate }}
+          </button>
+        </div>
+      } @else {
+        <button nz-button type="button" (click)="goBack()">
+          {{ 'recruitment.common.backToList' | translate }}
+        </button>
+      }
+    </form>
+  </nz-spin>
+</nz-card>
+
+<ng-template #titleTemplate>
+  {{
+    isDetail
+      ? ('recruitment.request.detailTitle' | translate)
+      : isEdit
+        ? ('recruitment.request.editTitle' | translate)
+        : ('recruitment.request.addTitle' | translate)
+  }}
+</ng-template>

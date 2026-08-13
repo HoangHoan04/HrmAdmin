@@ -1,11 +1,18 @@
 import { PERMISSION_CODES } from '@/app/core/constants/common/permission-codes';
 import { enumData } from '@/app/core/constants/enums/enumData';
-import { Employee } from '@/app/core/models/human-resource/employee.models';
+import {
+  Employee,
+  EmployeeExpiringFile,
+  EmployeeSelectBoxDto,
+} from '@/app/core/models/human-resource/employee.models';
+import { SelectBoxDto } from '@/app/core/models/common.models';
 import { PermissionService } from '@/app/core/services/permission.service';
 import { ActionConfirmService } from '@/app/shared/services/action-confirm.service';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { Subject, takeUntil } from 'rxjs';
 import { ROUTES_CONFIG } from '../../../../core/constants/common/routes.config';
 import { ImportResult, PagedResult } from '../../../../core/models/common.models';
 import { ApiService } from '../../../../core/services/api.service';
@@ -32,12 +39,58 @@ import {
   templateUrl: './employee-manager.component.html',
   styleUrls: ['./employee-manager.component.scss'],
 })
-export class EmployeeManagerComponent implements OnInit {
+export class EmployeeManagerComponent implements OnInit, OnDestroy {
   private readonly ENTITY_KEY = 'humanResource.employee.entityName';
+  private readonly destroy$ = new Subject<void>();
 
-  data: (Employee & { activeStatus?: boolean })[] = [];
+  data: (Employee & { activeStatus?: boolean; statusLabel?: string })[] = [];
   loading = false;
   excelLoading = false;
+  selectedRows: Employee[] = [];
+
+  employeeOptions: EmployeeSelectBoxDto[] = [];
+  companies: SelectBoxDto[] = [];
+  branches: SelectBoxDto[] = [];
+  departments: SelectBoxDto[] = [];
+  parts: SelectBoxDto[] = [];
+  positions: SelectBoxDto[] = [];
+  transferTypeOptions = Object.values(enumData.TRANSFER_TYPE);
+
+  bulkManagerVisible = false;
+  bulkManagerSubmitting = false;
+  bulkManagerForm!: FormGroup;
+
+  bulkTransferVisible = false;
+  bulkTransferSubmitting = false;
+  bulkTransferForm!: FormGroup;
+
+  expiringVisible = false;
+  expiringLoading = false;
+  expiringDaysAhead = 30;
+  expiringFiles: EmployeeExpiringFile[] = [];
+
+  expiringColumns: TableColumn[] = [
+    { field: 'employeeCode', header: 'humanResource.employee.code', type: 'text' },
+    { field: 'employeeName', header: 'humanResource.employee.fullName', type: 'text' },
+    {
+      field: 'fileCategory',
+      header: 'humanResource.employee.file.fileCategory',
+      type: 'text',
+    },
+    { field: 'fileName', header: 'humanResource.employee.file.fileName', type: 'text' },
+    { field: 'expiryDate', header: 'humanResource.employee.file.expiryDate', type: 'date' },
+    { field: 'versionNo', header: 'humanResource.employee.file.versionNo', type: 'number' },
+    {
+      field: 'daysUntilExpiry',
+      header: 'humanResource.employee.daysUntilExpiry',
+      type: 'number',
+    },
+    {
+      field: 'isExpired',
+      header: 'humanResource.employee.file.isExpired',
+      type: 'boolean',
+    },
+  ];
 
   pagination: PaginationConfig = {
     current: enumData.PAGE.PAGE_INDEX,
@@ -57,6 +110,29 @@ export class EmployeeManagerComponent implements OnInit {
     {
       ...CommonActions.create(() => this.openCreateModal()),
       visible: () => this.permissionSvc.has(PERMISSION_CODES.HR_EMPLOYEE_CREATE),
+    },
+    {
+      key: 'bulk-manager',
+      label: 'humanResource.employee.bulkChangeManager',
+      icon: 'team',
+      severity: 'default',
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.HR_EMPLOYEE_UPDATE),
+      onClick: () => this.openBulkManagerModal(),
+    },
+    {
+      key: 'bulk-transfer',
+      label: 'humanResource.employee.bulkTransfer',
+      icon: 'swap',
+      severity: 'default',
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.HR_EMPLOYEE_UPDATE),
+      onClick: () => this.openBulkTransferModal(),
+    },
+    {
+      key: 'expiring-files',
+      label: 'humanResource.employee.expiringFiles',
+      icon: 'file-exclamation',
+      severity: 'warning',
+      onClick: () => this.openExpiringFilesModal(),
     },
     {
       ...CommonActions.uploadExcel(
@@ -119,11 +195,10 @@ export class EmployeeManagerComponent implements OnInit {
       placeholder: 'humanResource.employee.filterStatus',
       col: 8,
       allowClear: true,
-      options: [
-        { label: 'humanResource.employee.statusWorking', value: 'Đang làm việc' },
-        { label: 'humanResource.employee.statusResigned', value: 'Nghỉ việc' },
-        { label: 'humanResource.employee.statusOnLeave', value: 'Tạm nghỉ' },
-      ],
+      options: Object.values(enumData.WORK_STATUS).map((s) => ({
+        label: s.labelKey,
+        value: s.value,
+      })),
     },
     {
       key: 'isDeleted',
@@ -149,7 +224,17 @@ export class EmployeeManagerComponent implements OnInit {
     { field: 'fullName', header: 'humanResource.employee.fullName', type: 'text', sortable: true },
     { field: 'phone', header: 'humanResource.employee.phone', type: 'text', sortable: true },
     { field: 'email', header: 'humanResource.employee.email', type: 'text', sortable: true },
-    { field: 'status', header: 'humanResource.employee.status', type: 'text', sortable: true },
+    {
+      field: 'statusLabel',
+      header: 'humanResource.employee.status',
+      type: 'text',
+      sortable: true,
+    },
+    {
+      field: 'directManagerName',
+      header: 'humanResource.employee.directManager',
+      type: 'text',
+    },
     { field: 'joinDate', header: 'humanResource.employee.joinDate', type: 'date', sortable: true },
     {
       field: 'activeStatus',
@@ -187,8 +272,7 @@ export class EmployeeManagerComponent implements OnInit {
       tooltip: 'humanResource.employee.activate',
       severity: 'success',
       visible: (record) =>
-        record.isDeleted === true &&
-        this.permissionSvc.has(PERMISSION_CODES.HR_EMPLOYEE_ACTIVATE),
+        record.isDeleted === true && this.permissionSvc.has(PERMISSION_CODES.HR_EMPLOYEE_ACTIVATE),
       onClick: (record) => this.activateEmployee(record),
     },
     {
@@ -210,11 +294,171 @@ export class EmployeeManagerComponent implements OnInit {
     private readonly apiService: ApiService,
     private readonly cdr: ChangeDetectorRef,
     private readonly actionConfirm: ActionConfirmService,
+    private readonly fb: FormBuilder,
     readonly permissionSvc: PermissionService,
   ) {}
 
   ngOnInit(): void {
+    this.initBulkForms();
+    this.loadEmployeeOptions();
+    this.loadCompanies();
     this.loadData();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  private initBulkForms(): void {
+    this.bulkManagerForm = this.fb.group({
+      employeeIds: [[], [Validators.required]],
+      directManagerId: [null],
+    });
+
+    this.bulkTransferForm = this.fb.group({
+      employeeIds: [[], [Validators.required]],
+      codePrefix: [''],
+      transferType: [null, [Validators.required]],
+      effectiveDate: [null, [Validators.required]],
+      reason: [''],
+      newCompanyId: [null],
+      newBranchId: [null],
+      newDepartmentId: [null],
+      newPartId: [null],
+      newPositionId: [null],
+    });
+
+    this.bulkTransferForm
+      .get('newCompanyId')
+      ?.valueChanges.pipe(takeUntil(this.destroy$))
+      .subscribe((companyId) => {
+        this.branches = [];
+        this.departments = [];
+        this.parts = [];
+        this.positions = [];
+        this.bulkTransferForm.patchValue(
+          { newBranchId: null, newDepartmentId: null, newPartId: null, newPositionId: null },
+          { emitEvent: false },
+        );
+        if (companyId) {
+          this.loadBranches(companyId);
+          this.loadDepartments(companyId, null);
+        }
+      });
+
+    this.bulkTransferForm
+      .get('newBranchId')
+      ?.valueChanges.pipe(takeUntil(this.destroy$))
+      .subscribe((branchId) => {
+        this.departments = [];
+        this.parts = [];
+        this.positions = [];
+        this.bulkTransferForm.patchValue(
+          { newDepartmentId: null, newPartId: null, newPositionId: null },
+          { emitEvent: false },
+        );
+        const companyId = this.bulkTransferForm.get('newCompanyId')?.value ?? null;
+        if (companyId || branchId) {
+          this.loadDepartments(companyId, branchId);
+        }
+      });
+
+    this.bulkTransferForm
+      .get('newDepartmentId')
+      ?.valueChanges.pipe(takeUntil(this.destroy$))
+      .subscribe((departmentId) => {
+        this.parts = [];
+        this.positions = [];
+        this.bulkTransferForm.patchValue(
+          { newPartId: null, newPositionId: null },
+          { emitEvent: false },
+        );
+        if (departmentId) {
+          this.loadParts(departmentId);
+          this.loadPositions(departmentId);
+        }
+      });
+  }
+
+  private selectedEmployeeIds(): string[] {
+    return this.selectedRows.map((r) => r.id).filter((id): id is string => !!id);
+  }
+
+  onSelectionChange(rows: Employee[]): void {
+    this.selectedRows = rows || [];
+  }
+
+  loadEmployeeOptions(): void {
+    this.apiService
+      .post<EmployeeSelectBoxDto[]>(this.apiService.EMPLOYEE.SELECT_BOX, {})
+      .subscribe({
+        next: (res) => {
+          this.employeeOptions = res || [];
+          this.cdr.markForCheck();
+        },
+      });
+  }
+
+  loadCompanies(): void {
+    this.apiService.post<SelectBoxDto[]>(this.apiService.COMPANY.SELECT_BOX, {}).subscribe({
+      next: (res) => (this.companies = res || []),
+    });
+  }
+
+  loadBranches(companyId: string): void {
+    this.apiService
+      .post<SelectBoxDto[]>(this.apiService.BRANCH.LOAD_BY_COMPANY, { companyId })
+      .subscribe({
+        next: (res) => (this.branches = res || []),
+        error: () => (this.branches = []),
+      });
+  }
+
+  loadDepartments(companyId: string | null, branchId: string | null): void {
+    if (!companyId && !branchId) {
+      this.departments = [];
+      return;
+    }
+    if (branchId) {
+      this.apiService
+        .post<SelectBoxDto[]>(this.apiService.DEPARTMENT.LOAD_BY_BRANCH, { branchId })
+        .subscribe({
+          next: (res) => (this.departments = res || []),
+          error: () => (this.departments = []),
+        });
+      return;
+    }
+    this.apiService
+      .post<SelectBoxDto[]>(this.apiService.DEPARTMENT.LOAD_BY_COMPANY, { companyId })
+      .subscribe({
+        next: (res) => (this.departments = res || []),
+        error: () => (this.departments = []),
+      });
+  }
+
+  loadParts(departmentId: string): void {
+    this.apiService
+      .post<SelectBoxDto[]>(this.apiService.PART.LOAD_BY_DEPARTMENT, { departmentId })
+      .subscribe({
+        next: (res) => (this.parts = res || []),
+        error: () => (this.parts = []),
+      });
+  }
+
+  loadPositions(departmentId: string): void {
+    this.apiService
+      .post<SelectBoxDto[]>(this.apiService.POSITION.SELECT_BOX, { departmentId })
+      .subscribe({
+        next: (res) => (this.positions = res || []),
+        error: () => (this.positions = []),
+      });
+  }
+
+  private resolveWorkStatusLabel(status?: string): string {
+    if (!status) return '-';
+    const meta = Object.values(enumData.WORK_STATUS).find((x) => x.value === status);
+    return meta ? this.i18n.instant(meta.labelKey) : status;
   }
 
   loadData(): void {
@@ -225,7 +469,7 @@ export class EmployeeManagerComponent implements OnInit {
     const payload: Record<string, any> = {
       pageIndex: this.pagination.current,
       pageSize: this.pagination.pageSize,
-      sortField: this.sortField === 'activeStatus' ? 'isDeleted' : this.sortField,
+      sortField: this.sortField === 'activeStatus' ? 'isDeleted' : this.sortField === 'statusLabel' ? 'status' : this.sortField,
       sortOrder: this.sortOrder,
       code: (this.filters['code'] || '').trim() || undefined,
       fullName: (this.filters['fullName'] || '').trim() || undefined,
@@ -244,6 +488,7 @@ export class EmployeeManagerComponent implements OnInit {
           this.data = res.items.map((item) => ({
             ...item,
             activeStatus: !item.isDeleted,
+            statusLabel: this.resolveWorkStatusLabel(item.status),
           }));
           this.pagination.total = res.totalCount;
           this.loading = false;
@@ -282,9 +527,154 @@ export class EmployeeManagerComponent implements OnInit {
 
   onSortChange(event: { sortField: string | null; sortOrder: 1 | -1 | 0 | null }): void {
     const field = event.sortField || 'createdAt';
-    this.sortField = field === 'activeStatus' ? 'isDeleted' : field;
+    this.sortField =
+      field === 'activeStatus' ? 'isDeleted' : field === 'statusLabel' ? 'status' : field;
     this.sortOrder = event.sortOrder === 1 ? 'asc' : event.sortOrder === -1 ? 'desc' : 'desc';
     this.loadData();
+  }
+
+  openBulkManagerModal(): void {
+    this.bulkManagerForm.reset({
+      employeeIds: this.selectedEmployeeIds(),
+      directManagerId: null,
+    });
+    this.bulkManagerVisible = true;
+  }
+
+  closeBulkManagerModal(): void {
+    this.bulkManagerVisible = false;
+    this.bulkManagerSubmitting = false;
+  }
+
+  submitBulkManager(): void {
+    if (this.bulkManagerForm.invalid) {
+      this.bulkManagerForm.markAllAsTouched();
+      this.message.warning(this.i18n.instant('humanResource.employee.selectEmployeesRequired'));
+      return;
+    }
+    const value = this.bulkManagerForm.getRawValue();
+    this.bulkManagerSubmitting = true;
+    this.apiService
+      .post<number>(this.apiService.EMPLOYEE.BULK_CHANGE_MANAGER, {
+        employeeIds: value.employeeIds,
+        directManagerId: value.directManagerId || null,
+      })
+      .subscribe({
+        next: (count) => {
+          this.message.success(
+            this.i18n.instant('humanResource.employee.bulkChangeManagerSuccess', {
+              count: count ?? value.employeeIds.length,
+            }),
+          );
+          this.closeBulkManagerModal();
+          this.selectedRows = [];
+          this.loadData();
+        },
+        error: (err: any) => {
+          this.message.error(this.i18n.genericError(err.error));
+          this.bulkManagerSubmitting = false;
+        },
+      });
+  }
+
+  openBulkTransferModal(): void {
+    this.branches = [];
+    this.departments = [];
+    this.parts = [];
+    this.positions = [];
+    this.bulkTransferForm.reset({
+      employeeIds: this.selectedEmployeeIds(),
+      codePrefix: '',
+      transferType: null,
+      effectiveDate: null,
+      reason: '',
+      newCompanyId: null,
+      newBranchId: null,
+      newDepartmentId: null,
+      newPartId: null,
+      newPositionId: null,
+    });
+    this.bulkTransferVisible = true;
+  }
+
+  closeBulkTransferModal(): void {
+    this.bulkTransferVisible = false;
+    this.bulkTransferSubmitting = false;
+  }
+
+  submitBulkTransfer(): void {
+    if (this.bulkTransferForm.invalid) {
+      this.bulkTransferForm.markAllAsTouched();
+      return;
+    }
+    const value = this.bulkTransferForm.getRawValue();
+    if (
+      !value.newCompanyId &&
+      !value.newBranchId &&
+      !value.newDepartmentId &&
+      !value.newPartId &&
+      !value.newPositionId
+    ) {
+      this.message.warning(this.i18n.instant('humanResource.employee.orgTargetRequired'));
+      return;
+    }
+
+    this.bulkTransferSubmitting = true;
+    this.apiService
+      .post<string[]>(this.apiService.TRANSFER_EMPLOYEE.BULK_CREATE, {
+        employeeIds: value.employeeIds,
+        codePrefix: (value.codePrefix || '').trim() || undefined,
+        transferType: value.transferType,
+        effectiveDate: value.effectiveDate ? new Date(value.effectiveDate).toISOString() : null,
+        reason: value.reason || undefined,
+        newCompanyId: value.newCompanyId || null,
+        newBranchId: value.newBranchId || null,
+        newDepartmentId: value.newDepartmentId || null,
+        newPartId: value.newPartId || null,
+        newPositionId: value.newPositionId || null,
+      })
+      .subscribe({
+        next: (ids) => {
+          this.message.success(
+            this.i18n.instant('humanResource.employee.bulkTransferSuccess', {
+              count: ids?.length ?? value.employeeIds.length,
+            }),
+          );
+          this.closeBulkTransferModal();
+          this.selectedRows = [];
+          this.loadData();
+        },
+        error: (err: any) => {
+          this.message.error(this.i18n.genericError(err.error));
+          this.bulkTransferSubmitting = false;
+        },
+      });
+  }
+
+  openExpiringFilesModal(): void {
+    this.expiringVisible = true;
+    this.expiringLoading = true;
+    this.apiService
+      .post<EmployeeExpiringFile[]>(this.apiService.EMPLOYEE.FILES_EXPIRING, {
+        daysAhead: this.expiringDaysAhead,
+        includeExpired: true,
+      })
+      .subscribe({
+        next: (items) => {
+          this.expiringFiles = items || [];
+          this.expiringLoading = false;
+          this.cdr.markForCheck();
+        },
+        error: (err: any) => {
+          this.message.error(this.i18n.genericError(err.error));
+          this.expiringLoading = false;
+          this.cdr.markForCheck();
+        },
+      });
+  }
+
+  closeExpiringFilesModal(): void {
+    this.expiringVisible = false;
   }
 
   async activateEmployee(employee: Employee): Promise<void> {

@@ -1,0 +1,102 @@
+<nz-card
+  [nzTitle]="(isEdit ? 'recruitment.source.editTitle' : 'recruitment.source.addTitle') | translate"
+>
+  @if (isSystem) {
+    <p
+      style="
+        margin: 0 0 16px;
+        padding: 10px 12px;
+        background: #e6f4ff;
+        border: 1px solid #91caff;
+        color: rgba(0, 0, 0, 0.65);
+      "
+    >
+      {{ 'recruitment.source.systemHint' | translate }}
+    </p>
+  }
+  <nz-spin [nzSpinning]="loading">
+    <form nz-form [formGroup]="validateForm" nzLayout="vertical" (ngSubmit)="submitForm()">
+      <div nz-row [nzGutter]="16">
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{ 'recruitment.source.code' | translate }}</nz-form-label>
+            <nz-form-control>
+              <input nz-input formControlName="code" [attr.disabled]="isSystem ? true : null" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{ 'recruitment.source.name' | translate }}</nz-form-label>
+            <nz-form-control><input nz-input formControlName="name" /></nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{
+              'recruitment.source.channelType' | translate
+            }}</nz-form-label>
+            <nz-form-control>
+              <nz-select formControlName="channelType" style="width: 100%">
+                @for (opt of channelOptions; track opt.value) {
+                  <nz-option [nzValue]="opt.value" [nzLabel]="opt.label | translate"></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'recruitment.source.contactEmail' | translate }}</nz-form-label>
+            <nz-form-control>
+              <input nz-input formControlName="contactEmail" placeholder="hr@company.com" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label nzRequired>{{
+              'recruitment.source.displayOrder' | translate
+            }}</nz-form-label>
+            <nz-form-control>
+              <nz-input-number
+                formControlName="displayOrder"
+                [nzMin]="0"
+                style="width: 100%"
+              ></nz-input-number>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'recruitment.common.isActive' | translate }}</nz-form-label>
+            <nz-form-control><nz-switch formControlName="isActive"></nz-switch></nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <nz-form-item>
+        <nz-form-label>{{ 'recruitment.source.description' | translate }}</nz-form-label>
+        <nz-form-control>
+          <textarea nz-input rows="3" formControlName="description"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+      <p style="color: rgba(0, 0, 0, 0.45); margin-bottom: 16px">
+        {{ 'recruitment.source.priorityHint' | translate }}
+      </p>
+      <div>
+        <button nz-button type="button" (click)="goBack()">
+          {{ 'common.actions.cancel' | translate }}
+        </button>
+        <button
+          nz-button
+          nzType="primary"
+          type="submit"
+          [nzLoading]="submitting"
+          style="margin-left: 8px"
+        >
+          {{ 'common.actions.save' | translate }}
+        </button>
+      </div>
+    </form>
+  </nz-spin>
+</nz-card>

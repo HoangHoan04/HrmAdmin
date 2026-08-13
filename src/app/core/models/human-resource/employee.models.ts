@@ -31,6 +31,7 @@ export interface EmployeeCertificate extends BaseDto {
   issueDate?: string | null;
   expiryDate?: string | null;
   credentialId?: string;
+  imageUrl?: string | null;
 }
 
 export interface EmployeeFile extends BaseDto {
@@ -42,6 +43,10 @@ export interface EmployeeFile extends BaseDto {
   fileSize?: number | null;
   description?: string;
   expiryDate?: string | null;
+  versionNo?: number;
+  replacesFileId?: string | null;
+  isCurrent?: boolean;
+  isExpired?: boolean;
 }
 
 export interface EmployeeSalaryHistory extends BaseDto {
@@ -55,6 +60,28 @@ export interface EmployeeSalaryHistory extends BaseDto {
   decisionNumber?: string;
   approvedBy?: string;
   note?: string;
+}
+
+export interface EmployeeChangeTimelineItem {
+  at: string;
+  kind: string;
+  title: string;
+  summary?: string | null;
+  refId?: string | null;
+  refType?: string | null;
+}
+
+export interface EmployeeExpiringFile {
+  id: string;
+  employeeId: string;
+  employeeCode: string;
+  employeeName: string;
+  fileCategory: string;
+  fileName: string;
+  expiryDate?: string | null;
+  versionNo: number;
+  isExpired: boolean;
+  daysUntilExpiry: number;
 }
 
 export interface Employee extends BaseDto {
@@ -98,6 +125,9 @@ export interface Employee extends BaseDto {
   departmentId?: string | null;
   partId?: string | null;
   positionId?: string | null;
+  directManagerId?: string | null;
+  directManagerName?: string | null;
+  directManagerCode?: string | null;
   dependents?: EmployeeDependent[];
   educations?: EmployeeEducation[];
   certificates?: EmployeeCertificate[];

@@ -1,0 +1,21 @@
+<div style="margin-bottom: 12px; display: flex; align-items: center; gap: 12px">
+  <h3 style="margin: 0">{{ 'system.sessions.title' | translate }}</h3>
+  @if (canManageAll) {
+    <label nz-checkbox [ngModel]="allUsers" (ngModelChange)="onToggleAllUsers($event)">
+      {{ 'system.sessions.allUsers' | translate }}
+    </label>
+  }
+</div>
+
+<app-table-custom
+  [id]="'sessions-table'"
+  [data]="data"
+  [columns]="columns"
+  [loading]="loading"
+  [showIndexList]="true"
+  [stripedRows]="true"
+  [rowActions]="rowActions"
+  [pagination]="pagination"
+  (pageChange)="onPageChange($event)"
+  (refresh)="loadData()"
+></app-table-custom>

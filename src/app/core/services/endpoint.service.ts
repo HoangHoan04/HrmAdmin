@@ -14,6 +14,15 @@ export class EndpointService {
     FORGOT_PASSWORD: `${this.baseUrl}/admin/auth/forgot-password`,
     RESET_PASSWORD_WITH_OTP: `${this.baseUrl}/admin/auth/reset-password-with-otp`,
     ME: `${this.baseUrl}/admin/auth/me`,
+    TWO_FA_SETUP: `${this.baseUrl}/admin/auth/2fa/setup`,
+    TWO_FA_ENABLE: `${this.baseUrl}/admin/auth/2fa/enable`,
+    TWO_FA_DISABLE: `${this.baseUrl}/admin/auth/2fa/disable`,
+    TWO_FA_VERIFY: `${this.baseUrl}/admin/auth/2fa/verify`,
+    SSO_STATUS: `${this.baseUrl}/admin/auth/sso/status`,
+    SSO_START: (provider: string) => `${this.baseUrl}/admin/auth/sso/${provider}/start`,
+    SSO_CALLBACK: (provider: string) => `${this.baseUrl}/admin/auth/sso/${provider}/callback`,
+    SESSIONS_LIST: `${this.baseUrl}/admin/auth/sessions/list`,
+    SESSIONS_REVOKE: `${this.baseUrl}/admin/auth/sessions/revoke`,
   };
 
   COMPANY = {
@@ -27,6 +36,11 @@ export class EndpointService {
     EXCEL_TEMPLATE: `${this.baseUrl}/company/excel/template`,
     EXCEL_EXPORT: `${this.baseUrl}/company/excel/export`,
     EXCEL_IMPORT: `${this.baseUrl}/company/excel/import`,
+  };
+
+  ORG_CHART = {
+    TREE: `${this.baseUrl}/org-chart/tree`,
+    REPARENT: `${this.baseUrl}/org-chart/reparent`,
   };
 
   BRANCH = {
@@ -55,6 +69,7 @@ export class EndpointService {
     EXCEL_EXPORT: `${this.baseUrl}/department/excel/export`,
     EXCEL_IMPORT: `${this.baseUrl}/department/excel/import`,
     LOAD_BY_BRANCH: `${this.baseUrl}/department/load-by-branch`,
+    LOAD_BY_COMPANY: `${this.baseUrl}/department/load-by-company`,
   };
 
   PART = {
@@ -135,9 +150,13 @@ export class EndpointService {
     FILE_CREATE: `${this.baseUrl}/employee/file/create`,
     FILE_UPDATE: `${this.baseUrl}/employee/file/update`,
     FILE_DELETE: `${this.baseUrl}/employee/file/delete`,
+    FILES_EXPIRING: `${this.baseUrl}/employee/files/expiring`,
     SALARY_HISTORY_CREATE: `${this.baseUrl}/employee/salary-history/create`,
     SALARY_HISTORY_UPDATE: `${this.baseUrl}/employee/salary-history/update`,
     SALARY_HISTORY_DELETE: `${this.baseUrl}/employee/salary-history/delete`,
+    CHANGE_TIMELINE: `${this.baseUrl}/employee/change-timeline`,
+    SET_LIFECYCLE_STATUS: `${this.baseUrl}/employee/set-lifecycle-status`,
+    BULK_CHANGE_MANAGER: `${this.baseUrl}/employee/bulk-change-manager`,
   };
 
   TIMEKEEPING_STANDARD = {
@@ -185,11 +204,26 @@ export class EndpointService {
     SUMMARY_PAGINATION: `${this.baseUrl}/timekeeping/summary/pagination`,
   };
 
+  TIMEKEEPING_PUNCH = {
+    IMPORT_CSV: `${this.baseUrl}/timekeeping-punch/import-csv`,
+  };
+
   ATTENDANCE_COMPLAINT = {
     PAGINATION: `${this.baseUrl}/attendance-complaint/pagination`,
     DETAIL: `${this.baseUrl}/attendance-complaint/detail`,
     APPROVE: `${this.baseUrl}/attendance-complaint/approve`,
     REJECT: `${this.baseUrl}/attendance-complaint/reject`,
+  };
+
+  OVERTIME_REQUEST = {
+    PAGINATION: `${this.baseUrl}/overtime-request/pagination`,
+    DETAIL: `${this.baseUrl}/overtime-request/detail`,
+    CREATE: `${this.baseUrl}/overtime-request/create`,
+    SUBMIT: `${this.baseUrl}/overtime-request/submit`,
+    APPROVE: `${this.baseUrl}/overtime-request/approve`,
+    REJECT: `${this.baseUrl}/overtime-request/reject`,
+    BULK_APPROVE: `${this.baseUrl}/overtime-request/bulk-approve`,
+    CANCEL: `${this.baseUrl}/overtime-request/cancel`,
   };
 
   DAY_OFF_CONFIG = {
@@ -219,11 +253,13 @@ export class EndpointService {
     REJECT: `${this.baseUrl}/register-day-off/reject`,
     CANCEL: `${this.baseUrl}/register-day-off/cancel`,
     PREVIEW_DAYS: `${this.baseUrl}/register-day-off/preview-days`,
+    CALENDAR_RANGE: `${this.baseUrl}/register-day-off/calendar-range`,
   };
 
   DAY_OFF_ALLOCATION = {
     PAGINATION: `${this.baseUrl}/day-off-allocation/pagination`,
     UPSERT: `${this.baseUrl}/day-off-allocation/upsert`,
+    BALANCE_REPORT: `${this.baseUrl}/day-off-allocation/balance-report`,
   };
 
   CONTRACT_TYPE = {
@@ -262,6 +298,7 @@ export class EndpointService {
     PAGINATION: `${this.baseUrl}/transfer-employee/pagination`,
     DETAIL: `${this.baseUrl}/transfer-employee/detail`,
     CREATE: `${this.baseUrl}/transfer-employee/create`,
+    BULK_CREATE: `${this.baseUrl}/transfer-employee/bulk-create`,
     UPDATE: `${this.baseUrl}/transfer-employee/update`,
     APPROVE: `${this.baseUrl}/transfer-employee/approve`,
     REJECT: `${this.baseUrl}/transfer-employee/reject`,
@@ -279,6 +316,13 @@ export class EndpointService {
     APPROVE: `${this.baseUrl}/salary/approve`,
     MARK_PAID: `${this.baseUrl}/salary/mark-paid`,
     CANCEL: `${this.baseUrl}/salary/cancel`,
+    PREVIEW_RUN: `${this.baseUrl}/salary/preview-run`,
+    RUN: `${this.baseUrl}/salary/run`,
+    FINALIZE_PERIOD: `${this.baseUrl}/salary/finalize-period`,
+    PAYSLIP_HTML: `${this.baseUrl}/salary/payslip-html`,
+    EXPORT_BANK_FILE: `${this.baseUrl}/salary/export-bank-file`,
+    EXPORT_BHXH: `${this.baseUrl}/salary/export-bhxh`,
+    EXPORT_ACCOUNTING: `${this.baseUrl}/salary/export-accounting`,
   };
 
   SALARY_CONFIG = {
@@ -289,6 +333,27 @@ export class EndpointService {
     ACTIVATE: `${this.baseUrl}/salary-config/activate`,
     DEACTIVATE: `${this.baseUrl}/salary-config/deactivate`,
     SELECT_BOX: `${this.baseUrl}/salary-config/select-box`,
+  };
+
+  ALLOWANCE = {
+    PAGINATION: `${this.baseUrl}/allowance/pagination`,
+    UPSERT: `${this.baseUrl}/allowance/upsert`,
+    SET_ACTIVE: `${this.baseUrl}/allowance/set-active`,
+  };
+
+  ADVANCE = {
+    PAGINATION: `${this.baseUrl}/advance/pagination`,
+    CREATE: `${this.baseUrl}/advance/create`,
+    APPROVE: `${this.baseUrl}/advance/approve`,
+    REJECT: `${this.baseUrl}/advance/reject`,
+    CANCEL: `${this.baseUrl}/advance/cancel`,
+  };
+
+  PAYROLL_SLIP = {
+    PAGINATION: `${this.baseUrl}/payroll-slip/pagination`,
+    CREATE: `${this.baseUrl}/payroll-slip/create`,
+    APPROVE: `${this.baseUrl}/payroll-slip/approve`,
+    REJECT: `${this.baseUrl}/payroll-slip/reject`,
   };
 
   PERMISSION = {
@@ -322,8 +387,325 @@ export class EndpointService {
     DELETE: `${this.baseUrl}/user/delete`,
   };
 
+  HEADCOUNT = {
+    TREE: `${this.baseUrl}/headcount/tree`,
+    UPSERT_ROW: `${this.baseUrl}/headcount/upsert-row`,
+  };
+
+  JOB_DESCRIPTION = {
+    PAGINATION: `${this.baseUrl}/job-description/pagination`,
+    DETAIL: `${this.baseUrl}/job-description/detail`,
+    CREATE: `${this.baseUrl}/job-description/create`,
+    UPDATE: `${this.baseUrl}/job-description/update`,
+    DELETE: `${this.baseUrl}/job-description/delete`,
+  };
+
+  EVALUATION_CRITERIA = {
+    PAGINATION: `${this.baseUrl}/evaluation-criteria/pagination`,
+    DETAIL: `${this.baseUrl}/evaluation-criteria/detail`,
+    CREATE: `${this.baseUrl}/evaluation-criteria/create`,
+    UPDATE: `${this.baseUrl}/evaluation-criteria/update`,
+    DELETE: `${this.baseUrl}/evaluation-criteria/delete`,
+  };
+
+  HIRING_SOURCE = {
+    LIST: `${this.baseUrl}/hiring-source/list`,
+    DETAIL: `${this.baseUrl}/hiring-source/detail`,
+    CREATE: `${this.baseUrl}/hiring-source/create`,
+    UPDATE: `${this.baseUrl}/hiring-source/update`,
+    DELETE: `${this.baseUrl}/hiring-source/delete`,
+  };
+
+  RECRUITMENT_REQUEST = {
+    PAGINATION: `${this.baseUrl}/recruitment-request/pagination`,
+    DETAIL: `${this.baseUrl}/recruitment-request/detail`,
+    CREATE: `${this.baseUrl}/recruitment-request/create`,
+    UPDATE: `${this.baseUrl}/recruitment-request/update`,
+    SUBMIT: `${this.baseUrl}/recruitment-request/submit`,
+    APPROVE: `${this.baseUrl}/recruitment-request/approve`,
+    REJECT: `${this.baseUrl}/recruitment-request/reject`,
+    CLOSE: `${this.baseUrl}/recruitment-request/close`,
+  };
+
+  HIRING_PLAN = {
+    PAGINATION: `${this.baseUrl}/hiring-plan/pagination`,
+    DETAIL: `${this.baseUrl}/hiring-plan/detail`,
+    CREATE: `${this.baseUrl}/hiring-plan/create`,
+    UPDATE: `${this.baseUrl}/hiring-plan/update`,
+    SET_CRITERIA: `${this.baseUrl}/hiring-plan/set-criteria`,
+  };
+
+  CANDIDATE = {
+    PAGINATION: `${this.baseUrl}/candidate/pagination`,
+    DETAIL: `${this.baseUrl}/candidate/detail`,
+    CREATE: `${this.baseUrl}/candidate/create`,
+    UPDATE: `${this.baseUrl}/candidate/update`,
+    CHANGE_STATUS: `${this.baseUrl}/candidate/change-status`,
+    HIRE_PREFILL: `${this.baseUrl}/candidate/hire-prefill`,
+    LINK_EMPLOYEE: `${this.baseUrl}/candidate/link-employee`,
+    STATUS_SUMMARY: `${this.baseUrl}/candidate/status-summary`,
+  };
+
+  INTERVIEW_SCHEDULE = {
+    PAGINATION: `${this.baseUrl}/interview-schedule/pagination`,
+    DETAIL: `${this.baseUrl}/interview-schedule/detail`,
+    CREATE: `${this.baseUrl}/interview-schedule/create`,
+    UPDATE: `${this.baseUrl}/interview-schedule/update`,
+    CANCEL: `${this.baseUrl}/interview-schedule/cancel`,
+    COMPLETE: `${this.baseUrl}/interview-schedule/complete`,
+    SET_INTERVIEWERS: `${this.baseUrl}/interview-schedule/set-interviewers`,
+    CALENDAR_RANGE: `${this.baseUrl}/interview-schedule/calendar-range`,
+    EVALUATIONS: `${this.baseUrl}/interview-schedule/evaluations`,
+    UPSERT_EVALUATIONS: `${this.baseUrl}/interview-schedule/upsert-evaluations`,
+  };
+
+  VIOLATION_TYPE = {
+    PAGINATION: `${this.baseUrl}/violation-type/pagination`,
+    LIST: `${this.baseUrl}/violation-type/list`,
+    DETAIL: `${this.baseUrl}/violation-type/detail`,
+    CREATE: `${this.baseUrl}/violation-type/create`,
+    UPDATE: `${this.baseUrl}/violation-type/update`,
+    DELETE: `${this.baseUrl}/violation-type/delete`,
+  };
+
+  VIOLATION = {
+    PAGINATION: `${this.baseUrl}/violation/pagination`,
+    DETAIL: `${this.baseUrl}/violation/detail`,
+    CREATE: `${this.baseUrl}/violation/create`,
+    UPDATE: `${this.baseUrl}/violation/update`,
+    DELETE: `${this.baseUrl}/violation/delete`,
+    CONFIRM: `${this.baseUrl}/violation/confirm`,
+    CANCEL: `${this.baseUrl}/violation/cancel`,
+  };
+
+  ASSET_TYPE = {
+    PAGINATION: `${this.baseUrl}/asset-type/pagination`,
+    DETAIL: `${this.baseUrl}/asset-type/detail`,
+    CREATE: `${this.baseUrl}/asset-type/create`,
+    UPDATE: `${this.baseUrl}/asset-type/update`,
+    DELETE: `${this.baseUrl}/asset-type/delete`,
+  };
+
+  ASSET = {
+    PAGINATION: `${this.baseUrl}/asset/pagination`,
+    DETAIL: `${this.baseUrl}/asset/detail`,
+    CREATE: `${this.baseUrl}/asset/create`,
+    UPDATE: `${this.baseUrl}/asset/update`,
+    DELETE: `${this.baseUrl}/asset/delete`,
+  };
+
+  ASSET_TICKET = {
+    PAGINATION: `${this.baseUrl}/asset-ticket/pagination`,
+    DETAIL: `${this.baseUrl}/asset-ticket/detail`,
+    CREATE: `${this.baseUrl}/asset-ticket/create`,
+    UPDATE: `${this.baseUrl}/asset-ticket/update`,
+    DELETE: `${this.baseUrl}/asset-ticket/delete`,
+    COMPLETE: `${this.baseUrl}/asset-ticket/complete`,
+  };
+
+  PERFORMANCE_CYCLE = {
+    PAGINATION: `${this.baseUrl}/performance-cycle/pagination`,
+    LIST: `${this.baseUrl}/performance-cycle/list`,
+    DETAIL: `${this.baseUrl}/performance-cycle/detail`,
+    CREATE: `${this.baseUrl}/performance-cycle/create`,
+    UPDATE: `${this.baseUrl}/performance-cycle/update`,
+    DELETE: `${this.baseUrl}/performance-cycle/delete`,
+  };
+
+  PERFORMANCE_DASHBOARD = {
+    SUMMARY: `${this.baseUrl}/performance-dashboard/summary`,
+  };
+
+  PERFORMANCE_360 = {
+    PAGINATION: `${this.baseUrl}/performance-360/pagination`,
+    DETAIL: `${this.baseUrl}/performance-360/detail`,
+    CREATE: `${this.baseUrl}/performance-360/create`,
+    UPDATE: `${this.baseUrl}/performance-360/update`,
+    DELETE: `${this.baseUrl}/performance-360/delete`,
+  };
+
+  KPI_GOAL = {
+    PAGINATION: `${this.baseUrl}/kpi-goal/pagination`,
+    LIST: `${this.baseUrl}/kpi-goal/list`,
+    DETAIL: `${this.baseUrl}/kpi-goal/detail`,
+    CREATE: `${this.baseUrl}/kpi-goal/create`,
+    UPDATE: `${this.baseUrl}/kpi-goal/update`,
+    DELETE: `${this.baseUrl}/kpi-goal/delete`,
+  };
+
+  KPI_RESULT = {
+    PAGINATION: `${this.baseUrl}/kpi-result/pagination`,
+    DETAIL: `${this.baseUrl}/kpi-result/detail`,
+    CREATE: `${this.baseUrl}/kpi-result/create`,
+    UPDATE: `${this.baseUrl}/kpi-result/update`,
+    DELETE: `${this.baseUrl}/kpi-result/delete`,
+  };
+
+  COMPETENCY = {
+    PAGINATION: `${this.baseUrl}/competency/pagination`,
+    LIST: `${this.baseUrl}/competency/list`,
+    DETAIL: `${this.baseUrl}/competency/detail`,
+    CREATE: `${this.baseUrl}/competency/create`,
+    UPDATE: `${this.baseUrl}/competency/update`,
+    DELETE: `${this.baseUrl}/competency/delete`,
+  };
+
+  TRAINING_COURSE = {
+    PAGINATION: `${this.baseUrl}/training-course/pagination`,
+    LIST: `${this.baseUrl}/training-course/list`,
+    DETAIL: `${this.baseUrl}/training-course/detail`,
+    CREATE: `${this.baseUrl}/training-course/create`,
+    UPDATE: `${this.baseUrl}/training-course/update`,
+    DELETE: `${this.baseUrl}/training-course/delete`,
+  };
+
+  TRAINING_COURSE_MATERIAL = {
+    PAGINATION: `${this.baseUrl}/training-course-material/pagination`,
+    DETAIL: `${this.baseUrl}/training-course-material/detail`,
+    CREATE: `${this.baseUrl}/training-course-material/create`,
+    UPDATE: `${this.baseUrl}/training-course-material/update`,
+    DELETE: `${this.baseUrl}/training-course-material/delete`,
+  };
+
+  TRAINING_QUIZ = {
+    PAGINATION: `${this.baseUrl}/training-quiz/pagination`,
+    DETAIL: `${this.baseUrl}/training-quiz/detail`,
+    CREATE: `${this.baseUrl}/training-quiz/create`,
+    UPDATE: `${this.baseUrl}/training-quiz/update`,
+    DELETE: `${this.baseUrl}/training-quiz/delete`,
+  };
+
+  TRAINING_PROGRESS = {
+    SUMMARY: `${this.baseUrl}/training-progress/summary`,
+  };
+
+  TRAINING_ENROLLMENT = {
+    PAGINATION: `${this.baseUrl}/training-enrollment/pagination`,
+    LIST: `${this.baseUrl}/training-enrollment/list`,
+    DETAIL: `${this.baseUrl}/training-enrollment/detail`,
+    CREATE: `${this.baseUrl}/training-enrollment/create`,
+    UPDATE: `${this.baseUrl}/training-enrollment/update`,
+    DELETE: `${this.baseUrl}/training-enrollment/delete`,
+  };
+
+  TRAINING_RESULT = {
+    PAGINATION: `${this.baseUrl}/training-result/pagination`,
+    DETAIL: `${this.baseUrl}/training-result/detail`,
+    CREATE: `${this.baseUrl}/training-result/create`,
+    UPDATE: `${this.baseUrl}/training-result/update`,
+    DELETE: `${this.baseUrl}/training-result/delete`,
+  };
+
+  WORKFLOW_DEFINITION = {
+    PAGINATION: `${this.baseUrl}/workflow-definition/pagination`,
+    DETAIL: `${this.baseUrl}/workflow-definition/detail`,
+    CREATE: `${this.baseUrl}/workflow-definition/create`,
+    UPDATE: `${this.baseUrl}/workflow-definition/update`,
+    DELETE: `${this.baseUrl}/workflow-definition/delete`,
+    SET_STEPS: `${this.baseUrl}/workflow-definition/set-steps`,
+  };
+
+  WORKFLOW = {
+    INBOX: `${this.baseUrl}/workflow/inbox`,
+    DASHBOARD_SUMMARY: `${this.baseUrl}/workflow/dashboard-summary`,
+    ADVANCE: `${this.baseUrl}/workflow/advance`,
+    REJECT: `${this.baseUrl}/workflow/reject`,
+  };
+
+  WORKFLOW_FORM_TEMPLATE = {
+    PAGINATION: `${this.baseUrl}/workflow-form-template/pagination`,
+    DETAIL: `${this.baseUrl}/workflow-form-template/detail`,
+    CREATE: `${this.baseUrl}/workflow-form-template/create`,
+    UPDATE: `${this.baseUrl}/workflow-form-template/update`,
+    DELETE: `${this.baseUrl}/workflow-form-template/delete`,
+  };
+
+  HOME = {
+    DASHBOARD: `${this.baseUrl}/home/dashboard`,
+  };
+
   ACTION_LOG = {
     BASE: `${this.baseUrl}/action-logs`,
+  };
+
+  COMPLIANCE = {
+    SUMMARY: `${this.baseUrl}/compliance/summary`,
+  };
+
+  REPORT_SCHEDULE = {
+    PAGINATION: `${this.baseUrl}/report-schedule/pagination`,
+    DETAIL: `${this.baseUrl}/report-schedule/detail`,
+    CREATE: `${this.baseUrl}/report-schedule/create`,
+    UPDATE: `${this.baseUrl}/report-schedule/update`,
+    DELETE: `${this.baseUrl}/report-schedule/delete`,
+    RUN_DUE: `${this.baseUrl}/report-schedule/run-due`,
+  };
+
+  LEGAL_RATE_CONFIG = {
+    PAGINATION: `${this.baseUrl}/legal-rate-config/pagination`,
+    DETAIL: `${this.baseUrl}/legal-rate-config/detail`,
+    CREATE: `${this.baseUrl}/legal-rate-config/create`,
+    UPDATE: `${this.baseUrl}/legal-rate-config/update`,
+    DELETE: `${this.baseUrl}/legal-rate-config/delete`,
+  };
+
+  NOTIFICATION_TEMPLATE = {
+    PAGINATION: `${this.baseUrl}/notification-template/pagination`,
+    DETAIL: `${this.baseUrl}/notification-template/detail`,
+    CREATE: `${this.baseUrl}/notification-template/create`,
+    UPDATE: `${this.baseUrl}/notification-template/update`,
+    DELETE: `${this.baseUrl}/notification-template/delete`,
+  };
+
+  API_CLIENT_KEY = {
+    PAGINATION: `${this.baseUrl}/api-client-key/pagination`,
+    DETAIL: `${this.baseUrl}/api-client-key/detail`,
+    CREATE: `${this.baseUrl}/api-client-key/create`,
+    UPDATE: `${this.baseUrl}/api-client-key/update`,
+    DELETE: `${this.baseUrl}/api-client-key/delete`,
+  };
+
+  WEBHOOK_SUBSCRIPTION = {
+    PAGINATION: `${this.baseUrl}/webhook-subscription/pagination`,
+    DETAIL: `${this.baseUrl}/webhook-subscription/detail`,
+    CREATE: `${this.baseUrl}/webhook-subscription/create`,
+    UPDATE: `${this.baseUrl}/webhook-subscription/update`,
+    DELETE: `${this.baseUrl}/webhook-subscription/delete`,
+  };
+
+  SYSTEM_RETENTION = {
+    DETAIL: `${this.baseUrl}/system-retention/detail`,
+    UPDATE: `${this.baseUrl}/system-retention/update`,
+  };
+
+  SMS_GATEWAY_CONFIG = {
+    PAGINATION: `${this.baseUrl}/sms-gateway-config/pagination`,
+    DETAIL: `${this.baseUrl}/sms-gateway-config/detail`,
+    CREATE: `${this.baseUrl}/sms-gateway-config/create`,
+    UPDATE: `${this.baseUrl}/sms-gateway-config/update`,
+    DELETE: `${this.baseUrl}/sms-gateway-config/delete`,
+    SEND_TEST: `${this.baseUrl}/sms-gateway-config/send-test`,
+  };
+
+  ZALO_OA_CONFIG = {
+    PAGINATION: `${this.baseUrl}/zalo-oa-config/pagination`,
+    DETAIL: `${this.baseUrl}/zalo-oa-config/detail`,
+    CREATE: `${this.baseUrl}/zalo-oa-config/create`,
+    UPDATE: `${this.baseUrl}/zalo-oa-config/update`,
+    DELETE: `${this.baseUrl}/zalo-oa-config/delete`,
+  };
+
+  INTEGRATIONS = {
+    STATUS: `${this.baseUrl}/integrations/status`,
+    ZALO_SEND_TEST: `${this.baseUrl}/integrations/zalo/send-test`,
+  };
+
+  IP_ALLOWLIST = {
+    PAGINATION: `${this.baseUrl}/ip-allowlist/pagination`,
+    DETAIL: `${this.baseUrl}/ip-allowlist/detail`,
+    CREATE: `${this.baseUrl}/ip-allowlist/create`,
+    UPDATE: `${this.baseUrl}/ip-allowlist/update`,
+    DELETE: `${this.baseUrl}/ip-allowlist/delete`,
   };
 
   UPLOAD_FILE = {

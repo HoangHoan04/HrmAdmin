@@ -18,6 +18,9 @@ export class ApiService {
   get COMPANY() {
     return this.endpoints.COMPANY;
   }
+  get ORG_CHART() {
+    return this.endpoints.ORG_CHART;
+  }
   get BRANCH() {
     return this.endpoints.BRANCH;
   }
@@ -57,6 +60,9 @@ export class ApiService {
   get ATTENDANCE_COMPLAINT() {
     return this.endpoints.ATTENDANCE_COMPLAINT;
   }
+  get OVERTIME_REQUEST() {
+    return this.endpoints.OVERTIME_REQUEST;
+  }
   get DAY_OFF_CONFIG() {
     return this.endpoints.DAY_OFF_CONFIG;
   }
@@ -87,6 +93,15 @@ export class ApiService {
   get SALARY_CONFIG() {
     return this.endpoints.SALARY_CONFIG;
   }
+  get ALLOWANCE() {
+    return this.endpoints.ALLOWANCE;
+  }
+  get ADVANCE() {
+    return this.endpoints.ADVANCE;
+  }
+  get PAYROLL_SLIP() {
+    return this.endpoints.PAYROLL_SLIP;
+  }
   get PERMISSION() {
     return this.endpoints.PERMISSION;
   }
@@ -99,8 +114,131 @@ export class ApiService {
   get USER() {
     return this.endpoints.USER;
   }
+  get HEADCOUNT() {
+    return this.endpoints.HEADCOUNT;
+  }
+  get JOB_DESCRIPTION() {
+    return this.endpoints.JOB_DESCRIPTION;
+  }
+  get EVALUATION_CRITERIA() {
+    return this.endpoints.EVALUATION_CRITERIA;
+  }
+  get HIRING_SOURCE() {
+    return this.endpoints.HIRING_SOURCE;
+  }
+  get RECRUITMENT_REQUEST() {
+    return this.endpoints.RECRUITMENT_REQUEST;
+  }
+  get HIRING_PLAN() {
+    return this.endpoints.HIRING_PLAN;
+  }
+  get CANDIDATE() {
+    return this.endpoints.CANDIDATE;
+  }
+  get INTERVIEW_SCHEDULE() {
+    return this.endpoints.INTERVIEW_SCHEDULE;
+  }
+  get VIOLATION_TYPE() {
+    return this.endpoints.VIOLATION_TYPE;
+  }
+  get VIOLATION() {
+    return this.endpoints.VIOLATION;
+  }
+  get ASSET_TYPE() {
+    return this.endpoints.ASSET_TYPE;
+  }
+  get ASSET() {
+    return this.endpoints.ASSET;
+  }
+  get ASSET_TICKET() {
+    return this.endpoints.ASSET_TICKET;
+  }
+  get PERFORMANCE_CYCLE() {
+    return this.endpoints.PERFORMANCE_CYCLE;
+  }
+  get PERFORMANCE_DASHBOARD() {
+    return this.endpoints.PERFORMANCE_DASHBOARD;
+  }
+  get PERFORMANCE_360() {
+    return this.endpoints.PERFORMANCE_360;
+  }
+  get KPI_GOAL() {
+    return this.endpoints.KPI_GOAL;
+  }
+  get KPI_RESULT() {
+    return this.endpoints.KPI_RESULT;
+  }
+  get COMPETENCY() {
+    return this.endpoints.COMPETENCY;
+  }
+  get TRAINING_COURSE() {
+    return this.endpoints.TRAINING_COURSE;
+  }
+  get TRAINING_COURSE_MATERIAL() {
+    return this.endpoints.TRAINING_COURSE_MATERIAL;
+  }
+  get TRAINING_QUIZ() {
+    return this.endpoints.TRAINING_QUIZ;
+  }
+  get TRAINING_PROGRESS() {
+    return this.endpoints.TRAINING_PROGRESS;
+  }
+  get TRAINING_ENROLLMENT() {
+    return this.endpoints.TRAINING_ENROLLMENT;
+  }
+  get TRAINING_RESULT() {
+    return this.endpoints.TRAINING_RESULT;
+  }
+  get WORKFLOW_DEFINITION() {
+    return this.endpoints.WORKFLOW_DEFINITION;
+  }
+  get WORKFLOW() {
+    return this.endpoints.WORKFLOW;
+  }
+  get WORKFLOW_FORM_TEMPLATE() {
+    return this.endpoints.WORKFLOW_FORM_TEMPLATE;
+  }
+  get HOME() {
+    return this.endpoints.HOME;
+  }
   get ACTION_LOG() {
     return this.endpoints.ACTION_LOG;
+  }
+  get COMPLIANCE() {
+    return this.endpoints.COMPLIANCE;
+  }
+  get REPORT_SCHEDULE() {
+    return this.endpoints.REPORT_SCHEDULE;
+  }
+  get LEGAL_RATE_CONFIG() {
+    return this.endpoints.LEGAL_RATE_CONFIG;
+  }
+  get NOTIFICATION_TEMPLATE() {
+    return this.endpoints.NOTIFICATION_TEMPLATE;
+  }
+  get API_CLIENT_KEY() {
+    return this.endpoints.API_CLIENT_KEY;
+  }
+  get WEBHOOK_SUBSCRIPTION() {
+    return this.endpoints.WEBHOOK_SUBSCRIPTION;
+  }
+  get SYSTEM_RETENTION() {
+    return this.endpoints.SYSTEM_RETENTION;
+  }
+  get SMS_GATEWAY_CONFIG() {
+    return this.endpoints.SMS_GATEWAY_CONFIG;
+  }
+  get ZALO_OA_CONFIG() {
+    return this.endpoints.ZALO_OA_CONFIG;
+  }
+  get INTEGRATIONS() {
+    return this.endpoints.INTEGRATIONS;
+  }
+  get TIMEKEEPING_PUNCH() {
+    return this.endpoints.TIMEKEEPING_PUNCH;
+  }
+  get IP_ALLOWLIST() {
+    return this.endpoints.IP_ALLOWLIST;
   }
   get UPLOAD_FILE() {
     return this.endpoints.UPLOAD_FILE;
@@ -108,6 +246,10 @@ export class ApiService {
 
   get<T>(url: string): Observable<T> {
     return this.http.get<T>(url);
+  }
+
+  getText(url: string): Observable<string> {
+    return this.http.get(url, { responseType: 'text' });
   }
 
   post<T>(url: string, body: any): Observable<T> {

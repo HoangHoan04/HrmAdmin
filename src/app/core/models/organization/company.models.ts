@@ -35,10 +35,13 @@ export interface Company extends BaseDto {
   timeZone?: string;
   defaultLanguage?: string;
   logoUrl?: string;
+  primaryColor?: string;
   isActive?: boolean;
   socialInsuranceCode?: string;
   timeKeepingStandardId?: string | null;
   saturdayPolicy?: string | null;
+  latitude?: number | null;
+  longitude?: number | null;
 }
 
 export interface CompanyImportResult {
