@@ -81,7 +81,17 @@ export class WorkflowInboxComponent implements OnInit {
         this.cdr.markForCheck();
       },
       error: (err: any) => {
-        this.message.error(this.i18n.loadListFailed(this.ENTITY_KEY, err.error));
+        const apiMessage =
+          typeof err?.error === 'string'
+            ? err.error
+            : err?.error?.message || err?.error?.title || '';
+        if (apiMessage.includes('chưa gắn nhân viên')) {
+          this.data = [];
+          this.pagination.total = 0;
+          this.message.warning(this.i18n.instant('workflow.inbox.noEmployeeLinked'));
+        } else {
+          this.message.error(this.i18n.loadListFailed(this.ENTITY_KEY, err.error));
+        }
         this.loading = false;
         this.cdr.markForCheck();
       },

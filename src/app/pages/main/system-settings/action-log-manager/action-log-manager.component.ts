@@ -1,5 +1,5 @@
-import { toDateOnly } from '@/app/core/constants/helpers';
 import { enumData } from '@/app/core/constants/enums';
+import { toDateOnly } from '@/app/core/constants/helpers';
 import { ActionLog, PagedResult } from '@/app/core/models';
 import { ApiService, I18nMessageService } from '@/app/core/services';
 import {
@@ -86,7 +86,7 @@ export class ActionLogManagerComponent implements OnInit {
     {
       key: 'view',
       icon: 'eye',
-      tooltip: 'actionLog.viewDetail',
+      tooltip: 'table.action.viewDetail',
       severity: 'info',
       visible: (record: ActionLog) => !!(record.oldValue || record.newValue),
       onClick: (record) => this.openDetailModal(record),
@@ -178,9 +178,7 @@ export class ActionLogManagerComponent implements OnInit {
   getActionTypeLabel(actionType?: string): string {
     if (!actionType) return this.translate.instant('enums.notAvailable');
     const meta = Object.values(enumData.ACTION_TYPE).find((item) => item.code === actionType);
-    return meta?.labelKey
-      ? this.translate.instant(meta.labelKey)
-      : actionType;
+    return meta?.labelKey ? this.translate.instant(meta.labelKey) : actionType;
   }
 
   openDetailModal(log: ActionLog): void {

@@ -3,7 +3,7 @@ import { enumData } from '@/app/core/constants/enums';
 import { Salary } from '@/app/core/models';
 import { ApiService, I18nMessageService } from '@/app/core/services';
 import { ActionConfirmService } from '@/app/shared/services/action-confirm.service';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 
@@ -19,6 +19,10 @@ export class SalaryDetailComponent implements OnInit {
   actionSubmitting = false;
   printing = false;
   salary: Salary | null = null;
+  canEdit = false;
+  canApprove = false;
+  canMarkPaid = false;
+  canCancel = false;
   enumData = enumData;
 
   constructor(
@@ -28,7 +32,30 @@ export class SalaryDetailComponent implements OnInit {
     private readonly i18n: I18nMessageService,
     private readonly apiService: ApiService,
     private readonly actionConfirm: ActionConfirmService,
+    private readonly cdr: ChangeDetectorRef,
   ) {}
+
+  private syncActionFlags(): void {
+    const salary = this.salary;
+    if (!salary) {
+      this.canEdit = false;
+      this.canApprove = false;
+      this.canMarkPaid = false;
+      this.canCancel = false;
+      return;
+    }
+
+    this.canEdit =
+      salary.status === enumData.SALARY_STATUS.DRAFT.value ||
+      salary.status === enumData.SALARY_STATUS.PROCESSING.value;
+    this.canApprove = this.canEdit;
+    this.canMarkPaid =
+      salary.status === enumData.SALARY_STATUS.APPROVED.value ||
+      salary.status === enumData.SALARY_STATUS.PROCESSING.value;
+    this.canCancel =
+      salary.status !== enumData.SALARY_STATUS.PAID.value &&
+      salary.status !== enumData.SALARY_STATUS.CANCELLED.value;
+  }
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id');
@@ -37,44 +64,14 @@ export class SalaryDetailComponent implements OnInit {
     }
   }
 
-  get canEdit(): boolean {
-    return (
-      !!this.salary &&
-      (this.salary.status === enumData.SALARY_STATUS.DRAFT.value ||
-        this.salary.status === enumData.SALARY_STATUS.PROCESSING.value)
-    );
-  }
-
-  get canApprove(): boolean {
-    return (
-      !!this.salary &&
-      (this.salary.status === enumData.SALARY_STATUS.DRAFT.value ||
-        this.salary.status === enumData.SALARY_STATUS.PROCESSING.value)
-    );
-  }
-
-  get canMarkPaid(): boolean {
-    return (
-      !!this.salary &&
-      (this.salary.status === enumData.SALARY_STATUS.APPROVED.value ||
-        this.salary.status === enumData.SALARY_STATUS.PROCESSING.value)
-    );
-  }
-
-  get canCancel(): boolean {
-    return (
-      !!this.salary &&
-      this.salary.status !== enumData.SALARY_STATUS.PAID.value &&
-      this.salary.status !== enumData.SALARY_STATUS.CANCELLED.value
-    );
-  }
-
   loadDetail(id: string): void {
     this.loading = true;
     this.apiService.post<Salary>(this.apiService.SALARY.DETAIL, { id }).subscribe({
       next: (item) => {
         this.salary = item;
+        this.syncActionFlags();
         this.loading = false;
+        this.cdr.markForCheck();
       },
       error: (err: any) => {
         this.message.error(this.i18n.loadDetailFailed(err.error));
@@ -108,12 +105,14 @@ export class SalaryDetailComponent implements OnInit {
         window.open(blobUrl, '_blank');
         setTimeout(() => URL.revokeObjectURL(blobUrl), 60_000);
         this.printing = false;
+        this.cdr.markForCheck();
       },
       error: (err: any) => {
         this.message.error(
           this.i18n.instant('salary.printPayslipFailed') || this.i18n.genericError(err.error),
         );
         this.printing = false;
+        this.cdr.markForCheck();
       },
     });
   }
@@ -143,10 +142,12 @@ export class SalaryDetailComponent implements OnInit {
             this.message.error(this.i18n.genericError());
           }
           this.actionSubmitting = false;
+          this.cdr.markForCheck();
         },
         error: (err: any) => {
           this.message.error(this.i18n.genericError(err.error));
           this.actionSubmitting = false;
+          this.cdr.markForCheck();
         },
       });
   }
@@ -176,10 +177,12 @@ export class SalaryDetailComponent implements OnInit {
             this.message.error(this.i18n.genericError());
           }
           this.actionSubmitting = false;
+          this.cdr.markForCheck();
         },
         error: (err: any) => {
           this.message.error(this.i18n.genericError(err.error));
           this.actionSubmitting = false;
+          this.cdr.markForCheck();
         },
       });
   }
@@ -207,10 +210,12 @@ export class SalaryDetailComponent implements OnInit {
           this.message.error(this.i18n.genericError());
         }
         this.actionSubmitting = false;
+        this.cdr.markForCheck();
       },
       error: (err: any) => {
         this.message.error(this.i18n.genericError(err.error));
         this.actionSubmitting = false;
+        this.cdr.markForCheck();
       },
     });
   }

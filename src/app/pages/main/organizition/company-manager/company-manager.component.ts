@@ -142,14 +142,15 @@ export class CompanyManagerComponent implements OnInit {
     {
       key: 'view',
       icon: 'eye',
-      tooltip: 'organization.company.viewDetail',
+      tooltip: 'table.action.viewDetail',
       severity: 'primary',
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.ORG_COMPANY_VIEW),
       onClick: (record) => this.viewDetail(record),
     },
     {
       key: 'edit',
       icon: 'edit',
-      tooltip: 'organization.company.edit',
+      tooltip: 'table.action.edit',
       severity: 'info',
       visible: () => this.permissionSvc.has(PERMISSION_CODES.ORG_COMPANY_UPDATE),
       onClick: (record) => this.openEdit(record),
@@ -157,7 +158,7 @@ export class CompanyManagerComponent implements OnInit {
     {
       key: 'activate',
       icon: 'check-circle',
-      tooltip: 'organization.company.activate',
+      tooltip: 'table.action.activate',
       severity: 'success',
       visible: (record) =>
         record.isDeleted === true && this.permissionSvc.has(PERMISSION_CODES.ORG_COMPANY_ACTIVATE),
@@ -166,7 +167,7 @@ export class CompanyManagerComponent implements OnInit {
     {
       key: 'deactivate',
       icon: 'stop',
-      tooltip: 'organization.company.deactivate',
+      tooltip: 'table.action.deactivate',
       severity: 'danger',
       visible: (record) =>
         record.isDeleted === false &&

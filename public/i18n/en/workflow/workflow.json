@@ -39,7 +39,8 @@
       "rejectConfirm": "Reject this task?",
       "notePlaceholder": "Optional note",
       "rejectNotePlaceholder": "Rejection reason",
-      "rejectNoteRequired": "Rejection note is required."
+      "rejectNoteRequired": "Rejection note is required.",
+      "noEmployeeLinked": "Your account is not linked to an employee record, so the workflow inbox is unavailable."
     },
     "dashboard": {
       "title": "Workflow dashboard",

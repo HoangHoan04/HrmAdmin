@@ -1,8 +1,8 @@
-import { ROUTES_CONFIG } from '@/app/core/constants/common';
+import { PERMISSION_CODES, ROUTES_CONFIG } from '@/app/core/constants/common';
 import { enumData } from '@/app/core/constants/enums';
 import { toUtcDateIso } from '@/app/core/constants/helpers';
 import { EmployeeSelectBoxDto, PagedResult, TransferEmployee } from '@/app/core/models';
-import { ApiService, I18nMessageService } from '@/app/core/services';
+import { ApiService, I18nMessageService, PermissionService } from '@/app/core/services';
 import { StaticTranslateService } from '@/app/core/services/static-translate.service';
 import {
   CommonFilterActions,
@@ -51,7 +51,12 @@ export class TransferManagerComponent implements OnInit {
   sortField = enumData.PAGE.SORT_FIELD.CREATED_AT;
   sortOrder = enumData.PAGE.SORT_ORDER.DESC;
   toolbar: ToolbarConfig = { show: true };
-  toolbarActions: TableAction[] = [CommonActions.create(() => this.openCreate())];
+  toolbarActions: TableAction[] = [
+    {
+      ...CommonActions.create(() => this.openCreate()),
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.HR_TRANSFER_CREATE),
+    },
+  ];
 
   filters: Record<string, any> = {
     code: '',
@@ -165,50 +170,60 @@ export class TransferManagerComponent implements OnInit {
     {
       key: 'view',
       icon: 'eye',
-      tooltip: 'transfer.viewDetail',
+      tooltip: 'table.action.viewDetail',
       severity: 'primary',
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.HR_TRANSFER_VIEW),
       onClick: (record) => this.openDetail(record),
     },
     {
       key: 'edit',
       icon: 'edit',
-      tooltip: 'transfer.edit',
+      tooltip: 'table.action.edit',
       severity: 'info',
-      visible: (record) => record.status === enumData.TRANSFER_STATUS.PENDING.value,
+      visible: (record) =>
+        record.status === enumData.TRANSFER_STATUS.PENDING.value &&
+        this.permissionSvc.has(PERMISSION_CODES.HR_TRANSFER_UPDATE),
       onClick: (record) => this.openEdit(record),
     },
     {
       key: 'approve',
       icon: 'check',
-      tooltip: 'transfer.approve',
+      tooltip: 'table.action.approve',
       severity: 'success',
-      visible: (record) => record.status === enumData.TRANSFER_STATUS.PENDING.value,
+      visible: (record) =>
+        record.status === enumData.TRANSFER_STATUS.PENDING.value &&
+        this.permissionSvc.has(PERMISSION_CODES.HR_TRANSFER_APPROVE),
       onClick: (record) => this.approve(record),
     },
     {
       key: 'reject',
       icon: 'close',
-      tooltip: 'transfer.reject',
+      tooltip: 'table.action.reject',
       severity: 'danger',
-      visible: (record) => record.status === enumData.TRANSFER_STATUS.PENDING.value,
+      visible: (record) =>
+        record.status === enumData.TRANSFER_STATUS.PENDING.value &&
+        this.permissionSvc.has(PERMISSION_CODES.HR_TRANSFER_REJECT),
       onClick: (record) => this.reject(record),
     },
     {
       key: 'apply',
       icon: 'play-circle',
-      tooltip: 'transfer.apply',
+      tooltip: 'table.action.apply',
       severity: 'success',
-      visible: (record) => record.status === enumData.TRANSFER_STATUS.APPROVED.value,
+      visible: (record) =>
+        record.status === enumData.TRANSFER_STATUS.APPROVED.value &&
+        this.permissionSvc.has(PERMISSION_CODES.HR_TRANSFER_APPLY),
       onClick: (record) => this.apply(record),
     },
     {
       key: 'cancel',
       icon: 'stop',
-      tooltip: 'transfer.cancel',
+      tooltip: 'table.action.cancel',
       severity: 'warning',
       visible: (record) =>
-        record.status === enumData.TRANSFER_STATUS.PENDING.value ||
-        record.status === enumData.TRANSFER_STATUS.APPROVED.value,
+        (record.status === enumData.TRANSFER_STATUS.PENDING.value ||
+          record.status === enumData.TRANSFER_STATUS.APPROVED.value) &&
+        this.permissionSvc.has(PERMISSION_CODES.HR_TRANSFER_CANCEL),
       onClick: (record) => this.cancel(record),
     },
   ];
@@ -222,6 +237,7 @@ export class TransferManagerComponent implements OnInit {
     private readonly apiService: ApiService,
     private readonly cdr: ChangeDetectorRef,
     private readonly modal: NzModalService,
+    readonly permissionSvc: PermissionService,
   ) {}
 
   ngOnInit(): void {

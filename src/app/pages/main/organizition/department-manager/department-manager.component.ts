@@ -1,5 +1,7 @@
+import { PERMISSION_CODES } from '@/app/core/constants/common';
 import { enumData } from '@/app/core/constants/enums/enumData';
 import { BranchSelectBoxDto, CompanySelectBoxDto, Department } from '@/app/core/models';
+import { PermissionService } from '@/app/core/services';
 import { StaticTranslateService } from '@/app/core/services/static-translate.service';
 import { downloadBlob, extractFileName } from '@/app/core/utils/file.util';
 import {
@@ -57,12 +59,21 @@ export class DepartmentManagerComponent implements OnInit {
   };
 
   toolbarActions: TableAction[] = [
-    CommonActions.create(() => this.openCreateModal()),
-    CommonActions.uploadExcel(
-      () => this.downloadTemplate(),
-      (file) => this.uploadFile(file),
-    ),
-    CommonActions.exportExcel(() => this.exportExcel()),
+    {
+      ...CommonActions.create(() => this.openCreateModal()),
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.ORG_DEPARTMENT_CREATE),
+    },
+    {
+      ...CommonActions.uploadExcel(
+        () => this.downloadTemplate(),
+        (file) => this.uploadFile(file),
+      ),
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.ORG_DEPARTMENT_IMPORT_EXCEL),
+    },
+    {
+      ...CommonActions.exportExcel(() => this.exportExcel()),
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.ORG_DEPARTMENT_EXPORT_EXCEL),
+    },
   ];
 
   filters: Record<string, any> = {
@@ -170,31 +181,37 @@ export class DepartmentManagerComponent implements OnInit {
     {
       key: 'view',
       icon: 'eye',
-      tooltip: 'organization.department.viewDetail',
+      tooltip: 'table.action.viewDetail',
       severity: 'primary',
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.ORG_DEPARTMENT_VIEW),
       onClick: (record) => this.viewDetail(record),
     },
     {
       key: 'edit',
       icon: 'edit',
-      tooltip: 'organization.department.edit',
+      tooltip: 'table.action.edit',
       severity: 'info',
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.ORG_DEPARTMENT_UPDATE),
       onClick: (record) => this.openEdit(record),
     },
     {
       key: 'activate',
       icon: 'check-circle',
-      tooltip: 'organization.department.activate',
+      tooltip: 'table.action.activate',
       severity: 'success',
-      visible: (record) => record.isDeleted === true,
+      visible: (record) =>
+        record.isDeleted === true &&
+        this.permissionSvc.has(PERMISSION_CODES.ORG_DEPARTMENT_ACTIVATE),
       onClick: (record) => this.activateDepartment(record),
     },
     {
       key: 'deactivate',
       icon: 'stop',
-      tooltip: 'organization.department.deactivate',
+      tooltip: 'table.action.deactivate',
       severity: 'danger',
-      visible: (record) => record.isDeleted === false,
+      visible: (record) =>
+        record.isDeleted === false &&
+        this.permissionSvc.has(PERMISSION_CODES.ORG_DEPARTMENT_DEACTIVATE),
       onClick: (record) => this.deactivateDepartment(record),
     },
   ];
@@ -207,6 +224,7 @@ export class DepartmentManagerComponent implements OnInit {
     private readonly apiService: ApiService,
     private readonly cdr: ChangeDetectorRef,
     private readonly actionConfirm: ActionConfirmService,
+    readonly permissionSvc: PermissionService,
   ) {}
 
   ngOnInit(): void {

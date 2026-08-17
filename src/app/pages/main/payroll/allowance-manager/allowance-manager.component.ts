@@ -1,6 +1,7 @@
+import { PERMISSION_CODES } from '@/app/core/constants/common';
 import { enumData } from '@/app/core/constants/enums';
 import { Allowance, CompanySelectBoxDto, PagedResult } from '@/app/core/models';
-import { ApiService, I18nMessageService } from '@/app/core/services';
+import { ApiService, I18nMessageService, PermissionService } from '@/app/core/services';
 import { StaticTranslateService } from '@/app/core/services/static-translate.service';
 import {
   CommonFilterActions,
@@ -50,7 +51,12 @@ export class AllowanceManagerComponent implements OnInit {
   sortOrder = enumData.PAGE.SORT_ORDER.ASC;
 
   toolbar: ToolbarConfig = { show: true };
-  toolbarActions: TableAction[] = [CommonActions.create(() => this.openCreate())];
+  toolbarActions: TableAction[] = [
+    {
+      ...CommonActions.create(() => this.openCreate()),
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.PAYROLL_ALLOWANCE_MANAGE),
+    },
+  ];
 
   filters: Record<string, any> = {
     search: '',
@@ -125,24 +131,29 @@ export class AllowanceManagerComponent implements OnInit {
     {
       key: 'edit',
       icon: 'edit',
-      tooltip: 'allowance.edit',
+      tooltip: 'table.action.edit',
       severity: 'info',
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.PAYROLL_ALLOWANCE_MANAGE),
       onClick: (record) => this.openEdit(record),
     },
     {
       key: 'activate',
       icon: 'check-circle',
-      tooltip: 'allowance.activate',
+      tooltip: 'table.action.activate',
       severity: 'success',
-      visible: (record) => record.isActive === false,
+      visible: (record) =>
+        record.isActive === false &&
+        this.permissionSvc.has(PERMISSION_CODES.PAYROLL_ALLOWANCE_MANAGE),
       onClick: (record) => this.setActive(record, true),
     },
     {
       key: 'deactivate',
       icon: 'stop',
-      tooltip: 'allowance.deactivate',
+      tooltip: 'table.action.deactivate',
       severity: 'danger',
-      visible: (record) => record.isActive === true,
+      visible: (record) =>
+        record.isActive === true &&
+        this.permissionSvc.has(PERMISSION_CODES.PAYROLL_ALLOWANCE_MANAGE),
       onClick: (record) => this.setActive(record, false),
     },
   ];
@@ -154,6 +165,7 @@ export class AllowanceManagerComponent implements OnInit {
     private readonly cdr: ChangeDetectorRef,
     private readonly actionConfirm: ActionConfirmService,
     private readonly fb: FormBuilder,
+    readonly permissionSvc: PermissionService,
   ) {
     this.form = this.fb.group({
       code: [null, Validators.required],

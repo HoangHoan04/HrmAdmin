@@ -1,4 +1,4 @@
-import { ROUTES_CONFIG } from '@/app/core/constants/common';
+import { PERMISSION_CODES, ROUTES_CONFIG } from '@/app/core/constants/common';
 import { enumData } from '@/app/core/constants/enums';
 import { toUtcDateIso } from '@/app/core/constants/helpers';
 import {
@@ -8,7 +8,7 @@ import {
   EmployeeSelectBoxDto,
   PagedResult,
 } from '@/app/core/models';
-import { ApiService, I18nMessageService } from '@/app/core/services';
+import { ApiService, I18nMessageService, PermissionService } from '@/app/core/services';
 import {
   CommonFilterActions,
   FilterAction,
@@ -28,7 +28,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 
-type ContractRow = Contract & { statusLabel?: string };
+type ContractRow = Contract & {
+  statusLabel?: string;
+};
 
 @Component({
   standalone: false,
@@ -61,7 +63,12 @@ export class ContractManagerComponent implements OnInit {
   sortField = enumData.PAGE.SORT_FIELD.CREATED_AT;
   sortOrder = enumData.PAGE.SORT_ORDER.DESC;
   toolbar: ToolbarConfig = { show: true };
-  toolbarActions: TableAction[] = [CommonActions.create(() => this.openCreate())];
+  toolbarActions: TableAction[] = [
+    {
+      ...CommonActions.create(() => this.openCreate()),
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.HR_CONTRACT_CREATE),
+    },
+  ];
 
   filters: Record<string, any> = {
     code: '',
@@ -157,6 +164,7 @@ export class ContractManagerComponent implements OnInit {
       icon: 'eye',
       tooltip: 'table.action.viewDetail',
       severity: 'primary',
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.HR_CONTRACT_VIEW),
       onClick: (record) => this.openDetail(record),
     },
     {
@@ -164,7 +172,9 @@ export class ContractManagerComponent implements OnInit {
       icon: 'edit',
       tooltip: 'table.action.edit',
       severity: 'info',
-      visible: (record) => this.EDITABLE_STATUSES.includes(record.status),
+      visible: (record) =>
+        this.EDITABLE_STATUSES.includes(record.status) &&
+        this.permissionSvc.has(PERMISSION_CODES.HR_CONTRACT_UPDATE),
       onClick: (record) => this.openEdit(record),
     },
     {
@@ -172,7 +182,9 @@ export class ContractManagerComponent implements OnInit {
       icon: 'form',
       tooltip: 'table.action.signContract',
       severity: 'success',
-      visible: (record) => this.EDITABLE_STATUSES.includes(record.status),
+      visible: (record) =>
+        this.EDITABLE_STATUSES.includes(record.status) &&
+        this.permissionSvc.has(PERMISSION_CODES.HR_CONTRACT_SIGN),
       onClick: (record) => this.openSignModal(record),
     },
     {
@@ -180,7 +192,9 @@ export class ContractManagerComponent implements OnInit {
       icon: 'stop',
       tooltip: 'table.action.terminateContract',
       severity: 'danger',
-      visible: (record) => this.TERMINABLE_STATUSES.includes(record.status),
+      visible: (record) =>
+        this.TERMINABLE_STATUSES.includes(record.status) &&
+        this.permissionSvc.has(PERMISSION_CODES.HR_CONTRACT_TERMINATE),
       onClick: (record) => this.openTerminateModal(record),
     },
   ];
@@ -201,6 +215,7 @@ export class ContractManagerComponent implements OnInit {
     private readonly apiService: ApiService,
     private readonly cdr: ChangeDetectorRef,
     private readonly fb: FormBuilder,
+    readonly permissionSvc: PermissionService,
   ) {}
 
   ngOnInit(): void {

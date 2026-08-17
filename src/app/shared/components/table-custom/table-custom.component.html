@@ -11,7 +11,7 @@
   >
     <div class="toolbar-left" style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap">
       <ng-container *ngFor="let act of toolbarActions">
-        @if (act.visible !== false) {
+        @if (isToolbarActionVisible(act)) {
           @if (act.subActions && act.subActions.length > 0) {
             <button
               nz-button
@@ -35,7 +35,7 @@
             <nz-dropdown-menu #menu="nzDropdownMenu">
               <div class="toolbar-dropdown-menu">
                 <ng-container *ngFor="let sub of act.subActions">
-                  @if (sub.visible !== false) {
+                  @if (isToolbarActionVisible(sub)) {
                     <button
                       type="button"
                       class="toolbar-dropdown-item"

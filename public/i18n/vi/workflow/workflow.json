@@ -39,7 +39,8 @@
       "rejectConfirm": "Từ chối task này?",
       "notePlaceholder": "Ghi chú (tuỳ chọn)",
       "rejectNotePlaceholder": "Lý do từ chối",
-      "rejectNoteRequired": "Vui lòng nhập lý do từ chối."
+      "rejectNoteRequired": "Vui lòng nhập lý do từ chối.",
+      "noEmployeeLinked": "Tài khoản chưa gắn nhân viên nên không thể xem hộp thư duyệt."
     },
     "dashboard": {
       "title": "Tổng quan quy trình",

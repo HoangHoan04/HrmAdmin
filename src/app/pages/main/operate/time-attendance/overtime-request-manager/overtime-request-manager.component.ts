@@ -1,7 +1,8 @@
+import { PERMISSION_CODES } from '@/app/core/constants/common';
 import { enumData } from '@/app/core/constants/enums/enumData';
 import { toDateOnly } from '@/app/core/constants/helpers';
 import { EmployeeSelectBoxDto, OvertimeRequest, PagedResult } from '@/app/core/models';
-import { ApiService, I18nMessageService } from '@/app/core/services';
+import { ApiService, I18nMessageService, PermissionService } from '@/app/core/services';
 import {
   CommonFilterActions,
   CommonFilterFields,
@@ -66,7 +67,10 @@ export class OvertimeRequestManagerComponent implements OnInit {
   sortOrder = enumData.PAGE.SORT_ORDER.DESC;
   toolbar: ToolbarConfig = { show: true };
   toolbarActions: TableAction[] = [
-    CommonActions.create(() => this.openCreate()),
+    {
+      ...CommonActions.create(() => this.openCreate()),
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.OPERATE_OVERTIME_CREATE),
+    },
     {
       key: 'bulkApprove',
       label: 'overtimeRequest.bulkApprove',
@@ -74,6 +78,7 @@ export class OvertimeRequestManagerComponent implements OnInit {
       severity: 'success',
       loading: false,
       disabled: false,
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.OPERATE_OVERTIME_APPROVE),
       onClick: () => this.bulkApprove(),
     },
   ];
@@ -156,6 +161,7 @@ export class OvertimeRequestManagerComponent implements OnInit {
       icon: 'eye',
       tooltip: 'common.actions.view',
       severity: 'info',
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.OPERATE_OVERTIME_VIEW),
       onClick: (record) => this.openDetail(record),
     },
   ];
@@ -167,6 +173,7 @@ export class OvertimeRequestManagerComponent implements OnInit {
     private readonly cdr: ChangeDetectorRef,
     private readonly modal: NzModalService,
     private readonly fb: FormBuilder,
+    readonly permissionSvc: PermissionService,
   ) {
     this.createForm = this.fb.group({
       employeeId: [null, Validators.required],

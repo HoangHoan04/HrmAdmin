@@ -1,7 +1,7 @@
 import { ROUTES_CONFIG } from '@/app/core/constants/common';
 import { CompanySelectBoxDto, EvaluationCriteria } from '@/app/core/models';
 import { ApiService, I18nMessageService } from '@/app/core/services';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
@@ -27,6 +27,7 @@ export class AddOrUpdateEvaluationCriteriaComponent implements OnInit {
     private readonly message: NzMessageService,
     private readonly i18n: I18nMessageService,
     private readonly apiService: ApiService,
+    private readonly cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
@@ -42,10 +43,16 @@ export class AddOrUpdateEvaluationCriteriaComponent implements OnInit {
     });
     this.id = this.route.snapshot.paramMap.get('id');
     this.isEdit = !!this.id;
+    if (this.isEdit) {
+      this.validateForm.get('code')?.disable({ emitEvent: false });
+    }
     this.apiService.post<CompanySelectBoxDto[]>(this.apiService.COMPANY.SELECT_BOX, {}).subscribe({
-      next: (res) => (this.companies = res),
+      next: (res) => {
+        this.companies = res;
+        this.cdr.markForCheck();
+        if (this.isEdit && this.id) this.loadDetail(this.id);
+      },
     });
-    if (this.isEdit && this.id) this.loadDetail(this.id);
   }
 
   loadDetail(id: string): void {
@@ -56,6 +63,7 @@ export class AddOrUpdateEvaluationCriteriaComponent implements OnInit {
         next: (item) => {
           this.validateForm.patchValue(item);
           this.loading = false;
+          this.cdr.markForCheck();
         },
         error: (err: any) => {
           this.message.error(this.i18n.loadDetailFailed(err.error));

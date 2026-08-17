@@ -14,8 +14,8 @@
       >
         {{
           company.isDeleted
-            ? ('organization.company.statusInactive' | translate)
-            : ('organization.company.statusActive' | translate)
+            ? ('common.statusInactive' | translate)
+            : ('common.statusActive' | translate)
         }}
       </span>
     </div>
@@ -121,8 +121,8 @@
       <i nz-icon nzType="sync"></i>
       {{
         company?.isDeleted
-          ? ('organization.company.activate' | translate)
-          : ('organization.company.deactivate' | translate)
+          ? ('table.action.activate' | translate)
+          : ('table.action.deactivate' | translate)
       }}
     </button>
   </div>

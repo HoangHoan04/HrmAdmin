@@ -4,31 +4,31 @@
       @if (canEdit) {
         <button nz-button nzType="default" (click)="openEdit()">
           <i nz-icon nzType="edit"></i>
-          {{ 'transfer.edit' | translate }}
+          {{ 'table.action.edit' | translate }}
         </button>
       }
       @if (canApprove) {
         <button nz-button nzType="primary" (click)="approve()">
           <i nz-icon nzType="check"></i>
-          {{ 'transfer.approve' | translate }}
+          {{ 'table.action.approve' | translate }}
         </button>
       }
       @if (canReject) {
         <button nz-button nzDanger (click)="reject()">
           <i nz-icon nzType="close"></i>
-          {{ 'transfer.reject' | translate }}
+          {{ 'table.action.reject' | translate }}
         </button>
       }
       @if (canApply) {
         <button nz-button nzType="primary" (click)="apply()">
           <i nz-icon nzType="play-circle"></i>
-          {{ 'transfer.apply' | translate }}
+          {{ 'table.action.apply' | translate }}
         </button>
       }
       @if (canCancel) {
         <button nz-button nzType="default" nzDanger (click)="cancel()">
           <i nz-icon nzType="stop"></i>
-          {{ 'transfer.cancel' | translate }}
+          {{ 'table.action.cancel' | translate }}
         </button>
       }
     </div>

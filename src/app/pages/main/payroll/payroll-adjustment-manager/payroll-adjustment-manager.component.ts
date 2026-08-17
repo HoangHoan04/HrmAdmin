@@ -1,6 +1,7 @@
+import { PERMISSION_CODES } from '@/app/core/constants/common';
 import { enumData } from '@/app/core/constants/enums';
 import { EmployeeSelectBoxDto, PagedResult, PayrollSlip } from '@/app/core/models';
-import { ApiService, I18nMessageService } from '@/app/core/services';
+import { ApiService, I18nMessageService, PermissionService } from '@/app/core/services';
 import {
   CommonFilterActions,
   FilterAction,
@@ -57,7 +58,12 @@ export class PayrollAdjustmentManagerComponent implements OnInit {
   sortOrder = enumData.PAGE.SORT_ORDER.DESC;
 
   toolbar: ToolbarConfig = { show: true };
-  toolbarActions: TableAction[] = [CommonActions.create(() => this.openCreate())];
+  toolbarActions: TableAction[] = [
+    {
+      ...CommonActions.create(() => this.openCreate()),
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.PAYROLL_ADJUSTMENT_MANAGE),
+    },
+  ];
 
   filters: Record<string, any> = {
     employeeId: null,
@@ -140,7 +146,9 @@ export class PayrollAdjustmentManagerComponent implements OnInit {
       icon: 'check-circle',
       tooltip: 'adjustment.approve',
       severity: 'success',
-      visible: (record) => this.REVIEWABLE.includes(record.status),
+      visible: (record) =>
+        this.REVIEWABLE.includes(record.status) &&
+        this.permissionSvc.has(PERMISSION_CODES.PAYROLL_ADJUSTMENT_MANAGE),
       onClick: (record) => this.approve(record),
     },
     {
@@ -148,7 +156,9 @@ export class PayrollAdjustmentManagerComponent implements OnInit {
       icon: 'close-circle',
       tooltip: 'adjustment.reject',
       severity: 'danger',
-      visible: (record) => this.REVIEWABLE.includes(record.status),
+      visible: (record) =>
+        this.REVIEWABLE.includes(record.status) &&
+        this.permissionSvc.has(PERMISSION_CODES.PAYROLL_ADJUSTMENT_MANAGE),
       onClick: (record) => this.reject(record),
     },
   ];
@@ -160,6 +170,7 @@ export class PayrollAdjustmentManagerComponent implements OnInit {
     private readonly cdr: ChangeDetectorRef,
     private readonly actionConfirm: ActionConfirmService,
     private readonly fb: FormBuilder,
+    readonly permissionSvc: PermissionService,
   ) {
     const now = new Date();
     this.createForm = this.fb.group({

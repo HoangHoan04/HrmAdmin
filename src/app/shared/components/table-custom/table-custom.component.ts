@@ -334,6 +334,14 @@ export class TableCustomComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
+  isToolbarActionVisible(action: TableAction): boolean {
+    return action.visible === undefined
+      ? true
+      : typeof action.visible === 'function'
+        ? action.visible()
+        : action.visible !== false;
+  }
+
   isActionVisible(action: RowAction, rowData: any): boolean {
     return action.visible === undefined
       ? true

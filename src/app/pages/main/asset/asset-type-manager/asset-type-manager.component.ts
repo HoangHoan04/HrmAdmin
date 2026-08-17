@@ -111,7 +111,7 @@ export class AssetTypeManagerComponent implements OnInit {
     this.toolbarActions = [
       {
         ...CommonActions.create(() => this.openCreate()),
-        visible: () => this.permissionSvc.has(PERMISSION_CODES.ASSET_INVENTORY_MANAGE),
+        visible: () => this.permissionSvc.has(PERMISSION_CODES.ASSET_TYPE_MANAGE),
       },
     ];
     this.rowActions = [
@@ -120,7 +120,7 @@ export class AssetTypeManagerComponent implements OnInit {
         icon: 'edit',
         tooltip: 'common.actions.update',
         severity: 'info',
-        visible: () => this.permissionSvc.has(PERMISSION_CODES.ASSET_INVENTORY_MANAGE),
+        visible: () => this.permissionSvc.has(PERMISSION_CODES.ASSET_TYPE_MANAGE),
         onClick: (r) => this.openEdit(r),
       },
       {
@@ -128,7 +128,7 @@ export class AssetTypeManagerComponent implements OnInit {
         icon: 'delete',
         tooltip: 'common.actions.delete',
         severity: 'danger',
-        visible: () => this.permissionSvc.has(PERMISSION_CODES.ASSET_INVENTORY_MANAGE),
+        visible: () => this.permissionSvc.has(PERMISSION_CODES.ASSET_TYPE_MANAGE),
         onClick: (r) => this.delete(r),
       },
     ];

@@ -18,8 +18,6 @@
     "activeNo": "Inactive",
     "createTitle": "Assign default shift",
     "editTitle": "Edit default shift",
-    "edit": "Edit",
-    "deactivate": "Deactivate",
     "deactivateConfirm": "Deactivate this pattern? Employee will have no weekly schedule until reassigned.",
     "bulkAssign": "Bulk assign",
     "bulkTitle": "Bulk assign default shift (Full-time)",

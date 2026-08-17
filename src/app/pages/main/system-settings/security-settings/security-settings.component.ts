@@ -1,6 +1,6 @@
 import { SsoStatus, TwoFactorSetup } from '@/app/core/models';
 import { AuthService, I18nMessageService } from '@/app/core/services';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
@@ -25,6 +25,7 @@ export class SecuritySettingsComponent implements OnInit {
     private readonly auth: AuthService,
     private readonly message: NzMessageService,
     private readonly i18n: I18nMessageService,
+    private readonly cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
@@ -37,8 +38,12 @@ export class SecuritySettingsComponent implements OnInit {
       next: (res) => {
         this.twoFactorEnabled = !!res?.twoFactorEnabled;
         this.loading = false;
+        this.cdr.markForCheck();
       },
-      error: () => (this.loading = false),
+      error: () => {
+        this.loading = false;
+        this.cdr.markForCheck();
+      },
     });
     this.auth.getSsoStatus().subscribe({
       next: (res) => (this.ssoStatus = res),
@@ -53,10 +58,12 @@ export class SecuritySettingsComponent implements OnInit {
         this.setup = res;
         this.setupLoading = false;
         this.message.success(this.i18n.instant('system.security.setupReady'));
+        this.cdr.markForCheck();
       },
       error: (err: any) => {
         this.message.error(this.i18n.genericError(err.error));
         this.setupLoading = false;
+        this.cdr.markForCheck();
       },
     });
   }
@@ -74,10 +81,12 @@ export class SecuritySettingsComponent implements OnInit {
         this.setup = null;
         this.enableLoading = false;
         this.message.success(this.i18n.instant('system.security.enableSuccess'));
+        this.cdr.markForCheck();
       },
       error: (err: any) => {
         this.message.error(this.i18n.genericError(err.error));
         this.enableLoading = false;
+        this.cdr.markForCheck();
       },
     });
   }
@@ -95,10 +104,12 @@ export class SecuritySettingsComponent implements OnInit {
         this.disablePassword = '';
         this.disableLoading = false;
         this.message.success(this.i18n.instant('system.security.disableSuccess'));
+        this.cdr.markForCheck();
       },
       error: (err: any) => {
         this.message.error(this.i18n.genericError(err.error));
         this.disableLoading = false;
+        this.cdr.markForCheck();
       },
     });
   }

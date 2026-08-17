@@ -36,7 +36,7 @@ export class CompanyDetailComponent implements OnInit {
     {
       key: 'view',
       icon: 'eye',
-      tooltip: 'organization.branch.viewDetail',
+      tooltip: 'table.action.viewDetail',
       severity: 'primary',
       onClick: (record) => this.viewBranch(record),
     },

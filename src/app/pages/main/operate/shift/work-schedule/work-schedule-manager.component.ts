@@ -1,4 +1,4 @@
-import { ROUTES_CONFIG } from '@/app/core/constants/common';
+import { PERMISSION_CODES, ROUTES_CONFIG } from '@/app/core/constants/common';
 import { enumData } from '@/app/core/constants/enums/enumData';
 import { toDateOnly } from '@/app/core/constants/helpers';
 import {
@@ -8,7 +8,7 @@ import {
   ShiftMasterSelectBoxDto,
   WorkSchedule,
 } from '@/app/core/models';
-import { ApiService, I18nMessageService } from '@/app/core/services';
+import { ApiService, I18nMessageService, PermissionService } from '@/app/core/services';
 import {
   CommonFilterActions,
   FilterAction,
@@ -69,12 +69,16 @@ export class WorkScheduleManagerComponent implements OnInit {
 
   toolbar: ToolbarConfig = { show: true };
   toolbarActions: TableAction[] = [
-    CommonActions.create(() => this.openCreate()),
+    {
+      ...CommonActions.create(() => this.openCreate()),
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.OPERATE_WORK_SCHEDULE_CREATE),
+    },
     {
       key: 'bulk-create',
       label: 'workSchedule.bulkCreate',
       icon: 'calendar',
       severity: 'primary',
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.OPERATE_WORK_SCHEDULE_CREATE),
       onClick: () => this.openBulk(),
     },
     {
@@ -82,6 +86,7 @@ export class WorkScheduleManagerComponent implements OnInit {
       label: 'workSchedule.copyWeek',
       icon: 'copy',
       severity: 'info',
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.OPERATE_WORK_SCHEDULE_CREATE),
       onClick: () => this.openCopyWeek(),
     },
   ];
@@ -161,15 +166,17 @@ export class WorkScheduleManagerComponent implements OnInit {
     {
       key: 'edit',
       icon: 'edit',
-      tooltip: 'workSchedule.edit',
+      tooltip: 'table.action.edit',
       severity: 'info',
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.OPERATE_WORK_SCHEDULE_UPDATE),
       onClick: (record) => this.openEdit(record),
     },
     {
       key: 'deactivate',
       icon: 'delete',
-      tooltip: 'workSchedule.deactivate',
+      tooltip: 'table.action.deactivate',
       severity: 'danger',
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.OPERATE_WORK_SCHEDULE_DEACTIVATE),
       onClick: (record) => this.deactivate(record),
     },
   ];
@@ -182,6 +189,7 @@ export class WorkScheduleManagerComponent implements OnInit {
     private readonly cdr: ChangeDetectorRef,
     private readonly actionConfirm: ActionConfirmService,
     private readonly fb: FormBuilder,
+    readonly permissionSvc: PermissionService,
   ) {
     this.bulkForm = this.fb.group({
       employeeIds: [[], Validators.required],

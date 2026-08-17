@@ -29,7 +29,7 @@ export class BranchDetailComponent implements OnInit {
     {
       key: 'view',
       icon: 'eye',
-      tooltip: 'organization.department.viewDetail',
+      tooltip: 'table.action.viewDetail',
       severity: 'primary',
       onClick: (record) => this.viewDepartment(record),
     },

@@ -1,3 +1,4 @@
+import { PERMISSION_CODES } from '@/app/core/constants/common';
 import { enumData } from '@/app/core/constants/enums/enumData';
 import { toDateOnly } from '@/app/core/constants/helpers';
 import {
@@ -8,7 +9,7 @@ import {
   PreviewLeaveDays,
   RegisterDayOff,
 } from '@/app/core/models';
-import { ApiService, I18nMessageService } from '@/app/core/services';
+import { ApiService, I18nMessageService, PermissionService } from '@/app/core/services';
 import {
   CommonFilterActions,
   FilterAction,
@@ -70,7 +71,12 @@ export class LeaveManagerComponent implements OnInit {
   sortField = enumData.PAGE.SORT_FIELD.CREATED_AT;
   sortOrder = enumData.PAGE.SORT_ORDER.DESC;
   toolbar: ToolbarConfig = { show: true };
-  toolbarActions: TableAction[] = [CommonActions.create(() => this.openCreate())];
+  toolbarActions: TableAction[] = [
+    {
+      ...CommonActions.create(() => this.openCreate()),
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.OPERATE_LEAVE_CREATE),
+    },
+  ];
 
   filters: Record<string, any> = {
     employeeId: null,
@@ -154,6 +160,7 @@ export class LeaveManagerComponent implements OnInit {
       icon: 'eye',
       tooltip: 'common.actions.view',
       severity: 'info',
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.OPERATE_LEAVE_VIEW),
       onClick: (record) => this.openDetail(record),
     },
     {
@@ -161,7 +168,9 @@ export class LeaveManagerComponent implements OnInit {
       icon: 'check-circle',
       tooltip: 'leave.approve',
       severity: 'success',
-      visible: (record) => record.status === enumData.DAY_OFF_STATUS.PENDING.value,
+      visible: (record) =>
+        record.status === enumData.DAY_OFF_STATUS.PENDING.value &&
+        this.permissionSvc.has(PERMISSION_CODES.OPERATE_LEAVE_APPROVE),
       onClick: (record) => this.approve(record),
     },
     {
@@ -169,7 +178,9 @@ export class LeaveManagerComponent implements OnInit {
       icon: 'close-circle',
       tooltip: 'leave.reject',
       severity: 'danger',
-      visible: (record) => record.status === enumData.DAY_OFF_STATUS.PENDING.value,
+      visible: (record) =>
+        record.status === enumData.DAY_OFF_STATUS.PENDING.value &&
+        this.permissionSvc.has(PERMISSION_CODES.OPERATE_LEAVE_REJECT),
       onClick: (record) => this.reject(record),
     },
     {
@@ -178,8 +189,9 @@ export class LeaveManagerComponent implements OnInit {
       tooltip: 'leave.cancel',
       severity: 'warning',
       visible: (record) =>
-        record.status === enumData.DAY_OFF_STATUS.PENDING.value ||
-        record.status === enumData.DAY_OFF_STATUS.APPROVED.value,
+        (record.status === enumData.DAY_OFF_STATUS.PENDING.value ||
+          record.status === enumData.DAY_OFF_STATUS.APPROVED.value) &&
+        this.permissionSvc.has(PERMISSION_CODES.OPERATE_LEAVE_CANCEL),
       onClick: (record) => this.cancel(record),
     },
   ];
@@ -191,6 +203,7 @@ export class LeaveManagerComponent implements OnInit {
     private readonly cdr: ChangeDetectorRef,
     private readonly modal: NzModalService,
     private readonly fb: FormBuilder,
+    readonly permissionSvc: PermissionService,
   ) {
     this.createForm = this.fb.group({
       employeeId: [null, Validators.required],

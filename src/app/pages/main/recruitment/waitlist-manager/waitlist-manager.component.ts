@@ -108,6 +108,7 @@ export class WaitlistManagerComponent implements OnInit {
         icon: 'eye',
         tooltip: 'common.actions.view',
         severity: 'primary',
+        visible: () => this.permissionSvc.has(PERMISSION_CODES.RECRUITMENT_CANDIDATE_VIEW),
         onClick: (r) => this.openDetail(r),
       },
       {
@@ -142,7 +143,8 @@ export class WaitlistManagerComponent implements OnInit {
         icon: 'idcard',
         tooltip: 'recruitment.waitlist.viewEmployee',
         severity: 'primary',
-        visible: (r) => !!r.employeeId,
+        visible: (r) =>
+          !!r.employeeId && this.permissionSvc.has(PERMISSION_CODES.HR_EMPLOYEE_VIEW),
         onClick: (r) => this.openEmployee(r),
       },
       {

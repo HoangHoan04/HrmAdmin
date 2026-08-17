@@ -1,3 +1,4 @@
+import { PERMISSION_CODES } from '@/app/core/constants/common';
 import { enumData } from '@/app/core/constants/enums/enumData';
 import {
   EmployeeSelectBoxDto,
@@ -5,7 +6,7 @@ import {
   PagedResult,
   ShiftMasterSelectBoxDto,
 } from '@/app/core/models';
-import { ApiService, I18nMessageService } from '@/app/core/services';
+import { ApiService, I18nMessageService, PermissionService } from '@/app/core/services';
 import { StaticTranslateService } from '@/app/core/services/static-translate.service';
 import {
   CommonFilterActions,
@@ -57,12 +58,16 @@ export class WorkPatternManagerComponent implements OnInit {
 
   toolbar: ToolbarConfig = { show: true };
   toolbarActions: TableAction[] = [
-    CommonActions.create(() => this.openCreate()),
+    {
+      ...CommonActions.create(() => this.openCreate()),
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.OPERATE_WORK_PATTERN_CREATE),
+    },
     {
       key: 'bulk',
       label: 'workPattern.bulkAssign',
       icon: 'usergroup-add',
       severity: 'default',
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.OPERATE_WORK_PATTERN_CREATE),
       onClick: () => this.openBulk(),
     },
   ];
@@ -140,16 +145,18 @@ export class WorkPatternManagerComponent implements OnInit {
     {
       key: 'edit',
       icon: 'edit',
-      tooltip: 'workPattern.edit',
+      tooltip: 'table.action.edit',
       severity: 'info',
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.OPERATE_WORK_PATTERN_UPDATE),
       onClick: (row: EmployeeWorkPattern) => this.openEdit(row),
     },
     {
       key: 'deactivate',
       icon: 'stop',
-      tooltip: 'workPattern.deactivate',
+      tooltip: 'table.action.deactivate',
       severity: 'danger',
-      visible: (row: EmployeeWorkPattern) => !!row.isActive,
+      visible: (row: EmployeeWorkPattern) =>
+        !!row.isActive && this.permissionSvc.has(PERMISSION_CODES.OPERATE_WORK_PATTERN_DEACTIVATE),
       onClick: (row: EmployeeWorkPattern) => this.deactivate(row),
     },
   ];
@@ -161,6 +168,7 @@ export class WorkPatternManagerComponent implements OnInit {
     private readonly cdr: ChangeDetectorRef,
     private readonly fb: FormBuilder,
     private readonly modal: NzModalService,
+    readonly permissionSvc: PermissionService,
   ) {
     const today = new Date();
     this.upsertForm = this.fb.group({
@@ -462,7 +470,7 @@ export class WorkPatternManagerComponent implements OnInit {
 
   deactivate(row: EmployeeWorkPattern): void {
     this.modal.confirm({
-      nzTitle: this.i18n.instant('workPattern.deactivate'),
+      nzTitle: this.i18n.instant('table.action.deactivate'),
       nzContent: this.i18n.instant('workPattern.deactivateConfirm'),
       nzOnOk: () =>
         new Promise<void>((resolve, reject) => {

@@ -128,7 +128,7 @@ export class AssetTicketManagerComponent implements OnInit {
     this.toolbarActions = [
       {
         ...CommonActions.create(() => this.openCreate()),
-        visible: () => this.permissionSvc.has(PERMISSION_CODES.ASSET_MANAGE),
+        visible: () => this.permissionSvc.has(PERMISSION_CODES.ASSET_TICKET_MANAGE),
       },
     ];
     this.rowActions = [
@@ -139,7 +139,7 @@ export class AssetTicketManagerComponent implements OnInit {
         severity: 'info',
         visible: (r) =>
           r.status === enumData.ASSET_TICKET_STATUS.NEW.value &&
-          this.permissionSvc.has(PERMISSION_CODES.ASSET_MANAGE),
+          this.permissionSvc.has(PERMISSION_CODES.ASSET_TICKET_MANAGE),
         onClick: (r) => this.openEdit(r),
       },
       {
@@ -149,7 +149,7 @@ export class AssetTicketManagerComponent implements OnInit {
         severity: 'success',
         visible: (r) =>
           r.status === enumData.ASSET_TICKET_STATUS.NEW.value &&
-          this.permissionSvc.has(PERMISSION_CODES.ASSET_MANAGE),
+          this.permissionSvc.has(PERMISSION_CODES.ASSET_TICKET_MANAGE),
         onClick: (r) => this.complete(r),
       },
       {
@@ -157,7 +157,7 @@ export class AssetTicketManagerComponent implements OnInit {
         icon: 'delete',
         tooltip: 'table.action.delete',
         severity: 'danger',
-        visible: () => this.permissionSvc.has(PERMISSION_CODES.ASSET_MANAGE),
+        visible: () => this.permissionSvc.has(PERMISSION_CODES.ASSET_TICKET_MANAGE),
         onClick: (r) => this.delete(r),
       },
     ];

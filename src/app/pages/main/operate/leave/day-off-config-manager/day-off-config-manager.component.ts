@@ -1,7 +1,7 @@
-import { ROUTES_CONFIG } from '@/app/core/constants/common';
+import { PERMISSION_CODES, ROUTES_CONFIG } from '@/app/core/constants/common';
 import { enumData } from '@/app/core/constants/enums';
 import { CompanySelectBoxDto, DayOffConfig, PagedResult } from '@/app/core/models';
-import { ApiService, I18nMessageService } from '@/app/core/services';
+import { ApiService, I18nMessageService, PermissionService } from '@/app/core/services';
 import { StaticTranslateService } from '@/app/core/services/static-translate.service';
 import {
   CommonFilterActions,
@@ -44,7 +44,12 @@ export class DayOffConfigManagerComponent implements OnInit {
   sortField = enumData.PAGE.SORT_FIELD.CREATED_AT;
   sortOrder = enumData.PAGE.SORT_ORDER.DESC;
   toolbar: ToolbarConfig = { show: true };
-  toolbarActions: TableAction[] = [CommonActions.create(() => this.openCreate())];
+  toolbarActions: TableAction[] = [
+    {
+      ...CommonActions.create(() => this.openCreate()),
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.OPERATE_DAY_OFF_CONFIG_CREATE),
+    },
+  ];
 
   filters: Record<string, any> = {
     code: '',
@@ -164,24 +169,29 @@ export class DayOffConfigManagerComponent implements OnInit {
     {
       key: 'edit',
       icon: 'edit',
-      tooltip: 'dayOffConfig.edit',
+      tooltip: 'table.action.edit',
       severity: 'info',
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.OPERATE_DAY_OFF_CONFIG_UPDATE),
       onClick: (record) => this.openEdit(record),
     },
     {
       key: 'activate',
       icon: 'check-circle',
-      tooltip: 'dayOffConfig.activate',
+      tooltip: 'table.action.activate',
       severity: 'success',
-      visible: (record) => record.isDeleted === true,
+      visible: (record) =>
+        record.isDeleted === true &&
+        this.permissionSvc.has(PERMISSION_CODES.OPERATE_DAY_OFF_CONFIG_ACTIVATE),
       onClick: (record) => this.activate(record),
     },
     {
       key: 'deactivate',
       icon: 'stop',
-      tooltip: 'dayOffConfig.deactivate',
+      tooltip: 'table.action.deactivate',
       severity: 'danger',
-      visible: (record) => record.isDeleted === false,
+      visible: (record) =>
+        record.isDeleted === false &&
+        this.permissionSvc.has(PERMISSION_CODES.OPERATE_DAY_OFF_CONFIG_DEACTIVATE),
       onClick: (record) => this.deactivate(record),
     },
   ];
@@ -193,6 +203,7 @@ export class DayOffConfigManagerComponent implements OnInit {
     private readonly apiService: ApiService,
     private readonly cdr: ChangeDetectorRef,
     private readonly actionConfirm: ActionConfirmService,
+    readonly permissionSvc: PermissionService,
   ) {}
 
   ngOnInit(): void {

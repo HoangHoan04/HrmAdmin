@@ -14,8 +14,8 @@
       >
         {{
           branch.isDeleted
-            ? ('organization.branch.statusInactive' | translate)
-            : ('organization.branch.statusActive' | translate)
+            ? ('common.statusInactive' | translate)
+            : ('common.statusActive' | translate)
         }}
       </span>
     </div>
@@ -96,8 +96,8 @@
       <i nz-icon nzType="sync"></i>
       {{
         branch?.isDeleted
-          ? ('organization.branch.activate' | translate)
-          : ('organization.branch.deactivate' | translate)
+          ? ('table.action.activate' | translate)
+          : ('table.action.deactivate' | translate)
       }}
     </button>
   </div>

@@ -1,3 +1,4 @@
+import { PERMISSION_CODES } from '@/app/core/constants/common';
 import { enumData } from '@/app/core/constants/enums/enumData';
 import {
   DayOffAllocation,
@@ -5,7 +6,7 @@ import {
   EmployeeSelectBoxDto,
   PagedResult,
 } from '@/app/core/models';
-import { ApiService, I18nMessageService } from '@/app/core/services';
+import { ApiService, I18nMessageService, PermissionService } from '@/app/core/services';
 import {
   CommonFilterActions,
   FilterAction,
@@ -54,7 +55,12 @@ export class LeaveAllocationManagerComponent implements OnInit {
   sortField = enumData.PAGE.SORT_FIELD.YEAR;
   sortOrder = enumData.PAGE.SORT_ORDER.DESC;
   toolbar: ToolbarConfig = { show: true };
-  toolbarActions: TableAction[] = [CommonActions.create(() => this.openCreate())];
+  toolbarActions: TableAction[] = [
+    {
+      ...CommonActions.create(() => this.openCreate()),
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.OPERATE_LEAVE_ALLOCATION_CREATE),
+    },
+  ];
 
   filters: Record<string, any> = {
     employeeId: null,
@@ -119,8 +125,9 @@ export class LeaveAllocationManagerComponent implements OnInit {
     {
       key: 'edit',
       icon: 'edit',
-      tooltip: 'leaveAllocation.edit',
+      tooltip: 'table.action.edit',
       severity: 'info',
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.OPERATE_LEAVE_ALLOCATION_UPDATE),
       onClick: (record) => this.openEdit(record),
     },
   ];
@@ -131,6 +138,7 @@ export class LeaveAllocationManagerComponent implements OnInit {
     private readonly apiService: ApiService,
     private readonly cdr: ChangeDetectorRef,
     private readonly fb: FormBuilder,
+    readonly permissionSvc: PermissionService,
   ) {
     this.upsertForm = this.fb.group({
       employeeId: [null, Validators.required],

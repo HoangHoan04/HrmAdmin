@@ -18,8 +18,6 @@
     "activeNo": "Đã hết hiệu lực",
     "createTitle": "Gán ca mặc định",
     "editTitle": "Sửa ca mặc định",
-    "edit": "Sửa",
-    "deactivate": "Ngưng hiệu lực",
     "deactivateConfirm": "Ngưng ca mặc định này? Nhân viên sẽ không còn lịch tuần cho đến khi gán lại.",
     "bulkAssign": "Gán hàng loạt",
     "bulkTitle": "Gán ca mặc định hàng loạt (Full-time)",

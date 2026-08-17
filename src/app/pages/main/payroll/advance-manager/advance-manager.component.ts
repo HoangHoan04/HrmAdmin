@@ -1,6 +1,7 @@
+import { PERMISSION_CODES } from '@/app/core/constants/common';
 import { enumData } from '@/app/core/constants/enums';
 import { Advance, EmployeeSelectBoxDto, PagedResult } from '@/app/core/models';
-import { ApiService, I18nMessageService } from '@/app/core/services';
+import { ApiService, I18nMessageService, PermissionService } from '@/app/core/services';
 import {
   CommonFilterActions,
   FilterAction,
@@ -59,7 +60,12 @@ export class AdvanceManagerComponent implements OnInit {
   sortOrder = enumData.PAGE.SORT_ORDER.DESC;
 
   toolbar: ToolbarConfig = { show: true };
-  toolbarActions: TableAction[] = [CommonActions.create(() => this.openCreate())];
+  toolbarActions: TableAction[] = [
+    {
+      ...CommonActions.create(() => this.openCreate()),
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.PAYROLL_ADVANCE_CREATE),
+    },
+  ];
 
   filters: Record<string, any> = {
     employeeId: null,
@@ -141,7 +147,9 @@ export class AdvanceManagerComponent implements OnInit {
       icon: 'check-circle',
       tooltip: 'advance.approve',
       severity: 'success',
-      visible: (record) => this.REVIEWABLE.includes(record.status),
+      visible: (record) =>
+        this.REVIEWABLE.includes(record.status) &&
+        this.permissionSvc.has(PERMISSION_CODES.PAYROLL_ADVANCE_APPROVE),
       onClick: (record) => this.approve(record),
     },
     {
@@ -149,7 +157,9 @@ export class AdvanceManagerComponent implements OnInit {
       icon: 'close-circle',
       tooltip: 'advance.reject',
       severity: 'danger',
-      visible: (record) => this.REVIEWABLE.includes(record.status),
+      visible: (record) =>
+        this.REVIEWABLE.includes(record.status) &&
+        this.permissionSvc.has(PERMISSION_CODES.PAYROLL_ADVANCE_APPROVE),
       onClick: (record) => this.reject(record),
     },
     {
@@ -157,7 +167,9 @@ export class AdvanceManagerComponent implements OnInit {
       icon: 'stop',
       tooltip: 'advance.cancel',
       severity: 'warning',
-      visible: (record) => this.CANCELLABLE.includes(record.status),
+      visible: (record) =>
+        this.CANCELLABLE.includes(record.status) &&
+        this.permissionSvc.has(PERMISSION_CODES.PAYROLL_ADVANCE_MANAGE),
       onClick: (record) => this.cancel(record),
     },
   ];
@@ -169,6 +181,7 @@ export class AdvanceManagerComponent implements OnInit {
     private readonly cdr: ChangeDetectorRef,
     private readonly actionConfirm: ActionConfirmService,
     private readonly fb: FormBuilder,
+    readonly permissionSvc: PermissionService,
   ) {
     const now = new Date();
     this.createForm = this.fb.group({

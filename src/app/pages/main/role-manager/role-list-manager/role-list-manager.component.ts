@@ -144,7 +144,7 @@ export class RoleListManagerComponent implements OnInit {
     {
       key: 'edit',
       icon: 'edit',
-      tooltip: 'common.actions.edit',
+      tooltip: 'table.action.edit',
       severity: 'info',
       visible: () => this.permissionSvc.has(PERMISSION_CODES.ROLE_UPDATE),
       onClick: (record) => this.openEditModal(record),
@@ -160,7 +160,7 @@ export class RoleListManagerComponent implements OnInit {
     {
       key: 'delete',
       icon: 'delete',
-      tooltip: 'common.actions.delete',
+      tooltip: 'table.action.delete',
       severity: 'danger',
       visible: (record) => !record.isSystem && this.permissionSvc.has(PERMISSION_CODES.ROLE_DELETE),
       onClick: (record) => this.deleteRole(record),

@@ -265,14 +265,15 @@ export class EmployeeManagerComponent implements OnInit, OnDestroy {
     {
       key: 'view',
       icon: 'eye',
-      tooltip: 'common.action.viewDetail',
+      tooltip: 'table.action.viewDetail',
       severity: 'primary',
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.HR_EMPLOYEE_VIEW),
       onClick: (record) => this.viewDetail(record),
     },
     {
       key: 'edit',
       icon: 'edit',
-      tooltip: 'humanResource.employee.edit',
+      tooltip: 'table.action.edit',
       severity: 'info',
       visible: () => this.permissionSvc.has(PERMISSION_CODES.HR_EMPLOYEE_UPDATE),
       onClick: (record) => this.openEdit(record),
@@ -280,7 +281,7 @@ export class EmployeeManagerComponent implements OnInit, OnDestroy {
     {
       key: 'activate',
       icon: 'check-circle',
-      tooltip: 'humanResource.employee.activate',
+      tooltip: 'table.action.activate',
       severity: 'success',
       visible: (record) =>
         record.isDeleted === true && this.permissionSvc.has(PERMISSION_CODES.HR_EMPLOYEE_ACTIVATE),
@@ -289,7 +290,7 @@ export class EmployeeManagerComponent implements OnInit, OnDestroy {
     {
       key: 'deactivate',
       icon: 'stop',
-      tooltip: 'humanResource.employee.deactivate',
+      tooltip: 'table.action.deactivate',
       severity: 'danger',
       visible: (record) =>
         record.isDeleted === false &&

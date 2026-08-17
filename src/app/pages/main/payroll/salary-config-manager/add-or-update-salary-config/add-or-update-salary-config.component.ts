@@ -2,7 +2,7 @@ import { ROUTES_CONFIG } from '@/app/core/constants/common';
 import { enumData } from '@/app/core/constants/enums';
 import { CompanySelectBoxDto, SalaryConfig } from '@/app/core/models';
 import { ApiService, I18nMessageService } from '@/app/core/services';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
@@ -29,16 +29,21 @@ export class AddOrUpdateSalaryConfigComponent implements OnInit {
     private readonly message: NzMessageService,
     private readonly i18n: I18nMessageService,
     private readonly apiService: ApiService,
+    private readonly cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
     this.initForm();
     this.id = this.route.snapshot.paramMap.get('id');
     this.isEdit = !!this.id;
-    this.loadCompanies();
-    if (this.isEdit && this.id) {
-      this.loadDetail(this.id);
+    if (this.isEdit) {
+      this.validateForm.get('code')?.disable({ emitEvent: false });
     }
+    this.loadCompanies(() => {
+      if (this.isEdit && this.id) {
+        this.loadDetail(this.id);
+      }
+    });
   }
 
   initForm(): void {
@@ -59,9 +64,13 @@ export class AddOrUpdateSalaryConfigComponent implements OnInit {
     });
   }
 
-  loadCompanies(): void {
+  loadCompanies(onReady?: () => void): void {
     this.apiService.post<CompanySelectBoxDto[]>(this.apiService.COMPANY.SELECT_BOX, {}).subscribe({
-      next: (res) => (this.companies = res),
+      next: (res) => {
+        this.companies = res;
+        this.cdr.markForCheck();
+        onReady?.();
+      },
       error: () => this.message.error(this.i18n.instant('common.messages.loadCompanySelectFailed')),
     });
   }
@@ -86,6 +95,7 @@ export class AddOrUpdateSalaryConfigComponent implements OnInit {
           isActive: item.isActive ?? true,
         });
         this.loading = false;
+        this.cdr.markForCheck();
       },
       error: (err: any) => {
         this.message.error(this.i18n.loadDetailFailed(err.error));

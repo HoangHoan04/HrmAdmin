@@ -161,7 +161,7 @@ export class AccountManagerComponent implements OnInit {
     {
       key: 'edit',
       icon: 'edit',
-      tooltip: 'common.actions.edit',
+      tooltip: 'table.action.edit',
       severity: 'info',
       visible: () => this.permissionSvc.has(PERMISSION_CODES.USER_UPDATE),
       onClick: (record) => this.openEditModal(record),
@@ -177,7 +177,7 @@ export class AccountManagerComponent implements OnInit {
     {
       key: 'delete',
       icon: 'delete',
-      tooltip: 'common.actions.delete',
+      tooltip: 'table.action.delete',
       severity: 'danger',
       visible: () => this.permissionSvc.has(PERMISSION_CODES.USER_DELETE),
       onClick: (record) => this.deleteAccount(record),

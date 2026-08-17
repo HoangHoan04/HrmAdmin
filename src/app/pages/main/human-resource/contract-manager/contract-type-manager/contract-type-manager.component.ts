@@ -1,7 +1,7 @@
-import { ROUTES_CONFIG } from '@/app/core/constants/common';
+import { PERMISSION_CODES, ROUTES_CONFIG } from '@/app/core/constants/common';
 import { enumData } from '@/app/core/constants/enums';
 import { CompanySelectBoxDto, ContractType, PagedResult } from '@/app/core/models';
-import { ApiService, I18nMessageService } from '@/app/core/services';
+import { ApiService, I18nMessageService, PermissionService } from '@/app/core/services';
 import { StaticTranslateService } from '@/app/core/services/static-translate.service';
 import {
   CommonFilterActions,
@@ -44,7 +44,12 @@ export class ContractTypeManagerComponent implements OnInit {
   sortField = enumData.PAGE.SORT_FIELD.CREATED_AT;
   sortOrder = enumData.PAGE.SORT_ORDER.DESC;
   toolbar: ToolbarConfig = { show: true };
-  toolbarActions: TableAction[] = [CommonActions.create(() => this.openCreate())];
+  toolbarActions: TableAction[] = [
+    {
+      ...CommonActions.create(() => this.openCreate()),
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.HR_CONTRACT_TYPE_CREATE),
+    },
+  ];
 
   filters: Record<string, any> = {
     code: '',
@@ -135,24 +140,29 @@ export class ContractTypeManagerComponent implements OnInit {
     {
       key: 'edit',
       icon: 'edit',
-      tooltip: 'contractType.edit',
+      tooltip: 'table.action.edit',
       severity: 'info',
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.HR_CONTRACT_TYPE_UPDATE),
       onClick: (record) => this.openEdit(record),
     },
     {
       key: 'activate',
       icon: 'check-circle',
-      tooltip: 'contractType.activate',
+      tooltip: 'table.action.activate',
       severity: 'success',
-      visible: (record) => record.isActive === false,
+      visible: (record) =>
+        record.isActive === false &&
+        this.permissionSvc.has(PERMISSION_CODES.HR_CONTRACT_TYPE_ACTIVATE),
       onClick: (record) => this.activate(record),
     },
     {
       key: 'deactivate',
       icon: 'stop',
-      tooltip: 'contractType.deactivate',
+      tooltip: 'table.action.deactivate',
       severity: 'danger',
-      visible: (record) => record.isActive === true,
+      visible: (record) =>
+        record.isActive === true &&
+        this.permissionSvc.has(PERMISSION_CODES.HR_CONTRACT_TYPE_DEACTIVATE),
       onClick: (record) => this.deactivate(record),
     },
   ];
@@ -164,6 +174,7 @@ export class ContractTypeManagerComponent implements OnInit {
     private readonly apiService: ApiService,
     private readonly cdr: ChangeDetectorRef,
     private readonly actionConfirm: ActionConfirmService,
+    readonly permissionSvc: PermissionService,
   ) {}
 
   ngOnInit(): void {

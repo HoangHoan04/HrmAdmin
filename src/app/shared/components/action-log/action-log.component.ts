@@ -42,7 +42,7 @@ export class ActionLogComponent implements OnInit, OnChanges {
     {
       key: 'view',
       icon: 'eye',
-      tooltip: 'actionLog.viewDetail',
+      tooltip: 'table.action.viewDetail',
       severity: 'info',
       visible: (record: ActionLog) => !!(record.oldValue || record.newValue),
       onClick: (record) => this.openDetailModal(record),

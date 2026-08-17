@@ -1,5 +1,7 @@
+import { PERMISSION_CODES } from '@/app/core/constants/common';
 import { enumData } from '@/app/core/constants/enums/enumData';
 import { BranchSelectBoxDto, CompanySelectBoxDto, PositionMaster } from '@/app/core/models';
+import { PermissionService } from '@/app/core/services';
 import { StaticTranslateService } from '@/app/core/services/static-translate.service';
 import { downloadBlob, extractFileName } from '@/app/core/utils/file.util';
 import {
@@ -56,12 +58,21 @@ export class PositionMasterComponent implements OnInit {
   };
 
   toolbarActions: TableAction[] = [
-    CommonActions.create(() => this.openCreateModal()),
-    CommonActions.uploadExcel(
-      () => this.downloadTemplate(),
-      (file) => this.uploadFile(file),
-    ),
-    CommonActions.exportExcel(() => this.exportExcel()),
+    {
+      ...CommonActions.create(() => this.openCreateModal()),
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.ORG_POSITION_MASTER_CREATE),
+    },
+    {
+      ...CommonActions.uploadExcel(
+        () => this.downloadTemplate(),
+        (file) => this.uploadFile(file),
+      ),
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.ORG_POSITION_MASTER_IMPORT_EXCEL),
+    },
+    {
+      ...CommonActions.exportExcel(() => this.exportExcel()),
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.ORG_POSITION_MASTER_EXPORT_EXCEL),
+    },
   ];
 
   filters: Record<string, any> = {
@@ -203,31 +214,37 @@ export class PositionMasterComponent implements OnInit {
     {
       key: 'view',
       icon: 'eye',
-      tooltip: 'organization.positionMaster.viewDetail',
+      tooltip: 'table.action.viewDetail',
       severity: 'primary',
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.ORG_POSITION_MASTER_VIEW),
       onClick: (record) => this.viewDetail(record),
     },
     {
       key: 'edit',
       icon: 'edit',
-      tooltip: 'organization.positionMaster.edit',
+      tooltip: 'table.action.edit',
       severity: 'info',
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.ORG_POSITION_MASTER_UPDATE),
       onClick: (record) => this.openEdit(record),
     },
     {
       key: 'activate',
       icon: 'check-circle',
-      tooltip: 'organization.positionMaster.activate',
+      tooltip: 'table.action.activate',
       severity: 'success',
-      visible: (record) => record.isDeleted === true,
+      visible: (record) =>
+        record.isDeleted === true &&
+        this.permissionSvc.has(PERMISSION_CODES.ORG_POSITION_MASTER_ACTIVATE),
       onClick: (record) => this.activatePositionMaster(record),
     },
     {
       key: 'deactivate',
       icon: 'stop',
-      tooltip: 'organization.positionMaster.deactivate',
+      tooltip: 'table.action.deactivate',
       severity: 'danger',
-      visible: (record) => record.isDeleted === false,
+      visible: (record) =>
+        record.isDeleted === false &&
+        this.permissionSvc.has(PERMISSION_CODES.ORG_POSITION_MASTER_DEACTIVATE),
       onClick: (record) => this.deactivatePositionMaster(record),
     },
   ];
@@ -239,6 +256,7 @@ export class PositionMasterComponent implements OnInit {
     private readonly apiService: ApiService,
     private readonly cdr: ChangeDetectorRef,
     private readonly actionConfirm: ActionConfirmService,
+    readonly permissionSvc: PermissionService,
   ) {}
 
   ngOnInit(): void {

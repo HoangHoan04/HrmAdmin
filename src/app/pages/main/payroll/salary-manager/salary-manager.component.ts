@@ -1,4 +1,4 @@
-import { ROUTES_CONFIG } from '@/app/core/constants/common';
+import { PERMISSION_CODES, ROUTES_CONFIG } from '@/app/core/constants/common';
 import { enumData } from '@/app/core/constants/enums';
 import {
   CompanySelectBoxDto,
@@ -9,7 +9,7 @@ import {
   PayrollRunResult,
   Salary,
 } from '@/app/core/models';
-import { ApiService, I18nMessageService } from '@/app/core/services';
+import { ApiService, I18nMessageService, PermissionService } from '@/app/core/services';
 import {
   CommonFilterActions,
   FilterAction,
@@ -85,12 +85,16 @@ export class SalaryManagerComponent implements OnInit {
 
   toolbar: ToolbarConfig = { show: true };
   toolbarActions: TableAction[] = [
-    CommonActions.create(() => this.openCreate()),
+    {
+      ...CommonActions.create(() => this.openCreate()),
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.PAYROLL_SALARY_CREATE),
+    },
     {
       key: 'previewRun',
       label: 'salary.previewRun',
       icon: 'eye',
       severity: 'info',
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.PAYROLL_SALARY_CREATE),
       onClick: () => this.openPeriodModal('preview'),
     },
     {
@@ -98,6 +102,7 @@ export class SalaryManagerComponent implements OnInit {
       label: 'salary.runPayroll',
       icon: 'play-circle',
       severity: 'success',
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.PAYROLL_SALARY_CREATE),
       onClick: () => this.openPeriodModal('run'),
     },
     {
@@ -105,6 +110,7 @@ export class SalaryManagerComponent implements OnInit {
       label: 'salary.finalizePeriod',
       icon: 'check-circle',
       severity: 'primary',
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.PAYROLL_SALARY_APPROVE),
       onClick: () => this.openPeriodModal('finalize'),
     },
   ];
@@ -205,40 +211,49 @@ export class SalaryManagerComponent implements OnInit {
     {
       key: 'view',
       icon: 'eye',
-      tooltip: 'salary.viewDetail',
+      tooltip: 'table.action.viewDetail',
       severity: 'primary',
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.PAYROLL_SALARY_VIEW),
       onClick: (record) => this.openDetail(record),
     },
     {
       key: 'edit',
       icon: 'edit',
-      tooltip: 'salary.edit',
+      tooltip: 'table.action.edit',
       severity: 'info',
-      visible: (record) => this.EDITABLE_STATUSES.includes(record.status),
+      visible: (record) =>
+        this.EDITABLE_STATUSES.includes(record.status) &&
+        this.permissionSvc.has(PERMISSION_CODES.PAYROLL_SALARY_UPDATE),
       onClick: (record) => this.openEdit(record),
     },
     {
       key: 'approve',
       icon: 'check-circle',
-      tooltip: 'salary.approve',
+      tooltip: 'table.action.approve',
       severity: 'success',
-      visible: (record) => this.APPROVABLE_STATUSES.includes(record.status),
+      visible: (record) =>
+        this.APPROVABLE_STATUSES.includes(record.status) &&
+        this.permissionSvc.has(PERMISSION_CODES.PAYROLL_SALARY_APPROVE),
       onClick: (record) => this.approve(record),
     },
     {
       key: 'markPaid',
       icon: 'dollar',
-      tooltip: 'salary.markPaid',
+      tooltip: 'table.action.markPaid',
       severity: 'success',
-      visible: (record) => this.PAYABLE_STATUSES.includes(record.status),
+      visible: (record) =>
+        this.PAYABLE_STATUSES.includes(record.status) &&
+        this.permissionSvc.has(PERMISSION_CODES.PAYROLL_SALARY_MARK_PAID),
       onClick: (record) => this.markPaid(record),
     },
     {
       key: 'cancel',
       icon: 'stop',
-      tooltip: 'salary.cancel',
+      tooltip: 'table.action.cancel',
       severity: 'danger',
-      visible: (record) => this.CANCELLABLE_STATUSES.includes(record.status),
+      visible: (record) =>
+        this.CANCELLABLE_STATUSES.includes(record.status) &&
+        this.permissionSvc.has(PERMISSION_CODES.PAYROLL_SALARY_CANCEL),
       onClick: (record) => this.cancel(record),
     },
   ];
@@ -253,6 +268,7 @@ export class SalaryManagerComponent implements OnInit {
     private readonly cdr: ChangeDetectorRef,
     private readonly actionConfirm: ActionConfirmService,
     private readonly fb: FormBuilder,
+    readonly permissionSvc: PermissionService,
   ) {
     const now = new Date();
     this.periodForm = this.fb.group({

@@ -8,10 +8,11 @@ import {
   SalaryLineItem,
 } from '@/app/core/models';
 import { ApiService, I18nMessageService } from '@/app/core/services';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { forkJoin } from 'rxjs';
 
 @Component({
   standalone: false,
@@ -42,16 +43,23 @@ export class AddOrUpdateSalaryComponent implements OnInit {
     private readonly message: NzMessageService,
     private readonly i18n: I18nMessageService,
     private readonly apiService: ApiService,
+    private readonly cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
     this.initForm();
     this.id = this.route.snapshot.paramMap.get('id');
     this.isEdit = !!this.id;
-    this.loadSelectBoxes();
-    if (this.isEdit && this.id) {
-      this.loadDetail(this.id);
+    if (this.isEdit) {
+      this.validateForm.get('employeeId')?.disable({ emitEvent: false });
+      this.validateForm.get('year')?.disable({ emitEvent: false });
+      this.validateForm.get('month')?.disable({ emitEvent: false });
     }
+    this.loadSelectBoxes(() => {
+      if (this.isEdit && this.id) {
+        this.loadDetail(this.id);
+      }
+    });
   }
 
   get lineItems(): FormArray {
@@ -95,19 +103,22 @@ export class AddOrUpdateSalaryComponent implements OnInit {
     this.lineItems.removeAt(index);
   }
 
-  loadSelectBoxes(): void {
-    this.apiService
-      .post<EmployeeSelectBoxDto[]>(this.apiService.EMPLOYEE.SELECT_BOX, {})
-      .subscribe({
-        next: (res) => (this.employees = res),
-        error: () => this.message.error(this.i18n.genericError()),
-      });
-    this.apiService
-      .post<SalaryConfigSelectBoxDto[]>(this.apiService.SALARY_CONFIG.SELECT_BOX, {})
-      .subscribe({
-        next: (res) => (this.salaryConfigs = res),
-        error: () => this.message.error(this.i18n.genericError()),
-      });
+  loadSelectBoxes(onReady?: () => void): void {
+    forkJoin({
+      employees: this.apiService.post<EmployeeSelectBoxDto[]>(this.apiService.EMPLOYEE.SELECT_BOX, {}),
+      salaryConfigs: this.apiService.post<SalaryConfigSelectBoxDto[]>(
+        this.apiService.SALARY_CONFIG.SELECT_BOX,
+        {},
+      ),
+    }).subscribe({
+      next: ({ employees, salaryConfigs }) => {
+        this.employees = employees;
+        this.salaryConfigs = salaryConfigs;
+        this.cdr.markForCheck();
+        onReady?.();
+      },
+      error: () => this.message.error(this.i18n.genericError()),
+    });
   }
 
   loadDetail(id: string): void {
@@ -138,6 +149,7 @@ export class AddOrUpdateSalaryComponent implements OnInit {
         this.validateForm.get('year')?.disable({ emitEvent: false });
         this.validateForm.get('month')?.disable({ emitEvent: false });
         this.loading = false;
+        this.cdr.markForCheck();
       },
       error: (err: any) => {
         this.message.error(this.i18n.loadDetailFailed(err.error));

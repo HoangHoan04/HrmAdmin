@@ -2,6 +2,7 @@ import {
   ATTENDANCE_STATUS_OPTIONS,
   resolveAttendanceStatus,
 } from '@/app/core/constants/enums/attendance-status';
+import { PERMISSION_CODES } from '@/app/core/constants/common';
 import { enumData } from '@/app/core/constants/enums/enumData';
 import { toDateOnly } from '@/app/core/constants/helpers';
 import {
@@ -13,7 +14,7 @@ import {
   Timekeeping,
   TimekeepingSummary,
 } from '@/app/core/models';
-import { ApiService, I18nMessageService } from '@/app/core/services';
+import { ApiService, I18nMessageService, PermissionService } from '@/app/core/services';
 import {
   CommonFilterActions,
   FilterAction,
@@ -84,6 +85,7 @@ export class TimekeepingManagerComponent implements OnInit {
       label: 'timekeeping.summarize',
       icon: 'calculator',
       severity: 'primary',
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.OPERATE_TIMEKEEPING_SUMMARIZE),
       onClick: () => this.openSummarize(),
     },
   ];
@@ -248,8 +250,9 @@ export class TimekeepingManagerComponent implements OnInit {
     {
       key: 'view',
       icon: 'edit',
-      tooltip: 'timekeeping.viewDetail',
+      tooltip: 'table.action.viewDetail',
       severity: 'primary',
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.OPERATE_TIMEKEEPING_VIEW),
       onClick: (record) => this.openDetail(record),
     },
   ];
@@ -260,6 +263,7 @@ export class TimekeepingManagerComponent implements OnInit {
     private readonly i18n: I18nMessageService,
     private readonly apiService: ApiService,
     private readonly cdr: ChangeDetectorRef,
+    readonly permissionSvc: PermissionService,
   ) {}
 
   ngOnInit(): void {

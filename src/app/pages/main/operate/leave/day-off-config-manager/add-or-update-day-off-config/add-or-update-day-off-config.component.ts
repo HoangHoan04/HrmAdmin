@@ -1,5 +1,4 @@
 import { ROUTES_CONFIG } from '@/app/core/constants/common';
-import { enumData } from '@/app/core/constants/enums/enumData';
 import { CompanySelectBoxDto, DayOffConfig } from '@/app/core/models';
 import { ApiService, I18nMessageService } from '@/app/core/services';
 import { Component, OnInit } from '@angular/core';
@@ -20,7 +19,6 @@ export class AddOrUpdateDayOffConfigComponent implements OnInit {
   submitting = false;
   validateForm!: FormGroup;
   companies: CompanySelectBoxDto[] = [];
-  enumData = enumData;
 
   constructor(
     private readonly fb: FormBuilder,
@@ -35,6 +33,10 @@ export class AddOrUpdateDayOffConfigComponent implements OnInit {
     this.initForm();
     this.id = this.route.snapshot.paramMap.get('id');
     this.isEdit = !!this.id;
+    if (this.isEdit) {
+      this.validateForm.get('code')?.disable({ emitEvent: false });
+      this.validateForm.get('name')?.disable({ emitEvent: false });
+    }
     this.loadCompanies();
     if (this.isEdit && this.id) {
       this.loadDetail(this.id);
@@ -47,7 +49,6 @@ export class AddOrUpdateDayOffConfigComponent implements OnInit {
       name: ['', [Validators.required, Validators.maxLength(255)]],
       description: [''],
       companyId: [null],
-      type: [null, [Validators.required]],
       defaultDayPerYear: [0, [Validators.min(0)]],
       isPaid: [true],
       deductBalance: [true],

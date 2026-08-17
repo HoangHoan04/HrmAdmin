@@ -1,7 +1,8 @@
+import { PERMISSION_CODES } from '@/app/core/constants/common';
 import { enumData } from '@/app/core/constants/enums/enumData';
 import { toDateOnly } from '@/app/core/constants/helpers';
 import { AttendanceComplaint, PagedResult } from '@/app/core/models';
-import { ApiService, I18nMessageService } from '@/app/core/services';
+import { ApiService, I18nMessageService, PermissionService } from '@/app/core/services';
 import {
   CommonFilterActions,
   CommonFilterFields,
@@ -131,6 +132,7 @@ export class AttendanceComplaintManagerComponent implements OnInit {
       icon: 'eye',
       tooltip: 'common.actions.view',
       severity: 'info',
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.OPERATE_ATTENDANCE_COMPLAINT_VIEW),
       onClick: (record) => this.openDetail(record),
     },
   ];
@@ -141,6 +143,7 @@ export class AttendanceComplaintManagerComponent implements OnInit {
     private readonly apiService: ApiService,
     private readonly cdr: ChangeDetectorRef,
     private readonly modal: NzModalService,
+    readonly permissionSvc: PermissionService,
   ) {}
 
   ngOnInit(): void {

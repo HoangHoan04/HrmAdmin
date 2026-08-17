@@ -8,7 +8,7 @@ import {
 import { ApiService } from '@/app/core/services/api.service';
 import { I18nMessageService } from '@/app/core/services/i18n-message.service';
 import { PermissionService } from '@/app/core/services/permission.service';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import {
   NzFormatBeforeDropEvent,
@@ -49,6 +49,7 @@ export class OrgChartComponent implements OnInit {
     private readonly message: NzMessageService,
     private readonly i18n: I18nMessageService,
     private readonly permissionSvc: PermissionService,
+    private readonly cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
@@ -63,9 +64,11 @@ export class OrgChartComponent implements OnInit {
           this.companyId = this.companies[0].id;
           this.loadTree();
         }
+        this.cdr.markForCheck();
       },
       error: () => {
         this.message.error(this.i18n.instant('common.messages.loadCompanyListFailed'));
+        this.cdr.markForCheck();
       },
     });
   }
@@ -76,6 +79,7 @@ export class OrgChartComponent implements OnInit {
       this.loadTree();
     } else {
       this.treeNodes = [];
+      this.cdr.markForCheck();
     }
   }
 
@@ -90,6 +94,7 @@ export class OrgChartComponent implements OnInit {
     if (!this.companyId) return;
 
     this.loading = true;
+    this.cdr.markForCheck();
     const body: GetOrgChartTreeRequest = {
       companyId: this.companyId,
       includeParts: this.includeParts,
@@ -99,10 +104,12 @@ export class OrgChartComponent implements OnInit {
       next: (root) => {
         this.treeNodes = root ? [this.mapToTreeNode(root)] : [];
         this.loading = false;
+        this.cdr.markForCheck();
       },
       error: (err: any) => {
         this.treeNodes = [];
         this.loading = false;
+        this.cdr.markForCheck();
         this.message.error(err?.error || this.i18n.instant('organization.orgChart.loadFailed'));
       },
     });
@@ -155,6 +162,7 @@ export class OrgChartComponent implements OnInit {
     }
 
     this.reparenting = true;
+    this.cdr.markForCheck();
     const payload: ReparentOrgChartNodeRequest = {
       nodeType,
       id: String(drag.key),
@@ -166,12 +174,14 @@ export class OrgChartComponent implements OnInit {
     return this.apiService.post<boolean>(this.apiService.ORG_CHART.REPARENT, payload).pipe(
       map(() => {
         this.reparenting = false;
+        this.cdr.markForCheck();
         this.message.success(this.i18n.instant('organization.orgChart.reparentSuccess'));
         this.loadTree();
         return false;
       }),
       catchError((err: any) => {
         this.reparenting = false;
+        this.cdr.markForCheck();
         this.message.error(err?.error || this.i18n.instant('organization.orgChart.reparentFailed'));
         return of(false);
       }),

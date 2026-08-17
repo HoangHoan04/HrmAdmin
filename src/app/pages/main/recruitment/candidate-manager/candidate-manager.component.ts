@@ -111,6 +111,7 @@ export class CandidateManagerComponent implements OnInit {
         icon: 'eye',
         tooltip: 'common.actions.view',
         severity: 'primary',
+        visible: () => this.permissionSvc.has(PERMISSION_CODES.RECRUITMENT_CANDIDATE_VIEW),
         onClick: (r) => this.openDetail(r),
       },
       {

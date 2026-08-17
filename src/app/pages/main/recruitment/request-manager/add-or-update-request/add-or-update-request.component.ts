@@ -11,10 +11,11 @@ import {
   RecruitmentRequest,
 } from '@/app/core/models';
 import { ApiService, I18nMessageService } from '@/app/core/services';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { forkJoin, of, switchMap } from 'rxjs';
 
 @Component({
   standalone: false,
@@ -45,6 +46,7 @@ export class AddOrUpdateRequestComponent implements OnInit {
     private readonly message: NzMessageService,
     private readonly i18n: I18nMessageService,
     private readonly apiService: ApiService,
+    private readonly cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
@@ -66,65 +68,94 @@ export class AddOrUpdateRequestComponent implements OnInit {
     this.isDetail = this.router.url.includes('/detail');
     this.isEdit = !!this.id && !this.isDetail;
 
-    this.apiService.post<CompanySelectBoxDto[]>(this.apiService.COMPANY.SELECT_BOX, {}).subscribe({
-      next: (res) => (this.companies = res),
-    });
-    this.apiService
-      .post<PagedResult<JobDescription>>(this.apiService.JOB_DESCRIPTION.PAGINATION, {
-        pageIndex: 1,
-        pageSize: 200,
-        isActive: true,
-      })
-      .subscribe({ next: (res) => (this.jobDescriptions = res.items) });
+    if (this.isEdit) {
+      this.validateForm.get('code')?.disable({ emitEvent: false });
+    }
 
     this.validateForm.get('companyId')?.valueChanges.subscribe((companyId) => {
       this.loadBranches(companyId);
-      this.validateForm.patchValue({ branchId: null, departmentId: null, partId: null });
+      this.validateForm.patchValue(
+        { branchId: null, departmentId: null, partId: null },
+        { emitEvent: false },
+      );
     });
     this.validateForm.get('branchId')?.valueChanges.subscribe((branchId) => {
       this.loadDepartments(branchId);
-      this.validateForm.patchValue({ departmentId: null, partId: null });
+      this.validateForm.patchValue({ departmentId: null, partId: null }, { emitEvent: false });
     });
     this.validateForm.get('departmentId')?.valueChanges.subscribe((departmentId) => {
       this.loadParts(departmentId);
-      this.validateForm.patchValue({ partId: null });
+      this.validateForm.patchValue({ partId: null }, { emitEvent: false });
     });
-    this.apiService
-      .post<PositionSelectBoxDto[]>(this.apiService.POSITION.SELECT_BOX, {})
-      .subscribe({ next: (res) => (this.positions = res) });
 
-    if (this.id) this.loadDetail(this.id);
-    if (this.isDetail) this.validateForm.disable();
+    forkJoin({
+      companies: this.apiService.post<CompanySelectBoxDto[]>(this.apiService.COMPANY.SELECT_BOX, {}),
+      positions: this.apiService.post<PositionSelectBoxDto[]>(this.apiService.POSITION.SELECT_BOX, {}),
+      jobDescriptions: this.apiService.post<PagedResult<JobDescription>>(
+        this.apiService.JOB_DESCRIPTION.PAGINATION,
+        { pageIndex: 1, pageSize: 200, isActive: true },
+      ),
+    }).subscribe({
+      next: ({ companies, positions, jobDescriptions }) => {
+        this.companies = companies;
+        this.positions = positions;
+        this.jobDescriptions = jobDescriptions.items;
+        this.cdr.markForCheck();
+        if (this.id) {
+          this.loadDetail(this.id);
+        } else if (this.isDetail) {
+          this.validateForm.disable({ emitEvent: false });
+        }
+      },
+    });
   }
 
   loadBranches(companyId: string | null): void {
     if (!companyId) {
       this.branches = [];
+      this.cdr.markForCheck();
       return;
     }
     this.apiService
       .post<BranchSelectBoxDto[]>(this.apiService.BRANCH.LOAD_BY_COMPANY, { companyId })
-      .subscribe({ next: (res) => (this.branches = res) });
+      .subscribe({
+        next: (res) => {
+          this.branches = res;
+          this.cdr.markForCheck();
+        },
+      });
   }
 
   loadDepartments(branchId: string | null): void {
     if (!branchId) {
       this.departments = [];
+      this.cdr.markForCheck();
       return;
     }
     this.apiService
       .post<DepartmentSelectBoxDto[]>(this.apiService.DEPARTMENT.LOAD_BY_BRANCH, { branchId })
-      .subscribe({ next: (res) => (this.departments = res) });
+      .subscribe({
+        next: (res) => {
+          this.departments = res;
+          this.cdr.markForCheck();
+        },
+      });
   }
 
   loadParts(departmentId: string | null): void {
     if (!departmentId) {
       this.parts = [];
+      this.cdr.markForCheck();
       return;
     }
     this.apiService
       .post<PartSelectBoxDto[]>(this.apiService.PART.LOAD_BY_DEPARTMENT, { departmentId })
-      .subscribe({ next: (res) => (this.parts = res) });
+      .subscribe({
+        next: (res) => {
+          this.parts = res;
+          this.cdr.markForCheck();
+        },
+      });
   }
 
   loadDetail(id: string): void {
@@ -133,15 +164,54 @@ export class AddOrUpdateRequestComponent implements OnInit {
       .post<RecruitmentRequest>(this.apiService.RECRUITMENT_REQUEST.DETAIL, { id })
       .subscribe({
         next: (item) => {
-          this.loadBranches(item.companyId);
-          this.loadDepartments(item.branchId ?? null);
-          this.loadParts(item.departmentId ?? null);
-          this.validateForm.patchValue({
-            ...item,
-            expectedStartDate: item.expectedStartDate ? new Date(item.expectedStartDate) : null,
-          });
-          this.loading = false;
-          if (this.isDetail) this.validateForm.disable();
+          const branch$ = item.companyId
+            ? this.apiService.post<BranchSelectBoxDto[]>(this.apiService.BRANCH.LOAD_BY_COMPANY, {
+                companyId: item.companyId,
+              })
+            : of([] as BranchSelectBoxDto[]);
+
+          branch$
+            .pipe(
+              switchMap((branches) => {
+                this.branches = branches;
+                return item.branchId
+                  ? this.apiService.post<DepartmentSelectBoxDto[]>(
+                      this.apiService.DEPARTMENT.LOAD_BY_BRANCH,
+                      { branchId: item.branchId },
+                    )
+                  : of([] as DepartmentSelectBoxDto[]);
+              }),
+              switchMap((departments) => {
+                this.departments = departments;
+                return item.departmentId
+                  ? this.apiService.post<PartSelectBoxDto[]>(this.apiService.PART.LOAD_BY_DEPARTMENT, {
+                      departmentId: item.departmentId,
+                    })
+                  : of([] as PartSelectBoxDto[]);
+              }),
+            )
+            .subscribe({
+              next: (parts) => {
+                this.parts = parts;
+                this.validateForm.patchValue(
+                  {
+                    ...item,
+                    expectedStartDate: item.expectedStartDate
+                      ? new Date(item.expectedStartDate)
+                      : null,
+                  },
+                  { emitEvent: false },
+                );
+                if (this.isEdit) {
+                  this.validateForm.get('code')?.disable({ emitEvent: false });
+                }
+                if (this.isDetail) {
+                  this.validateForm.disable({ emitEvent: false });
+                }
+                this.loading = false;
+                this.cdr.markForCheck();
+              },
+            });
         },
         error: (err: any) => {
           this.message.error(this.i18n.loadDetailFailed(err.error));
