@@ -8,7 +8,9 @@
       "isActive": "Đang hoạt động",
       "filterCompany": "Chọn công ty...",
       "filterStatus": "Chọn trạng thái...",
-      "backToList": "Quay lại danh sách"
+      "backToList": "Quay lại danh sách",
+      "active": "Đang hoạt động",
+      "inactive": "Ngừng hoạt động"
     },
     "type": {
       "entityName": "loại tài sản",

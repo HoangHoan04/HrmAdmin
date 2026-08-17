@@ -7,6 +7,7 @@ import {
   Position,
   PositionMasterSelectBoxDto,
 } from '@/app/core/models';
+import { StaticTranslateService } from '@/app/core/services/static-translate.service';
 import { downloadBlob, extractFileName } from '@/app/core/utils/file.util';
 import {
   CommonFilterActions,
@@ -54,9 +55,8 @@ export class PositionComponent implements OnInit {
     showTotal: true,
   };
 
-  sortField = 'createdAt';
-  sortOrder = 'desc';
-
+  sortField = enumData.PAGE.SORT_FIELD.CREATED_AT;
+  sortOrder = enumData.PAGE.SORT_ORDER.DESC;
   toolbar: ToolbarConfig = {
     show: true,
   };
@@ -140,10 +140,9 @@ export class PositionComponent implements OnInit {
       placeholder: 'organization.position.filterStatus',
       col: 6,
       allowClear: true,
-      options: [
-        { label: 'organization.position.statusActive', value: false },
-        { label: 'organization.position.statusInactive', value: true },
-      ],
+      options: Object.values(enumData.STATUS_FILTER_IS_DELETED)
+        .filter((s) => s.value !== null)
+        .map((s) => ({ label: s.labelKey, value: s.value })),
     },
   ];
 
@@ -177,7 +176,15 @@ export class PositionComponent implements OnInit {
       type: 'text',
       sortable: true,
     },
-    { field: 'status', header: 'organization.position.status', type: 'boolean', sortable: true },
+    {
+      field: 'isDeleted',
+      header: 'organization.position.status',
+      type: 'boolean',
+      sortable: true,
+      renderBoolean: (value: boolean) =>
+        StaticTranslateService.instant(value ? 'common.statusInactive' : 'common.statusActive'),
+      badgeSeverity: (value: boolean) => (value ? 'danger' : 'success'),
+    },
   ];
 
   rowActions: RowAction[] = [

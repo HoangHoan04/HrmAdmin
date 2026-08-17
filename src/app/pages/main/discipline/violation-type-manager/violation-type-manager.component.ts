@@ -38,8 +38,8 @@ export class ViolationTypeManagerComponent implements OnInit {
     total: enumData.PAGE.TOTAL,
     showTotal: true,
   };
-  sortField = 'createdAt';
-  sortOrder = 'desc';
+  sortField = enumData.PAGE.SORT_FIELD.CREATED_AT;
+  sortOrder = enumData.PAGE.SORT_ORDER.DESC;
   toolbar: ToolbarConfig = { show: true };
   toolbarActions: TableAction[] = [];
   filters: Record<string, any> = { searchText: '', severity: '', isActive: null };
@@ -78,10 +78,9 @@ export class ViolationTypeManagerComponent implements OnInit {
       placeholder: 'discipline.common.filterStatus',
       col: 8,
       allowClear: true,
-      options: [
-        { label: 'enums.statusFilter.active', value: true },
-        { label: 'enums.statusFilter.inactive', value: false },
-      ],
+      options: Object.values(enumData.STATUS_FILTER_IS_ACTIVE)
+        .filter((s) => s.value !== null)
+        .map((s) => ({ label: s.labelKey, value: s.value })),
     },
   ];
   filterActions: FilterAction[] = [

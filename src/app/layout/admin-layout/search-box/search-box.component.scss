@@ -491,38 +491,41 @@
   font-weight: 500;
 }
 
-html.dark .search-trigger {
-  background: var(--muted, #1e293b);
-  border-color: var(--border, #334155);
-}
+:host-context(.dark) {
+  .search-trigger {
+    background: var(--muted);
+    border-color: var(--border);
+  }
 
-html.dark .search-trigger:hover {
-  background: var(--muted, #263548);
-}
+  .search-trigger:hover {
+    background: var(--muted);
+  }
 
-html.dark .search-dialog {
-  background: var(--background, #0f172a);
-  border-color: var(--border, #334155);
-}
+  .search-dialog {
+    background: var(--background-card);
+    border-color: var(--border);
+  }
 
-html.dark .search-header {
-  background: var(--muted, #1e293b);
-  border-color: var(--border, #334155);
-}
+  .search-header {
+    background: var(--muted);
+    border-color: var(--border);
+  }
 
-html.dark .search-input {
-  color: var(--foreground, #e2e8f0);
-}
+  .search-input {
+    color: var(--foreground);
+  }
 
-html.dark .search-item-active {
-  background: var(--primary-muted, rgba(59, 130, 246, 0.15));
-}
+  .search-item-active {
+    background: var(--primary-muted);
+  }
 
-html.dark .search-grid-item {
-  background: var(--muted, #1e293b);
-  border-color: var(--border, #334155);
-}
+  .search-grid-item {
+    background: var(--muted);
+    border-color: var(--border);
+    color: var(--foreground);
+  }
 
-html.dark .search-grid-item:hover {
-  border-color: var(--primary, #3b82f6);
+  .search-grid-item:hover {
+    border-color: var(--primary);
+  }
 }

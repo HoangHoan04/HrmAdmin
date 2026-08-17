@@ -2,6 +2,7 @@ import { ROUTES_CONFIG } from '@/app/core/constants/common';
 import { enumData } from '@/app/core/constants/enums';
 import { CompanySelectBoxDto, ContractType, PagedResult } from '@/app/core/models';
 import { ApiService, I18nMessageService } from '@/app/core/services';
+import { StaticTranslateService } from '@/app/core/services/static-translate.service';
 import {
   CommonFilterActions,
   FilterAction,
@@ -40,8 +41,8 @@ export class ContractTypeManagerComponent implements OnInit {
     showTotal: true,
   };
 
-  sortField = 'createdAt';
-  sortOrder = 'desc';
+  sortField = enumData.PAGE.SORT_FIELD.CREATED_AT;
+  sortOrder = enumData.PAGE.SORT_ORDER.DESC;
   toolbar: ToolbarConfig = { show: true };
   toolbarActions: TableAction[] = [CommonActions.create(() => this.openCreate())];
 
@@ -93,10 +94,9 @@ export class ContractTypeManagerComponent implements OnInit {
       placeholder: 'contractType.filterStatus',
       col: 6,
       allowClear: true,
-      options: [
-        { label: 'enums.statusFilter.active', value: true },
-        { label: 'enums.statusFilter.inactive', value: false },
-      ],
+      options: Object.values(enumData.STATUS_FILTER_IS_ACTIVE)
+        .filter((s) => s.value !== null)
+        .map((s) => ({ label: s.labelKey, value: s.value })),
     },
   ];
 
@@ -120,7 +120,15 @@ export class ContractTypeManagerComponent implements OnInit {
       header: 'contractType.notifyBeforeExpiryDays',
       type: 'number',
     },
-    { field: 'isActive', header: 'contractType.status', type: 'boolean', sortable: true },
+    {
+      field: 'isActive',
+      header: 'contractType.status',
+      type: 'boolean',
+      sortable: true,
+      renderBoolean: (value: boolean) =>
+        StaticTranslateService.instant(value ? 'common.statusActive' : 'common.statusInactive'),
+      badgeSeverity: (value: boolean) => (value ? 'success' : 'danger'),
+    },
   ];
 
   rowActions: RowAction[] = [

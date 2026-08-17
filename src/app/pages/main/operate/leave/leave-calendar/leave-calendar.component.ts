@@ -3,6 +3,7 @@ import { toDateOnly } from '@/app/core/constants/helpers';
 import {
   BranchSelectBoxDto,
   CompanySelectBoxDto,
+  DayOffConfigSelectBoxDto,
   LeaveCalendarEvent,
   RegisterDayOff,
 } from '@/app/core/models';
@@ -38,8 +39,9 @@ export class LeaveCalendarComponent implements OnInit, OnDestroy {
   selectedEvent?: LeaveCalendarEvent;
   selectedDetail?: RegisterDayOff;
 
-  companyOptions: { label: string; value: string }[] = [];
-  branchOptions: { label: string; value: string }[] = [];
+  companyOptions: CompanySelectBoxDto[] = [];
+  branchOptions: BranchSelectBoxDto[] = [];
+  dayOffConfigOptions: DayOffConfigSelectBoxDto[] = [];
 
   filters = {
     companyId: null as string | null,
@@ -48,18 +50,13 @@ export class LeaveCalendarComponent implements OnInit, OnDestroy {
     includeHolidays: true,
   };
 
-  readonly statusOptions = [
-    { value: null, labelKey: 'leaveCalendar.statusAll' },
-    { value: enumData.DAY_OFF_STATUS.APPROVED.value, labelKey: 'leaveCalendar.statusApproved' },
-    { value: enumData.DAY_OFF_STATUS.PENDING.value, labelKey: 'leaveCalendar.statusPending' },
-  ];
-
   events: EventInput[] = [];
   private readonly sub = new Subscription();
   private lastRange: { from: Date; to: Date } | null = null;
   private loadSeq = 0;
+
   private readonly dayOffStatuses = Object.values(enumData.DAY_OFF_STATUS);
-  private readonly dayOffTypes = Object.values(enumData.DAY_OFF_CONFIG_TYPE);
+  readonly statusOptions = Object.values(enumData.LEAVE_STATUS);
   private readonly leaveSessions = Object.values(enumData.LEAVE_SESSION);
 
   calendarOptions: CalendarOptions = {
@@ -114,23 +111,26 @@ export class LeaveCalendarComponent implements OnInit, OnDestroy {
   loadSelectBoxes(): void {
     this.apiService.post<CompanySelectBoxDto[]>(this.apiService.COMPANY.SELECT_BOX, {}).subscribe({
       next: (items) => {
-        this.companyOptions = items.map((item) => ({
-          label: item.code ? `${item.code} - ${item.name}` : item.name,
-          value: item.id,
-        }));
+        this.companyOptions = items;
         this.cdr.markForCheck();
       },
     });
 
     this.apiService.post<BranchSelectBoxDto[]>(this.apiService.BRANCH.SELECT_BOX, {}).subscribe({
       next: (items) => {
-        this.branchOptions = items.map((item) => ({
-          label: item.code ? `${item.code} - ${item.name}` : item.name,
-          value: item.id,
-        }));
+        this.branchOptions = items;
         this.cdr.markForCheck();
       },
     });
+
+    this.apiService
+      .post<DayOffConfigSelectBoxDto[]>(this.apiService.DAY_OFF_CONFIG.SELECT_BOX, {})
+      .subscribe({
+        next: (items) => {
+          this.dayOffConfigOptions = items;
+          this.cdr.markForCheck();
+        },
+      });
   }
 
   onFilterChange(): void {
@@ -218,12 +218,6 @@ export class LeaveCalendarComponent implements OnInit, OnDestroy {
     if (!status) return '-';
     const meta = this.dayOffStatuses.find((item) => item.value === status);
     return meta ? this.i18n.instant(meta.labelKey) : status;
-  }
-
-  getDayOffTypeLabel(type?: string | null): string {
-    if (!type) return '-';
-    const meta = this.dayOffTypes.find((item) => item.value === type);
-    return meta ? this.i18n.instant(meta.labelKey) : type;
   }
 
   getLeaveSessionLabel(session?: string | null): string {

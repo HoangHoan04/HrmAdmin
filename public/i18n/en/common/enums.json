@@ -6,6 +6,11 @@
       "inactive": "Inactive",
       "all": "All"
     },
+    "yesNoFilter": {
+      "yes": "Yes",
+      "no": "No",
+      "all": "All"
+    },
     "gender": {
       "male": "Male",
       "female": "Female",

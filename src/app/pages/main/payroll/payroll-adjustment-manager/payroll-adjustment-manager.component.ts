@@ -21,8 +21,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd/message';
 
 type SlipKind =
-  | typeof enumData.SLIP_KIND.DEDUCTION.value
-  | typeof enumData.SLIP_KIND.ADDITION.value;
+  typeof enumData.SLIP_KIND.DEDUCTION.value | typeof enumData.SLIP_KIND.ADDITION.value;
 type SlipRow = PayrollSlip & { employeeDisplay?: string; statusLabel?: string };
 
 @Component({
@@ -54,8 +53,9 @@ export class PayrollAdjustmentManagerComponent implements OnInit {
     showTotal: true,
   };
 
-  sortField = 'slipDate';
-  sortOrder = 'desc';
+  sortField = enumData.PAGE.SORT_FIELD.SLIP_DATE;
+  sortOrder = enumData.PAGE.SORT_ORDER.DESC;
+
   toolbar: ToolbarConfig = { show: true };
   toolbarActions: TableAction[] = [CommonActions.create(() => this.openCreate())];
 
@@ -192,9 +192,7 @@ export class PayrollAdjustmentManagerComponent implements OnInit {
 
   onTabChange(index: number): void {
     this.activeKind =
-      index === 1
-        ? enumData.SLIP_KIND.ADDITION.value
-        : enumData.SLIP_KIND.DEDUCTION.value;
+      index === 1 ? enumData.SLIP_KIND.ADDITION.value : enumData.SLIP_KIND.DEDUCTION.value;
     this.pagination.current = 1;
     this.loadData();
   }

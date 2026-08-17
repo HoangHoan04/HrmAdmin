@@ -54,23 +54,6 @@
       </div>
 
       <div nz-row [nzGutter]="24">
-        <!-- Loại ngày nghỉ -->
-        <div nz-col nzXs="24" nzMd="8">
-          <nz-form-item>
-            <nz-form-label [nzRequired]="true">{{ 'dayOffConfig.type' | translate }}</nz-form-label>
-            <nz-form-control>
-              <nz-select
-                formControlName="type"
-                nzAllowClear
-                [nzPlaceHolder]="'dayOffConfig.filterType' | translate"
-              >
-                @for (t of typeOptions; track t.value) {
-                  <nz-option [nzValue]="t.value" [nzLabel]="t.labelKey | translate"></nz-option>
-                }
-              </nz-select>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
         <!-- Số ngày nghỉ mặc định mỗi năm -->
         <div nz-col nzXs="24" nzMd="8">
           <nz-form-item>

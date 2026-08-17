@@ -3,20 +3,23 @@ import { enumData } from '@/app/core/constants/enums';
 import { NotificationTemplate, PagedResult } from '@/app/core/models';
 import { ApiService, I18nMessageService } from '@/app/core/services';
 import { PermissionService } from '@/app/core/services/permission.service';
-import {
-  CommonFilterActions,
-  FilterAction,
-  FilterConfig,
-  FilterField,
-} from '@/app/shared/components/filter-custom/filter-custom.types';
-import {
-  CommonActions,
-  PaginationConfig,
-  RowAction,
-  TableAction,
-  TableColumn,
-  ToolbarConfig,
-} from '@/app/shared/components/table-custom/table-custom.types';
+import { StaticTranslateService } from '@/app/core/services/static-translate.service';
+import
+    {
+        CommonFilterActions,
+        FilterAction,
+        FilterConfig,
+        FilterField,
+    } from '@/app/shared/components/filter-custom/filter-custom.types';
+import
+    {
+        CommonActions,
+        PaginationConfig,
+        RowAction,
+        TableAction,
+        TableColumn,
+        ToolbarConfig,
+    } from '@/app/shared/components/table-custom/table-custom.types';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
@@ -74,10 +77,9 @@ export class NotificationTemplateManagerComponent implements OnInit {
       type: 'select',
       col: 8,
       allowClear: true,
-      options: [
-        { label: 'enums.statusFilter.active', value: true },
-        { label: 'enums.statusFilter.inactive', value: false },
-      ],
+      options: Object.values(enumData.STATUS_FILTER_IS_ACTIVE)
+        .filter((s) => s.value !== null)
+        .map((s) => ({ label: s.labelKey, value: s.value })),
     },
   ];
   filterActions: FilterAction[] = [
@@ -88,7 +90,11 @@ export class NotificationTemplateManagerComponent implements OnInit {
     { field: 'code', header: 'system.notificationTemplate.code', type: 'text', sortable: true },
     { field: 'channel', header: 'system.notificationTemplate.channel', type: 'text' },
     { field: 'subject', header: 'system.notificationTemplate.subject', type: 'text' },
-    { field: 'isActive', header: 'common.status.label', type: 'boolean' },
+    { field: 'isActive', header: 'common.status.label', type: 'boolean', sortable: true, renderBoolean: (value: boolean) =>
+        StaticTranslateService.instant(value ? 'common.statusActive' : 'common.statusInactive'),
+      badgeSeverity: (value: boolean) => (value ? 'success' : 'danger'),
+    },
+    { field: 'createdAt', header: 'common.fields.createdAt', type: 'datetime' },
   ];
   rowActions: RowAction[] = [];
 
@@ -181,8 +187,8 @@ export class NotificationTemplateManagerComponent implements OnInit {
   }
   openCreate(): void {
     this.router.navigate([
-      ROUTES_CONFIG.SETTING_SYSTEM.children.NOTIFICATION_TEMPLATE.children
-        .ADD_NOTIFICATION_TEMPLATE.path,
+      ROUTES_CONFIG.SETTING_SYSTEM.children.NOTIFICATION_TEMPLATE.children.ADD_NOTIFICATION_TEMPLATE
+        .path,
     ]);
   }
   openEdit(item: NotificationTemplate): void {

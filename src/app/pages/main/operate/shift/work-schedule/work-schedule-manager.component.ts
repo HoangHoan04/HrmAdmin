@@ -64,8 +64,9 @@ export class WorkScheduleManagerComponent implements OnInit {
     showTotal: true,
   };
 
-  sortField = 'workDate';
-  sortOrder = 'desc';
+  sortField = enumData.PAGE.SORT_FIELD.WORK_DATE;
+  sortOrder = enumData.PAGE.SORT_ORDER.DESC;
+
   toolbar: ToolbarConfig = { show: true };
   toolbarActions: TableAction[] = [
     CommonActions.create(() => this.openCreate()),

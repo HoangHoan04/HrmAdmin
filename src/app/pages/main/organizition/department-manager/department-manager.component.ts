@@ -1,5 +1,6 @@
 import { enumData } from '@/app/core/constants/enums/enumData';
 import { BranchSelectBoxDto, CompanySelectBoxDto, Department } from '@/app/core/models';
+import { StaticTranslateService } from '@/app/core/services/static-translate.service';
 import { downloadBlob, extractFileName } from '@/app/core/utils/file.util';
 import {
   CommonFilterActions,
@@ -48,8 +49,8 @@ export class DepartmentManagerComponent implements OnInit {
     showTotal: true,
   };
 
-  sortField = 'createdAt';
-  sortOrder = 'desc';
+  sortField = enumData.PAGE.SORT_FIELD.CREATED_AT;
+  sortOrder = enumData.PAGE.SORT_ORDER.DESC;
 
   toolbar: ToolbarConfig = {
     show: true,
@@ -122,10 +123,9 @@ export class DepartmentManagerComponent implements OnInit {
       placeholder: 'organization.department.filterStatus',
       col: 6,
       allowClear: true,
-      options: [
-        { label: 'organization.department.statusActive', value: false },
-        { label: 'organization.department.statusInactive', value: true },
-      ],
+      options: Object.values(enumData.STATUS_FILTER_IS_DELETED)
+        .filter((s) => s.value !== null)
+        .map((s) => ({ label: s.labelKey, value: s.value })),
     },
   ];
 
@@ -155,12 +155,14 @@ export class DepartmentManagerComponent implements OnInit {
       type: 'text',
       sortable: false,
     },
-    { field: 'status', header: 'organization.department.status', type: 'boolean', sortable: true },
     {
-      field: 'createdAt',
-      header: 'organization.department.createdAt',
-      type: 'date',
+      field: 'isDeleted',
+      header: 'organization.department.status',
+      type: 'boolean',
       sortable: true,
+      renderBoolean: (value: boolean) =>
+        StaticTranslateService.instant(value ? 'common.statusInactive' : 'common.statusActive'),
+      badgeSeverity: (value: boolean) => (value ? 'danger' : 'success'),
     },
   ];
 

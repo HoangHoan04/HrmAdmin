@@ -21,7 +21,6 @@ export class AddOrUpdateDayOffConfigComponent implements OnInit {
   validateForm!: FormGroup;
   companies: CompanySelectBoxDto[] = [];
   enumData = enumData;
-  typeOptions = Object.values(enumData.DAY_OFF_CONFIG_TYPE);
 
   constructor(
     private readonly fb: FormBuilder,
@@ -75,7 +74,6 @@ export class AddOrUpdateDayOffConfigComponent implements OnInit {
           name: item.name,
           description: item.description,
           companyId: item.companyId,
-          type: item.dayOffType,
           defaultDayPerYear: item.defaultDaysPerYear,
           isPaid: item.isPaid,
           deductBalance: item.deductBalance ?? true,
@@ -117,7 +115,6 @@ export class AddOrUpdateDayOffConfigComponent implements OnInit {
       name: value.name,
       description: value.description,
       companyId: value.companyId || null,
-      dayOffType: value.type,
       defaultDaysPerYear: value.defaultDayPerYear,
       isPaid: value.isPaid,
       deductBalance: value.deductBalance,

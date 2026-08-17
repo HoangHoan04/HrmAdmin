@@ -2,6 +2,7 @@ import { PERMISSION_CODES } from '@/app/core/constants/common/permission-codes';
 import { enumData } from '@/app/core/constants/enums/enumData';
 import { Company } from '@/app/core/models/organization/company.models';
 import { PermissionService } from '@/app/core/services/permission.service';
+import { StaticTranslateService } from '@/app/core/services/static-translate.service';
 import { ActionConfirmService } from '@/app/shared/services/action-confirm.service';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
@@ -46,8 +47,8 @@ export class CompanyManagerComponent implements OnInit {
     showTotal: true,
   };
 
-  sortField = 'createdAt';
-  sortOrder = 'desc';
+  sortField = enumData.PAGE.SORT_FIELD.CREATED_AT;
+  sortOrder = enumData.PAGE.SORT_ORDER.DESC;
 
   toolbar: ToolbarConfig = {
     show: true,
@@ -109,10 +110,9 @@ export class CompanyManagerComponent implements OnInit {
       placeholder: 'organization.company.filterStatus',
       col: 8,
       allowClear: true,
-      options: [
-        { label: 'organization.company.statusActive', value: false },
-        { label: 'organization.company.statusInactive', value: true },
-      ],
+      options: Object.values(enumData.STATUS_FILTER_IS_DELETED)
+        .filter((s) => s.value !== null)
+        .map((s) => ({ label: s.labelKey, value: s.value })),
     },
   ];
 
@@ -127,7 +127,15 @@ export class CompanyManagerComponent implements OnInit {
     { field: 'address', header: 'organization.company.address', type: 'text', sortable: true },
     { field: 'hotline', header: 'organization.company.hotline', type: 'text' },
     { field: 'taxCode', header: 'organization.company.taxCode', type: 'text' },
-    { field: 'status', header: 'organization.company.status', type: 'boolean', sortable: true },
+    {
+      field: 'isDeleted',
+      header: 'organization.company.status',
+      type: 'boolean',
+      sortable: true,
+      renderBoolean: (value: boolean) =>
+        StaticTranslateService.instant(value ? 'common.statusInactive' : 'common.statusActive'),
+      badgeSeverity: (value: boolean) => (value ? 'danger' : 'success'),
+    },
   ];
 
   rowActions: RowAction[] = [
@@ -203,10 +211,7 @@ export class CompanyManagerComponent implements OnInit {
       .post<PagedResult<Company>>(this.apiService.COMPANY.PAGINATION, payload)
       .subscribe({
         next: (res) => {
-          this.data = res.items.map((item) => ({
-            ...item,
-            status: !item.isDeleted,
-          }));
+          this.data = res.items;
           this.pagination.total = res.totalCount;
           this.loading = false;
           this.syncFilterActionsLoading();

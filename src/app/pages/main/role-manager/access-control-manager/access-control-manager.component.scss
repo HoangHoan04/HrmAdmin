@@ -10,23 +10,25 @@
 
 .role-access-page {
   .role-filter-collapse {
-    background: #fff;
+    background: var(--background-card, #fff);
     border-radius: 8px;
 
     ::ng-deep {
       .ant-collapse-item {
-        border: 1px solid #f0f0f0;
+        border: 1px solid var(--border, #f0f0f0);
         border-radius: 8px;
         overflow: hidden;
       }
 
       .ant-collapse-header {
         font-weight: 500;
-        background: #fafafa;
+        background: var(--muted, #fafafa);
+        color: var(--foreground);
       }
 
       .ant-collapse-content-box {
         padding: 16px;
+        background: var(--background-card, #fff);
       }
     }
   }
@@ -34,7 +36,7 @@
   .role-filter-label {
     display: block;
     font-size: 13px;
-    color: #595959;
+    color: var(--muted-foreground, #595959);
     margin-bottom: 4px;
   }
 
@@ -84,7 +86,7 @@
 
   .role-save-hint {
     font-size: 13px;
-    color: #8c8c8c;
+    color: var(--muted-foreground, #8c8c8c);
   }
 
   .role-meta {
@@ -92,14 +94,15 @@
     align-items: center;
     gap: 8px;
     font-size: 13px;
-    color: #595959;
+    color: var(--muted-foreground, #595959);
   }
 
   .role-meta-count {
     padding: 2px 8px;
-    background: #f5f5f5;
+    background: var(--muted, #f5f5f5);
     border-radius: 4px;
-    border: 1px solid #e8e8e8;
+    border: 1px solid var(--border, #e8e8e8);
+    color: var(--foreground);
     font-variant-numeric: tabular-nums;
   }
 }
@@ -108,7 +111,8 @@
   height: 100%;
   border-radius: 8px;
   transition: all 0.3s ease;
-  border: 1px solid #d9d9d9;
+  border: 1px solid var(--border, #d9d9d9);
+  background: var(--background-card);
   overflow: hidden;
 
   &:hover {
@@ -118,8 +122,8 @@
   ::ng-deep .ant-card-head {
     min-height: 48px;
     padding: 0 12px;
-    background: linear-gradient(180deg, #e6f4ff 0%, #f0f7ff 100%);
-    border-bottom: 1px solid #91caff;
+    background: var(--primary-muted, linear-gradient(180deg, #e6f4ff 0%, #f0f7ff 100%));
+    border-bottom: 1px solid var(--border, #91caff);
   }
 
   ::ng-deep .ant-card-head-title {
@@ -144,7 +148,7 @@
     .card-title-text {
       font-weight: 700;
       font-size: 15px;
-      color: #0958d9;
+      color: var(--primary, #0958d9);
       letter-spacing: 0.01em;
       flex: 1;
       line-height: 1.3;
@@ -154,9 +158,9 @@
     .card-count {
       font-size: 12px;
       font-weight: 600;
-      color: #1677ff;
-      background: #fff;
-      border: 1px solid #91caff;
+      color: var(--primary, #1677ff);
+      background: var(--background-card, #fff);
+      border: 1px solid var(--border, #91caff);
       border-radius: 10px;
       padding: 0 8px;
       height: 22px;
@@ -188,7 +192,7 @@
   transition: background-color 0.2s ease;
 
   &:hover {
-    background-color: #f5f5f5;
+    background-color: var(--muted, #f5f5f5);
   }
 
   label {
@@ -203,7 +207,7 @@
   padding: 0;
   border: none;
   background: transparent;
-  color: #8c8c8c;
+  color: var(--muted-foreground, #8c8c8c);
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -212,21 +216,21 @@
   flex-shrink: 0;
 
   &:hover {
-    background: #f0f0f0;
-    color: #595959;
+    background: var(--muted, #f0f0f0);
+    color: var(--foreground, #595959);
   }
 }
 
 .tree-item-title {
   font-size: 13px;
   font-weight: 600;
-  color: #262626;
+  color: var(--foreground, #262626);
 }
 
 .tree-actions {
   margin-left: 26px;
   padding-left: 8px;
-  border-left: 1px dashed #e8e8e8;
+  border-left: 1px dashed var(--border, #e8e8e8);
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -244,7 +248,7 @@
 
   &:hover,
   &.is-checked {
-    background-color: #f5f5f5;
+    background-color: var(--muted, #f5f5f5);
   }
 
   .tree-action-name,
@@ -261,7 +265,7 @@
   .node-title {
     font-size: 13px;
     font-weight: 500;
-    color: #595959;
+    color: var(--foreground, #595959);
   }
 }
 
@@ -281,7 +285,7 @@
   margin: 0;
   font-size: 16px;
   font-weight: 600;
-  color: #262626;
+  color: var(--foreground, #262626);
 }
 
 .access-pane-body {
@@ -295,25 +299,25 @@
   justify-content: center;
   gap: 8px;
   padding: 48px 16px;
-  color: #8c8c8c;
+  color: var(--muted-foreground, #8c8c8c);
   text-align: center;
 }
 
 .access-empty-icon {
   font-size: 32px;
-  color: #bfbfbf;
+  color: var(--muted-foreground, #bfbfbf);
 }
 
 .access-selected-meta {
   margin: 0 0 16px;
-  color: #595959;
+  color: var(--muted-foreground, #595959);
 }
 
 .section-label {
   margin-bottom: 8px;
   font-size: 13px;
   font-weight: 600;
-  color: #595959;
+  color: var(--muted-foreground, #595959);
 }
 
 .role-check-list {
@@ -325,24 +329,27 @@
 
 .access-list-item {
   padding: 8px 10px;
-  border: 1px solid #f0f0f0;
+  border: 1px solid var(--border, #f0f0f0);
   border-radius: 6px;
   margin-bottom: 8px;
-  background: #fafafa;
+  background: var(--muted, #fafafa);
+  color: var(--foreground);
 
   label {
     margin: 0 !important;
     width: 100%;
+    color: var(--foreground);
   }
 }
 
 .access-list-item-title {
   margin-right: 8px;
+  color: var(--foreground);
 }
 
 .perm-code {
   font-size: 12px;
-  color: #8c8c8c;
+  color: var(--muted-foreground, #8c8c8c);
 }
 
 .access-actions {

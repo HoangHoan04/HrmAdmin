@@ -51,8 +51,8 @@ export class LeaveAllocationManagerComponent implements OnInit {
     showTotal: true,
   };
 
-  sortField = 'year';
-  sortOrder = 'desc';
+  sortField = enumData.PAGE.SORT_FIELD.YEAR;
+  sortOrder = enumData.PAGE.SORT_ORDER.DESC;
   toolbar: ToolbarConfig = { show: true };
   toolbarActions: TableAction[] = [CommonActions.create(() => this.openCreate())];
 

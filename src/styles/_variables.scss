@@ -71,6 +71,18 @@
   --radius-3xl: 18px;
   --radius-4xl: 21px;
 
+  --text-primary: var(--foreground);
+  --text-secondary: var(--muted-foreground);
+  --text-muted: var(--muted-foreground);
+  --foreground-muted: var(--muted-foreground);
+  --background-hover: var(--muted);
+  --input-bg: var(--background);
+  --input-border: var(--border);
+  --input-color: var(--foreground);
+  --input-placeholder: var(--muted-foreground);
+  --card-bg: var(--background-card);
+  --card-border: var(--border);
+
   --sidebar-width: 260px;
   --sidebar-collapsed-width: 70px;
   --navbar-height: 64px;
@@ -89,6 +101,18 @@
   --divider: #262629;
   --overlay: rgba(0, 0, 0, 0.6);
   --ring: rgba(59, 130, 246, 0.5);
+
+  --text-primary: var(--foreground);
+  --text-secondary: var(--muted-foreground);
+  --text-muted: var(--muted-foreground);
+  --foreground-muted: var(--muted-foreground);
+  --background-hover: var(--muted);
+  --input-bg: var(--background);
+  --input-border: var(--border);
+  --input-color: var(--foreground);
+  --input-placeholder: var(--muted-foreground);
+  --card-bg: var(--background-card);
+  --card-border: var(--border);
 
   --primary-muted: rgba(59, 130, 246, 0.15);
   --secondary-muted: rgba(139, 92, 246, 0.18);

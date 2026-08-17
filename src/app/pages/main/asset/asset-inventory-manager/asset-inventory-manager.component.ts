@@ -3,6 +3,7 @@ import { enumData } from '@/app/core/constants/enums';
 import { Asset, PagedResult } from '@/app/core/models';
 import { ApiService, I18nMessageService } from '@/app/core/services';
 import { PermissionService } from '@/app/core/services/permission.service';
+import { StaticTranslateService } from '@/app/core/services/static-translate.service';
 import {
   CommonFilterActions,
   FilterAction,
@@ -32,14 +33,17 @@ export class AssetInventoryManagerComponent implements OnInit {
   private readonly ENTITY_KEY = 'asset.inventory.entityName';
   data: Asset[] = [];
   loading = false;
+
   pagination: PaginationConfig = {
     current: enumData.PAGE.PAGE_INDEX,
     pageSize: enumData.PAGE.PAGE_SIZE,
     total: enumData.PAGE.TOTAL,
     showTotal: true,
   };
-  sortField = 'createdAt';
-  sortOrder = 'desc';
+
+  sortField = enumData.PAGE.SORT_FIELD.CREATED_AT;
+  sortOrder = enumData.PAGE.SORT_ORDER.DESC;
+
   toolbar: ToolbarConfig = { show: true };
   toolbarActions: TableAction[] = [];
   filters: Record<string, any> = { searchText: '', status: '' };
@@ -77,12 +81,47 @@ export class AssetInventoryManagerComponent implements OnInit {
     CommonFilterActions.clear(() => this.onFilterClear()),
   ];
   columns: TableColumn[] = [
-    { field: 'code', header: 'asset.inventory.code', type: 'text', sortable: true },
-    { field: 'name', header: 'asset.inventory.name', type: 'text', sortable: true },
-    { field: 'assetTypeName', header: 'asset.inventory.assetType', type: 'text' },
-    { field: 'companyName', header: 'asset.common.company', type: 'text' },
-    { field: 'serialNumber', header: 'asset.inventory.serialNumber', type: 'text' },
-    { field: 'status', header: 'asset.inventory.status', type: 'text' },
+    {
+      field: 'code',
+      header: 'asset.inventory.code',
+      type: 'text',
+      sortable: true,
+    },
+    {
+      field: 'name',
+      header: 'asset.inventory.name',
+      type: 'text',
+      sortable: true,
+    },
+    {
+      field: 'assetTypeName',
+      header: 'asset.inventory.assetType',
+      type: 'text',
+    },
+    {
+      field: 'companyName',
+      header: 'asset.common.company',
+      type: 'text',
+    },
+    {
+      field: 'serialNumber',
+      header: 'asset.inventory.serialNumber',
+      type: 'text',
+    },
+    {
+      field: 'status',
+      header: 'asset.inventory.status',
+      type: 'badge',
+      sortable: true,
+      render: (value: string) => {
+        const meta = Object.values(enumData.ASSET_STATUS).find((x) => x.value === value);
+        return meta ? StaticTranslateService.instant(meta.labelKey) : value;
+      },
+      badgeColor: (value: string) => {
+        const meta = Object.values(enumData.ASSET_STATUS).find((x) => x.value === value);
+        return meta?.color || '#8c8c8c';
+      },
+    },
   ];
   rowActions: RowAction[] = [];
 
@@ -107,7 +146,7 @@ export class AssetInventoryManagerComponent implements OnInit {
       {
         key: 'detail',
         icon: 'eye',
-        tooltip: 'common.actions.view',
+        tooltip: 'table.action.viewDetail',
         severity: 'secondary',
         visible: () => this.permissionSvc.has(PERMISSION_CODES.ASSET_INVENTORY_VIEW),
         onClick: (r) => this.openDetail(r),
@@ -115,7 +154,7 @@ export class AssetInventoryManagerComponent implements OnInit {
       {
         key: 'edit',
         icon: 'edit',
-        tooltip: 'common.actions.update',
+        tooltip: 'table.action.edit',
         severity: 'info',
         visible: () => this.permissionSvc.has(PERMISSION_CODES.ASSET_INVENTORY_UPDATE),
         onClick: (r) => this.openEdit(r),
@@ -123,7 +162,7 @@ export class AssetInventoryManagerComponent implements OnInit {
       {
         key: 'delete',
         icon: 'delete',
-        tooltip: 'common.actions.delete',
+        tooltip: 'table.action.delete',
         severity: 'danger',
         visible: () => this.permissionSvc.has(PERMISSION_CODES.ASSET_INVENTORY_MANAGE),
         onClick: (r) => this.delete(r),
@@ -143,21 +182,19 @@ export class AssetInventoryManagerComponent implements OnInit {
       searchText: (this.filters['searchText'] || '').trim() || undefined,
       status: this.filters['status'] || undefined,
     };
-    this.apiService
-      .post<PagedResult<Asset>>(this.apiService.ASSET.PAGINATION, payload)
-      .subscribe({
-        next: (res) => {
-          this.data = res.items;
-          this.pagination.total = res.totalCount;
-          this.loading = false;
-          this.cdr.markForCheck();
-        },
-        error: (err: any) => {
-          this.message.error(this.i18n.loadListFailed(this.ENTITY_KEY, err.error));
-          this.loading = false;
-          this.cdr.markForCheck();
-        },
-      });
+    this.apiService.post<PagedResult<Asset>>(this.apiService.ASSET.PAGINATION, payload).subscribe({
+      next: (res) => {
+        this.data = res.items;
+        this.pagination.total = res.totalCount;
+        this.loading = false;
+        this.cdr.markForCheck();
+      },
+      error: (err: any) => {
+        this.message.error(this.i18n.loadListFailed(this.ENTITY_KEY, err.error));
+        this.loading = false;
+        this.cdr.markForCheck();
+      },
+    });
   }
 
   onFiltersChange(filters: Record<string, any>): void {
@@ -178,14 +215,13 @@ export class AssetInventoryManagerComponent implements OnInit {
     this.loadData();
   }
   onSortChange(e: { sortField: string | null; sortOrder: 1 | -1 | 0 | null }): void {
-    this.sortField = e.sortField || 'createdAt';
-    this.sortOrder = e.sortOrder === 1 ? 'asc' : 'desc';
+    this.sortField = e.sortField || enumData.PAGE.SORT_FIELD.CREATED_AT;
+    this.sortOrder =
+      e.sortOrder === 1 ? enumData.PAGE.SORT_ORDER.ASC : enumData.PAGE.SORT_ORDER.DESC;
     this.loadData();
   }
   openCreate(): void {
-    this.router.navigate([
-      ROUTES_CONFIG.ASSET.children.ASSET_MANAGER.children.ADD_ASSET.path,
-    ]);
+    this.router.navigate([ROUTES_CONFIG.ASSET.children.ASSET_MANAGER.children.ADD_ASSET.path]);
   }
   openEdit(item: Asset): void {
     this.router.navigate([

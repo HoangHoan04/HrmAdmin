@@ -55,8 +55,9 @@ export class AdvanceManagerComponent implements OnInit {
     showTotal: true,
   };
 
-  sortField = 'requestDate';
-  sortOrder = 'desc';
+  sortField = enumData.PAGE.SORT_FIELD.REQUEST_DATE;
+  sortOrder = enumData.PAGE.SORT_ORDER.DESC;
+
   toolbar: ToolbarConfig = { show: true };
   toolbarActions: TableAction[] = [CommonActions.create(() => this.openCreate())];
 

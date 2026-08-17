@@ -38,8 +38,8 @@ export class EnrollmentManagerComponent implements OnInit {
     total: enumData.PAGE.TOTAL,
     showTotal: true,
   };
-  sortField = 'createdAt';
-  sortOrder = 'desc';
+  sortField = enumData.PAGE.SORT_FIELD.CREATED_AT;
+  sortOrder = enumData.PAGE.SORT_ORDER.DESC;
   toolbar: ToolbarConfig = { show: true };
   toolbarActions: TableAction[] = [];
   filters: Record<string, any> = { searchText: '', status: '' };
@@ -177,14 +177,12 @@ export class EnrollmentManagerComponent implements OnInit {
   }
   openCreate(): void {
     this.router.navigate([
-      ROUTES_CONFIG.TALENT.children.TRAINING.children.ENROLLMENT.children.ADD_ENROLLMENT
-        .path,
+      ROUTES_CONFIG.TALENT.children.TRAINING.children.ENROLLMENT.children.ADD_ENROLLMENT.path,
     ]);
   }
   openEdit(item: TrainingEnrollment): void {
     this.router.navigate([
-      ROUTES_CONFIG.TALENT.children.TRAINING.children.ENROLLMENT.children.EDIT_ENROLLMENT
-        .path,
+      ROUTES_CONFIG.TALENT.children.TRAINING.children.ENROLLMENT.children.EDIT_ENROLLMENT.path,
       item.id,
     ]);
   }

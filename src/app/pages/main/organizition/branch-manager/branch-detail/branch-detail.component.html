@@ -43,6 +43,22 @@
         </div>
       </nz-tab>
 
+      <nz-tab [nzTitle]="'organization.branch.tabDepartments' | translate">
+        <div class="tab-content">
+          <app-table-custom
+            [id]="'branch-detail-departments'"
+            [data]="departments"
+            [columns]="departmentColumns"
+            [rowActions]="departmentRowActions"
+            [loading]="departmentsLoading"
+            [stripedRows]="true"
+            [showIndexList]="true"
+            [toolbar]="{ show: false }"
+            [emptyText]="'organization.branch.noDepartments' | translate"
+          ></app-table-custom>
+        </div>
+      </nz-tab>
+
       <nz-tab [nzTitle]="'organization.branch.tabActivityLog' | translate">
         <div class="tab-content">
           <app-action-log

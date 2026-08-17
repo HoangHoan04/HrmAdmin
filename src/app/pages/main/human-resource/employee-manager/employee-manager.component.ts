@@ -1,12 +1,13 @@
 import { PERMISSION_CODES } from '@/app/core/constants/common/permission-codes';
 import { enumData } from '@/app/core/constants/enums/enumData';
+import { SelectBoxDto } from '@/app/core/models/common.models';
 import {
   Employee,
   EmployeeExpiringFile,
   EmployeeSelectBoxDto,
 } from '@/app/core/models/human-resource/employee.models';
-import { SelectBoxDto } from '@/app/core/models/common.models';
 import { PermissionService } from '@/app/core/services/permission.service';
+import { StaticTranslateService } from '@/app/core/services/static-translate.service';
 import { ActionConfirmService } from '@/app/shared/services/action-confirm.service';
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -99,8 +100,8 @@ export class EmployeeManagerComponent implements OnInit, OnDestroy {
     showTotal: true,
   };
 
-  sortField = 'createdAt';
-  sortOrder = 'desc';
+  sortField = enumData.PAGE.SORT_FIELD.CREATED_AT;
+  sortOrder = enumData.PAGE.SORT_ORDER.DESC;
 
   toolbar: ToolbarConfig = {
     show: true,
@@ -207,10 +208,9 @@ export class EmployeeManagerComponent implements OnInit, OnDestroy {
       placeholder: 'humanResource.employee.filterRecordStatus',
       col: 8,
       allowClear: true,
-      options: [
-        { label: 'humanResource.employee.statusActive', value: false },
-        { label: 'humanResource.employee.statusInactive', value: true },
-      ],
+      options: Object.values(enumData.STATUS_FILTER_IS_DELETED)
+        .filter((s) => s.value !== null)
+        .map((s) => ({ label: s.labelKey, value: s.value })),
     },
   ];
 
@@ -225,10 +225,18 @@ export class EmployeeManagerComponent implements OnInit, OnDestroy {
     { field: 'phone', header: 'humanResource.employee.phone', type: 'text', sortable: true },
     { field: 'email', header: 'humanResource.employee.email', type: 'text', sortable: true },
     {
-      field: 'statusLabel',
+      field: 'status',
       header: 'humanResource.employee.status',
-      type: 'text',
+      type: 'badge',
       sortable: true,
+      render: (value: string) => {
+        const meta = Object.values(enumData.WORK_STATUS).find((x) => x.value === value);
+        return meta ? StaticTranslateService.instant(meta.labelKey) : value;
+      },
+      badgeColor: (value: string) => {
+        const meta = Object.values(enumData.WORK_STATUS).find((x) => x.value === value);
+        return meta?.color || '#8c8c8c';
+      },
     },
     {
       field: 'directManagerName',
@@ -237,10 +245,13 @@ export class EmployeeManagerComponent implements OnInit, OnDestroy {
     },
     { field: 'joinDate', header: 'humanResource.employee.joinDate', type: 'date', sortable: true },
     {
-      field: 'activeStatus',
+      field: 'isDeleted',
       header: 'humanResource.employee.recordStatus',
       type: 'boolean',
       sortable: true,
+      renderBoolean: (value: boolean) =>
+        StaticTranslateService.instant(value ? 'common.statusInactive' : 'common.statusActive'),
+      badgeSeverity: (value: boolean) => (value ? 'danger' : 'success'),
     },
     {
       field: 'createdAt',
@@ -254,7 +265,7 @@ export class EmployeeManagerComponent implements OnInit, OnDestroy {
     {
       key: 'view',
       icon: 'eye',
-      tooltip: 'humanResource.employee.viewDetail',
+      tooltip: 'common.action.viewDetail',
       severity: 'primary',
       onClick: (record) => this.viewDetail(record),
     },
@@ -469,7 +480,12 @@ export class EmployeeManagerComponent implements OnInit, OnDestroy {
     const payload: Record<string, any> = {
       pageIndex: this.pagination.current,
       pageSize: this.pagination.pageSize,
-      sortField: this.sortField === 'activeStatus' ? 'isDeleted' : this.sortField === 'statusLabel' ? 'status' : this.sortField,
+      sortField:
+        this.sortField === enumData.PAGE.SORT_FIELD.ACTIVATE_STATUS
+          ? enumData.PAGE.SORT_FIELD.IS_DELETED
+          : this.sortField === enumData.PAGE.SORT_FIELD.STATUS_LABEL
+            ? enumData.PAGE.SORT_FIELD.STATUS
+            : this.sortField,
       sortOrder: this.sortOrder,
       code: (this.filters['code'] || '').trim() || undefined,
       fullName: (this.filters['fullName'] || '').trim() || undefined,
@@ -485,11 +501,7 @@ export class EmployeeManagerComponent implements OnInit, OnDestroy {
       .post<PagedResult<Employee>>(this.apiService.EMPLOYEE.PAGINATION, payload)
       .subscribe({
         next: (res) => {
-          this.data = res.items.map((item) => ({
-            ...item,
-            activeStatus: !item.isDeleted,
-            statusLabel: this.resolveWorkStatusLabel(item.status),
-          }));
+          this.data = res.items;
           this.pagination.total = res.totalCount;
           this.loading = false;
           this.syncFilterActionsLoading();

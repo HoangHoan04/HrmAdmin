@@ -30,7 +30,6 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 
 type LeaveRow = RegisterDayOff & {
   statusLabel?: string;
-  dayOffTypeLabel?: string;
   sessionLabel?: string;
 };
 
@@ -43,7 +42,6 @@ type LeaveRow = RegisterDayOff & {
 export class LeaveManagerComponent implements OnInit {
   private readonly ENTITY_KEY = 'leave.entityName';
   readonly dayOffStatuses = Object.values(enumData.DAY_OFF_STATUS);
-  readonly dayOffTypes = Object.values(enumData.DAY_OFF_CONFIG_TYPE);
   readonly leaveSessions = Object.values(enumData.LEAVE_SESSION);
 
   data: LeaveRow[] = [];
@@ -58,8 +56,9 @@ export class LeaveManagerComponent implements OnInit {
 
   createVisible = false;
   createForm: FormGroup;
-  dayOffConfigOptions: { label: string; value: string; dayOffType?: string }[] = [];
-  employeeOptions: { label: string; value: string }[] = [];
+  dayOffConfigOptions: DayOffConfigSelectBoxDto[] = [];
+  employeeOptions: EmployeeSelectBoxDto[] = [];
+  branchOptions: BranchSelectBoxDto[] = [];
 
   pagination: PaginationConfig = {
     current: enumData.PAGE.PAGE_INDEX,
@@ -68,8 +67,8 @@ export class LeaveManagerComponent implements OnInit {
     showTotal: true,
   };
 
-  sortField = 'createdAt';
-  sortOrder = 'desc';
+  sortField = enumData.PAGE.SORT_FIELD.CREATED_AT;
+  sortOrder = enumData.PAGE.SORT_ORDER.DESC;
   toolbar: ToolbarConfig = { show: true };
   toolbarActions: TableAction[] = [CommonActions.create(() => this.openCreate())];
 
@@ -77,7 +76,6 @@ export class LeaveManagerComponent implements OnInit {
     employeeId: null,
     branchId: null,
     status: null,
-    dayOffType: null,
     dateRange: null,
   };
 
@@ -120,18 +118,7 @@ export class LeaveManagerComponent implements OnInit {
         value: item.value,
       })),
     },
-    {
-      key: 'dayOffType',
-      label: 'leave.dayOffType',
-      type: 'select',
-      placeholder: 'leave.filterDayOffType',
-      col: 6,
-      allowClear: true,
-      options: Object.values(enumData.DAY_OFF_CONFIG_TYPE).map((item) => ({
-        label: item.labelKey,
-        value: item.value,
-      })),
-    },
+
     {
       key: 'dateRange',
       label: 'leave.filterDateRange',
@@ -149,7 +136,6 @@ export class LeaveManagerComponent implements OnInit {
   columns: TableColumn[] = [
     { field: 'employeeCode', header: 'leave.employeeCode', type: 'text' },
     { field: 'employeeName', header: 'leave.employee', type: 'text' },
-    { field: 'dayOffTypeLabel', header: 'leave.dayOffType', type: 'text' },
     { field: 'dayOffConfigName', header: 'leave.dayOffConfig', type: 'text' },
     { field: 'fromDate', header: 'leave.fromDate', type: 'date' },
     { field: 'toDate', header: 'leave.toDate', type: 'date' },
@@ -209,7 +195,6 @@ export class LeaveManagerComponent implements OnInit {
     this.createForm = this.fb.group({
       employeeId: [null, Validators.required],
       dayOffConfigId: [null, Validators.required],
-      dayOffType: [enumData.DAY_OFF_CONFIG_TYPE.ANNUAL.value, Validators.required],
       dateRange: [null, Validators.required],
       session: [enumData.LEAVE_SESSION.FULL.value, Validators.required],
       reason: [null, Validators.required],
@@ -218,9 +203,6 @@ export class LeaveManagerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.createForm.get('dayOffConfigId')?.valueChanges.subscribe((configId) => {
-      this.onConfigChange(configId);
-    });
     this.createForm.get('dateRange')?.valueChanges.subscribe(() => this.previewDays());
     this.createForm.get('session')?.valueChanges.subscribe(() => this.previewDays());
     this.createForm.get('employeeId')?.valueChanges.subscribe(() => this.previewDays());
@@ -230,28 +212,19 @@ export class LeaveManagerComponent implements OnInit {
 
   loadSelectBoxes(): void {
     this.apiService
-      .post<EmployeeSelectBoxDto[]>(this.apiService.EMPLOYEE.SELECT_BOX, {})
+      .post<EmployeeSelectBoxDto[]>(this.apiService.EMPLOYEE.SELECT_BOX, {
+        branchId: this.filters['branchId'] || null,
+      })
       .subscribe({
         next: (items) => {
-          this.employeeOptions = items.map((item) => ({
-            label: item.code ? `${item.code} - ${item.name}` : item.name,
-            value: item.id,
-          }));
-          const field = this.filterFields.find((f) => f.key === 'employeeId');
-          if (field) field.options = this.employeeOptions;
+          this.employeeOptions = items;
           this.cdr.markForCheck();
         },
       });
 
     this.apiService.post<BranchSelectBoxDto[]>(this.apiService.BRANCH.SELECT_BOX, {}).subscribe({
       next: (items) => {
-        const field = this.filterFields.find((f) => f.key === 'branchId');
-        if (field) {
-          field.options = items.map((item) => ({
-            label: item.code ? `${item.code} - ${item.name}` : item.name,
-            value: item.id,
-          }));
-        }
+        this.branchOptions = items;
         this.cdr.markForCheck();
       },
     });
@@ -260,11 +233,7 @@ export class LeaveManagerComponent implements OnInit {
       .post<DayOffConfigSelectBoxDto[]>(this.apiService.DAY_OFF_CONFIG.SELECT_BOX, {})
       .subscribe({
         next: (items) => {
-          this.dayOffConfigOptions = items.map((item) => ({
-            label: item.code ? `${item.code} - ${item.name}` : item.name,
-            value: item.id,
-            dayOffType: item.dayOffType,
-          }));
+          this.dayOffConfigOptions = items;
           this.cdr.markForCheck();
         },
       });
@@ -284,7 +253,7 @@ export class LeaveManagerComponent implements OnInit {
     if (this.filters['employeeId']) payload['employeeId'] = this.filters['employeeId'];
     if (this.filters['branchId']) payload['branchId'] = this.filters['branchId'];
     if (this.filters['status']) payload['status'] = this.filters['status'];
-    if (this.filters['dayOffType']) payload['dayOffType'] = this.filters['dayOffType'];
+    if (this.filters['dayOffConfigId']) payload['dayOffConfigId'] = this.filters['dayOffConfigId'];
 
     const range = this.filters['dateRange'] as Date[] | null;
     if (range?.length === 2 && range[0] && range[1]) {
@@ -296,12 +265,7 @@ export class LeaveManagerComponent implements OnInit {
       .post<PagedResult<RegisterDayOff>>(this.apiService.REGISTER_DAY_OFF.PAGINATION, payload)
       .subscribe({
         next: (res) => {
-          this.data = res.items.map((item) => ({
-            ...item,
-            statusLabel: this.getDayOffStatusLabel(item.status),
-            dayOffTypeLabel: this.getDayOffTypeLabel(item.dayOffType),
-            sessionLabel: this.getLeaveSessionLabel(item.session),
-          }));
+          this.data = res.items;
           this.pagination.total = res.totalCount;
           this.loading = false;
           this.syncFilterActionsLoading();
@@ -330,7 +294,7 @@ export class LeaveManagerComponent implements OnInit {
       employeeId: null,
       branchId: null,
       status: null,
-      dayOffType: null,
+      dayOffConfigId: null,
       dateRange: null,
     };
     this.pagination.current = 1;
@@ -380,7 +344,6 @@ export class LeaveManagerComponent implements OnInit {
     this.createForm.reset({
       employeeId: null,
       dayOffConfigId: null,
-      dayOffType: enumData.DAY_OFF_CONFIG_TYPE.ANNUAL.value,
       dateRange: null,
       session: enumData.LEAVE_SESSION.FULL.value,
       reason: null,
@@ -392,14 +355,6 @@ export class LeaveManagerComponent implements OnInit {
   closeCreate(): void {
     this.createVisible = false;
     this.previewTotalDays = null;
-  }
-
-  onConfigChange(configId: string | null): void {
-    if (!configId) return;
-    const found = this.dayOffConfigOptions.find((x) => x.value === configId);
-    if (found?.dayOffType) {
-      this.createForm.patchValue({ dayOffType: found.dayOffType });
-    }
   }
 
   previewDays(): void {
@@ -450,7 +405,6 @@ export class LeaveManagerComponent implements OnInit {
     const payload = {
       employeeId: value.employeeId,
       dayOffConfigId: value.dayOffConfigId || null,
-      dayOffType: value.dayOffType,
       fromDate: toDateOnly(range[0]),
       toDate: toDateOnly(range[1]),
       session: value.session || enumData.LEAVE_SESSION.FULL.value,
@@ -583,12 +537,6 @@ export class LeaveManagerComponent implements OnInit {
     if (!status) return '-';
     const meta = this.dayOffStatuses.find((item) => item.value === status);
     return meta ? this.i18n.instant(meta.labelKey) : status;
-  }
-
-  getDayOffTypeLabel(type?: string | null): string {
-    if (!type) return '-';
-    const meta = this.dayOffTypes.find((item) => item.value === type);
-    return meta ? this.i18n.instant(meta.labelKey) : type;
   }
 
   getLeaveSessionLabel(session?: string | null): string {

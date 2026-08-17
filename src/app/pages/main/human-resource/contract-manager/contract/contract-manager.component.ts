@@ -58,8 +58,8 @@ export class ContractManagerComponent implements OnInit {
     showTotal: true,
   };
 
-  sortField = 'createdAt';
-  sortOrder = 'desc';
+  sortField = enumData.PAGE.SORT_FIELD.CREATED_AT;
+  sortOrder = enumData.PAGE.SORT_ORDER.DESC;
   toolbar: ToolbarConfig = { show: true };
   toolbarActions: TableAction[] = [CommonActions.create(() => this.openCreate())];
 
@@ -155,14 +155,14 @@ export class ContractManagerComponent implements OnInit {
     {
       key: 'view',
       icon: 'eye',
-      tooltip: 'contract.viewDetail',
+      tooltip: 'table.action.viewDetail',
       severity: 'primary',
       onClick: (record) => this.openDetail(record),
     },
     {
       key: 'edit',
       icon: 'edit',
-      tooltip: 'contract.edit',
+      tooltip: 'table.action.edit',
       severity: 'info',
       visible: (record) => this.EDITABLE_STATUSES.includes(record.status),
       onClick: (record) => this.openEdit(record),
@@ -170,7 +170,7 @@ export class ContractManagerComponent implements OnInit {
     {
       key: 'sign',
       icon: 'form',
-      tooltip: 'contract.sign',
+      tooltip: 'table.action.signContract',
       severity: 'success',
       visible: (record) => this.EDITABLE_STATUSES.includes(record.status),
       onClick: (record) => this.openSignModal(record),
@@ -178,7 +178,7 @@ export class ContractManagerComponent implements OnInit {
     {
       key: 'terminate',
       icon: 'stop',
-      tooltip: 'contract.terminate',
+      tooltip: 'table.action.terminateContract',
       severity: 'danger',
       visible: (record) => this.TERMINABLE_STATUSES.includes(record.status),
       onClick: (record) => this.openTerminateModal(record),

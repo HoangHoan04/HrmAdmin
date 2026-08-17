@@ -395,4 +395,13 @@ export class TableCustomComponent implements OnInit, OnChanges, OnDestroy {
     if (!this.pagination) return rowIndex + 1;
     return (this.pagination.current - 1) * this.pagination.pageSize + rowIndex + 1;
   }
+
+  getBadgeColorStyle(hex: string): Record<string, string> {
+    const normalized = hex.startsWith('#') ? hex : `#${hex}`;
+    return {
+      'background-color': `${normalized}1A`,
+      color: normalized,
+      'border-color': `${normalized}33`,
+    };
+  }
 }

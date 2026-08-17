@@ -3,6 +3,7 @@ import { enumData } from '@/app/core/constants/enums';
 import { PagedResult, Violation } from '@/app/core/models';
 import { ApiService, I18nMessageService } from '@/app/core/services';
 import { PermissionService } from '@/app/core/services/permission.service';
+import { StaticTranslateService } from '@/app/core/services/static-translate.service';
 import {
   CommonFilterActions,
   FilterAction,
@@ -38,8 +39,9 @@ export class ViolationManagerComponent implements OnInit {
     total: enumData.PAGE.TOTAL,
     showTotal: true,
   };
-  sortField = 'createdAt';
-  sortOrder = 'desc';
+  sortField = enumData.PAGE.SORT_FIELD.CREATED_AT;
+  sortOrder = enumData.PAGE.SORT_ORDER.DESC;
+
   toolbar: ToolbarConfig = { show: true };
   toolbarActions: TableAction[] = [];
   filters: Record<string, any> = { searchText: '', status: '' };
@@ -83,7 +85,20 @@ export class ViolationManagerComponent implements OnInit {
     { field: 'companyName', header: 'discipline.common.company', type: 'text' },
     { field: 'occurredAt', header: 'discipline.violation.occurredAt', type: 'date' },
     { field: 'penaltyType', header: 'discipline.violation.penaltyType', type: 'text' },
-    { field: 'status', header: 'discipline.violation.status', type: 'text' },
+    {
+      field: 'status',
+      header: 'discipline.violation.status',
+      type: 'badge',
+      sortable: true,
+      render: (value: string) => {
+        const meta = Object.values(enumData.VIOLATION_STATUS).find((x) => x.value === value);
+        return meta ? StaticTranslateService.instant(meta.labelKey) : value;
+      },
+      badgeColor: (value: string) => {
+        const meta = Object.values(enumData.VIOLATION_STATUS).find((x) => x.value === value);
+        return meta?.color || '#8c8c8c';
+      },
+    },
   ];
   rowActions: RowAction[] = [];
 

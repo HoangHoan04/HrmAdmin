@@ -10,8 +10,11 @@
         [nzPlaceHolder]="'leaveCalendar.filterCompany' | translate"
         style="width: 100%"
       >
-        @for (opt of companyOptions; track opt.value) {
-          <nz-option [nzValue]="opt.value" [nzLabel]="opt.label"></nz-option>
+        @for (opt of companyOptions; track opt.id) {
+          <nz-option
+            [nzValue]="opt.id"
+            [nzLabel]="opt.code ? opt.code + ' - ' + opt.name : opt.name"
+          ></nz-option>
         }
       </nz-select>
     </div>
@@ -25,8 +28,11 @@
         [nzPlaceHolder]="'leaveCalendar.filterBranch' | translate"
         style="width: 100%"
       >
-        @for (opt of branchOptions; track opt.value) {
-          <nz-option [nzValue]="opt.value" [nzLabel]="opt.label"></nz-option>
+        @for (opt of branchOptions; track opt.id) {
+          <nz-option
+            [nzValue]="opt.id"
+            [nzLabel]="opt.code ? opt.code + ' - ' + opt.name : opt.name"
+          ></nz-option>
         }
       </nz-select>
     </div>
@@ -92,9 +98,6 @@
             </nz-descriptions-item>
             <nz-descriptions-item [nzTitle]="'leaveCalendar.branch' | translate">
               {{ selectedDetail.branchName || selectedEvent.branchName || '-' }}
-            </nz-descriptions-item>
-            <nz-descriptions-item [nzTitle]="'leaveCalendar.dayOffType' | translate">
-              {{ getDayOffTypeLabel(selectedDetail.dayOffType) }}
             </nz-descriptions-item>
             <nz-descriptions-item [nzTitle]="'leaveCalendar.dayOffConfig' | translate">
               {{ selectedDetail.dayOffConfigName || '-' }}

@@ -80,8 +80,9 @@ export class SalaryManagerComponent implements OnInit {
     showTotal: true,
   };
 
-  sortField = 'createdAt';
-  sortOrder = 'desc';
+  sortField = enumData.PAGE.SORT_FIELD.CREATED_AT;
+  sortOrder = enumData.PAGE.SORT_ORDER.DESC;
+
   toolbar: ToolbarConfig = { show: true };
   toolbarActions: TableAction[] = [
     CommonActions.create(() => this.openCreate()),
@@ -570,24 +571,22 @@ export class SalaryManagerComponent implements OnInit {
   private runPreview(body: PayrollRunRequest): void {
     this.periodSubmitting = true;
     this.previewLoading = true;
-    this.apiService
-      .post<PayrollPreviewResult>(this.apiService.SALARY.PREVIEW_RUN, body)
-      .subscribe({
-        next: (res) => {
-          this.previewResult = res;
-          this.periodModalVisible = false;
-          this.periodSubmitting = false;
-          this.previewLoading = false;
-          this.previewVisible = true;
-          this.cdr.markForCheck();
-        },
-        error: (err: any) => {
-          this.message.error(this.i18n.genericError(err.error));
-          this.periodSubmitting = false;
-          this.previewLoading = false;
-          this.cdr.markForCheck();
-        },
-      });
+    this.apiService.post<PayrollPreviewResult>(this.apiService.SALARY.PREVIEW_RUN, body).subscribe({
+      next: (res) => {
+        this.previewResult = res;
+        this.periodModalVisible = false;
+        this.periodSubmitting = false;
+        this.previewLoading = false;
+        this.previewVisible = true;
+        this.cdr.markForCheck();
+      },
+      error: (err: any) => {
+        this.message.error(this.i18n.genericError(err.error));
+        this.periodSubmitting = false;
+        this.previewLoading = false;
+        this.cdr.markForCheck();
+      },
+    });
   }
 
   private runPayroll(body: PayrollRunRequest): void {

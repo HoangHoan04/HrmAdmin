@@ -3,6 +3,7 @@ import { enumData } from '@/app/core/constants/enums';
 import { AssetType, PagedResult } from '@/app/core/models';
 import { ApiService, I18nMessageService } from '@/app/core/services';
 import { PermissionService } from '@/app/core/services/permission.service';
+import { StaticTranslateService } from '@/app/core/services/static-translate.service';
 import {
   CommonFilterActions,
   FilterAction,
@@ -32,17 +33,21 @@ export class AssetTypeManagerComponent implements OnInit {
   private readonly ENTITY_KEY = 'asset.type.entityName';
   data: AssetType[] = [];
   loading = false;
+
   pagination: PaginationConfig = {
     current: enumData.PAGE.PAGE_INDEX,
     pageSize: enumData.PAGE.PAGE_SIZE,
     total: enumData.PAGE.TOTAL,
     showTotal: true,
   };
-  sortField = 'createdAt';
-  sortOrder = 'desc';
+
+  sortField = enumData.PAGE.SORT_FIELD.CREATED_AT;
+  sortOrder = enumData.PAGE.SORT_ORDER.DESC;
+
   toolbar: ToolbarConfig = { show: true };
   toolbarActions: TableAction[] = [];
   filters: Record<string, any> = { searchText: '', isActive: null };
+
   filterConfig: FilterConfig = {
     show: true,
     collapsible: true,
@@ -50,6 +55,7 @@ export class AssetTypeManagerComponent implements OnInit {
     title: 'common.filter.title',
     actionsAlign: 'center',
   };
+
   filterFields: FilterField[] = [
     {
       key: 'searchText',
@@ -66,10 +72,9 @@ export class AssetTypeManagerComponent implements OnInit {
       placeholder: 'asset.common.filterStatus',
       col: 8,
       allowClear: true,
-      options: [
-        { label: 'enums.statusFilter.active', value: true },
-        { label: 'enums.statusFilter.inactive', value: false },
-      ],
+      options: Object.values(enumData.STATUS_FILTER_IS_ACTIVE)
+        .filter((s) => s.value !== null)
+        .map((s) => ({ label: s.labelKey, value: s.value })),
     },
   ];
   filterActions: FilterAction[] = [
@@ -80,7 +85,15 @@ export class AssetTypeManagerComponent implements OnInit {
     { field: 'code', header: 'asset.type.code', type: 'text', sortable: true },
     { field: 'name', header: 'asset.type.name', type: 'text', sortable: true },
     { field: 'companyName', header: 'asset.common.company', type: 'text' },
-    { field: 'isActive', header: 'asset.common.status', type: 'boolean' },
+    {
+      field: 'isActive',
+      header: 'asset.common.status',
+      type: 'boolean',
+      sortable: true,
+      renderBoolean: (value: boolean) =>
+        StaticTranslateService.instant(value ? 'asset.common.active' : 'asset.common.inactive'),
+      badgeSeverity: (value: boolean) => (value ? 'success' : 'danger'),
+    },
   ];
   rowActions: RowAction[] = [];
 
@@ -175,9 +188,7 @@ export class AssetTypeManagerComponent implements OnInit {
     this.loadData();
   }
   openCreate(): void {
-    this.router.navigate([
-      ROUTES_CONFIG.ASSET.children.ASSET_TYPE.children.ADD_ASSET_TYPE.path,
-    ]);
+    this.router.navigate([ROUTES_CONFIG.ASSET.children.ASSET_TYPE.children.ADD_ASSET_TYPE.path]);
   }
   openEdit(item: AssetType): void {
     this.router.navigate([

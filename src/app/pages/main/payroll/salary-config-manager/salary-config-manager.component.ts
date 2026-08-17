@@ -2,6 +2,7 @@ import { ROUTES_CONFIG } from '@/app/core/constants/common';
 import { enumData } from '@/app/core/constants/enums';
 import { CompanySelectBoxDto, PagedResult, SalaryConfig } from '@/app/core/models';
 import { ApiService, I18nMessageService } from '@/app/core/services';
+import { StaticTranslateService } from '@/app/core/services/static-translate.service';
 import {
   CommonFilterActions,
   FilterAction,
@@ -40,8 +41,9 @@ export class SalaryConfigManagerComponent implements OnInit {
     showTotal: true,
   };
 
-  sortField = 'createdAt';
-  sortOrder = 'desc';
+  sortField = enumData.PAGE.SORT_FIELD.CREATED_AT;
+  sortOrder = enumData.PAGE.SORT_ORDER.DESC;
+
   toolbar: ToolbarConfig = { show: true };
   toolbarActions: TableAction[] = [CommonActions.create(() => this.openCreate())];
 
@@ -93,10 +95,9 @@ export class SalaryConfigManagerComponent implements OnInit {
       placeholder: 'salaryConfig.filterStatus',
       col: 6,
       allowClear: true,
-      options: [
-        { label: 'enums.statusFilter.active', value: true },
-        { label: 'enums.statusFilter.inactive', value: false },
-      ],
+      options: Object.values(enumData.STATUS_FILTER_IS_ACTIVE)
+        .filter((s) => s.value !== null)
+        .map((s) => ({ label: s.labelKey, value: s.value })),
     },
   ];
 
@@ -116,7 +117,15 @@ export class SalaryConfigManagerComponent implements OnInit {
     },
     { field: 'defaultPayDay', header: 'salaryConfig.defaultPayDay', type: 'number' },
     { field: 'currency', header: 'salaryConfig.currency', type: 'text' },
-    { field: 'isActive', header: 'salaryConfig.status', type: 'boolean', sortable: true },
+    {
+      field: 'isActive',
+      header: 'salaryConfig.status',
+      type: 'boolean',
+      sortable: true,
+      renderBoolean: (value: boolean) =>
+        StaticTranslateService.instant(value ? 'common.statusActive' : 'common.statusInactive'),
+      badgeSeverity: (value: boolean) => (value ? 'success' : 'danger'),
+    },
   ];
 
   rowActions: RowAction[] = [

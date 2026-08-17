@@ -9,7 +9,6 @@ export interface RegisterDayOff extends BaseDto {
   branchName?: string;
   dayOffConfigId?: string | null;
   dayOffConfigName?: string;
-  dayOffType: string;
   fromDate: string;
   toDate: string;
   session?: string;
@@ -38,7 +37,6 @@ export interface DayOffAllocation {
   id: string;
   dayOffConfigId: string;
   dayOffConfigName?: string;
-  dayOffType?: string;
   employeeId: string;
   employeeName?: string;
   employeeCode?: string;
@@ -58,7 +56,6 @@ export interface LeaveCalendarEvent {
   startDate: string;
   endDate: string;
   status?: string | null;
-  dayOffType?: string | null;
   session?: string | null;
   totalDays?: number | null;
   employeeId?: string | null;
@@ -75,7 +72,6 @@ export interface LeaveBalanceReport {
   id: string;
   dayOffConfigId?: string;
   dayOffConfigName?: string;
-  dayOffType?: string;
   employeeId?: string;
   employeeName?: string;
   employeeCode?: string;

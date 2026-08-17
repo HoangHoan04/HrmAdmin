@@ -46,8 +46,8 @@ export class LeaveBalanceReportComponent implements OnInit {
     showTotal: true,
   };
 
-  sortField = 'remainingDays';
-  sortOrder = 'desc';
+  sortField = enumData.PAGE.SORT_FIELD.REMAINING_DAYS;
+  sortOrder = enumData.PAGE.SORT_ORDER.DESC;
   toolbar: ToolbarConfig = { show: true };
   toolbarActions: TableAction[] = [
     {
@@ -128,10 +128,9 @@ export class LeaveBalanceReportComponent implements OnInit {
       type: 'select',
       col: 4,
       allowClear: true,
-      options: [
-        { label: 'leaveBalanceReport.yes', value: true },
-        { label: 'leaveBalanceReport.no', value: false },
-      ],
+      options: Object.values(enumData.YES_NO_FILTER)
+        .filter((s) => s.value !== null)
+        .map((s) => ({ label: s.labelKey, value: s.value })),
     },
   ];
 

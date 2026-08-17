@@ -42,10 +42,6 @@
             {{ selected.branchName || '-' }}
           </p>
           <p>
-            <strong>{{ 'leave.dayOffType' | translate }}:</strong>
-            {{ getDayOffTypeLabel(selected.dayOffType) }}
-          </p>
-          <p>
             <strong>{{ 'leave.dayOffConfig' | translate }}:</strong>
             {{ selected.dayOffConfigName || '-' }}
           </p>
@@ -149,8 +145,8 @@
             nzAllowClear
             [nzPlaceHolder]="'leave.filterEmployee' | translate"
           >
-            @for (opt of employeeOptions; track opt.value) {
-              <nz-option [nzValue]="opt.value" [nzLabel]="opt.label"></nz-option>
+            @for (opt of employeeOptions; track opt.id) {
+              <nz-option [nzValue]="opt.id" [nzLabel]="opt.code + ' - ' + opt.name"></nz-option>
             }
           </nz-select>
         </nz-form-control>
@@ -165,19 +161,8 @@
             nzAllowClear
             [nzPlaceHolder]="'leave.filterDayOffConfig' | translate"
           >
-            @for (opt of dayOffConfigOptions; track opt.value) {
-              <nz-option [nzValue]="opt.value" [nzLabel]="opt.label"></nz-option>
-            }
-          </nz-select>
-        </nz-form-control>
-      </nz-form-item>
-
-      <nz-form-item>
-        <nz-form-label nzRequired>{{ 'leave.dayOffType' | translate }}</nz-form-label>
-        <nz-form-control>
-          <nz-select formControlName="dayOffType">
-            @for (t of dayOffTypes; track t.value) {
-              <nz-option [nzValue]="t.value" [nzLabel]="t.labelKey | translate"></nz-option>
+            @for (opt of dayOffConfigOptions; track opt.id) {
+              <nz-option [nzValue]="opt.id" [nzLabel]="opt.code + ' - ' + opt.name"></nz-option>
             }
           </nz-select>
         </nz-form-control>

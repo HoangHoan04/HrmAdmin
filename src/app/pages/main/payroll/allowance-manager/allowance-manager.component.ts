@@ -1,6 +1,7 @@
 import { enumData } from '@/app/core/constants/enums';
 import { Allowance, CompanySelectBoxDto, PagedResult } from '@/app/core/models';
 import { ApiService, I18nMessageService } from '@/app/core/services';
+import { StaticTranslateService } from '@/app/core/services/static-translate.service';
 import {
   CommonFilterActions,
   FilterAction,
@@ -45,8 +46,9 @@ export class AllowanceManagerComponent implements OnInit {
     showTotal: true,
   };
 
-  sortField = 'displayOrder';
-  sortOrder = 'asc';
+  sortField = enumData.PAGE.SORT_FIELD.DISPLAY_ORDER;
+  sortOrder = enumData.PAGE.SORT_ORDER.ASC;
+
   toolbar: ToolbarConfig = { show: true };
   toolbarActions: TableAction[] = [CommonActions.create(() => this.openCreate())];
 
@@ -89,10 +91,9 @@ export class AllowanceManagerComponent implements OnInit {
       placeholder: 'allowance.filterStatus',
       col: 8,
       allowClear: true,
-      options: [
-        { label: 'enums.statusFilter.active', value: true },
-        { label: 'enums.statusFilter.inactive', value: false },
-      ],
+      options: Object.values(enumData.STATUS_FILTER_IS_ACTIVE)
+        .filter((s) => s.value !== null)
+        .map((s) => ({ label: s.labelKey, value: s.value })),
     },
   ];
 
@@ -108,7 +109,15 @@ export class AllowanceManagerComponent implements OnInit {
     { field: 'defaultAmount', header: 'allowance.defaultAmount', type: 'currency' },
     { field: 'isTaxable', header: 'allowance.isTaxable', type: 'boolean' },
     { field: 'isInsurable', header: 'allowance.isInsurable', type: 'boolean' },
-    { field: 'isActive', header: 'allowance.isActive', type: 'boolean' },
+    {
+      field: 'isActive',
+      header: 'allowance.isActive',
+      type: 'boolean',
+      sortable: true,
+      renderBoolean: (value: boolean) =>
+        StaticTranslateService.instant(value ? 'common.statusActive' : 'common.statusInactive'),
+      badgeSeverity: (value: boolean) => (value ? 'success' : 'danger'),
+    },
     { field: 'displayOrder', header: 'allowance.displayOrder', type: 'text' },
   ];
 
@@ -331,7 +340,9 @@ export class AllowanceManagerComponent implements OnInit {
         next: (success) => {
           if (success) {
             this.message.success(
-              this.i18n.instant(isActive ? 'allowance.activateSuccess' : 'allowance.deactivateSuccess'),
+              this.i18n.instant(
+                isActive ? 'allowance.activateSuccess' : 'allowance.deactivateSuccess',
+              ),
             );
             this.loadData();
           } else {

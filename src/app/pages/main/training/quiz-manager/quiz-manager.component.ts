@@ -38,8 +38,8 @@ export class QuizManagerComponent implements OnInit {
     total: enumData.PAGE.TOTAL,
     showTotal: true,
   };
-  sortField = 'createdAt';
-  sortOrder = 'desc';
+  sortField = enumData.PAGE.SORT_FIELD.CREATED_AT;
+  sortOrder = enumData.PAGE.SORT_ORDER.DESC;
   toolbar: ToolbarConfig = { show: true };
   toolbarActions: TableAction[] = [];
   filters: Record<string, any> = { searchText: '' };
@@ -160,8 +160,7 @@ export class QuizManagerComponent implements OnInit {
   }
   openCreate(): void {
     this.router.navigate([
-      ROUTES_CONFIG.TALENT.children.TRAINING.children.TRAINING_QUIZ.children.ADD_TRAINING_QUIZ
-        .path,
+      ROUTES_CONFIG.TALENT.children.TRAINING.children.TRAINING_QUIZ.children.ADD_TRAINING_QUIZ.path,
     ]);
   }
   openEdit(item: TrainingQuiz): void {

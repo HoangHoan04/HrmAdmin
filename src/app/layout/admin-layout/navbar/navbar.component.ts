@@ -53,13 +53,19 @@ export class NavbarComponent implements OnInit, OnDestroy {
         this.s = settings;
       }),
     );
-    // Wave B: paint từ session trước, /me lazy (không block shell)
+    // Wave A: paint từ session (user + email) trước; /me light chỉ khi F5 thiếu email
     const sessionUser = this.auth.currentUser;
     if (sessionUser) {
       this.username = sessionUser;
       this.avatarText = sessionUser.substring(0, 2).toUpperCase();
+      this.email = this.auth.currentEmail || '';
     }
-    setTimeout(() => this.loadUserInfo(), 0);
+    if (!this.email) {
+      setTimeout(() => this.loadUserInfo(), 0);
+    } else {
+      // F5: sync light /me nền (không block shell)
+      setTimeout(() => this.loadUserInfo(), 400);
+    }
   }
 
   loadUserInfo(): void {

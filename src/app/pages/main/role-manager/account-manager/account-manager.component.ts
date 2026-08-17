@@ -10,6 +10,7 @@ import {
 } from '@/app/core/models';
 import { ApiService, I18nMessageService } from '@/app/core/services';
 import { PermissionService } from '@/app/core/services/permission.service';
+import { StaticTranslateService } from '@/app/core/services/static-translate.service';
 import {
   CommonFilterActions,
   FilterAction,
@@ -51,8 +52,8 @@ export class AccountManagerComponent implements OnInit {
     showTotal: true,
   };
 
-  sortField = 'username';
-  sortOrder = 'asc';
+  sortField = enumData.PAGE.SORT_FIELD.USERNAME;
+  sortOrder = enumData.PAGE.SORT_ORDER.ASC;
 
   toolbar: ToolbarConfig = { show: true };
   toolbarActions: TableAction[] = [
@@ -125,10 +126,9 @@ export class AccountManagerComponent implements OnInit {
       placeholder: 'role.filterActive',
       col: 6,
       allowClear: true,
-      options: [
-        { label: 'common.statusActive', value: true },
-        { label: 'common.statusInactive', value: false },
-      ],
+      options: Object.values(enumData.STATUS_FILTER_IS_ACTIVE)
+        .filter((s) => s.value !== null)
+        .map((s) => ({ label: s.labelKey, value: s.value })),
     },
   ];
 
@@ -145,7 +145,15 @@ export class AccountManagerComponent implements OnInit {
     { field: 'type', header: 'role.userType', type: 'text' },
     { field: 'email', header: 'role.email', type: 'text' },
     { field: 'roleCodesText', header: 'role.roleCodes', type: 'text' },
-    { field: 'isActive', header: 'role.isActive', type: 'boolean' },
+    {
+      field: 'isActive',
+      header: 'role.isActive',
+      type: 'boolean',
+      sortable: true,
+      renderBoolean: (value: boolean) =>
+        StaticTranslateService.instant(value ? 'common.statusActive' : 'common.statusInactive'),
+      badgeSeverity: (value: boolean) => (value ? 'success' : 'danger'),
+    },
     { field: 'isLocked', header: 'role.isLocked', type: 'boolean' },
   ];
 

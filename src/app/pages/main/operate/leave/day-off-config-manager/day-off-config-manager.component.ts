@@ -2,6 +2,7 @@ import { ROUTES_CONFIG } from '@/app/core/constants/common';
 import { enumData } from '@/app/core/constants/enums';
 import { CompanySelectBoxDto, DayOffConfig, PagedResult } from '@/app/core/models';
 import { ApiService, I18nMessageService } from '@/app/core/services';
+import { StaticTranslateService } from '@/app/core/services/static-translate.service';
 import {
   CommonFilterActions,
   FilterAction,
@@ -40,8 +41,8 @@ export class DayOffConfigManagerComponent implements OnInit {
     showTotal: true,
   };
 
-  sortField = 'createdAt';
-  sortOrder = 'desc';
+  sortField = enumData.PAGE.SORT_FIELD.CREATED_AT;
+  sortOrder = enumData.PAGE.SORT_ORDER.DESC;
   toolbar: ToolbarConfig = { show: true };
   toolbarActions: TableAction[] = [CommonActions.create(() => this.openCreate())];
 
@@ -93,10 +94,9 @@ export class DayOffConfigManagerComponent implements OnInit {
       placeholder: 'dayOffConfig.filterStatus',
       col: 6,
       allowClear: true,
-      options: Object.values(enumData.STATUS_FILTER).map((item) => ({
-        label: item.labelKey,
-        value: item.value,
-      })),
+      options: Object.values(enumData.STATUS_FILTER_IS_DELETED)
+        .filter((s) => s.value !== null)
+        .map((s) => ({ label: s.labelKey, value: s.value })),
     },
   ];
 
@@ -142,6 +142,15 @@ export class DayOffConfigManagerComponent implements OnInit {
       field: 'minNoticeDays',
       header: 'dayOffConfig.minNoticeDays',
       type: 'text',
+    },
+    {
+      field: 'isDeleted',
+      header: 'humanResource.employee.recordStatus',
+      type: 'boolean',
+      sortable: true,
+      renderBoolean: (value: boolean) =>
+        StaticTranslateService.instant(value ? 'common.statusInactive' : 'common.statusActive'),
+      badgeSeverity: (value: boolean) => (value ? 'danger' : 'success'),
     },
     {
       field: 'createdAt',
@@ -265,8 +274,9 @@ export class DayOffConfigManagerComponent implements OnInit {
   }
 
   onSortChange(event: { sortField: string | null; sortOrder: 1 | -1 | 0 | null }): void {
-    this.sortField = event.sortField || 'createdAt';
-    this.sortOrder = event.sortOrder === 1 ? 'asc' : 'desc';
+    this.sortField = event.sortField || enumData.PAGE.SORT_FIELD.CREATED_AT;
+    this.sortOrder =
+      event.sortOrder === 1 ? enumData.PAGE.SORT_ORDER.ASC : enumData.PAGE.SORT_ORDER.DESC;
     this.loadData();
   }
 

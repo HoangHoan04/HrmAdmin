@@ -10,8 +10,8 @@
       <span class="status-badge" [class.active]="!part.isDeleted" [class.inactive]="part.isDeleted">
         {{
           part.isDeleted
-            ? ('organization.part.statusInactive' | translate)
-            : ('organization.part.statusActive' | translate)
+            ? ('common.statusInactive' | translate)
+            : ('common.statusActive' | translate)
         }}
       </span>
     </div>

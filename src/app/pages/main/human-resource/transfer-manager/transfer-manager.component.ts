@@ -3,6 +3,7 @@ import { enumData } from '@/app/core/constants/enums';
 import { toUtcDateIso } from '@/app/core/constants/helpers';
 import { EmployeeSelectBoxDto, PagedResult, TransferEmployee } from '@/app/core/models';
 import { ApiService, I18nMessageService } from '@/app/core/services';
+import { StaticTranslateService } from '@/app/core/services/static-translate.service';
 import {
   CommonFilterActions,
   FilterAction,
@@ -47,8 +48,8 @@ export class TransferManagerComponent implements OnInit {
     showTotal: true,
   };
 
-  sortField = 'createdAt';
-  sortOrder = 'desc';
+  sortField = enumData.PAGE.SORT_FIELD.CREATED_AT;
+  sortOrder = enumData.PAGE.SORT_ORDER.DESC;
   toolbar: ToolbarConfig = { show: true };
   toolbarActions: TableAction[] = [CommonActions.create(() => this.openCreate())];
 
@@ -128,13 +129,34 @@ export class TransferManagerComponent implements OnInit {
   columns: TableColumn[] = [
     { field: 'code', header: 'transfer.code', type: 'text', sortable: true },
     { field: 'employeeName', header: 'transfer.employeeName', type: 'text' },
-    { field: 'transferTypeLabel', header: 'transfer.transferType', type: 'text' },
+    {
+      field: 'transferType',
+      header: 'transfer.transferType',
+      type: 'badge',
+      sortable: true,
+      render: (value: string) => {
+        const meta = Object.values(enumData.TRANSFER_TYPE).find((x) => x.value === value);
+        return meta ? StaticTranslateService.instant(meta.labelKey) : value;
+      },
+      badgeColor: (value: string) => {
+        const meta = Object.values(enumData.TRANSFER_TYPE).find((x) => x.value === value);
+        return meta?.color || '#8c8c8c';
+      },
+    },
     { field: 'effectiveDate', header: 'transfer.effectiveDate', type: 'date', sortable: true },
     {
-      field: 'statusLabel',
+      field: 'status',
       header: 'transfer.status',
-      type: 'tag',
-      tagSeverity: (value) => this.getStatusSeverityByLabel(value),
+      type: 'badge',
+      sortable: true,
+      render: (value: string) => {
+        const meta = Object.values(enumData.TRANSFER_STATUS).find((x) => x.value === value);
+        return meta ? StaticTranslateService.instant(meta.labelKey) : value;
+      },
+      badgeColor: (value: string) => {
+        const meta = Object.values(enumData.TRANSFER_STATUS).find((x) => x.value === value);
+        return meta?.color || '#8c8c8c';
+      },
     },
     { field: 'approvedBy', header: 'transfer.approvedBy', type: 'text' },
   ];
@@ -251,15 +273,7 @@ export class TransferManagerComponent implements OnInit {
       .subscribe({
         next: (res) => {
           this.statusLabelMap.clear();
-          this.data = res.items.map((item) => {
-            const statusLabel = this.resolveStatusLabel(item.status);
-            if (item.status) this.statusLabelMap.set(statusLabel, item.status);
-            return {
-              ...item,
-              statusLabel,
-              transferTypeLabel: this.resolveTransferTypeLabel(item.transferType),
-            };
-          });
+          this.data = res.items;
           this.pagination.total = res.totalCount;
           this.loading = false;
           this.syncFilterActionsLoading();
@@ -435,37 +449,6 @@ export class TransferManagerComponent implements OnInit {
         nzOnCancel: () => resolve(undefined),
       });
     });
-  }
-
-  private resolveStatusLabel(status?: string): string {
-    if (!status) return '-';
-    const meta = Object.values(enumData.TRANSFER_STATUS).find((x) => x.value === status);
-    return meta ? this.i18n.instant(meta.labelKey) : status;
-  }
-
-  private resolveTransferTypeLabel(type?: string): string {
-    if (!type) return '-';
-    const meta = Object.values(enumData.TRANSFER_TYPE).find((x) => x.value === type);
-    return meta ? this.i18n.instant(meta.labelKey) : type;
-  }
-
-  private getStatusSeverityByLabel(
-    label: string,
-  ): 'success' | 'info' | 'warning' | 'danger' | 'secondary' {
-    const status = this.statusLabelMap.get(label);
-    switch (status) {
-      case enumData.TRANSFER_STATUS.APPROVED.value:
-      case enumData.TRANSFER_STATUS.APPLIED.value:
-        return 'success';
-      case enumData.TRANSFER_STATUS.PENDING.value:
-        return 'warning';
-      case enumData.TRANSFER_STATUS.REJECTED.value:
-        return 'danger';
-      case enumData.TRANSFER_STATUS.CANCELLED.value:
-        return 'secondary';
-      default:
-        return 'info';
-    }
   }
 
   private syncFilterActionsLoading(): void {

@@ -1,5 +1,6 @@
 import { enumData } from '@/app/core/constants/enums/enumData';
 import { BranchSelectBoxDto, CompanySelectBoxDto, PositionMaster } from '@/app/core/models';
+import { StaticTranslateService } from '@/app/core/services/static-translate.service';
 import { downloadBlob, extractFileName } from '@/app/core/utils/file.util';
 import {
   CommonFilterActions,
@@ -47,8 +48,8 @@ export class PositionMasterComponent implements OnInit {
     showTotal: true,
   };
 
-  sortField = 'createdAt';
-  sortOrder = 'desc';
+  sortField = enumData.PAGE.SORT_FIELD.CREATED_AT;
+  sortOrder = enumData.PAGE.SORT_ORDER.DESC;
 
   toolbar: ToolbarConfig = {
     show: true,
@@ -121,10 +122,9 @@ export class PositionMasterComponent implements OnInit {
       placeholder: 'organization.positionMaster.filterStatus',
       col: 6,
       allowClear: true,
-      options: [
-        { label: 'organization.positionMaster.statusActive', value: false },
-        { label: 'organization.positionMaster.statusInactive', value: true },
-      ],
+      options: Object.values(enumData.STATUS_FILTER_IS_DELETED)
+        .filter((s) => s.value !== null)
+        .map((s) => ({ label: s.labelKey, value: s.value })),
     },
   ];
 
@@ -134,8 +134,18 @@ export class PositionMasterComponent implements OnInit {
   ];
 
   columns: TableColumn[] = [
-    { field: 'code', header: 'organization.positionMaster.code', type: 'text', sortable: true },
-    { field: 'name', header: 'organization.positionMaster.name', type: 'text', sortable: true },
+    {
+      field: 'code',
+      header: 'organization.positionMaster.code',
+      type: 'text',
+      sortable: true,
+    },
+    {
+      field: 'name',
+      header: 'organization.positionMaster.name',
+      type: 'text',
+      sortable: true,
+    },
     {
       field: 'companyName',
       header: 'organization.positionMaster.companyName',
@@ -179,16 +189,13 @@ export class PositionMasterComponent implements OnInit {
       sortable: true,
     },
     {
-      field: 'status',
+      field: 'isDeleted',
       header: 'organization.positionMaster.status',
       type: 'boolean',
       sortable: true,
-    },
-    {
-      field: 'createdAt',
-      header: 'organization.positionMaster.createdAt',
-      type: 'date',
-      sortable: true,
+      renderBoolean: (value: boolean) =>
+        StaticTranslateService.instant(value ? 'common.statusInactive' : 'common.statusActive'),
+      badgeSeverity: (value: boolean) => (value ? 'danger' : 'success'),
     },
   ];
 

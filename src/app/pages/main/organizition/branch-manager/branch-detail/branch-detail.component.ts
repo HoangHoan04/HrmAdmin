@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { enumData } from '@/app/core/constants/enums';
+import { RowAction, TableColumn } from '@/app/shared/components/table-custom/table-custom.types';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { ROUTES_CONFIG } from '../../../../../core/constants/common/routes.config';
-import { Branch } from '../../../../../core/models';
+import { Branch, Department, PagedResult } from '../../../../../core/models';
 import { ApiService } from '../../../../../core/services/api.service';
 import { I18nMessageService } from '../../../../../core/services/i18n-message.service';
 import { ActionConfirmService } from '../../../../../shared/services/action-confirm.service';
@@ -18,8 +20,35 @@ export class BranchDetailComponent implements OnInit {
 
   id: string | null = null;
   loading = false;
+  departmentsLoading = false;
   branch: Branch | null = null;
+  departments: Branch[] = [];
   selectedTabIndex = 0;
+
+  departmentRowActions: RowAction[] = [
+    {
+      key: 'view',
+      icon: 'eye',
+      tooltip: 'organization.department.viewDetail',
+      severity: 'primary',
+      onClick: (record) => this.viewDepartment(record),
+    },
+  ];
+
+  departmentColumns: TableColumn[] = [
+    { field: 'code', header: 'organization.department.code', type: 'text' },
+    { field: 'name', header: 'organization.department.name', type: 'text' },
+    { field: 'managerName', header: 'organization.department.managerName', type: 'text' },
+    {
+      field: 'status',
+      header: 'organization.department.status',
+      type: 'boolean',
+      renderBoolean: (value) =>
+        value
+          ? this.i18n.instant('common.statusActive')
+          : this.i18n.instant('common.statusInactive'),
+    },
+  ];
 
   detailFields: {
     key: keyof Branch | string;
@@ -55,6 +84,7 @@ export class BranchDetailComponent implements OnInit {
     private readonly i18n: I18nMessageService,
     private readonly apiService: ApiService,
     private readonly actionConfirm: ActionConfirmService,
+    private readonly cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
@@ -66,17 +96,46 @@ export class BranchDetailComponent implements OnInit {
 
   loadBranchDetail(id: string): void {
     this.loading = true;
+    this.cdr.markForCheck();
     this.apiService.post<Branch>(this.apiService.BRANCH.DETAIL, { id }).subscribe({
       next: (branch) => {
         this.branch = branch;
         this.loading = false;
+        this.cdr.markForCheck();
+        this.loadDepartments();
       },
       error: (err: any) => {
         this.message.error(this.i18n.loadDetailFailed(err.error));
         this.loading = false;
+        this.cdr.markForCheck();
         this.goBack();
       },
     });
+  }
+
+  loadDepartments(): void {
+    if (!this.id) return;
+    this.departmentsLoading = true;
+    this.apiService
+      .post<PagedResult<Branch>>(this.apiService.DEPARTMENT.PAGINATION, {
+        branchId: this.id,
+        pageIndex: enumData.PAGE.PAGE_INDEX,
+        pageSize: enumData.PAGE.PAGE_SIZE,
+        sortField: enumData.PAGE.SORT_FIELD.NAME,
+        sortOrder: enumData.PAGE.SORT_ORDER.ASC,
+      })
+      .subscribe({
+        next: (res) => {
+          this.departments = res.items.map((item) => ({
+            ...item,
+            status: !item.isDeleted,
+          }));
+          this.departmentsLoading = false;
+        },
+        error: () => {
+          this.departmentsLoading = false;
+        },
+      });
   }
 
   onTabChange(index: number): void {
@@ -109,6 +168,14 @@ export class BranchDetailComponent implements OnInit {
     this.router.navigate([
       ROUTES_CONFIG.ORGANIZATION.children.BRANCH_MANAGER.children.EDIT_BRANCH.path,
       this.id,
+    ]);
+  }
+
+  viewDepartment(department: Department): void {
+    if (!department.id) return;
+    this.router.navigate([
+      ROUTES_CONFIG.ORGANIZATION.children.DEPARTMENT_MANAGER.children.DETAIL_DEPARTMENT.path,
+      department.id,
     ]);
   }
 

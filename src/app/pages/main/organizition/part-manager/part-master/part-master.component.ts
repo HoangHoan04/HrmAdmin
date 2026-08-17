@@ -1,5 +1,6 @@
 import { enumData } from '@/app/core/constants/enums/enumData';
 import { BranchSelectBoxDto, CompanySelectBoxDto, PartMaster } from '@/app/core/models';
+import { StaticTranslateService } from '@/app/core/services/static-translate.service';
 import { downloadBlob, extractFileName } from '@/app/core/utils/file.util';
 import {
   CommonFilterActions,
@@ -7,6 +8,14 @@ import {
   FilterConfig,
   FilterField,
 } from '@/app/shared/components/filter-custom/filter-custom.types';
+import {
+  CommonActions,
+  PaginationConfig,
+  RowAction,
+  TableAction,
+  TableColumn,
+  ToolbarConfig,
+} from '@/app/shared/components/table-custom/table-custom.types';
 import { ActionConfirmService } from '@/app/shared/services/action-confirm.service';
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
@@ -16,14 +25,6 @@ import { ROUTES_CONFIG } from '../../../../../core/constants/common/routes.confi
 import { ImportResult, PagedResult } from '../../../../../core/models/common.models';
 import { ApiService } from '../../../../../core/services/api.service';
 import { I18nMessageService } from '../../../../../core/services/i18n-message.service';
-import {
-  CommonActions,
-  PaginationConfig,
-  RowAction,
-  TableAction,
-  TableColumn,
-  ToolbarConfig,
-} from '../../../../../shared/components/table-custom/table-custom.types';
 import { SharedModule } from '../../../../../shared/shared.module';
 
 @Component({
@@ -49,8 +50,8 @@ export class PartMasterComponent implements OnInit {
     showTotal: true,
   };
 
-  sortField = 'createdAt';
-  sortOrder = 'desc';
+  sortField = enumData.PAGE.SORT_FIELD.CREATED_AT;
+  sortOrder = enumData.PAGE.SORT_ORDER.DESC;
 
   toolbar: ToolbarConfig = {
     show: true,
@@ -123,10 +124,9 @@ export class PartMasterComponent implements OnInit {
       placeholder: 'organization.partMaster.filterStatus',
       col: 6,
       allowClear: true,
-      options: [
-        { label: 'organization.partMaster.statusActive', value: false },
-        { label: 'organization.partMaster.statusInactive', value: true },
-      ],
+      options: Object.values(enumData.STATUS_FILTER_IS_DELETED)
+        .filter((s) => s.value !== null)
+        .map((s) => ({ label: s.labelKey, value: s.value })),
     },
   ];
 
@@ -151,12 +151,14 @@ export class PartMasterComponent implements OnInit {
       sortable: true,
     },
     { field: 'type', header: 'organization.partMaster.type', type: 'text', sortable: true },
-    { field: 'status', header: 'organization.partMaster.status', type: 'boolean', sortable: true },
     {
-      field: 'createdAt',
-      header: 'organization.partMaster.createdAt',
-      type: 'date',
+      field: 'isDeleted',
+      header: 'organization.partMaster.status',
+      type: 'boolean',
       sortable: true,
+      renderBoolean: (value: boolean) =>
+        StaticTranslateService.instant(value ? 'common.statusInactive' : 'common.statusActive'),
+      badgeSeverity: (value: boolean) => (value ? 'danger' : 'success'),
     },
   ];
 

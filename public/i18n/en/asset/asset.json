@@ -8,7 +8,9 @@
       "isActive": "Active",
       "filterCompany": "Select company...",
       "filterStatus": "Select status...",
-      "backToList": "Back to list"
+      "backToList": "Back to list",
+      "active": "Active",
+      "inactive": "Inactive"
     },
     "type": {
       "entityName": "asset type",

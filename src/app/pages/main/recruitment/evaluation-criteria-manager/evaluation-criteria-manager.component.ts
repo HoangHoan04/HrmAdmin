@@ -3,6 +3,7 @@ import { enumData } from '@/app/core/constants/enums';
 import { EvaluationCriteria, PagedResult } from '@/app/core/models';
 import { ApiService, I18nMessageService } from '@/app/core/services';
 import { PermissionService } from '@/app/core/services/permission.service';
+import { StaticTranslateService } from '@/app/core/services/static-translate.service';
 import {
   CommonFilterActions,
   FilterAction,
@@ -38,8 +39,8 @@ export class EvaluationCriteriaManagerComponent implements OnInit {
     total: enumData.PAGE.TOTAL,
     showTotal: true,
   };
-  sortField = 'createdAt';
-  sortOrder = 'desc';
+  sortField = enumData.PAGE.SORT_FIELD.CREATED_AT;
+  sortOrder = enumData.PAGE.SORT_ORDER.DESC;
   toolbar: ToolbarConfig = { show: true };
   toolbarActions: TableAction[] = [];
   filters: Record<string, any> = { searchText: '', category: '', isActive: null };
@@ -74,10 +75,9 @@ export class EvaluationCriteriaManagerComponent implements OnInit {
       placeholder: 'recruitment.common.filterStatus',
       col: 8,
       allowClear: true,
-      options: [
-        { label: 'enums.statusFilter.active', value: true },
-        { label: 'enums.statusFilter.inactive', value: false },
-      ],
+      options: Object.values(enumData.STATUS_FILTER_IS_ACTIVE)
+        .filter((s) => s.value !== null)
+        .map((s) => ({ label: s.labelKey, value: s.value })),
     },
   ];
   filterActions: FilterAction[] = [
@@ -90,7 +90,15 @@ export class EvaluationCriteriaManagerComponent implements OnInit {
     { field: 'category', header: 'recruitment.criteria.category', type: 'text' },
     { field: 'defaultWeight', header: 'recruitment.criteria.defaultWeight', type: 'number' },
     { field: 'maxScore', header: 'recruitment.criteria.maxScore', type: 'number' },
-    { field: 'isActive', header: 'recruitment.common.status', type: 'boolean' },
+    {
+      field: 'isActive',
+      header: 'recruitment.common.status',
+      type: 'boolean',
+      sortable: true,
+      renderBoolean: (value: boolean) =>
+        StaticTranslateService.instant(value ? 'common.statusActive' : 'common.statusInactive'),
+      badgeSeverity: (value: boolean) => (value ? 'success' : 'danger'),
+    },
   ];
   rowActions: RowAction[] = [];
 

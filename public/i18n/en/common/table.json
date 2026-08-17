@@ -18,6 +18,22 @@
     "firstPage": "First page",
     "columnConfigTitle": "Visible columns",
     "paginationSummary": "Showing {{from}} - {{to}} of {{total}} records",
-    "pageSizeLabel": "Rows:"
+    "pageSizeLabel": "Rows:",
+    "action": {
+      "edit": "Edit",
+      "viewDetail": "View detail",
+      "deactivate": "Deactivate",
+      "activate": "Activate",
+      "delete": "Delete",
+      "signContract": "Sign contract",
+      "terminateContract": "Terminate contract",
+      "renewContract": "Renew contract",
+      "sendApproval": "Send for approval",
+      "approve": "Approve",
+      "reject": "Reject",
+      "apply": "Apply",
+      "cancel": "Cancel",
+      "markPaid": "Mark as Paid"
+    }
   }
 }

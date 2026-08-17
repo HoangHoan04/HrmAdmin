@@ -41,8 +41,8 @@ export class PublicHolidayManagerComponent implements OnInit {
     showTotal: true,
   };
 
-  sortField = 'createdAt';
-  sortOrder = 'desc';
+  sortField = enumData.PAGE.SORT_FIELD.CREATED_AT;
+  sortOrder = enumData.PAGE.SORT_ORDER.DESC;
   toolbar: ToolbarConfig = { show: true };
   toolbarActions: TableAction[] = [CommonActions.create(() => this.openCreate())];
 
@@ -94,10 +94,9 @@ export class PublicHolidayManagerComponent implements OnInit {
       placeholder: 'publicHoliday.filterStatus',
       col: 6,
       allowClear: true,
-      options: Object.values(enumData.STATUS_FILTER).map((item) => ({
-        label: item.labelKey ? StaticTranslateService.instant(item.labelKey) : item.code,
-        value: item.value,
-      })),
+      options: Object.values(enumData.STATUS_FILTER_IS_DELETED)
+        .filter((s) => s.value !== null)
+        .map((s) => ({ label: s.labelKey, value: s.value })),
     },
   ];
 
@@ -124,7 +123,14 @@ export class PublicHolidayManagerComponent implements OnInit {
       header: 'publicHoliday.companyName',
       type: 'text',
     },
-    { field: 'status', header: 'publicHoliday.status', type: 'boolean' },
+    {
+      field: 'isDeleted',
+      header: 'publicHoliday.status',
+      type: 'boolean',
+      renderBoolean: (value: boolean) =>
+        StaticTranslateService.instant(value ? 'common.statusInactive' : 'common.statusActive'),
+      badgeSeverity: (value: boolean) => (value ? 'danger' : 'success'),
+    },
     {
       field: 'createdAt',
       header: 'publicHoliday.createdAt',
@@ -210,7 +216,7 @@ export class PublicHolidayManagerComponent implements OnInit {
       .post<PagedResult<PublicHoliday>>(this.apiService.PUBLIC_HOLIDAY.PAGINATION, payload)
       .subscribe({
         next: (res) => {
-          this.data = res.items.map((item) => ({ ...item, status: !item.isDeleted }));
+          this.data = res.items;
           this.pagination.total = res.totalCount;
           this.loading = false;
           this.syncFilterActionsLoading();

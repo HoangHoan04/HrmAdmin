@@ -1,5 +1,6 @@
 import { enumData } from '@/app/core/constants/enums/enumData';
 import { Branch, CompanySelectBoxDto } from '@/app/core/models';
+import { StaticTranslateService } from '@/app/core/services/static-translate.service';
 import { downloadBlob, extractFileName } from '@/app/core/utils/file.util';
 import {
   CommonFilterActions,
@@ -46,8 +47,8 @@ export class BranchManagerComponent implements OnInit {
     showTotal: true,
   };
 
-  sortField = 'createdAt';
-  sortOrder = 'desc';
+  sortField = enumData.PAGE.SORT_FIELD.CREATED_AT;
+  sortOrder = enumData.PAGE.SORT_ORDER.DESC;
 
   toolbar: ToolbarConfig = {
     show: true,
@@ -110,10 +111,9 @@ export class BranchManagerComponent implements OnInit {
       placeholder: 'organization.branch.filterStatus',
       col: 6,
       allowClear: true,
-      options: [
-        { label: 'organization.branch.statusActive', value: false },
-        { label: 'organization.branch.statusInactive', value: true },
-      ],
+      options: Object.values(enumData.STATUS_FILTER_IS_DELETED)
+        .filter((s) => s.value !== null)
+        .map((s) => ({ label: s.labelKey, value: s.value })),
     },
   ];
 
@@ -139,7 +139,15 @@ export class BranchManagerComponent implements OnInit {
       type: 'text',
       sortable: false,
     },
-    { field: 'status', header: 'organization.branch.status', type: 'boolean', sortable: true },
+    {
+      field: 'isDeleted',
+      header: 'organization.branch.status',
+      type: 'boolean',
+      sortable: true,
+      renderBoolean: (value: boolean) =>
+        StaticTranslateService.instant(value ? 'common.statusInactive' : 'common.statusActive'),
+      badgeSeverity: (value: boolean) => (value ? 'danger' : 'success'),
+    },
   ];
 
   rowActions: RowAction[] = [
@@ -240,10 +248,7 @@ export class BranchManagerComponent implements OnInit {
       .post<PagedResult<Branch>>(this.apiService.BRANCH.PAGINATION, payload)
       .subscribe({
         next: (res) => {
-          this.data = res.items.map((item) => ({
-            ...item,
-            status: !item.isDeleted,
-          }));
+          this.data = res.items;
           this.pagination.total = res.totalCount;
           this.loading = false;
           this.syncFilterActionsLoading();

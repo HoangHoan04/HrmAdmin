@@ -62,8 +62,8 @@ export class OvertimeRequestManagerComponent implements OnInit {
     showTotal: true,
   };
 
-  sortField = 'createdAt';
-  sortOrder = 'desc';
+  sortField = enumData.PAGE.SORT_FIELD.CREATED_AT;
+  sortOrder = enumData.PAGE.SORT_ORDER.DESC;
   toolbar: ToolbarConfig = { show: true };
   toolbarActions: TableAction[] = [
     CommonActions.create(() => this.openCreate()),
@@ -493,7 +493,9 @@ export class OvertimeRequestManagerComponent implements OnInit {
         .subscribe({
           next: (count) => {
             this.message.success(
-              this.i18n.instant('overtimeRequest.bulkApproveSuccess', { count: String(count ?? 0) }),
+              this.i18n.instant('overtimeRequest.bulkApproveSuccess', {
+                count: String(count ?? 0),
+              }),
             );
             this.bulkApproving = false;
             this.syncBulkApproveLoading();

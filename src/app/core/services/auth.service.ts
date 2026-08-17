@@ -7,6 +7,7 @@ import { PermissionService } from './permission.service';
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly KEY_USER = 'auth_user';
+  private readonly KEY_EMAIL = 'auth_email';
   private readonly KEY_TOKEN = 'auth_token';
   private readonly KEY_REFRESH_TOKEN = 'auth_refresh_token';
   private readonly KEY_TEMP_2FA = 'auth_2fa_temp';
@@ -22,6 +23,10 @@ export class AuthService {
 
   get currentUser(): string | null {
     return sessionStorage.getItem(this.KEY_USER);
+  }
+
+  get currentEmail(): string | null {
+    return sessionStorage.getItem(this.KEY_EMAIL);
   }
 
   get token(): string | null {
@@ -76,6 +81,7 @@ export class AuthService {
     sessionStorage.removeItem(this.KEY_TOKEN);
     sessionStorage.removeItem(this.KEY_REFRESH_TOKEN);
     sessionStorage.removeItem(this.KEY_USER);
+    sessionStorage.removeItem(this.KEY_EMAIL);
     sessionStorage.removeItem(this.KEY_TEMP_2FA);
     this.permissionService.clear();
   }
@@ -86,6 +92,8 @@ export class AuthService {
         if (res && res.token) {
           sessionStorage.setItem(this.KEY_TOKEN, res.token);
           sessionStorage.setItem(this.KEY_REFRESH_TOKEN, res.refreshToken);
+          if (res.username) sessionStorage.setItem(this.KEY_USER, res.username);
+          if (res.email) sessionStorage.setItem(this.KEY_EMAIL, res.email);
           if (Array.isArray(res.roles) || Array.isArray(res.permissions) || res.type) {
             this.permissionService.setAuthContext({
               roles: Array.isArray(res.roles) ? res.roles : this.permissionService.roles,
@@ -112,8 +120,24 @@ export class AuthService {
     return this.apiService.post<any>(this.apiService.AUTH.RESET_PASSWORD_WITH_OTP, body);
   }
 
+  /** Light /me — shell / F5 bootstrap */
   getInfoUser(): Observable<any> {
-    return this.apiService.get<any>(this.apiService.AUTH.ME);
+    return this.apiService.get<any>(this.apiService.AUTH.ME).pipe(
+      tap((user) => {
+        if (!user) return;
+        if (user.username) sessionStorage.setItem(this.KEY_USER, user.username);
+        if (user.email) sessionStorage.setItem(this.KEY_EMAIL, user.email);
+        if (Array.isArray(user.roles) || Array.isArray(user.permissions) || user.type) {
+          this.permissionService.setAuthContext({
+            roles: Array.isArray(user.roles) ? user.roles : this.permissionService.roles,
+            permissions: Array.isArray(user.permissions)
+              ? user.permissions
+              : this.permissionService.permissions,
+            type: user.type ?? this.permissionService.userType,
+          });
+        }
+      }),
+    );
   }
 
   private applyLoginResponse(res: any): void {
@@ -128,6 +152,7 @@ export class AuthService {
       sessionStorage.setItem(this.KEY_TOKEN, res.token);
       sessionStorage.setItem(this.KEY_REFRESH_TOKEN, res.refreshToken);
       sessionStorage.setItem(this.KEY_USER, res.username);
+      if (res.email) sessionStorage.setItem(this.KEY_EMAIL, res.email);
       this.permissionService.setAuthContext({
         roles: Array.isArray(res.roles) ? res.roles : [],
         permissions: Array.isArray(res.permissions) ? res.permissions : [],

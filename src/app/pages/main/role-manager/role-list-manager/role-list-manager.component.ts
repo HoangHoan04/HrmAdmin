@@ -10,6 +10,7 @@ import {
 } from '@/app/core/models';
 import { ApiService, I18nMessageService } from '@/app/core/services';
 import { PermissionService } from '@/app/core/services/permission.service';
+import { StaticTranslateService } from '@/app/core/services/static-translate.service';
 import {
   CommonFilterActions,
   FilterAction,
@@ -50,8 +51,8 @@ export class RoleListManagerComponent implements OnInit {
     showTotal: true,
   };
 
-  sortField = 'code';
-  sortOrder = 'asc';
+  sortField = enumData.PAGE.SORT_FIELD.CODE;
+  sortOrder = enumData.PAGE.SORT_ORDER.ASC;
 
   toolbar: ToolbarConfig = { show: true };
   toolbarActions: TableAction[] = [
@@ -109,10 +110,9 @@ export class RoleListManagerComponent implements OnInit {
       placeholder: 'role.filterActive',
       col: 6,
       allowClear: true,
-      options: [
-        { label: 'common.statusActive', value: true },
-        { label: 'common.statusInactive', value: false },
-      ],
+      options: Object.values(enumData.STATUS_FILTER_IS_ACTIVE)
+        .filter((s) => s.value !== null)
+        .map((s) => ({ label: s.labelKey, value: s.value })),
     },
   ];
 
@@ -129,7 +129,15 @@ export class RoleListManagerComponent implements OnInit {
     { field: 'permissionCount', header: 'role.permissionCount', type: 'text' },
     { field: 'userCount', header: 'role.userCount', type: 'text' },
     { field: 'isSystem', header: 'role.isSystem', type: 'boolean' },
-    { field: 'isActive', header: 'role.isActive', type: 'boolean', sortable: true },
+    {
+      field: 'isActive',
+      header: 'role.isActive',
+      type: 'boolean',
+      sortable: true,
+      renderBoolean: (value: boolean) =>
+        StaticTranslateService.instant(value ? 'common.statusActive' : 'common.statusInactive'),
+      badgeSeverity: (value: boolean) => (value ? 'success' : 'danger'),
+    },
   ];
 
   rowActions: RowAction[] = [

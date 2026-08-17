@@ -25,7 +25,6 @@ export class AddOrUpdateEmployeeComponent implements OnInit, OnDestroy {
   genderOptions = Object.values(enumData.GENDER);
   employeeLevelOptions = Object.values(enumData.EMPLOYEE_LEVEL);
   workingModeOptions = Object.values(enumData.WORKING_MODE);
-  contractTypeOptions = Object.values(enumData.CONTRACT_TYPE);
   workStatusOptions = Object.values(enumData.WORK_STATUS);
 
   companies: any[] = [];
@@ -34,6 +33,7 @@ export class AddOrUpdateEmployeeComponent implements OnInit, OnDestroy {
   parts: any[] = [];
   positions: any[] = [];
   managerOptions: any[] = [];
+  contractTypes: any[] = [];
 
   hireCandidateId: string | null = null;
   hireCandidateLabel: string | null = null;
@@ -57,6 +57,7 @@ export class AddOrUpdateEmployeeComponent implements OnInit, OnDestroy {
     this.hireCandidateId = this.route.snapshot.queryParamMap.get('candidateId');
 
     this.loadCompanies();
+    this.loadContractTypes();
     this.loadManagerOptions();
 
     if (this.isEdit && this.id) {
@@ -185,6 +186,12 @@ export class AddOrUpdateEmployeeComponent implements OnInit, OnDestroy {
   loadCompanies(): void {
     this.apiService.post<any[]>(this.apiService.COMPANY.SELECT_BOX, {}).subscribe({
       next: (res) => (this.companies = res),
+    });
+  }
+
+  loadContractTypes(): void {
+    this.apiService.post<any[]>(this.apiService.CONTRACT_TYPE.SELECT_BOX, {}).subscribe({
+      next: (res) => (this.contractTypes = res),
     });
   }
 

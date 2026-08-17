@@ -1,8 +1,8 @@
-import { enumData } from '@/app/core/constants/enums/enumData';
 import {
   ATTENDANCE_STATUS_OPTIONS,
   resolveAttendanceStatus,
 } from '@/app/core/constants/enums/attendance-status';
+import { enumData } from '@/app/core/constants/enums/enumData';
 import { toDateOnly } from '@/app/core/constants/helpers';
 import {
   BranchSelectBoxDto,
@@ -75,8 +75,8 @@ export class TimekeepingManagerComponent implements OnInit {
     showTotal: true,
   };
 
-  sortField = 'workDate';
-  sortOrder = 'desc';
+  sortField = enumData.PAGE.SORT_FIELD.WORK_DATE;
+  sortOrder = enumData.PAGE.SORT_ORDER.DESC;
   toolbar: ToolbarConfig = { show: true };
   toolbarActions: TableAction[] = [
     {

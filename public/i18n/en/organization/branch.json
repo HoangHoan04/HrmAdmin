@@ -29,13 +29,6 @@
       "searchName": "Enter branch name...",
       "filterCompany": "Select company...",
       "filterStatus": "Select status...",
-      "statusActive": "Active",
-      "statusInactive": "Inactive",
-      "viewDetail": "View detail",
-      "edit": "Edit branch",
-      "toggleStatus": "Activate / Deactivate",
-      "activate": "Activate",
-      "deactivate": "Deactivate",
       "detailTitle": "Branch Detail",
       "backToList": "Back to branch list",
       "tabDetail": "Details",
@@ -59,7 +52,9 @@
       "latitude": "Latitude",
       "longitude": "Longitude",
       "timeKeepingStandardId": "Timekeeping standard",
-      "filterTimeKeepingStandard": "Select timekeeping standard..."
+      "filterTimeKeepingStandard": "Select timekeeping standard...",
+      "tabDepartments": "Departments",
+      "noDepartments": "No departments found for this branch."
     }
   }
 }

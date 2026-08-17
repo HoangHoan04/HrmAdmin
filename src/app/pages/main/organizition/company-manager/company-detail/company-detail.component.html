@@ -43,16 +43,6 @@
         </div>
       </nz-tab>
 
-      <nz-tab [nzTitle]="'organization.company.tabActivityLog' | translate">
-        <div class="tab-content">
-          <app-action-log
-            entityName="CompanyEntity"
-            [entityId]="id ?? undefined"
-            [title]="'actionLog.title' | translate"
-          ></app-action-log>
-        </div>
-      </nz-tab>
-
       <nz-tab [nzTitle]="'organization.company.tabBranches' | translate">
         <div class="tab-content">
           <div class="tab-toolbar">
@@ -91,6 +81,16 @@
             [toolbar]="{ show: false }"
             [emptyText]="'organization.company.noChildCompanies' | translate"
           ></app-table-custom>
+        </div>
+      </nz-tab>
+
+      <nz-tab [nzTitle]="'organization.company.tabActivityLog' | translate">
+        <div class="tab-content">
+          <app-action-log
+            entityName="CompanyEntity"
+            [entityId]="id ?? undefined"
+            [title]="'actionLog.title' | translate"
+          ></app-action-log>
         </div>
       </nz-tab>
     </nz-tabs>

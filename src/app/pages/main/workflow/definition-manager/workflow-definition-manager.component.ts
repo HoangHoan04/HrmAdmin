@@ -3,6 +3,7 @@ import { enumData } from '@/app/core/constants/enums';
 import { PagedResult, WorkflowDefinition } from '@/app/core/models';
 import { ApiService, I18nMessageService } from '@/app/core/services';
 import { PermissionService } from '@/app/core/services/permission.service';
+import { StaticTranslateService } from '@/app/core/services/static-translate.service';
 import {
   CommonFilterActions,
   FilterAction,
@@ -76,10 +77,9 @@ export class WorkflowDefinitionManagerComponent implements OnInit {
       placeholder: 'workflow.common.filterStatus',
       col: 8,
       allowClear: true,
-      options: [
-        { label: 'enums.statusFilter.active', value: true },
-        { label: 'enums.statusFilter.inactive', value: false },
-      ],
+      options: Object.values(enumData.STATUS_FILTER_IS_ACTIVE)
+        .filter((s) => s.value !== null)
+        .map((s) => ({ label: s.labelKey, value: s.value })),
     },
   ];
   filterActions: FilterAction[] = [
@@ -90,7 +90,15 @@ export class WorkflowDefinitionManagerComponent implements OnInit {
     { field: 'code', header: 'workflow.definition.code', type: 'text', sortable: false },
     { field: 'name', header: 'workflow.definition.name', type: 'text', sortable: false },
     { field: 'entityType', header: 'workflow.common.entityType', type: 'text' },
-    { field: 'isActive', header: 'workflow.common.status', type: 'boolean' },
+    {
+      field: 'isActive',
+      header: 'workflow.common.status',
+      type: 'boolean',
+      sortable: false,
+      renderBoolean: (value: boolean) =>
+        StaticTranslateService.instant(value ? 'common.statusActive' : 'common.statusInactive'),
+      badgeSeverity: (value: boolean) => (value ? 'success' : 'danger'),
+    },
   ];
   rowActions: RowAction[] = [];
 
@@ -145,7 +153,10 @@ export class WorkflowDefinitionManagerComponent implements OnInit {
       payload['isActive'] = this.filters['isActive'];
     }
     this.apiService
-      .post<PagedResult<WorkflowDefinition>>(this.apiService.WORKFLOW_DEFINITION.PAGINATION, payload)
+      .post<PagedResult<WorkflowDefinition>>(
+        this.apiService.WORKFLOW_DEFINITION.PAGINATION,
+        payload,
+      )
       .subscribe({
         next: (res) => {
           this.data = res.items;

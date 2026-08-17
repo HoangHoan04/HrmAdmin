@@ -3,6 +3,7 @@ import { enumData } from '@/app/core/constants/enums';
 import { IpAllowlistEntry, PagedResult } from '@/app/core/models';
 import { ApiService, I18nMessageService } from '@/app/core/services';
 import { PermissionService } from '@/app/core/services/permission.service';
+import { StaticTranslateService } from '@/app/core/services/static-translate.service';
 import {
   CommonFilterActions,
   FilterAction,
@@ -63,10 +64,9 @@ export class IpAllowlistManagerComponent implements OnInit {
       type: 'select',
       col: 8,
       allowClear: true,
-      options: [
-        { label: 'enums.statusFilter.active', value: true },
-        { label: 'enums.statusFilter.inactive', value: false },
-      ],
+      options: Object.values(enumData.STATUS_FILTER_IS_ACTIVE)
+        .filter((s) => s.value !== null)
+        .map((s) => ({ label: s.labelKey, value: s.value })),
     },
   ];
   filterActions: FilterAction[] = [
@@ -76,7 +76,15 @@ export class IpAllowlistManagerComponent implements OnInit {
   columns: TableColumn[] = [
     { field: 'cidrOrIp', header: 'system.ipAllowlist.cidrOrIp', type: 'text', sortable: true },
     { field: 'note', header: 'common.fields.note', type: 'text' },
-    { field: 'isActive', header: 'common.status.label', type: 'boolean' },
+    {
+      field: 'isActive',
+      header: 'common.status.label',
+      type: 'boolean',
+      sortable: true,
+      renderBoolean: (value: boolean) =>
+        StaticTranslateService.instant(value ? 'common.statusActive' : 'common.statusInactive'),
+      badgeSeverity: (value: boolean) => (value ? 'success' : 'danger'),
+    },
     { field: 'createdAt', header: 'common.fields.createdAt', type: 'datetime' },
   ];
   rowActions: RowAction[] = [];

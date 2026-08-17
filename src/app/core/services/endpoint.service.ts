@@ -14,6 +14,7 @@ export class EndpointService {
     FORGOT_PASSWORD: `${this.baseUrl}/admin/auth/forgot-password`,
     RESET_PASSWORD_WITH_OTP: `${this.baseUrl}/admin/auth/reset-password-with-otp`,
     ME: `${this.baseUrl}/admin/auth/me`,
+    PROFILE: `${this.baseUrl}/admin/auth/profile`,
     TWO_FA_SETUP: `${this.baseUrl}/admin/auth/2fa/setup`,
     TWO_FA_ENABLE: `${this.baseUrl}/admin/auth/2fa/enable`,
     TWO_FA_DISABLE: `${this.baseUrl}/admin/auth/2fa/disable`,

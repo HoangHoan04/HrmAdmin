@@ -38,8 +38,8 @@ export class MaterialManagerComponent implements OnInit {
     total: enumData.PAGE.TOTAL,
     showTotal: true,
   };
-  sortField = 'displayOrder';
-  sortOrder = 'asc';
+  sortField = enumData.PAGE.SORT_FIELD.DISPLAY_ORDER;
+  sortOrder = enumData.PAGE.SORT_ORDER.ASC;
   toolbar: ToolbarConfig = { show: true };
   toolbarActions: TableAction[] = [];
   filters: Record<string, any> = { searchText: '' };

@@ -22,8 +22,6 @@
     "searchName": "Nhập tên ca...",
     "filterCompany": "Chọn công ty...",
     "filterStatus": "Chọn trạng thái...",
-    "statusActive": "Đang hoạt động",
-    "statusInactive": "Ngưng hoạt động",
     "edit": "Sửa ca",
     "activate": "Kích hoạt",
     "deactivate": "Ngưng hoạt động",

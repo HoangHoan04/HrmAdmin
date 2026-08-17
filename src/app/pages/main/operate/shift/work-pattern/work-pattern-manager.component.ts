@@ -6,6 +6,7 @@ import {
   ShiftMasterSelectBoxDto,
 } from '@/app/core/models';
 import { ApiService, I18nMessageService } from '@/app/core/services';
+import { StaticTranslateService } from '@/app/core/services/static-translate.service';
 import {
   CommonFilterActions,
   FilterAction,
@@ -106,10 +107,9 @@ export class WorkPatternManagerComponent implements OnInit {
       placeholder: 'workPattern.filterActive',
       col: 8,
       allowClear: true,
-      options: [
-        { label: 'workPattern.activeYes', value: true },
-        { label: 'workPattern.activeNo', value: false },
-      ],
+      options: Object.values(enumData.STATUS_FILTER_IS_ACTIVE)
+        .filter((s) => s.value !== null)
+        .map((s) => ({ label: s.labelKey, value: s.value })),
     },
   ];
 
@@ -125,7 +125,15 @@ export class WorkPatternManagerComponent implements OnInit {
     { field: 'workDaysLabel', header: 'workPattern.workDays', type: 'text' },
     { field: 'effectiveFrom', header: 'workPattern.effectiveFrom', type: 'date' },
     { field: 'effectiveTo', header: 'workPattern.effectiveTo', type: 'date' },
-    { field: 'isActive', header: 'workPattern.isActive', type: 'boolean' },
+    {
+      field: 'isActive',
+      header: 'workPattern.isActive',
+      type: 'boolean',
+      sortable: true,
+      renderBoolean: (value: boolean) =>
+        StaticTranslateService.instant(value ? 'common.statusActive' : 'common.statusInactive'),
+      badgeSeverity: (value: boolean) => (value ? 'success' : 'danger'),
+    },
   ];
 
   rowActions: RowAction[] = [

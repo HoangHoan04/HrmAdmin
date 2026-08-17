@@ -5,13 +5,48 @@ export const enumData = {
     PAGE_SIZE_MAX: 1000000,
     LST_PAGE_SIZE: [10, 20, 50, 100],
     TOTAL: 0,
+    SORT_ORDER: {
+      ASC: 'asc',
+      DESC: 'desc',
+    },
+
+    SORT_FIELD: {
+      CREATED_AT: 'createdAt',
+      UPDATED_AT: 'updatedAt',
+      NAME: 'name',
+      CODE: 'code',
+      ACTIVATE_STATUS: 'activateStatus',
+      IS_DELETED: 'isDeleted',
+      STATUS_LABEL: 'statusLabel',
+      STATUS: 'status',
+      YEAR: 'year',
+      REMAINING_DAYS: 'remainingDays',
+      WORK_DATE: 'workDate',
+      REQUEST_DATE: 'requestDate',
+      DISPLAY_ORDER: 'displayOrder',
+      SLIP_DATE: 'slipDate',
+      USERNAME: 'username',
+    },
   },
+
   maxSizeUpload: 5 * 1024 * 1024,
 
-  STATUS_FILTER: {
+  STATUS_FILTER_IS_DELETED: {
     ACTIVE: { code: 'ACTIVE', labelKey: 'enums.statusFilter.active', value: false },
     INACTIVE: { code: 'INACTIVE', labelKey: 'enums.statusFilter.inactive', value: true },
     ALL: { code: 'ALL', labelKey: 'enums.statusFilter.all', value: null },
+  },
+
+  STATUS_FILTER_IS_ACTIVE: {
+    ACTIVE: { code: 'ACTIVE', labelKey: 'enums.statusFilter.active', value: true },
+    INACTIVE: { code: 'INACTIVE', labelKey: 'enums.statusFilter.inactive', value: false },
+    ALL: { code: 'ALL', labelKey: 'enums.statusFilter.all', value: null },
+  },
+
+  YES_NO_FILTER: {
+    YES: { code: 'YES', labelKey: 'enums.yesNoFilter.yes', value: true },
+    NO: { code: 'NO', labelKey: 'enums.yesNoFilter.no', value: false },
+    ALL: { code: 'ALL', labelKey: 'enums.yesNoFilter.all', value: null },
   },
 
   GENDER: {
@@ -183,16 +218,6 @@ export const enumData = {
     },
   },
 
-  DAYS_OF_WEEK: [
-    { key: 'T2', code: 'MONDAY', labelKey: 'enums.daysOfWeek.mon', value: 1 },
-    { key: 'T3', code: 'TUESDAY', labelKey: 'enums.daysOfWeek.tue', value: 2 },
-    { key: 'T4', code: 'WEDNESDAY', labelKey: 'enums.daysOfWeek.wed', value: 3 },
-    { key: 'T5', code: 'THURSDAY', labelKey: 'enums.daysOfWeek.thu', value: 4 },
-    { key: 'T6', code: 'FRIDAY', labelKey: 'enums.daysOfWeek.fri', value: 5 },
-    { key: 'T7', code: 'SATURDAY', labelKey: 'enums.daysOfWeek.sat', value: 6 },
-    { key: 'CN', code: 'SUNDAY', labelKey: 'enums.daysOfWeek.sun', value: 0 },
-  ],
-
   MONTH: {
     JANUARY: { code: 'JANUARY', labelKey: 'enums.month.january', value: 0 },
     FEBRUARY: { code: 'FEBRUARY', labelKey: 'enums.month.february', value: 1 },
@@ -208,55 +233,65 @@ export const enumData = {
     DECEMBER: { code: 'DECEMBER', labelKey: 'enums.month.december', value: 11 },
   },
 
+  // Trình độ nhấn viên
   EMPLOYEE_LEVEL: {
+    // Thực tập sinh
     INTERNSHIP: {
       code: 'INTERNSHIP',
       labelKey: 'enums.employeeLevel.internship',
       value: 'INTERNSHIP',
       color: '#8c8c8c',
     },
+    // Mới vào nghề
     FRESHER: {
       code: 'FRESHER',
       labelKey: 'enums.employeeLevel.fresher',
       value: 'FRESHER',
       color: '#52c41a',
     },
+    // Trình độ nhân viên
     JUNIOR: {
       code: 'JUNIOR',
       labelKey: 'enums.employeeLevel.junior',
       value: 'JUNIOR',
       color: '#1890ff',
     },
+    // Trình độ nhân viên trung cấp
     MIDDLE: {
       code: 'MIDDLE',
       labelKey: 'enums.employeeLevel.middle',
       value: 'MIDDLE',
       color: '#faad14',
     },
+    // Trình độ nhân viên cao cấp
     SENIOR: {
       code: 'SENIOR',
       labelKey: 'enums.employeeLevel.senior',
       value: 'SENIOR',
       color: '#f5222d',
     },
+    // Trình độ trưởng nhóm
     LEADER: {
       code: 'LEADER',
       labelKey: 'enums.employeeLevel.leader',
       value: 'LEADER',
       color: '#722ed1',
     },
+    // Trình độ quản lý
     MANAGER: {
       code: 'MANAGER',
       labelKey: 'enums.employeeLevel.manager',
       value: 'MANAGER',
       color: '#eb2f96',
     },
+    // Trình độ giám đốc
     DIRECTOR: {
       code: 'DIRECTOR',
       labelKey: 'enums.employeeLevel.director',
       value: 'DIRECTOR',
       color: '#13c2c2',
     },
+    // Trình độ điều hành
     EXECUTIVE: {
       code: 'EXECUTIVE',
       labelKey: 'enums.employeeLevel.executive',
@@ -265,31 +300,37 @@ export const enumData = {
     },
   },
 
+  // Hình thức làm việc
   WORKING_MODE: {
+    // Làm việc tại văn phòng
     ON_SITE: {
       code: 'ON_SITE',
       labelKey: 'enums.workingMode.onSite',
       value: 'ON_SITE',
       color: '#1890ff',
     },
+    // Làm việc từ xa
     REMOTE: {
       code: 'REMOTE',
       labelKey: 'enums.workingMode.remote',
       value: 'REMOTE',
       color: '#52c41a',
     },
+    // Làm việc kết hợp
     HYBRID: {
       code: 'HYBRID',
       labelKey: 'enums.workingMode.hybrid',
       value: 'HYBRID',
       color: '#faad14',
     },
+    // Làm việc linh hoạt
     FLEXIBLE: {
       code: 'FLEXIBLE',
       labelKey: 'enums.workingMode.flexible',
       value: 'FLEXIBLE',
       color: '#722ed1',
     },
+    // Đi công tác
     BUSINESS_TRIP: {
       code: 'BUSINESS_TRIP',
       labelKey: 'enums.workingMode.businessTrip',
@@ -298,125 +339,55 @@ export const enumData = {
     },
   },
 
-  CONTRACT_TYPE: {
-    PROBATION: {
-      code: 'PROBATION',
-      labelKey: 'enums.contractType.probation',
-      value: 'PROBATION',
-      color: '#faad14',
-    },
-    INDEFINITE: {
-      code: 'INDEFINITE',
-      labelKey: 'enums.contractType.indefinite',
-      value: 'INDEFINITE',
-      color: '#52c41a',
-    },
-    DEFINITE: {
-      code: 'DEFINITE',
-      labelKey: 'enums.contractType.definite',
-      value: 'DEFINITE',
-      color: '#1890ff',
-    },
-    SEASONAL: {
-      code: 'SEASONAL',
-      labelKey: 'enums.contractType.seasonal',
-      value: 'SEASONAL',
-      color: '#fa8c16',
-    },
-    COLLABORATOR: {
-      code: 'COLLABORATOR',
-      labelKey: 'enums.contractType.collaborator',
-      value: 'COLLABORATOR',
-      color: '#722ed1',
-    },
-    INTERNSHIP: {
-      code: 'INTERNSHIP',
-      labelKey: 'enums.contractType.internship',
-      value: 'INTERNSHIP',
-      color: '#8c8c8c',
-    },
-  },
-
+  // Trạng thái làm việc
   WORK_STATUS: {
+    // Đang làm việc
     WORKING: {
       code: 'WORKING',
       labelKey: 'enums.workStatus.working',
       value: 'WORKING',
       color: '#52c41a',
     },
+    // Đang thử việc
     PROBATION: {
       code: 'PROBATION',
       labelKey: 'enums.workStatus.probation',
       value: 'PROBATION',
       color: '#1890ff',
     },
+    // Nhân viên chính thức
     OFFICIAL: {
       code: 'OFFICIAL',
       labelKey: 'enums.workStatus.official',
       value: 'OFFICIAL',
       color: '#13c2c2',
     },
+    // Nghỉ phép (nghỉ có thời hạn: thai sản, nghỉ dài ngày, nghỉ không lương tạm thời...)
     ON_LEAVE: {
       code: 'ON_LEAVE',
       labelKey: 'enums.workStatus.onLeave',
       value: 'ON_LEAVE',
       color: '#faad14',
     },
+    // Bị đình chỉ/cách việc tạm thời
     SUSPENDED: {
       code: 'SUSPENDED',
       labelKey: 'enums.workStatus.suspended',
       value: 'SUSPENDED',
       color: '#722ed1',
     },
+    // Nghỉ việc
     RESIGNED: {
       code: 'RESIGNED',
       labelKey: 'enums.workStatus.resigned',
       value: 'RESIGNED',
       color: '#f5222d',
     },
+    // Đã nghỉ hưu
     RETIRED: {
       code: 'RETIRED',
       labelKey: 'enums.workStatus.retired',
       value: 'RETIRED',
-      color: '#8c8c8c',
-    },
-  },
-
-  DAY_OFF_CONFIG_TYPE: {
-    ANNUAL: {
-      code: 'ANNUAL',
-      labelKey: 'enums.dayOffConfigType.annual',
-      value: 'ANNUAL',
-      color: '#52c41a',
-    },
-    SICK: {
-      code: 'SICK',
-      labelKey: 'enums.dayOffConfigType.sick',
-      value: 'SICK',
-      color: '#faad14',
-    },
-    UNPAID: {
-      code: 'UNPAID',
-      labelKey: 'enums.dayOffConfigType.unpaid',
-      value: 'UNPAID',
-      color: '#722ed1',
-    },
-    MATERNITY: {
-      code: 'MATERNITY',
-      labelKey: 'enums.dayOffConfigType.maternity',
-      value: 'MATERNITY',
-      color: '#1890ff',
-    },
-    PATERNITY: {
-      code: 'PATERNITY',
-      labelKey: 'enums.dayOffConfigType.paternity',
-      value: 'PATERNITY',
-      color: '#13c2c2',
-    },
-    OTHER: {
-      code: 'OTHER',
-      labelKey: 'enums.dayOffConfigType.other',
-      value: 'OTHER',
       color: '#8c8c8c',
     },
   },
@@ -908,6 +879,39 @@ export const enumData = {
     },
   },
 
+  LEAVE_STATUS: {
+    NEW: {
+      code: 'NEW',
+      labelKey: 'enums.leaveStatus.new',
+      value: 'NEW',
+      color: '#faad14',
+    },
+    AWAITING_APPROVAL: {
+      code: 'AWAITING_APPROVAL',
+      labelKey: 'enums.leaveStatus.awaitingApproval',
+      value: 'AWAITING_APPROVAL',
+      color: '#1890ff',
+    },
+    APPROVED: {
+      code: 'APPROVED',
+      labelKey: 'enums.leaveStatus.approved',
+      value: 'APPROVED',
+      color: '#52c41a',
+    },
+    REJECTED: {
+      code: 'REJECTED',
+      labelKey: 'enums.leaveStatus.rejected',
+      value: 'REJECTED',
+      color: '#f5222d',
+    },
+    CANCELLED: {
+      code: 'CANCELLED',
+      labelKey: 'enums.leaveStatus.cancelled',
+      value: 'CANCELLED',
+      color: '#8c8c8c',
+    },
+  },
+
   ATTENDANCE_COMPLAINT_STATUS: {
     PENDING: {
       code: 'PENDING',
@@ -1177,16 +1181,23 @@ export const enumData = {
   },
 
   VIOLATION_STATUS: {
-    DRAFT: { code: 'DRAFT', labelKey: 'enums.violationStatus.draft', value: 'DRAFT' },
+    DRAFT: {
+      code: 'DRAFT',
+      labelKey: 'enums.violationStatus.draft',
+      value: 'DRAFT',
+      color: '#8c8c8c',
+    },
     CONFIRMED: {
       code: 'CONFIRMED',
       labelKey: 'enums.violationStatus.confirmed',
       value: 'CONFIRMED',
+      color: '#52c41a',
     },
     CANCELLED: {
       code: 'CANCELLED',
       labelKey: 'enums.violationStatus.cancelled',
       value: 'CANCELLED',
+      color: '#f5222d',
     },
   },
 
@@ -1272,21 +1283,25 @@ export const enumData = {
       code: 'AVAILABLE',
       labelKey: 'enums.assetStatus.available',
       value: 'AVAILABLE',
+      color: '#52c41a',
     },
     ASSIGNED: {
       code: 'ASSIGNED',
       labelKey: 'enums.assetStatus.assigned',
       value: 'ASSIGNED',
+      color: '#1890ff',
     },
     MAINTENANCE: {
       code: 'MAINTENANCE',
       labelKey: 'enums.assetStatus.maintenance',
       value: 'MAINTENANCE',
+      color: '#faad14',
     },
     RETIRED: {
       code: 'RETIRED',
       labelKey: 'enums.assetStatus.retired',
       value: 'RETIRED',
+      color: '#f5222d',
     },
   },
 
@@ -1296,12 +1311,48 @@ export const enumData = {
   },
 
   ASSET_TICKET_STATUS: {
-    DRAFT: { code: 'DRAFT', labelKey: 'enums.assetTicketStatus.draft', value: 'DRAFT' },
-    DONE: { code: 'DONE', labelKey: 'enums.assetTicketStatus.done', value: 'DONE' },
+    // Mới tạo
+    NEW: {
+      code: 'NEW',
+      labelKey: 'enums.assetTicketStatus.new',
+      value: 'NEW',
+      color: '#8c8c8c',
+    },
+    WAIT_APPROVAL: {
+      code: 'WAIT_APPROVAL',
+      labelKey: 'enums.assetTicketStatus.waitApproval',
+      value: 'WAIT_APPROVAL',
+      color: '#faad14',
+    },
+    APPROVED: {
+      code: 'APPROVED',
+      labelKey: 'enums.assetTicketStatus.approved',
+      value: 'APPROVED',
+      color: '#52c41a',
+    },
+    REJECTED: {
+      code: 'REJECTED',
+      labelKey: 'enums.assetTicketStatus.rejected',
+      value: 'REJECTED',
+      color: '#f5222d',
+    },
+    IN_PROGRESS: {
+      code: 'IN_PROGRESS',
+      labelKey: 'enums.assetTicketStatus.inProgress',
+      value: 'IN_PROGRESS',
+      color: '#1890ff',
+    },
+    COMPLETED: {
+      code: 'COMPLETED',
+      labelKey: 'enums.assetTicketStatus.completed',
+      value: 'COMPLETED',
+      color: '#13c2c2',
+    },
     CANCELLED: {
       code: 'CANCELLED',
       labelKey: 'enums.assetTicketStatus.cancelled',
       value: 'CANCELLED',
+      color: '#f5222d',
     },
   },
 

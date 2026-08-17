@@ -23,7 +23,9 @@ export interface TableColumn<T = any> {
   currencySymbol?: string;
   numberFormat?: string;
   badgeSeverity?: (value: any) => 'success' | 'info' | 'warning' | 'danger' | 'secondary';
+  badgeColor?: (value: any) => string;
   tagSeverity?: (value: any) => 'success' | 'info' | 'warning' | 'danger' | 'secondary';
+  render?: (value: any) => string;
   renderBoolean?: (value: boolean) => string;
   renderEmpty?: () => string;
 }

@@ -387,19 +387,25 @@
                 </span>
 
                 <span *ngIf="col.type === 'boolean'">
-                  <ng-container *ngIf="col.renderBoolean">
-                    {{ col.renderBoolean(rowData[col.field]) }}
-                  </ng-container>
-                  <ng-container *ngIf="!col.renderBoolean">
-                    <span
-                      class="badge-status"
-                      [ngClass]="rowData[col.field] ? 'status-true' : 'status-false'"
-                    >
+                  <span
+                    class="badge-status inline-badge"
+                    [ngClass]="
+                      col.badgeSeverity
+                        ? getBadgeSeverityClass(col.badgeSeverity(rowData[col.field]))
+                        : rowData[col.field]
+                          ? 'status-true'
+                          : 'status-false'
+                    "
+                  >
+                    <ng-container *ngIf="col.renderBoolean">
+                      {{ col.renderBoolean(rowData[col.field]) }}
+                    </ng-container>
+                    <ng-container *ngIf="!col.renderBoolean">
                       {{
                         rowData[col.field] ? ('common.yes' | translate) : ('common.no' | translate)
                       }}
-                    </span>
-                  </ng-container>
+                    </ng-container>
+                  </span>
                 </span>
 
                 <span *ngIf="col.type === 'badge' || col.type === 'tag'">
@@ -407,16 +413,21 @@
                     *ngIf="rowData[col.field] != null"
                     class="badge-status inline-badge"
                     [ngClass]="
-                      getBadgeSeverityClass(
-                        col.badgeSeverity
-                          ? col.badgeSeverity(rowData[col.field])
-                          : col.tagSeverity
-                            ? col.tagSeverity(rowData[col.field])
-                            : 'secondary'
-                      )
+                      !col.badgeColor
+                        ? getBadgeSeverityClass(
+                            col.badgeSeverity
+                              ? col.badgeSeverity(rowData[col.field])
+                              : col.tagSeverity
+                                ? col.tagSeverity(rowData[col.field])
+                                : 'secondary'
+                          )
+                        : null
+                    "
+                    [ngStyle]="
+                      col.badgeColor ? getBadgeColorStyle(col.badgeColor(rowData[col.field])) : null
                     "
                   >
-                    {{ rowData[col.field] }}
+                    {{ col.render ? col.render(rowData[col.field]) : rowData[col.field] }}
                   </span>
                   <span *ngIf="rowData[col.field] == null">-</span>
                 </span>

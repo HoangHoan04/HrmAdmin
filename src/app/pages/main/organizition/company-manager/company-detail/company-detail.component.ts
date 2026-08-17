@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { ROUTES_CONFIG } from '../../../../../core/constants/common/routes.config';
@@ -130,6 +130,7 @@ export class CompanyDetailComponent implements OnInit {
     private readonly i18n: I18nMessageService,
     private readonly apiService: ApiService,
     private readonly actionConfirm: ActionConfirmService,
+    private readonly cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
@@ -141,16 +142,19 @@ export class CompanyDetailComponent implements OnInit {
 
   loadCompanyDetail(id: string): void {
     this.loading = true;
+    this.cdr.markForCheck();
     this.apiService.post<Company>(this.apiService.COMPANY.DETAIL, { id }).subscribe({
       next: (company) => {
         this.company = company;
         this.loading = false;
+        this.cdr.markForCheck();
         this.loadBranches();
         this.loadChildCompanies();
       },
       error: (err: any) => {
         this.message.error(err.error || this.i18n.loadDetailFailed(err.error));
         this.loading = false;
+        this.cdr.markForCheck();
         this.goBack();
       },
     });

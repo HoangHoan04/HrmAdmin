@@ -1,6 +1,6 @@
 .hub-desc {
   margin-bottom: 16px;
-  color: rgba(0, 0, 0, 0.65);
+  color: var(--muted-foreground, #64748b);
 }
 
 .kpi-row {
@@ -11,7 +11,7 @@
   padding: 12px 0;
 
   &__label {
-    color: rgba(0, 0, 0, 0.55);
+    color: var(--muted-foreground, #64748b);
     font-size: 13px;
     margin-bottom: 4px;
   }
@@ -20,37 +20,42 @@
     font-size: 28px;
     font-weight: 600;
     line-height: 1.2;
+    color: var(--foreground);
   }
 }
 
 .report-card {
-  border: 1px solid #f0f0f0;
+  border: 1px solid var(--border, #f0f0f0);
   border-radius: 8px;
   padding: 20px;
   cursor: pointer;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
   min-height: 140px;
-  background: #fafafa;
+  background: var(--background-card, #fafafa);
+  color: var(--foreground);
 
   &:hover {
-    border-color: #1890ff;
+    border-color: var(--primary, #1890ff);
     box-shadow: 0 2px 8px rgba(24, 144, 255, 0.12);
   }
 
   &__icon {
     font-size: 22px;
-    color: #1890ff;
+    color: var(--primary, #1890ff);
     margin-bottom: 8px;
   }
 
   h3 {
     margin: 0 0 8px;
     font-size: 16px;
+    color: var(--foreground);
   }
 
   p {
     margin: 0;
-    color: rgba(0, 0, 0, 0.55);
+    color: var(--muted-foreground, #64748b);
     font-size: 13px;
   }
 }

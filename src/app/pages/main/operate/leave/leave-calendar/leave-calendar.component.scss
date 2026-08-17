@@ -1,15 +1,15 @@
 .calendar-filters {
   margin-bottom: 12px;
   padding: 12px 14px;
-  background: var(--ant-color-bg-container, #fff);
+  background: var(--background-card, #fff);
   border-radius: 12px;
-  border: 1px solid #dadce0;
+  border: 1px solid var(--border, #dadce0);
 }
 
 .filter-label {
   display: block;
   font-size: 12px;
-  color: #70757a;
+  color: var(--muted-foreground, #70757a);
   margin-bottom: 4px;
 }
 
@@ -23,9 +23,9 @@
 .calendar-page {
   height: calc(100vh - 260px);
   min-height: 520px;
-  background: var(--ant-color-bg-container, #fff);
+  background: var(--background-card, #fff);
   border-radius: 12px;
-  border: 1px solid #dadce0;
+  border: 1px solid var(--border, #dadce0);
   padding: 12px 14px 10px;
   overflow: hidden;
   display: flex;
@@ -34,7 +34,7 @@
 
 .calendar-hint {
   font-size: 12px;
-  color: #70757a;
+  color: var(--muted-foreground, #70757a);
   margin-bottom: 8px;
 }
 
@@ -49,9 +49,9 @@
   }
 
   .fc .fc-button-primary {
-    background-color: #fff !important;
-    border: 1px solid #dadce0 !important;
-    color: #3c4043 !important;
+    background-color: var(--background-card, #fff) !important;
+    border: 1px solid var(--border, #dadce0) !important;
+    color: var(--foreground, #3c4043) !important;
     box-shadow: none !important;
     font-weight: 500;
     font-size: 13px;
@@ -63,17 +63,17 @@
   }
 
   .fc .fc-button-primary:not(:disabled):hover {
-    background-color: #f8f9fa !important;
-    border-color: #dadce0 !important;
-    color: #202124 !important;
+    background-color: var(--muted, #f8f9fa) !important;
+    border-color: var(--border, #dadce0) !important;
+    color: var(--foreground, #202124) !important;
   }
 
   .fc .fc-button-primary:not(:disabled):focus,
   .fc .fc-button-primary:not(:disabled):active,
   .fc .fc-button-primary:not(:disabled).fc-button-active {
-    background-color: #e8f0fe !important;
-    border-color: #1a73e8 !important;
-    color: #1a73e8 !important;
+    background-color: var(--primary-muted, #e8f0fe) !important;
+    border-color: var(--primary, #1a73e8) !important;
+    color: var(--primary, #1a73e8) !important;
     box-shadow: none !important;
   }
 
@@ -92,7 +92,7 @@
   .fc .fc-toolbar-title {
     font-size: 20px;
     font-weight: 500;
-    color: #3c4043;
+    color: var(--foreground, #3c4043);
     letter-spacing: -0.01em;
   }
 
@@ -102,15 +102,15 @@
 
   .fc-theme-standard td,
   .fc-theme-standard th {
-    border-color: #dadce0;
+    border-color: var(--border, #dadce0);
   }
 
   .fc-theme-standard .fc-scrollgrid {
-    border-color: #dadce0;
+    border-color: var(--border, #dadce0);
   }
 
   .fc .fc-col-header-cell {
-    background: #fff;
+    background: var(--background-card, #fff);
     padding: 8px 0 4px;
   }
 
@@ -132,7 +132,7 @@
     font-weight: 500;
     letter-spacing: 0.04em;
     text-transform: uppercase;
-    color: #70757a;
+    color: var(--muted-foreground, #70757a);
   }
 
   .gcal-daynum {
@@ -144,16 +144,16 @@
     justify-content: center;
     font-size: 20px;
     font-weight: 420;
-    color: #3c4043;
+    color: var(--foreground, #3c4043);
     line-height: 1;
   }
 
   .gcal-dayhead.is-today .gcal-weekday {
-    color: #1a73e8;
+    color: var(--primary, #1a73e8);
   }
 
   .gcal-dayhead.is-today .gcal-daynum {
-    background: #1a73e8;
+    background: var(--primary, #1a73e8);
     color: #fff;
   }
 
@@ -161,16 +161,16 @@
     text-decoration: none !important;
     font-size: 12px;
     font-weight: 500;
-    color: #3c4043;
+    color: var(--foreground, #3c4043);
     padding: 8px;
   }
 
   .fc .fc-day-today {
-    background: #f8fbff !important;
+    background: var(--primary-muted, #f8fbff) !important;
   }
 
   .fc .fc-day-today .fc-daygrid-day-number {
-    background: #1a73e8;
+    background: var(--primary, #1a73e8);
     color: #fff;
     border-radius: 50%;
     width: 26px;

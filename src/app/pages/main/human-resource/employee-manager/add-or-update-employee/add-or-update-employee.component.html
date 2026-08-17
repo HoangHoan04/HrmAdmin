@@ -431,11 +431,15 @@
         </div>
         <div nz-col nzXs="24" nzMd="8">
           <nz-form-item>
-            <nz-form-label>{{ 'humanResource.employee.contractType' | translate }}</nz-form-label>
+            <nz-form-label>{{ 'contractType.entityName' | translate }}</nz-form-label>
             <nz-form-control>
-              <nz-select formControlName="contractType" nzAllowClear>
-                @for (opt of contractTypeOptions; track opt.value) {
-                  <nz-option [nzValue]="opt.value" [nzLabel]="opt.labelKey | translate"></nz-option>
+              <nz-select
+                formControlName="contractTypeId"
+                nzAllowClear
+                [nzPlaceHolder]="'Chọn Loại Hợp Đồng'"
+              >
+                @for (pos of contractTypes; track pos.id) {
+                  <nz-option [nzValue]="pos.id" [nzLabel]="pos.name"></nz-option>
                 }
               </nz-select>
             </nz-form-control>

@@ -29,13 +29,6 @@
       "searchName": "Nhập tên chi nhánh...",
       "filterCompany": "Chọn công ty...",
       "filterStatus": "Chọn trạng thái...",
-      "statusActive": "Đang hoạt động",
-      "statusInactive": "Ngưng hoạt động",
-      "viewDetail": "Xem chi tiết",
-      "edit": "Sửa chi nhánh",
-      "toggleStatus": "Kích hoạt / Ngưng hoạt động",
-      "activate": "Kích hoạt",
-      "deactivate": "Ngưng hoạt động",
       "detailTitle": "Chi tiết chi nhánh",
       "backToList": "Danh sách chi nhánh",
       "tabDetail": "Thông tin chi tiết",
@@ -59,7 +52,9 @@
       "latitude": "Vĩ độ",
       "longitude": "Kinh độ",
       "timeKeepingStandardId": "Chuẩn chấm công",
-      "filterTimeKeepingStandard": "Chọn chuẩn chấm công..."
+      "filterTimeKeepingStandard": "Chọn chuẩn chấm công...",
+       "tabDepartments": "Phòng ban",
+       "noDepartments": "Không tìm thấy phòng ban nào cho chi nhánh này."
     }
   }
 }

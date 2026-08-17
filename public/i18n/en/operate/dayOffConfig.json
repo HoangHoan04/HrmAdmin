@@ -6,7 +6,6 @@
     "name": "Leave Name",
     "description": "Description",
     "companyName": "Company",
-    "dayOffType": "Classification",
     "type": "Type",
     "filterType": "Select type...",
     "defaultDaysPerYear": "Default Days",
@@ -24,19 +23,12 @@
     "searchName": "Enter leave name...",
     "filterCompany": "Select company...",
     "filterStatus": "Select status...",
-    "statusActive": "Active",
-    "statusInactive": "Inactive",
-    "viewDetail": "View detail",
-    "edit": "Edit leave type",
-    "activate": "Activate",
-    "deactivate": "Deactivate",
     "addTitle": "Add leave type",
     "editTitle": "Update leave type",
     "backToList": "Back to list",
     "codeRequired": "Please enter leave code!",
     "nameRequired": "Please enter leave name!",
-    "dayOffTypeRequired": "Please select classification!",
-    "codePlaceholder": "Ex: AL-01",
-    "namePlaceholder": "Ex: Annual Leave"
+    "codePlaceholder": "e.g.: NP-01",
+    "namePlaceholder": "e.g.: Annual leave"
   }
 }

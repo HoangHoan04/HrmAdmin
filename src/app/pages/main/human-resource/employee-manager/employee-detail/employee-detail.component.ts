@@ -1,3 +1,4 @@
+import { StaticTranslateService } from '@/app/core/services/static-translate.service';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -74,7 +75,20 @@ export class EmployeeDetailComponent implements OnInit {
       header: 'humanResource.employee.dependent.identityNumber',
       type: 'text',
     },
-    { field: 'status', header: 'humanResource.employee.dependent.status', type: 'text' },
+    {
+      field: 'status',
+      header: 'humanResource.employee.dependent.status',
+      type: 'badge',
+      sortable: true,
+      render: (value: string) => {
+        const meta = Object.values(enumData.ASSET_STATUS).find((x) => x.value === value);
+        return meta ? StaticTranslateService.instant(meta.labelKey) : value;
+      },
+      badgeColor: (value: string) => {
+        const meta = Object.values(enumData.ASSET_STATUS).find((x) => x.value === value);
+        return meta?.color || '#8c8c8c';
+      },
+    },
   ];
 
   educationColumns: TableColumn[] = [
@@ -435,7 +449,10 @@ export class EmployeeDetailComponent implements OnInit {
   async onLifecycleStatusClick(status: string): Promise<void> {
     if (!this.employee?.id || this.employee.status === status) return;
 
-    if (status === enumData.WORK_STATUS.RESIGNED.value || status === enumData.WORK_STATUS.RETIRED.value) {
+    if (
+      status === enumData.WORK_STATUS.RESIGNED.value ||
+      status === enumData.WORK_STATUS.RETIRED.value
+    ) {
       this.pendingLifecycleStatus = status;
       this.resignationForm.reset({
         resignationDate: this.employee.resignationDate

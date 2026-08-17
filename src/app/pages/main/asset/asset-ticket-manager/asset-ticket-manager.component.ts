@@ -3,6 +3,7 @@ import { enumData } from '@/app/core/constants/enums';
 import { AssetTicket, PagedResult } from '@/app/core/models';
 import { ApiService, I18nMessageService } from '@/app/core/services';
 import { PermissionService } from '@/app/core/services/permission.service';
+import { StaticTranslateService } from '@/app/core/services/static-translate.service';
 import {
   CommonFilterActions,
   FilterAction,
@@ -38,8 +39,9 @@ export class AssetTicketManagerComponent implements OnInit {
     total: enumData.PAGE.TOTAL,
     showTotal: true,
   };
-  sortField = 'createdAt';
-  sortOrder = 'desc';
+  sortField = enumData.PAGE.SORT_FIELD.CREATED_AT;
+  sortOrder = enumData.PAGE.SORT_ORDER.DESC;
+
   toolbar: ToolbarConfig = { show: true };
   toolbarActions: TableAction[] = [];
   filters: Record<string, any> = { searchText: '', ticketType: '', status: '' };
@@ -95,7 +97,20 @@ export class AssetTicketManagerComponent implements OnInit {
     { field: 'companyName', header: 'asset.common.company', type: 'text' },
     { field: 'ticketType', header: 'asset.ticket.ticketType', type: 'text' },
     { field: 'ticketAt', header: 'asset.ticket.ticketAt', type: 'date' },
-    { field: 'status', header: 'asset.ticket.status', type: 'text' },
+    {
+      field: 'status',
+      header: 'asset.ticket.status',
+      type: 'badge',
+      sortable: true,
+      render: (value: string) => {
+        const meta = Object.values(enumData.ASSET_TICKET_STATUS).find((x) => x.value === value);
+        return meta ? StaticTranslateService.instant(meta.labelKey) : value;
+      },
+      badgeColor: (value: string) => {
+        const meta = Object.values(enumData.ASSET_TICKET_STATUS).find((x) => x.value === value);
+        return meta?.color || '#8c8c8c';
+      },
+    },
   ];
   rowActions: RowAction[] = [];
 
@@ -120,27 +135,27 @@ export class AssetTicketManagerComponent implements OnInit {
       {
         key: 'edit',
         icon: 'edit',
-        tooltip: 'common.actions.update',
+        tooltip: 'table.action.edit',
         severity: 'info',
         visible: (r) =>
-          r.status === enumData.ASSET_TICKET_STATUS.DRAFT.value &&
+          r.status === enumData.ASSET_TICKET_STATUS.NEW.value &&
           this.permissionSvc.has(PERMISSION_CODES.ASSET_MANAGE),
         onClick: (r) => this.openEdit(r),
       },
       {
         key: 'complete',
         icon: 'check',
-        tooltip: 'asset.ticket.complete',
+        tooltip: 'table.action.complete',
         severity: 'success',
         visible: (r) =>
-          r.status === enumData.ASSET_TICKET_STATUS.DRAFT.value &&
+          r.status === enumData.ASSET_TICKET_STATUS.NEW.value &&
           this.permissionSvc.has(PERMISSION_CODES.ASSET_MANAGE),
         onClick: (r) => this.complete(r),
       },
       {
         key: 'delete',
         icon: 'delete',
-        tooltip: 'common.actions.delete',
+        tooltip: 'table.action.delete',
         severity: 'danger',
         visible: () => this.permissionSvc.has(PERMISSION_CODES.ASSET_MANAGE),
         onClick: (r) => this.delete(r),

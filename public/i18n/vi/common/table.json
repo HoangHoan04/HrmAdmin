@@ -18,6 +18,20 @@
     "firstPage": "Trang đầu",
     "columnConfigTitle": "Cột hiển thị",
     "paginationSummary": "Hiển thị {{from}} - {{to}} của {{total}} bản ghi",
-    "pageSizeLabel": "Số dòng:"
+    "pageSizeLabel": "Số dòng:",
+    "action": {
+      "edit": "Chỉnh sửa",
+      "viewDetail": "Xem chi tiết",
+      "deactivate": "Vô hiệu hóa",
+      "activate": "Kích hoạt",
+      "delete": "Xóa",
+      "signContract": "Ký hợp đồng",
+       "sendApproval": "Gửi để phê duyệt",
+      "approve": "Phê duyệt",
+      "reject": "Từ chối",
+      "apply": "Áp dụng",
+      "cancel": "Hủy",
+      "markPaid": "Đánh dấu là Đã thanh toán"
+    }
   }
 }

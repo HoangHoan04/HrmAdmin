@@ -38,8 +38,8 @@ export class KpiGoalManagerComponent implements OnInit {
     total: enumData.PAGE.TOTAL,
     showTotal: true,
   };
-  sortField = 'createdAt';
-  sortOrder = 'desc';
+  sortField = enumData.PAGE.SORT_FIELD.CREATED_AT;
+  sortOrder = enumData.PAGE.SORT_ORDER.DESC;
   toolbar: ToolbarConfig = { show: true };
   toolbarActions: TableAction[] = [];
   filters: Record<string, any> = { searchText: '' };
@@ -177,22 +177,24 @@ export class KpiGoalManagerComponent implements OnInit {
       nzTitle: this.i18n.instant('performance.kpiGoal.deleteConfirm'),
       nzOnOk: () =>
         new Promise<void>((resolve, reject) => {
-          this.apiService.post<boolean>(this.apiService.KPI_GOAL.DELETE, { id: item.id }).subscribe({
-            next: (ok) => {
-              if (ok) {
-                this.message.success(this.i18n.instant('common.messages.saveSuccess'));
-                this.loadData();
-                resolve();
-              } else {
-                this.message.error(this.i18n.genericError());
+          this.apiService
+            .post<boolean>(this.apiService.KPI_GOAL.DELETE, { id: item.id })
+            .subscribe({
+              next: (ok) => {
+                if (ok) {
+                  this.message.success(this.i18n.instant('common.messages.saveSuccess'));
+                  this.loadData();
+                  resolve();
+                } else {
+                  this.message.error(this.i18n.genericError());
+                  reject();
+                }
+              },
+              error: (err: any) => {
+                this.message.error(this.i18n.genericError(err.error));
                 reject();
-              }
-            },
-            error: (err: any) => {
-              this.message.error(this.i18n.genericError(err.error));
-              reject();
-            },
-          });
+              },
+            });
         }),
     });
   }
