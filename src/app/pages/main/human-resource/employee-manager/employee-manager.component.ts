@@ -13,7 +13,7 @@ import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil, tap } from 'rxjs';
 import { ROUTES_CONFIG } from '../../../../core/constants/common/routes.config';
 import { ImportResult, PagedResult } from '../../../../core/models/common.models';
 import { ApiService } from '../../../../core/services/api.service';
@@ -136,10 +136,12 @@ export class EmployeeManagerComponent implements OnInit, OnDestroy {
       onClick: () => this.openExpiringFilesModal(),
     },
     {
-      ...CommonActions.uploadExcel(
-        () => this.downloadTemplate(),
-        (file) => this.uploadFile(file),
-      ),
+      ...CommonActions.uploadExcel({
+        templateUrl: () => this.apiService.EMPLOYEE.EXCEL_TEMPLATE,
+        importUrl: () => this.apiService.EMPLOYEE.EXCEL_IMPORT,
+        entityName: this.ENTITY_KEY,
+        onSuccess: () => this.loadData(),
+      }),
       visible: () => this.permissionSvc.has(PERMISSION_CODES.HR_EMPLOYEE_IMPORT_EXCEL),
     },
     {
@@ -230,11 +232,23 @@ export class EmployeeManagerComponent implements OnInit, OnDestroy {
       type: 'badge',
       sortable: true,
       render: (value: string) => {
-        const meta = Object.values(enumData.WORK_STATUS).find((x) => x.value === value);
+        if (!value) return '-';
+        const meta = Object.values(enumData.WORK_STATUS).find(
+          (x) =>
+            x.value === value ||
+            x.code === value ||
+            x.value?.toLowerCase() === value.toLowerCase(),
+        );
         return meta ? StaticTranslateService.instant(meta.labelKey) : value;
       },
       badgeColor: (value: string) => {
-        const meta = Object.values(enumData.WORK_STATUS).find((x) => x.value === value);
+        if (!value) return '#8c8c8c';
+        const meta = Object.values(enumData.WORK_STATUS).find(
+          (x) =>
+            x.value === value ||
+            x.code === value ||
+            x.value?.toLowerCase() === value.toLowerCase(),
+        );
         return meta?.color || '#8c8c8c';
       },
     },
@@ -465,12 +479,6 @@ export class EmployeeManagerComponent implements OnInit, OnDestroy {
         next: (res) => (this.positions = res || []),
         error: () => (this.positions = []),
       });
-  }
-
-  private resolveWorkStatusLabel(status?: string): string {
-    if (!status) return '-';
-    const meta = Object.values(enumData.WORK_STATUS).find((x) => x.value === status);
-    return meta ? this.i18n.instant(meta.labelKey) : status;
   }
 
   loadData(): void {
@@ -821,7 +829,7 @@ export class EmployeeManagerComponent implements OnInit, OnDestroy {
       });
   }
 
-  exportExcel(): void {
+  exportExcel() {
     this.excelLoading = true;
     const payload: Record<string, any> = {
       code: (this.filters['code'] || '').trim() || undefined,
@@ -833,27 +841,28 @@ export class EmployeeManagerComponent implements OnInit, OnDestroy {
       payload['isDeleted'] = this.filters['isDeleted'];
     }
 
-    this.apiService.postBlob(this.apiService.EMPLOYEE.EXCEL_EXPORT, payload).subscribe({
-      next: (response) => {
-        const blob = response.body;
-        if (!blob) {
-          this.message.error(this.i18n.excelExportFailed());
+    return this.apiService.postBlob(this.apiService.EMPLOYEE.EXCEL_EXPORT, payload).pipe(
+      tap({
+        next: (response) => {
           this.excelLoading = false;
-          return;
-        }
-        const fileName = extractFileName(
-          response.headers.get('content-disposition'),
-          `Danh_Sach_Nhan_Vien_${new Date().getTime()}.xlsx`,
-        );
-        downloadBlob(blob, fileName);
-        this.message.success(this.i18n.excelExportSuccess());
-        this.excelLoading = false;
-      },
-      error: () => {
-        this.message.error(this.i18n.excelExportFailed());
-        this.excelLoading = false;
-      },
-    });
+          const blob = response.body;
+          if (!blob) {
+            this.message.error(this.i18n.excelExportFailed());
+            return;
+          }
+          const fileName = extractFileName(
+            response.headers.get('content-disposition'),
+            `Danh_Sach_Nhan_Vien_${new Date().getTime()}.xlsx`,
+          );
+          downloadBlob(blob, fileName);
+          this.message.success(this.i18n.excelExportSuccess());
+        },
+        error: () => {
+          this.excelLoading = false;
+          this.message.error(this.i18n.excelExportFailed());
+        },
+      }),
+    );
   }
 
   private syncFilterActionsLoading(): void {

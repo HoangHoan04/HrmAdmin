@@ -13,7 +13,7 @@
       "inactive": "Ngừng hoạt động"
     },
     "type": {
-      "entityName": "loại tài sản",
+      "entityName": "Loại tài sản",
       "code": "Mã",
       "name": "Tên",
       "description": "Mô tả",
@@ -24,7 +24,7 @@
       "deleteConfirm": "Xóa loại tài sản này?"
     },
     "inventory": {
-      "entityName": "tài sản",
+      "entityName": "Tài sản",
       "code": "Mã",
       "name": "Tên",
       "assetType": "Loại tài sản",
@@ -41,7 +41,7 @@
       "deleteConfirm": "Xóa tài sản này?"
     },
     "ticket": {
-      "entityName": "phiếu tài sản",
+      "entityName": "Phiếu tài sản",
       "code": "Mã",
       "asset": "Tài sản",
       "employee": "Nhân viên",

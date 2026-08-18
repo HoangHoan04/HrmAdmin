@@ -1,6 +1,6 @@
 {
   "attendanceComplaint": {
-    "entityName": "attendance complaint",
+    "entityName": "Attendance Complaint",
     "title": "Attendance complaint management",
     "employee": "Employee",
     "branch": "Branch",

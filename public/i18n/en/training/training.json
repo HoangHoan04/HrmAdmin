@@ -10,7 +10,7 @@
       "backToList": "Back to list"
     },
     "course": {
-      "entityName": "training course",
+      "entityName": "Training Course",
       "code": "Code",
       "name": "Course name",
       "provider": "Provider",
@@ -34,7 +34,7 @@
       "completionPercent": "Completion %"
     },
     "material": {
-      "entityName": "course material",
+      "entityName": "Course Material",
       "course": "Course",
       "name": "Material name",
       "fileUrl": "File URL",
@@ -46,7 +46,7 @@
       "deleteConfirm": "Delete this course material?"
     },
     "quiz": {
-      "entityName": "training quiz",
+      "entityName": "Training Quiz",
       "course": "Course",
       "question": "Question",
       "optionA": "Option A",
@@ -61,7 +61,7 @@
       "deleteConfirm": "Delete this quiz question?"
     },
     "enrollment": {
-      "entityName": "training enrollment",
+      "entityName": "Training Enrollment",
       "course": "Course",
       "employee": "Employee",
       "enrolledAt": "Enrolled at",
@@ -74,7 +74,7 @@
       "deleteConfirm": "Delete this enrollment?"
     },
     "result": {
-      "entityName": "training result",
+      "entityName": "Training Result",
       "enrollment": "Enrollment",
       "score": "Score",
       "grade": "Grade",

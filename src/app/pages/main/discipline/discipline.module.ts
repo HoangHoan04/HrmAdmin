@@ -15,6 +15,11 @@ const getRelativePath = (p: string) => {
 
 const routes: Routes = [
   {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: getRelativePath(ROUTES_CONFIG.TALENT.children.DISCIPLINE.children.VIOLATION_TYPE.path),
+  },
+  {
     path: getRelativePath(ROUTES_CONFIG.TALENT.children.DISCIPLINE.children.VIOLATION_TYPE.path),
     component: ViolationTypeManagerComponent,
   },

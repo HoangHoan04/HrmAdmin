@@ -1,6 +1,6 @@
 {
   "salaryConfig": {
-    "entityName": "payroll configuration",
+    "entityName": "Payroll Configuration",
     "title": "Payroll Configuration",
     "code": "Config Code",
     "name": "Config Name",

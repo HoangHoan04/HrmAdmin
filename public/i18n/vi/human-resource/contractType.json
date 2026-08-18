@@ -1,6 +1,6 @@
 {
   "contractType": {
-    "entityName": "loại hợp đồng",
+    "entityName": "Loại hợp đồng",
     "title": "Quản lý loại hợp đồng",
     "code": "Mã loại hợp đồng",
     "name": "Tên loại hợp đồng",

@@ -1,7 +1,7 @@
 {
   "organization": {
     "company": {
-      "entityName": "company",
+      "entityName": "Company",
       "title": "Company Management",
       "code": "Company Code",
       "name": "Company Name",

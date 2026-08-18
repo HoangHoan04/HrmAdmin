@@ -11,6 +11,7 @@
   "common/home.json",
   "common/menu.json",
   "common/navbar.json",
+  "common/notification.json",
   "common/routes.json",
   "common/search.json",
   "common/table.json",

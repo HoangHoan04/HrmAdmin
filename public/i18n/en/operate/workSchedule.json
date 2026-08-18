@@ -1,6 +1,6 @@
 {
   "workSchedule": {
-    "entityName": "work schedule",
+    "entityName": "Work Schedule",
     "title": "Work schedule management",
     "employee": "Employee",
     "employees": "Employees",

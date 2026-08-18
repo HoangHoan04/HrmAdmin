@@ -31,6 +31,16 @@ const getRelativePath = (p: string) => {
 
 const routes: Routes = [
   {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: getRelativePath(ROUTES_CONFIG.RECRUITMENT.children.SETUP.children.HEADCOUNT.path),
+  },
+  {
+    path: 'setup',
+    pathMatch: 'full',
+    redirectTo: getRelativePath(ROUTES_CONFIG.RECRUITMENT.children.SETUP.children.HEADCOUNT.path),
+  },
+  {
     path: getRelativePath(ROUTES_CONFIG.RECRUITMENT.children.SETUP.children.HEADCOUNT.path),
     component: HeadcountManagerComponent,
   },

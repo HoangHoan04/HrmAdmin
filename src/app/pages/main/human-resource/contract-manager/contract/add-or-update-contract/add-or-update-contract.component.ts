@@ -107,14 +107,16 @@ export class AddOrUpdateContractComponent implements OnInit, OnDestroy {
     this.validateForm
       .get('contractTypeId')
       ?.valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe((typeId) => this.applyContractTypeDefaults(typeId));
+      .subscribe((typeId) => this.applyContractTypeDefaults(typeId, true));
 
     this.validateForm
       .get('startDate')
       ?.valueChanges.pipe(takeUntil(this.destroy$))
       .subscribe(() => {
-        const typeId = this.validateForm.get('contractTypeId')?.value;
-        if (typeId) this.applyContractTypeDefaults(typeId);
+        if (!this.isEdit) {
+          const typeId = this.validateForm.get('contractTypeId')?.value;
+          if (typeId) this.applyContractTypeDefaults(typeId, false);
+        }
       });
 
     this.validateForm
@@ -187,7 +189,17 @@ export class AddOrUpdateContractComponent implements OnInit, OnDestroy {
       .post<ContractTypeSelectBoxDto[]>(this.apiService.CONTRACT_TYPE.SELECT_BOX, {})
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (res) => this.setList('contractTypes', res ?? []),
+        next: (res) => {
+          this.setList('contractTypes', res ?? []);
+          const currentTypeId = this.validateForm.get('contractTypeId')?.value;
+          if (currentTypeId) {
+            const currentType = (res ?? []).find((t) => t.id === currentTypeId);
+            if (currentType?.isUnlimited) {
+              this.validateForm.patchValue({ endDate: null }, { emitEvent: false });
+              this.validateForm.get('endDate')?.disable({ emitEvent: false });
+            }
+          }
+        },
         error: () => this.message.error(this.i18n.instant('contract.loadContractTypeSelectFailed')),
       });
     this.apiService
@@ -301,6 +313,11 @@ export class AddOrUpdateContractComponent implements OnInit, OnDestroy {
                 this.validateForm.get('employeeId')?.disable({ emitEvent: false });
                 this.validateForm.get('code')?.disable({ emitEvent: false });
               }
+              const selectedType = this.contractTypes.find((t) => t.id === item.contractTypeId);
+              if (selectedType?.isUnlimited) {
+                this.validateForm.patchValue({ endDate: null }, { emitEvent: false });
+                this.validateForm.get('endDate')?.disable({ emitEvent: false });
+              }
               this.loading = false;
             },
           });
@@ -337,6 +354,7 @@ export class AddOrUpdateContractComponent implements OnInit, OnDestroy {
       code: value.code,
       decisionNumber: value.decisionNumber || null,
       signDate: value.signDate ? toUtcDateIso(value.signDate) : null,
+      clearSignDate: !value.signDate,
       startDate: toUtcDateIso(value.startDate),
       endDate: value.endDate ? toUtcDateIso(value.endDate) : null,
       clearEndDate: !value.endDate,
@@ -477,16 +495,22 @@ export class AddOrUpdateContractComponent implements OnInit, OnDestroy {
     });
   }
 
-  private applyContractTypeDefaults(typeId: string | null): void {
-    if (!typeId) return;
+  private applyContractTypeDefaults(typeId: string | null, forceDuration = false): void {
+    if (!typeId) {
+      this.validateForm.get('endDate')?.enable({ emitEvent: false });
+      return;
+    }
     const type = this.contractTypes.find((t) => t.id === typeId);
     if (!type) return;
     if (type.isUnlimited) {
       this.validateForm.patchValue({ endDate: null }, { emitEvent: false });
+      this.validateForm.get('endDate')?.disable({ emitEvent: false });
       return;
     }
+    this.validateForm.get('endDate')?.enable({ emitEvent: false });
+    const currentEndDate = this.validateForm.get('endDate')?.value;
     const startDate = this.validateForm.get('startDate')?.value as Date | null;
-    if (type.defaultDurationMonths && startDate) {
+    if (type.defaultDurationMonths && startDate && (forceDuration || !currentEndDate)) {
       this.validateForm.patchValue(
         { endDate: this.addMonths(new Date(startDate), type.defaultDurationMonths) },
         { emitEvent: false },

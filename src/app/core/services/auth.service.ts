@@ -42,9 +42,9 @@ export class AuthService {
   }
 
   login(username: string, password: string): Observable<any> {
-    return this.apiService.post<any>(this.apiService.AUTH.LOGIN, { username, password }).pipe(
-      tap((res) => this.applyLoginResponse(res)),
-    );
+    return this.apiService
+      .post<any>(this.apiService.AUTH.LOGIN, { username, password })
+      .pipe(tap((res) => this.applyLoginResponse(res)));
   }
 
   verifyTwoFactor(tempToken: string, code: string): Observable<any> {
@@ -120,7 +120,6 @@ export class AuthService {
     return this.apiService.post<any>(this.apiService.AUTH.RESET_PASSWORD_WITH_OTP, body);
   }
 
-  /** Light /me — shell / F5 bootstrap */
   getInfoUser(): Observable<any> {
     return this.apiService.get<any>(this.apiService.AUTH.ME).pipe(
       tap((user) => {

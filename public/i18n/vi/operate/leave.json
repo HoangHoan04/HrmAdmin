@@ -1,6 +1,6 @@
 {
   "leave": {
-    "entityName": "đơn nghỉ phép",
+    "entityName": "Đơn nghỉ phép",
     "title": "Quản lý đơn nghỉ phép",
     "employee": "Nhân viên",
     "employeeCode": "Mã nhân viên",
@@ -45,7 +45,7 @@
     "validationDateRange": "Vui lòng chọn khoảng ngày nghỉ"
   },
   "leaveAllocation": {
-    "entityName": "quỹ phép",
+    "entityName": "Quỹ phép",
     "title": "Quản lý quỹ phép",
     "employee": "Nhân viên",
     "employeeCode": "Mã NV",
@@ -93,7 +93,7 @@
     "holidayDate": "Ngày lễ"
   },
   "leaveBalanceReport": {
-    "entityName": "báo cáo quỹ phép",
+    "entityName": "Báo cáo quỹ phép",
     "title": "Báo cáo quỹ phép / hết hạn",
     "employee": "Nhân viên",
     "branch": "Chi nhánh",

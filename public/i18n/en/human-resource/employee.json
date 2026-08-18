@@ -1,7 +1,7 @@
 {
   "humanResource": {
     "employee": {
-      "entityName": "employee",
+      "entityName": "Employee",
       "title": "Employee Management",
       "code": "Employee Code",
       "firstName": "First Name",

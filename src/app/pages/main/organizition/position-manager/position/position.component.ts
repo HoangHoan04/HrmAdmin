@@ -22,6 +22,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { tap } from 'rxjs';
 import { ROUTES_CONFIG } from '../../../../../core/constants/common/routes.config';
 import { ImportResult, PagedResult } from '../../../../../core/models/common.models';
 import { ApiService } from '../../../../../core/services/api.service';
@@ -69,10 +70,12 @@ export class PositionComponent implements OnInit {
       visible: () => this.permissionSvc.has(PERMISSION_CODES.ORG_POSITION_CREATE),
     },
     {
-      ...CommonActions.uploadExcel(
-        () => this.downloadTemplate(),
-        (file) => this.uploadFile(file),
-      ),
+      ...CommonActions.uploadExcel({
+        templateUrl: () => this.apiService.POSITION.EXCEL_TEMPLATE,
+        importUrl: () => this.apiService.POSITION.EXCEL_IMPORT,
+        entityName: this.ENTITY_KEY,
+        onSuccess: () => this.loadData(),
+      }),
       visible: () => this.permissionSvc.has(PERMISSION_CODES.ORG_POSITION_IMPORT_EXCEL),
     },
     {
@@ -520,41 +523,45 @@ export class PositionComponent implements OnInit {
       });
   }
 
-  exportExcel(): void {
+  exportExcel() {
     this.excelLoading = true;
-    const payload: Record<string, any> = {};
+    const payload: Record<string, any> = {
+      code: (this.filters['code'] || '').trim() || undefined,
+      name: (this.filters['name'] || '').trim() || undefined,
+    };
 
-    ['companyId', 'branchId', 'departmentId', 'partId', 'positionMasterId'].forEach((key) => {
-      if (this.filters[key]) {
-        payload[key] = this.filters[key];
-      }
-    });
+    if (this.filters['companyId']) payload['companyId'] = this.filters['companyId'];
+    if (this.filters['branchId']) payload['branchId'] = this.filters['branchId'];
+    if (this.filters['departmentId']) payload['departmentId'] = this.filters['departmentId'];
+    if (this.filters['positionMasterId'])
+      payload['positionMasterId'] = this.filters['positionMasterId'];
 
     if (this.filters['isDeleted'] !== null && this.filters['isDeleted'] !== undefined) {
       payload['isDeleted'] = this.filters['isDeleted'];
     }
 
-    this.apiService.postBlob(this.apiService.POSITION.EXCEL_EXPORT, payload).subscribe({
-      next: (response) => {
-        const blob = response.body;
-        if (!blob) {
-          this.message.error(this.i18n.excelExportFailed());
+    return this.apiService.postBlob(this.apiService.POSITION.EXCEL_EXPORT, payload).pipe(
+      tap({
+        next: (response) => {
           this.excelLoading = false;
-          return;
-        }
-        const fileName = extractFileName(
-          response.headers.get('content-disposition'),
-          `Danh_Sach_Chuc_Vu_${new Date().getTime()}.xlsx`,
-        );
-        downloadBlob(blob, fileName);
-        this.message.success(this.i18n.excelExportSuccess());
-        this.excelLoading = false;
-      },
-      error: () => {
-        this.message.error(this.i18n.excelExportFailed());
-        this.excelLoading = false;
-      },
-    });
+          const blob = response.body;
+          if (!blob) {
+            this.message.error(this.i18n.excelExportFailed());
+            return;
+          }
+          const fileName = extractFileName(
+            response.headers.get('content-disposition'),
+            `Danh_Sach_Chuc_Vu_${new Date().getTime()}.xlsx`,
+          );
+          downloadBlob(blob, fileName);
+          this.message.success(this.i18n.excelExportSuccess());
+        },
+        error: () => {
+          this.excelLoading = false;
+          this.message.error(this.i18n.excelExportFailed());
+        },
+      }),
+    );
   }
 
   private getDisplayName(position: Position): string {

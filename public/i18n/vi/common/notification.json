@@ -1,0 +1,66 @@
+{
+  "notification": {
+    "title": "Thông báo",
+    "unreadCount": "{{count}} chưa đọc",
+    "markAllRead": "Đánh dấu tất cả đã đọc",
+    "viewAll": "Xem tất cả thông báo",
+    "empty": "Không có thông báo nào",
+    "emptyDesc": "Bạn đã đọc hết mọi thông báo mới!",
+    "centerTitle": "Trung tâm Thông báo",
+    "centerDesc": "Quản lý và theo dõi toàn bộ thông báo hệ thống của bạn",
+    "allTab": "Tất cả",
+    "unreadTab": "Chưa đọc",
+    "leaveTab": "Nghỉ phép",
+    "otTab": "Tăng ca",
+    "payrollTab": "Lương thưởng",
+    "systemTab": "Hệ thống",
+    "broadcastBtn": "Phát thông báo",
+    "broadcastTitle": "Gửi thông báo toàn hệ thống",
+    "form": {
+      "title": "Tiêu đề thông báo",
+      "titleRequired": "Vui lòng nhập tiêu đề thông báo",
+      "content": "Nội dung thông báo",
+      "contentRequired": "Vui lòng nhập nội dung chi tiết",
+      "type": "Phân loại",
+      "severity": "Mức độ quan trọng",
+      "targetUrl": "Đường dẫn liên kết (tùy chọn)",
+      "scope": "Phạm vi người nhận",
+      "scopeAll": "Tất cả nhân viên",
+      "scopeCompany": "Theo Công ty",
+      "scopeBranch": "Theo Chi nhánh",
+      "scopeDepartment": "Theo Phòng ban",
+      "sendSuccess": "Gửi thông báo thành công đến {{count}} người dùng!",
+      "sendFailed": "Không thể gửi thông báo. Vui lòng thử lại!"
+    },
+    "severity": {
+      "info": "Thông tin",
+      "success": "Thành công",
+      "warning": "Cảnh báo",
+      "danger": "Khẩn cấp"
+    },
+    "type": {
+      "leave": "Nghỉ phép",
+      "overtime": "Tăng ca",
+      "attendance": "Chấm công",
+      "payslip": "Phiếu lương",
+      "contract": "Hợp đồng",
+      "recruitment": "Tuyển dụng",
+      "performance": "Đánh giá",
+      "system": "Hệ thống",
+      "announcement": "Thông báo chung"
+    },
+    "actions": {
+      "markAsRead": "Đánh dấu đã đọc",
+      "delete": "Xóa thông báo",
+      "confirmDelete": "Bạn có chắc chắn muốn xóa thông báo này?",
+      "deleteSuccess": "Đã xóa thông báo thành công",
+      "markAllSuccess": "Đã đánh dấu tất cả thông báo là đã đọc"
+    },
+    "time": {
+      "justNow": "Vừa xong",
+      "minutesAgo": "{{minutes}} phút trước",
+      "hoursAgo": "{{hours}} giờ trước",
+      "daysAgo": "{{days}} ngày trước"
+    }
+  }
+}

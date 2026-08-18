@@ -13,7 +13,7 @@
       "inactive": "Inactive"
     },
     "type": {
-      "entityName": "asset type",
+      "entityName": "Asset type",
       "code": "Code",
       "name": "Name",
       "description": "Description",
@@ -24,7 +24,7 @@
       "deleteConfirm": "Delete this asset type?"
     },
     "inventory": {
-      "entityName": "asset",
+      "entityName": "Asset",
       "code": "Code",
       "name": "Name",
       "assetType": "Asset type",
@@ -41,7 +41,7 @@
       "deleteConfirm": "Delete this asset?"
     },
     "ticket": {
-      "entityName": "asset ticket",
+      "entityName": "Asset ticket",
       "code": "Code",
       "asset": "Asset",
       "employee": "Employee",

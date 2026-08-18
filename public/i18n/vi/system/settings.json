@@ -10,7 +10,7 @@
       "ipAddress": "IP"
     },
     "legalRate": {
-      "entityName": "tỷ lệ pháp lý",
+      "entityName": "Tỷ lệ pháp lý",
       "searchPlaceholder": "Tìm theo ghi chú...",
       "year": "Năm",
       "siEmployee": "BHXH NLĐ (%)",
@@ -24,7 +24,7 @@
       "deleteConfirm": "Bạn có chắc muốn xóa cấu hình tỷ lệ này?"
     },
     "notificationTemplate": {
-      "entityName": "mẫu thông báo",
+      "entityName": "Mẫu thông báo",
       "searchPlaceholder": "Tìm theo mã / tiêu đề...",
       "code": "Mã mẫu",
       "channel": "Kênh",
@@ -49,7 +49,7 @@
       "plaintextOnce": "Lưu key này ngay — chỉ hiển thị một lần:"
     },
     "webhook": {
-      "entityName": "webhook",
+      "entityName": "Webhook",
       "searchPlaceholder": "Tìm theo tên / URL...",
       "name": "Tên",
       "url": "URL",
@@ -67,7 +67,7 @@
     },
     "sessions": {
       "title": "Phiên đăng nhập",
-      "entityName": "phiên đăng nhập",
+      "entityName": "Phiên đăng nhập",
       "username": "Tài khoản",
       "platform": "Nền tảng",
       "ipAddress": "Địa chỉ IP",
@@ -109,7 +109,7 @@
       "ssoUnavailable": "Không tải được trạng thái SSO"
     },
     "reportSchedule": {
-      "entityName": "lịch báo cáo",
+      "entityName": "Lịch báo cáo",
       "searchPlaceholder": "Tìm theo mã / tên...",
       "code": "Mã",
       "name": "Tên",

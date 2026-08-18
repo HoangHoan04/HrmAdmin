@@ -1,6 +1,6 @@
 {
   "transfer": {
-    "entityName": "employee transfer",
+    "entityName": "Employee Transfer",
     "title": "Employee Transfer Management",
     "code": "Transfer code",
     "employeeName": "Employee",

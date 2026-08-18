@@ -1,0 +1,66 @@
+{
+  "notification": {
+    "title": "Notifications",
+    "unreadCount": "{{count}} unread",
+    "markAllRead": "Mark all as read",
+    "viewAll": "View all notifications",
+    "empty": "No notifications",
+    "emptyDesc": "You are all caught up!",
+    "centerTitle": "Notification Center",
+    "centerDesc": "Manage and review all your system notifications",
+    "allTab": "All",
+    "unreadTab": "Unread",
+    "leaveTab": "Leave",
+    "otTab": "Overtime",
+    "payrollTab": "Payroll",
+    "systemTab": "System",
+    "broadcastBtn": "Broadcast Notice",
+    "broadcastTitle": "Broadcast System Notification",
+    "form": {
+      "title": "Notification Title",
+      "titleRequired": "Please enter notification title",
+      "content": "Content",
+      "contentRequired": "Please enter content",
+      "type": "Type",
+      "severity": "Severity",
+      "targetUrl": "Target URL (Optional)",
+      "scope": "Recipient Scope",
+      "scopeAll": "All Employees",
+      "scopeCompany": "By Company",
+      "scopeBranch": "By Branch",
+      "scopeDepartment": "By Department",
+      "sendSuccess": "Broadcast notification sent successfully to {{count}} users!",
+      "sendFailed": "Failed to send notification. Please try again!"
+    },
+    "severity": {
+      "info": "Info",
+      "success": "Success",
+      "warning": "Warning",
+      "danger": "Critical"
+    },
+    "type": {
+      "leave": "Leave",
+      "overtime": "Overtime",
+      "attendance": "Attendance",
+      "payslip": "Payslip",
+      "contract": "Contract",
+      "recruitment": "Recruitment",
+      "performance": "Performance",
+      "system": "System",
+      "announcement": "Announcement"
+    },
+    "actions": {
+      "markAsRead": "Mark as read",
+      "delete": "Delete notification",
+      "confirmDelete": "Are you sure you want to delete this notification?",
+      "deleteSuccess": "Notification deleted successfully",
+      "markAllSuccess": "All notifications marked as read"
+    },
+    "time": {
+      "justNow": "Just now",
+      "minutesAgo": "{{minutes}}m ago",
+      "hoursAgo": "{{hours}}h ago",
+      "daysAgo": "{{days}}d ago"
+    }
+  }
+}

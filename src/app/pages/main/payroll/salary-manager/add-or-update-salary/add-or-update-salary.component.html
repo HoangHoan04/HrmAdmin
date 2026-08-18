@@ -222,10 +222,23 @@
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col nzXs="24" nzMd="3" style="display: flex; align-items: flex-end">
-              <button nz-button nzType="default" nzDanger type="button" (click)="removeLineItem(i)">
-                {{ 'salary.removeLineItem' | translate }}
-              </button>
+            <div nz-col nzXs="24" nzMd="3">
+              <nz-form-item>
+                <nz-form-label style="visibility: hidden">&nbsp;</nz-form-label>
+                <nz-form-control>
+                  <button
+                    nz-button
+                    nzType="default"
+                    nzDanger
+                    type="button"
+                    style="width: 100%"
+                    (click)="removeLineItem(i)"
+                  >
+                    <i nz-icon nzType="delete"></i>
+                    {{ 'salary.removeLineItem' | translate }}
+                  </button>
+                </nz-form-control>
+              </nz-form-item>
             </div>
           </div>
         }

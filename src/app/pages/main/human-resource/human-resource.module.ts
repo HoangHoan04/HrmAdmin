@@ -24,6 +24,18 @@ const getRelativePath = (p: string) => {
 
 const routes: Routes = [
   {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: getRelativePath(ROUTES_CONFIG.HUMAN_RESOURCE.children.EMPLOYEE_MANAGER.path),
+  },
+  {
+    path: 'contract-manager',
+    pathMatch: 'full',
+    redirectTo: getRelativePath(
+      ROUTES_CONFIG.HUMAN_RESOURCE.children.CONTRACT_MANAGER.children.CONTRACT_LIST.path,
+    ),
+  },
+  {
     path: getRelativePath(ROUTES_CONFIG.HUMAN_RESOURCE.children.EMPLOYEE_MANAGER.path),
     component: EmployeeManagerComponent,
   },

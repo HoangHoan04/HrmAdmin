@@ -1,6 +1,6 @@
 {
   "timekeeping": {
-    "entityName": "timekeeping",
+    "entityName": "Timekeeping",
     "title": "Timekeeping management",
     "employee": "Employee",
     "employeeCode": "Employee code",

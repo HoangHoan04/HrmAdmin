@@ -11,7 +11,7 @@
       "backToList": "Quay lại danh sách"
     },
     "violationType": {
-      "entityName": "loại vi phạm",
+      "entityName": "Loại vi phạm",
       "code": "Mã",
       "name": "Tên",
       "description": "Mô tả",
@@ -24,7 +24,7 @@
       "deleteConfirm": "Xóa loại vi phạm này?"
     },
     "violation": {
-      "entityName": "vi phạm kỷ luật",
+      "entityName": "Vi phạm kỷ luật",
       "code": "Mã",
       "violationType": "Loại vi phạm",
       "employee": "Nhân viên",

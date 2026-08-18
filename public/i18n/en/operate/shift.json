@@ -1,6 +1,6 @@
 {
   "shift": {
-    "entityName": "shift",
+    "entityName": "Shift",
     "tabShift": "Shifts",
     "tabWorkSchedule": "Work schedules",
     "title": "Shift management",

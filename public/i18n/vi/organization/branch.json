@@ -1,7 +1,7 @@
 {
   "organization": {
     "branch": {
-      "entityName": "chi nhánh",
+      "entityName": "Chi nhánh",
       "title": "Quản lý chi nhánh",
       "code": "Mã chi nhánh",
       "name": "Tên chi nhánh",

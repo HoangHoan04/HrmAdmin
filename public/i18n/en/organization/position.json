@@ -1,7 +1,7 @@
 {
   "organization": {
     "position": {
-      "entityName": "position",
+      "entityName": "Position",
       "title": "Position Management",
       "tabPosition": "Positions",
       "positionMasterName": "Position Master",
@@ -31,7 +31,7 @@
       "positionMasterRequired": "Please select a position master!"
     },
     "positionMaster": {
-      "entityName": "position master",
+      "entityName": "Position Master",
       "tabTitle": "Position Masters",
       "title": "Position Master Management",
       "code": "Position Master Code",

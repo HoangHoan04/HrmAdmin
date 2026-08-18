@@ -14,6 +14,7 @@ import { ActionConfirmService } from '@/app/shared/services/action-confirm.servi
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { tap } from 'rxjs';
 import { ROUTES_CONFIG } from '../../../../core/constants/common/routes.config';
 import { ImportResult, PagedResult } from '../../../../core/models/common.models';
 import { ApiService } from '../../../../core/services/api.service';
@@ -62,10 +63,12 @@ export class BranchManagerComponent implements OnInit {
       visible: () => this.permissionSvc.has(PERMISSION_CODES.ORG_BRANCH_CREATE),
     },
     {
-      ...CommonActions.uploadExcel(
-        () => this.downloadTemplate(),
-        (file) => this.uploadFile(file),
-      ),
+      ...CommonActions.uploadExcel({
+        templateUrl: () => this.apiService.BRANCH.EXCEL_TEMPLATE,
+        importUrl: () => this.apiService.BRANCH.EXCEL_IMPORT,
+        entityName: this.ENTITY_KEY,
+        onSuccess: () => this.loadData(),
+      }),
       visible: () => this.permissionSvc.has(PERMISSION_CODES.ORG_BRANCH_IMPORT_EXCEL),
     },
     {
@@ -442,7 +445,7 @@ export class BranchManagerComponent implements OnInit {
     });
   }
 
-  exportExcel(): void {
+  exportExcel() {
     this.excelLoading = true;
     const payload: Record<string, any> = {
       code: (this.filters['code'] || '').trim() || undefined,
@@ -452,27 +455,28 @@ export class BranchManagerComponent implements OnInit {
       payload['isDeleted'] = this.filters['isDeleted'];
     }
 
-    this.apiService.postBlob(this.apiService.BRANCH.EXCEL_EXPORT, payload).subscribe({
-      next: (response) => {
-        const blob = response.body;
-        if (!blob) {
-          this.message.error(this.i18n.excelExportFailed());
+    return this.apiService.postBlob(this.apiService.BRANCH.EXCEL_EXPORT, payload).pipe(
+      tap({
+        next: (response) => {
           this.excelLoading = false;
-          return;
-        }
-        const fileName = extractFileName(
-          response.headers.get('content-disposition'),
-          `Danh_Sach_Chi_Nhanh_${new Date().getTime()}.xlsx`,
-        );
-        downloadBlob(blob, fileName);
-        this.message.success(this.i18n.excelExportSuccess());
-        this.excelLoading = false;
-      },
-      error: () => {
-        this.message.error(this.i18n.excelExportFailed());
-        this.excelLoading = false;
-      },
-    });
+          const blob = response.body;
+          if (!blob) {
+            this.message.error(this.i18n.excelExportFailed());
+            return;
+          }
+          const fileName = extractFileName(
+            response.headers.get('content-disposition'),
+            `Danh_Sach_Chi_Nhanh_${new Date().getTime()}.xlsx`,
+          );
+          downloadBlob(blob, fileName);
+          this.message.success(this.i18n.excelExportSuccess());
+        },
+        error: () => {
+          this.excelLoading = false;
+          this.message.error(this.i18n.excelExportFailed());
+        },
+      }),
+    );
   }
 
   private applyCompanyCodeFilter(): void {

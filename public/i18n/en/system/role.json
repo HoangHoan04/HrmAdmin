@@ -1,6 +1,6 @@
 {
   "role": {
-    "entityName": "role",
+    "entityName": "Role",
     "userEntityName": "account",
     "tabByRole": "By role",
     "tabByEmployee": "By employee",

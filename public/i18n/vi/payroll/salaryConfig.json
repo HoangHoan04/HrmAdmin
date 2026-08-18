@@ -1,6 +1,6 @@
 {
   "salaryConfig": {
-    "entityName": "cấu hình lương",
+    "entityName": "Cấu hình lương",
     "title": "Quản lý cấu hình lương",
     "code": "Mã cấu hình",
     "name": "Tên cấu hình",

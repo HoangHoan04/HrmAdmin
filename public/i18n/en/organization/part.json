@@ -1,7 +1,7 @@
 {
   "organization": {
     "part": {
-      "entityName": "part",
+      "entityName": "Part",
       "title": "Part Management",
       "tabPart": "Parts",
       "code": "Part Code",
@@ -40,15 +40,15 @@
       "partMasterRequired": "Please select a part category!"
     },
     "partMaster": {
-      "entityName": "part category",
-      "title": "Part Category Management",
-      "tabPartMaster": "Part Categories",
-      "code": "Category Code",
-      "name": "Category Name",
+      "entityName": "Part Master",
+      "title": "Part Master Management",
+      "tabPartMaster": "Part Master",
+      "code": "Part Master Code",
+      "name": "Part Master Name",
       "description": "Description",
       "companyName": "Company",
       "branchName": "Branch",
-      "type": "Category Type",
+      "type": "Part Master Type",
       "displayOrder": "Display Order",
       "isActive": "System Active",
       "status": "Active",
@@ -59,9 +59,9 @@
       "filterCompany": "Select company...",
       "filterBranch": "Select branch...",
       "filterStatus": "Select status...",
-      "detailTitle": "Part Category Detail",
-      "addTitle": "Add Part Category",
-      "editTitle": "Update Part Category",
+      "detailTitle": "Part Master Detail",
+      "addTitle": "Add Part Master",
+      "editTitle": "Update Part Master",
       "backToList": "Back to category list",
       "tabDetail": "Details",
       "tabActivityLog": "Activity Log",

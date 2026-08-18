@@ -1,7 +1,7 @@
 {
   "organization": {
     "position": {
-      "entityName": "chức vụ",
+      "entityName": "Chức vụ",
       "title": "Quản lý chức vụ",
       "tabPosition": "Chức vụ",
       "positionMasterName": "Danh mục chức vụ",
@@ -31,7 +31,7 @@
       "positionMasterRequired": "Vui lòng chọn danh mục chức vụ!"
     },
     "positionMaster": {
-      "entityName": "danh mục chức vụ",
+      "entityName": "Danh mục chức vụ",
       "tabTitle": "Danh mục chức vụ",
       "title": "Quản lý danh mục chức vụ",
       "code": "Mã danh mục chức vụ",

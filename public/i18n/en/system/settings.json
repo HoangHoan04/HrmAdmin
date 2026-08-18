@@ -10,7 +10,7 @@
       "ipAddress": "IP"
     },
     "legalRate": {
-      "entityName": "legal rate config",
+      "entityName": "Legal Rate Config",
       "searchPlaceholder": "Search by note...",
       "year": "Year",
       "siEmployee": "SI employee (%)",
@@ -24,7 +24,7 @@
       "deleteConfirm": "Delete this legal rate config?"
     },
     "notificationTemplate": {
-      "entityName": "notification template",
+      "entityName": "Notification Template",
       "searchPlaceholder": "Search by code / subject...",
       "code": "Code",
       "channel": "Channel",
@@ -37,7 +37,7 @@
       "deleteConfirm": "Delete this notification template?"
     },
     "apiKey": {
-      "entityName": "API key",
+      "entityName": "API Key",
       "searchPlaceholder": "Search by name...",
       "name": "Name",
       "keyPrefix": "Prefix",
@@ -49,7 +49,7 @@
       "plaintextOnce": "Save this key now — shown only once:"
     },
     "webhook": {
-      "entityName": "webhook",
+      "entityName": "Webhook",
       "searchPlaceholder": "Search by name / URL...",
       "name": "Name",
       "url": "URL",
@@ -67,7 +67,7 @@
     },
     "sessions": {
       "title": "Login sessions",
-      "entityName": "login session",
+      "entityName": "Login Session",
       "username": "Username",
       "platform": "Platform",
       "ipAddress": "IP address",
@@ -79,7 +79,7 @@
       "revokeSuccess": "Session revoked."
     },
     "ipAllowlist": {
-      "entityName": "IP allowlist",
+      "entityName": "IP Allowlist",
       "searchPlaceholder": "Search by IP / CIDR...",
       "cidrOrIp": "IP / CIDR",
       "cidrPlaceholder": "e.g. 192.168.1.10 or 10.0.0.0/24",
@@ -109,7 +109,7 @@
       "ssoUnavailable": "Unable to load SSO status"
     },
     "reportSchedule": {
-      "entityName": "report schedule",
+      "entityName": "Report Schedule",
       "searchPlaceholder": "Search by code / name...",
       "code": "Code",
       "name": "Name",
@@ -130,7 +130,7 @@
       "runDueSuccess": "Due schedules triggered."
     },
     "reports": {
-      "hubTitle": "Reports & compliance",
+      "hubTitle": "Reports & Compliance",
       "hubDesc": "Monitor compliance KPIs and open operational reports.",
       "expiringContracts": "Expiring contracts",
       "expiringFiles": "Expiring files",

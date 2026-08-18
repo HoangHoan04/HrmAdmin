@@ -53,7 +53,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
         this.s = settings;
       }),
     );
-    // Wave A: paint từ session (user + email) trước; /me light chỉ khi F5 thiếu email
     const sessionUser = this.auth.currentUser;
     if (sessionUser) {
       this.username = sessionUser;
@@ -63,7 +62,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
     if (!this.email) {
       setTimeout(() => this.loadUserInfo(), 0);
     } else {
-      // F5: sync light /me nền (không block shell)
       setTimeout(() => this.loadUserInfo(), 400);
     }
   }
@@ -88,9 +86,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
         setTimeout(() => {
           this.username = this.auth.currentUser || 'User';
           this.email = '';
-          this.avatarText = this.username
-            ? this.username.substring(0, 2).toUpperCase()
-            : 'US';
+          this.avatarText = this.username ? this.username.substring(0, 2).toUpperCase() : 'US';
           this.cdr.markForCheck();
         });
       },

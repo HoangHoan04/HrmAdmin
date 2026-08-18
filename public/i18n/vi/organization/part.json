@@ -1,7 +1,7 @@
 {
   "organization": {
     "part": {
-      "entityName": "bộ phận",
+      "entityName": "Bộ phận",
       "title": "Quản lý bộ phận",
       "tabPart": "Bộ phận",
       "code": "Mã bộ phận",
@@ -40,7 +40,7 @@
       "partMasterRequired": "Vui lòng chọn danh mục bộ phận!"
     },
     "partMaster": {
-      "entityName": "danh mục bộ phận",
+      "entityName": "Danh mục bộ phận",
       "title": "Quản lý danh mục bộ phận",
       "tabPartMaster": "Danh mục bộ phận",
       "code": "Mã danh mục bộ phận",

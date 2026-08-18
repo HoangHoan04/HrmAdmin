@@ -112,7 +112,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.updateGreeting();
-    // Wave B3: paint shell trước, defer dashboard API (TTI)
     this.loading = true;
     setTimeout(() => this.loadDashboard(), 0);
 

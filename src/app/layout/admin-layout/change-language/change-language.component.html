@@ -1,24 +1,24 @@
 <div nz-dropdown nzTrigger="click" [nzDropdownMenu]="langMenu">
   <button class="navbar-action" [title]="'navbar.changeLanguage' | translate">
     @if (s.language === 'vi') {
-      <img src="/icons/vi.svg" alt="VI" class="lang-icon" />
+      <img src="assets/icons/vi.svg" alt="VI" class="lang-icon" />
     }
     @if (s.language === 'en') {
-      <img src="/icons/en.svg" alt="EN" class="lang-icon" />
+      <img src="assets/icons/en.svg" alt="EN" class="lang-icon" />
     }
   </button>
 </div>
 <nz-dropdown-menu class="lang-dropdown" #langMenu="nzDropdownMenu">
   <ul class="lang-menu" nz-menu>
     <li class="lang-item" nz-menu-item (click)="setLanguage('vi')">
-      <img src="/icons/vi.svg" alt="VI" class="lang-icon" />
+      <img src="assets/icons/vi.svg" alt="VI" class="lang-icon" />
       <span class="lang-text">{{ 'table.languageVi' | translate }}</span>
       @if (s.language === 'vi') {
         <span nz-icon nzType="check" nzTheme="outline" class="lang-check"></span>
       }
     </li>
     <li class="lang-item" nz-menu-item (click)="setLanguage('en')">
-      <img src="/icons/en.svg" alt="EN" class="lang-icon" />
+      <img src="assets/icons/en.svg" alt="EN" class="lang-icon" />
       <span class="lang-text">{{ 'table.languageEn' | translate }}</span>
       @if (s.language === 'en') {
         <span nz-icon nzType="check" nzTheme="outline" class="lang-check"></span>

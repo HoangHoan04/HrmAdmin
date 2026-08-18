@@ -7,6 +7,7 @@ import { FooterComponent } from './footer/footer.component';
 import { FullscreenComponent } from './fullscreen/fullscreen.component';
 import { LayoutWidgetsModule } from './layout-widgets.module';
 import { NavbarComponent } from './navbar/navbar.component';
+import { NavbarNotificationComponent } from './navbar-notification/navbar-notification.component';
 import { SearchBoxComponent } from './search-box/search-box.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { TabsBarComponent } from './tabs-bar/tabs-bar.component';
@@ -19,6 +20,7 @@ import { TabsBarComponent } from './tabs-bar/tabs-bar.component';
     FooterComponent,
     FullscreenComponent,
     NavbarComponent,
+    NavbarNotificationComponent,
     SearchBoxComponent,
     SidebarComponent,
     TabsBarComponent,

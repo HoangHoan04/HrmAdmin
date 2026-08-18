@@ -1,6 +1,6 @@
 {
   "salary": {
-    "entityName": "salary slip",
+    "entityName": "Salary Slip",
     "title": "Payroll Management",
     "employeeName": "Employee",
     "salaryConfigName": "Payroll Config",

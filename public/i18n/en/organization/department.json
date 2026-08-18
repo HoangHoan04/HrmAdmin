@@ -1,7 +1,7 @@
 {
   "organization": {
     "department": {
-      "entityName": "department",
+      "entityName": "Department",
       "title": "Department Management",
       "code": "Department Code",
       "name": "Department Name",

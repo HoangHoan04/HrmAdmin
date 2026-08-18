@@ -1,6 +1,6 @@
 {
   "contract": {
-    "entityName": "contract",
+    "entityName": "Contract",
     "title": "Employment Contract Management",
     "code": "Contract No.",
     "decisionNumber": "Decision No.",

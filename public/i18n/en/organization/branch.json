@@ -1,7 +1,7 @@
 {
   "organization": {
     "branch": {
-      "entityName": "branch",
+      "entityName": "Branch",
       "title": "Branch Management",
       "code": "Branch Code",
       "name": "Branch Name",

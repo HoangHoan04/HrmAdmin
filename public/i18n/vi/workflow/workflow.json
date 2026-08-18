@@ -7,7 +7,7 @@
       "isActive": "Đang hoạt động"
     },
     "definition": {
-      "entityName": "định nghĩa quy trình",
+      "entityName": "Định nghĩa quy trình",
       "search": "Tìm kiếm",
       "searchPlaceholder": "Tìm theo mã hoặc tên",
       "code": "Mã",
@@ -28,7 +28,7 @@
       "roleCodeRequired": "Resolver ROLE yêu cầu mã vai trò."
     },
     "inbox": {
-      "entityName": "task duyệt",
+      "entityName": "Task duyệt",
       "title": "Hộp thư duyệt",
       "stepName": "Bước",
       "instanceStatus": "Trạng thái instance",
@@ -51,7 +51,7 @@
       "byEntityType": "Instance theo loại nghiệp vụ"
     },
     "formTemplate": {
-      "entityName": "mẫu biểu mẫu",
+      "entityName": "Mẫu biểu mẫu",
       "search": "Tìm kiếm",
       "searchPlaceholder": "Tìm theo tên hoặc loại nghiệp vụ",
       "name": "Tên",

@@ -1,6 +1,6 @@
 {
   "dayOffConfig": {
-    "entityName": "leave type",
+    "entityName": "Leave Type",
     "title": "Leave Type Management",
     "code": "Leave Code",
     "name": "Leave Name",

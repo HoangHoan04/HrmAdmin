@@ -1,6 +1,6 @@
 {
   "dayOffConfig": {
-    "entityName": "loại nghỉ phép",
+    "entityName": "Loại nghỉ phép",
     "title": "Quản lý loại nghỉ phép",
     "code": "Mã loại nghỉ",
     "name": "Tên loại nghỉ",

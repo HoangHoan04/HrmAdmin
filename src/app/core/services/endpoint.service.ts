@@ -722,4 +722,14 @@ export class EndpointService {
     UPLOAD_MULTI_S3: `${this.baseUrl}/upload-file/upload-multi-s3`,
     DOWNLOAD_IMAGES_ZIP: `${this.baseUrl}/upload-file/download-images-zip`,
   };
+
+  NOTIFICATION = {
+    PAGINATION: `${this.baseUrl}/notifications/pagination`,
+    UNREAD_COUNT: `${this.baseUrl}/notifications/unread-count`,
+    MARK_READ: `${this.baseUrl}/notifications/mark-read`,
+    MARK_ALL_READ: `${this.baseUrl}/notifications/mark-all-read`,
+    DELETE: `${this.baseUrl}/notifications/delete`,
+    BROADCAST: `${this.baseUrl}/notifications/broadcast`,
+    SETTINGS: `${this.baseUrl}/notifications/settings`,
+  };
 }

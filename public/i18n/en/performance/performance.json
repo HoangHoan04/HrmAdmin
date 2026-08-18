@@ -11,7 +11,7 @@
       "backToList": "Back to list"
     },
     "competency": {
-      "entityName": "competency framework",
+      "entityName": "Competency Framework",
       "code": "Code",
       "name": "Name",
       "description": "Description",
@@ -22,7 +22,7 @@
       "deleteConfirm": "Delete this competency framework?"
     },
     "reviewCycle": {
-      "entityName": "review cycle",
+      "entityName": "Review Cycle",
       "code": "Code",
       "name": "Name",
       "periodFrom": "Period from",
@@ -36,7 +36,7 @@
       "deleteConfirm": "Delete this review cycle?"
     },
     "kpiGoal": {
-      "entityName": "KPI goal",
+      "entityName": "KPI Goal",
       "cycle": "Review cycle",
       "employee": "Employee",
       "title": "Title",
@@ -50,7 +50,7 @@
       "deleteConfirm": "Delete this KPI goal?"
     },
     "kpiResult": {
-      "entityName": "KPI result",
+      "entityName": "KPI Result",
       "goal": "KPI goal",
       "actualValue": "Actual value",
       "score": "Score",
@@ -75,7 +75,7 @@
       "deptAvg": "Department average"
     },
     "review360": {
-      "entityName": "360 review",
+      "entityName": "360 Review",
       "cycle": "Review cycle",
       "subject": "Subject employee",
       "reviewer": "Reviewer",

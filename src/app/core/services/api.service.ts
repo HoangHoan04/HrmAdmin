@@ -240,6 +240,9 @@ export class ApiService {
   get IP_ALLOWLIST() {
     return this.endpoints.IP_ALLOWLIST;
   }
+  get NOTIFICATION() {
+    return this.endpoints.NOTIFICATION;
+  }
   get UPLOAD_FILE() {
     return this.endpoints.UPLOAD_FILE;
   }

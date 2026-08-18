@@ -1,6 +1,6 @@
 {
   "contract": {
-    "entityName": "hợp đồng",
+    "entityName": "Hợp đồng",
     "title": "Quản lý hợp đồng lao động",
     "code": "Số hợp đồng",
     "decisionNumber": "Số quyết định",

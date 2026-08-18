@@ -14,7 +14,7 @@
       "backToList": "Back to list"
     },
     "headcount": {
-      "entityName": "headcount",
+      "entityName": "Headcount",
       "title": "Workforce headcount",
       "subtitle": "Edit planned headcount by company / branch / department / part / position. Save each row inline.",
       "orgUnit": "Organization unit",
@@ -34,7 +34,7 @@
       "readOnly": "Read-only — cannot edit directly"
     },
     "jd": {
-      "entityName": "job description",
+      "entityName": "Job Description",
       "code": "JD code",
       "title": "Title",
       "search": "Search",
@@ -50,7 +50,7 @@
       "deleteConfirm": "Delete this job description?"
     },
     "criteria": {
-      "entityName": "evaluation criteria",
+      "entityName": "Evaluation Criteria",
       "code": "Code",
       "name": "Name",
       "category": "Category",
@@ -64,7 +64,7 @@
       "deleteConfirm": "Delete this criteria?"
     },
     "source": {
-      "entityName": "hiring source",
+      "entityName": "Hiring Source",
       "code": "Code",
       "name": "Source name",
       "description": "Description",
@@ -78,7 +78,6 @@
       "editTitle": "Edit hiring source",
       "deleteConfirm": "Delete this hiring source?",
       "systemHint": "System source — code locked / cannot delete; you can deactivate or edit order and email.",
-      "priorityHint": "Lower number = higher priority (referral → HR email → ...).",
       "channelReferral": "Internal referral",
       "channelEmail": "HR email",
       "channelCareers": "Careers site",
@@ -89,7 +88,7 @@
       "channelOther": "Other"
     },
     "request": {
-      "entityName": "recruitment request",
+      "entityName": "Recruitment Request",
       "code": "Request code",
       "title": "Title",
       "quantity": "Quantity",
@@ -108,7 +107,7 @@
       "close": "Close"
     },
     "candidate": {
-      "entityName": "candidate",
+      "entityName": "Candidate",
       "code": "Candidate code",
       "fullName": "Full name",
       "email": "Email",
@@ -127,7 +126,7 @@
       "detailTitle": "Candidate detail"
     },
     "waitlist": {
-      "entityName": "waitlist / offer candidate",
+      "entityName": "Waitlist / Offer Candidate",
       "search": "Search",
       "searchPlaceholder": "Candidate code or name...",
       "toOffer": "Move to Offer",
@@ -141,7 +140,7 @@
       "viewEmployee": "View employee profile"
     },
     "plan": {
-      "entityName": "hiring plan",
+      "entityName": "Hiring Plan",
       "code": "Plan code",
       "name": "Plan name",
       "parentRequest": "Parent request code",
@@ -149,7 +148,6 @@
       "searchPlaceholder": "Plan code or name...",
       "addTitle": "Add hiring plan",
       "editTitle": "Edit hiring plan",
-      "formHint": "Company is required (Branch optional). Pick an approved request to prefill org / JD / quantity. Set OPEN when ready for candidates.",
       "companyRequired": "Please select a company for this hiring plan.",
       "openPlan": "Open plan",
       "closePlan": "Close plan",

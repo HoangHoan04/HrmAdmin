@@ -22,6 +22,13 @@ const getRelativePath = (p: string) => {
 
 const routes: Routes = [
   {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: getRelativePath(
+      ROUTES_CONFIG.TALENT.children.TRAINING.children.TRAINING_PROGRESS.path,
+    ),
+  },
+  {
     path: getRelativePath(
       ROUTES_CONFIG.TALENT.children.TRAINING.children.TRAINING_PROGRESS.path,
     ),

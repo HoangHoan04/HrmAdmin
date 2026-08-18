@@ -1,6 +1,6 @@
 {
   "overtimeRequest": {
-    "entityName": "overtime request",
+    "entityName": "Overtime Request",
     "title": "Overtime request management",
     "code": "Code",
     "employee": "Employee",

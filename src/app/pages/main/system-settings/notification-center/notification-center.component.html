@@ -1,0 +1,186 @@
+<nz-tabs [nzSelectedIndex]="selectedTabIndex" (nzSelectedIndexChange)="onTabChange($event)">
+  <nz-tab [nzTitle]="'notification.allTab' | translate"></nz-tab>
+  <nz-tab [nzTitle]="'notification.unreadTab' | translate"></nz-tab>
+  <nz-tab [nzTitle]="'notification.leaveTab' | translate"></nz-tab>
+  <nz-tab [nzTitle]="'notification.otTab' | translate"></nz-tab>
+  <nz-tab [nzTitle]="'notification.payrollTab' | translate"></nz-tab>
+  <nz-tab [nzTitle]="'notification.systemTab' | translate"></nz-tab>
+</nz-tabs>
+
+<app-filter-custom
+  [id]="'notification-filter'"
+  [fields]="filterFields"
+  [filters]="filters"
+  [config]="filterConfig"
+  [filterActions]="filterActions"
+  [loading]="loading"
+  (filtersChange)="filters = $event"
+></app-filter-custom>
+
+<app-table-custom
+  [id]="'notification-table'"
+  [data]="data"
+  [columns]="columns"
+  [loading]="loading"
+  [showIndexList]="true"
+  [stripedRows]="true"
+  [rowActions]="rowActions"
+  [toolbarActions]="toolbarActions"
+  [pagination]="pagination"
+  (pageChange)="onPageChange($event)"
+  (refresh)="loadData()"
+>
+  <ng-template #cellTemplate let-column="column" let-row="row">
+    @if (column.field === 'type') {
+      <nz-tag [nzColor]="row.type === 'LEAVE' ? 'blue' : row.type === 'OVERTIME' ? 'orange' : row.type === 'PAYSLIP' ? 'green' : row.type === 'SYSTEM' ? 'purple' : 'cyan'">
+        {{ ('notification.type.' + (row.type | lowercase)) | translate }}
+      </nz-tag>
+    } @else if (column.field === 'title') {
+      <div class="notification-cell-title" [class.font-bold]="!row.isRead">
+        <div class="title-text">{{ row.title }}</div>
+        <div class="content-text">{{ row.content }}</div>
+      </div>
+    } @else if (column.field === 'severity') {
+      <nz-badge
+        [nzStatus]="row.severity === 'DANGER' ? 'error' : row.severity === 'WARNING' ? 'warning' : row.severity === 'SUCCESS' ? 'success' : 'processing'"
+        [nzText]="('notification.severity.' + (row.severity | lowercase)) | translate"
+      ></nz-badge>
+    } @else if (column.field === 'createdAt') {
+      <span>{{ row.createdAt | date: 'dd/MM/yyyy HH:mm' }}</span>
+    } @else if (column.field === 'isRead') {
+      @if (row.isRead) {
+        <nz-tag nzColor="default">Đã đọc</nz-tag>
+      } @else {
+        <nz-tag nzColor="processing">Chưa đọc</nz-tag>
+      }
+    }
+  </ng-template>
+</app-table-custom>
+
+<!-- Drawer Phát thông báo toàn hệ thống -->
+<nz-drawer
+  [nzVisible]="broadcastVisible"
+  [nzWidth]="600"
+  [nzPlacement]="'right'"
+  [nzTitle]="'notification.broadcastTitle' | translate"
+  [nzFooter]="drawerFooter"
+  (nzOnClose)="closeBroadcastDrawer()"
+>
+  <ng-container *nzDrawerContent>
+    <form nz-form [formGroup]="broadcastForm" nzLayout="vertical">
+      <nz-form-item>
+        <nz-form-label nzRequired>{{ 'notification.form.title' | translate }}</nz-form-label>
+        <nz-form-control [nzErrorTip]="'notification.form.titleRequired' | translate">
+          <input nz-input formControlName="title" placeholder="Nhập tiêu đề thông báo..." />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired>{{ 'notification.form.content' | translate }}</nz-form-label>
+        <nz-form-control [nzErrorTip]="'notification.form.contentRequired' | translate">
+          <textarea
+            nz-input
+            formControlName="content"
+            rows="4"
+            placeholder="Nhập nội dung thông báo gửi đến nhân viên..."
+          ></textarea>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired>{{ 'notification.form.type' | translate }}</nz-form-label>
+        <nz-form-control>
+          <nz-select formControlName="type" style="width: 100%">
+            <nz-option nzValue="ANNOUNCEMENT" nzLabel="Thông báo chung"></nz-option>
+            <nz-option nzValue="SYSTEM" nzLabel="Hệ thống"></nz-option>
+            <nz-option nzValue="LEAVE" nzLabel="Nghỉ phép"></nz-option>
+            <nz-option nzValue="OVERTIME" nzLabel="Tăng ca"></nz-option>
+            <nz-option nzValue="PAYSLIP" nzLabel="Lương thưởng"></nz-option>
+            <nz-option nzValue="RECRUITMENT" nzLabel="Tuyển dụng"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired>{{ 'notification.form.severity' | translate }}</nz-form-label>
+        <nz-form-control>
+          <nz-select formControlName="severity" style="width: 100%">
+            <nz-option nzValue="INFO" nzLabel="Thông tin thông thường (Info)"></nz-option>
+            <nz-option nzValue="SUCCESS" nzLabel="Thành công (Success)"></nz-option>
+            <nz-option nzValue="WARNING" nzLabel="Cảnh báo (Warning)"></nz-option>
+            <nz-option nzValue="DANGER" nzLabel="Khẩn cấp (Danger)"></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label>{{ 'notification.form.targetUrl' | translate }}</nz-form-label>
+        <nz-form-control>
+          <input nz-input formControlName="targetUrl" placeholder="Ví dụ: /operate-manager/leave-manager" />
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzRequired>{{ 'notification.form.scope' | translate }}</nz-form-label>
+        <nz-form-control>
+          <nz-radio-group formControlName="scope">
+            <label nz-radio nzValue="ALL">{{ 'notification.form.scopeAll' | translate }}</label>
+            <label nz-radio nzValue="COMPANY">{{ 'notification.form.scopeCompany' | translate }}</label>
+            <label nz-radio nzValue="BRANCH">{{ 'notification.form.scopeBranch' | translate }}</label>
+            <label nz-radio nzValue="DEPARTMENT">{{ 'notification.form.scopeDepartment' | translate }}</label>
+          </nz-radio-group>
+        </nz-form-control>
+      </nz-form-item>
+
+      @if (broadcastForm.get('scope')?.value === 'COMPANY') {
+        <nz-form-item>
+          <nz-form-label nzRequired>Chọn Công ty</nz-form-label>
+          <nz-form-control>
+            <nz-select formControlName="companyId" nzShowSearch nzAllowClear placeholder="Chọn công ty..." style="width: 100%">
+              @for (c of companyOptions; track c.value) {
+                <nz-option [nzValue]="c.value" [nzLabel]="c.label"></nz-option>
+              }
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      }
+
+      @if (broadcastForm.get('scope')?.value === 'BRANCH') {
+        <nz-form-item>
+          <nz-form-label nzRequired>Chọn Chi nhánh</nz-form-label>
+          <nz-form-control>
+            <nz-select formControlName="branchId" nzShowSearch nzAllowClear placeholder="Chọn chi nhánh..." style="width: 100%">
+              @for (b of branchOptions; track b.value) {
+                <nz-option [nzValue]="b.value" [nzLabel]="b.label"></nz-option>
+              }
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      }
+
+      @if (broadcastForm.get('scope')?.value === 'DEPARTMENT') {
+        <nz-form-item>
+          <nz-form-label nzRequired>Chọn Phòng ban</nz-form-label>
+          <nz-form-control>
+            <nz-select formControlName="departmentId" nzShowSearch nzAllowClear placeholder="Chọn phòng ban..." style="width: 100%">
+              @for (d of departmentOptions; track d.value) {
+                <nz-option [nzValue]="d.value" [nzLabel]="d.label"></nz-option>
+              }
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      }
+    </form>
+  </ng-container>
+
+  <ng-template #drawerFooter>
+    <div style="display: flex; justify-content: flex-end; gap: 8px">
+      <button nz-button nzType="default" (click)="closeBroadcastDrawer()" [disabled]="broadcastSubmitting">
+        {{ 'common.actions.cancel' | translate }}
+      </button>
+      <button nz-button nzType="primary" (click)="submitBroadcast()" [nzLoading]="broadcastSubmitting">
+        {{ 'notification.broadcastBtn' | translate }}
+      </button>
+    </div>
+  </ng-template>
+</nz-drawer>

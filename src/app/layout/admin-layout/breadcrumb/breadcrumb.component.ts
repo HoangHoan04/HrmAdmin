@@ -1,4 +1,4 @@
-import { getRouteByPath } from '@/app/core/constants/common';
+import { getFirstNavigableRoute, getRouteByPath } from '@/app/core/constants/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
@@ -65,22 +65,39 @@ export class BreadcrumbComponent implements OnInit, OnDestroy {
       isLast: url === '/',
     });
 
-    const segments = url.split('/').filter(Boolean);
+    const cleanUrl = url.split('?')[0].split('#')[0];
+    const segments = cleanUrl.split('/').filter(Boolean);
     let currentUrl = '';
 
-    segments.forEach((segment, idx) => {
+    segments.forEach((segment) => {
       currentUrl += `/${segment}`;
       if (currentUrl === '/') return;
 
       const route = getRouteByPath(currentUrl);
-      if (route) {
+      if (route && route.isShow !== false) {
+        const label = this.translate.instant(route.translationKey);
+        const navigableRoute = getFirstNavigableRoute(route);
+        const targetUrl = navigableRoute ? navigableRoute.path : route.path;
+
+        const prev = list[list.length - 1];
+        if (prev && prev.label === label) {
+          prev.url = targetUrl;
+          return;
+        }
+
         list.push({
-          label: this.translate.instant(route.translationKey),
-          url: route.path,
-          isLast: idx === segments.length - 1,
+          label,
+          url: targetUrl,
+          isLast: false,
         });
       }
     });
+
+    if (list.length > 0) {
+      list.forEach((item, index) => {
+        item.isLast = index === list.length - 1;
+      });
+    }
 
     this.breadcrumbs = list;
   }

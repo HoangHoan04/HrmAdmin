@@ -400,6 +400,7 @@ export class AddOrUpdateEmployeeComponent implements OnInit, OnDestroy {
     const raw = this.validateForm.getRawValue();
     const payload = {
       ...raw,
+      status: raw.status || enumData.WORK_STATUS.WORKING.value,
       fullName: (raw.fullName || '').trim() || this.computeFullName(),
       dayOfBirth: raw.dayOfBirth ? new Date(raw.dayOfBirth).toISOString() : null,
       issuanceDate: raw.issuanceDate ? new Date(raw.issuanceDate).toISOString() : null,

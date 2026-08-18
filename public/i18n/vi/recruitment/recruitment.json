@@ -14,7 +14,7 @@
       "backToList": "Quay lại danh sách"
     },
     "headcount": {
-      "entityName": "định biên",
+      "entityName": "Định biên",
       "title": "Định biên nhân sự",
       "subtitle": "Chỉnh số định biên theo công ty / chi nhánh / phòng ban / bộ phận / vị trí. Lưu từng dòng ngay trên bảng.",
       "orgUnit": "Đơn vị tổ chức",
@@ -34,7 +34,7 @@
       "readOnly": "Chỉ xem — không chỉnh trực tiếp"
     },
     "jd": {
-      "entityName": "mô tả công việc",
+      "entityName": "Mô tả công việc",
       "code": "Mã JD",
       "title": "Tiêu đề",
       "search": "Tìm kiếm",
@@ -50,7 +50,7 @@
       "deleteConfirm": "Xóa mô tả công việc này?"
     },
     "criteria": {
-      "entityName": "tiêu chí đánh giá",
+      "entityName": "Tiêu chí đánh giá",
       "code": "Mã",
       "name": "Tên",
       "category": "Nhóm",
@@ -64,7 +64,7 @@
       "deleteConfirm": "Xóa tiêu chí này?"
     },
     "source": {
-      "entityName": "nguồn tuyển dụng",
+      "entityName": "Nguồn tuyển dụng",
       "code": "Mã",
       "name": "Tên nguồn",
       "description": "Mô tả",
@@ -78,7 +78,6 @@
       "editTitle": "Cập nhật nguồn tuyển dụng",
       "deleteConfirm": "Xóa nguồn tuyển dụng này?",
       "systemHint": "Nguồn hệ thống — không đổi mã / không xóa; có thể tắt hoặc chỉnh thứ tự, email.",
-      "priorityHint": "Số nhỏ hơn = ưu tiên cao hơn (giới thiệu nội bộ → mail HR → ...).",
       "channelReferral": "Giới thiệu nội bộ",
       "channelEmail": "Mail HR",
       "channelCareers": "Website tuyển dụng",
@@ -89,7 +88,7 @@
       "channelOther": "Khác"
     },
     "request": {
-      "entityName": "yêu cầu tuyển dụng",
+      "entityName": "Yêu cầu tuyển dụng",
       "code": "Mã yêu cầu",
       "title": "Tiêu đề",
       "quantity": "Số lượng",
@@ -108,7 +107,7 @@
       "close": "Đóng"
     },
     "candidate": {
-      "entityName": "ứng viên",
+      "entityName": "Ứng viên",
       "code": "Mã ứng viên",
       "fullName": "Họ tên",
       "email": "Email",
@@ -127,7 +126,7 @@
       "detailTitle": "Chi tiết ứng viên"
     },
     "waitlist": {
-      "entityName": "ứng viên chờ / offer",
+      "entityName": "Ứng viên chờ / offer",
       "search": "Tìm kiếm",
       "searchPlaceholder": "Mã hoặc tên ứng viên...",
       "toOffer": "Chuyển sang thư mời",
@@ -141,7 +140,7 @@
       "viewEmployee": "Xem hồ sơ nhân viên"
     },
     "plan": {
-      "entityName": "kế hoạch tuyển dụng",
+      "entityName": "Kế hoạch tuyển dụng",
       "code": "Mã kế hoạch",
       "name": "Tên kế hoạch",
       "parentRequest": "Mã yêu cầu (parent)",
@@ -149,7 +148,6 @@
       "searchPlaceholder": "Mã hoặc tên kế hoạch...",
       "addTitle": "Thêm kế hoạch tuyển dụng",
       "editTitle": "Cập nhật kế hoạch tuyển dụng",
-      "formHint": "Bắt buộc chọn Công ty (Chi nhánh tuỳ chọn). Chọn yêu cầu đã duyệt để điền sẵn org / JD / chỉ tiêu. Đặt OPEN khi sẵn sàng nhận UV.",
       "companyRequired": "Vui lòng chọn công ty cho kế hoạch tuyển dụng.",
       "openPlan": "Mở kế hoạch",
       "closePlan": "Ngưng kế hoạch",

@@ -7,7 +7,7 @@
       "isActive": "Active"
     },
     "definition": {
-      "entityName": "workflow definition",
+      "entityName": "Workflow Definition",
       "search": "Search",
       "searchPlaceholder": "Search by code or name",
       "code": "Code",
@@ -28,7 +28,7 @@
       "roleCodeRequired": "ROLE resolver requires a role code."
     },
     "inbox": {
-      "entityName": "inbox task",
+      "entityName": "Inbox Task",
       "title": "Workflow inbox",
       "stepName": "Step",
       "instanceStatus": "Instance status",
@@ -51,7 +51,7 @@
       "byEntityType": "Instances by entity type"
     },
     "formTemplate": {
-      "entityName": "form template",
+      "entityName": "Form Template",
       "search": "Search",
       "searchPlaceholder": "Search by name or entity type",
       "name": "Name",

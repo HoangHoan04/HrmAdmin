@@ -17,8 +17,8 @@
               nz-button
               nz-dropdown
               [nzDropdownMenu]="menu"
-              [nzLoading]="act.loading"
-              [disabled]="act.disabled"
+              [nzLoading]="isToolbarActionLoading(act) || isAnySubActionLoading(act)"
+              [disabled]="act.disabled || isToolbarActionLoading(act) || isAnySubActionLoading(act)"
               (nzVisibleChange)="onDropdownVisibleChange($event, act)"
               class="toolbar-btn"
               [ngClass]="'severity-' + (act.severity || 'primary')"
@@ -39,16 +39,22 @@
                     <button
                       type="button"
                       class="toolbar-dropdown-item"
-                      [class.disabled]="sub.disabled"
-                      [disabled]="sub.disabled"
+                      [class.disabled]="sub.disabled || isToolbarActionLoading(sub)"
+                      [disabled]="sub.disabled || isToolbarActionLoading(sub)"
                       (click)="handleActionClick(sub, act)"
                     >
                       <span
-                        *ngIf="sub.icon"
+                        *ngIf="!isToolbarActionLoading(sub) && sub.icon"
                         nz-icon
                         [nzType]="sub.icon"
                         class="toolbar-dropdown-item-icon"
                         [ngClass]="'severity-' + (sub.severity || act.severity || 'primary')"
+                      ></span>
+                      <span
+                        *ngIf="isToolbarActionLoading(sub)"
+                        nz-icon
+                        nzType="loading"
+                        class="toolbar-dropdown-item-icon"
                       ></span>
                       <span class="toolbar-dropdown-item-label">{{ sub.label | translate }}</span>
                     </button>
@@ -59,8 +65,8 @@
           } @else {
             <button
               nz-button
-              [nzLoading]="act.loading"
-              [disabled]="act.disabled"
+              [nzLoading]="isToolbarActionLoading(act)"
+              [disabled]="act.disabled || isToolbarActionLoading(act)"
               (click)="handleActionClick(act)"
               class="toolbar-btn"
               [ngClass]="'severity-' + (act.severity || 'primary')"

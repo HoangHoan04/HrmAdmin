@@ -75,10 +75,8 @@ body {
 }
 
 html.dark {
-  // Global base resets
   color-scheme: dark;
 
-  // Typography & common elements
   h1,
   h2,
   h3,
@@ -88,7 +86,6 @@ html.dark {
     color: var(--foreground) !important;
   }
 
-  // Native Form Controls
   input,
   textarea,
   select,
@@ -104,7 +101,6 @@ html.dark {
     }
   }
 
-  // Placeholders across all elements
   ::placeholder,
   ::-webkit-input-placeholder,
   ::-moz-placeholder,
@@ -113,7 +109,6 @@ html.dark {
     opacity: 0.8 !important;
   }
 
-  // Form items & labels
   .ant-form-item-label > label {
     color: var(--foreground) !important;
   }
@@ -127,7 +122,6 @@ html.dark {
     color: var(--muted-foreground) !important;
   }
 
-  // Ng-Zorro Inputs & Wrappers
   .ant-input,
   .ant-input-affix-wrapper,
   .ant-input-number,
@@ -188,7 +182,6 @@ html.dark {
     color: var(--muted-foreground) !important;
   }
 
-  // Disabled and Readonly Controls
   .ant-input[disabled],
   .ant-input.ant-input-disabled,
   .ant-input-affix-wrapper-disabled,
@@ -212,7 +205,6 @@ html.dark {
     color: var(--foreground) !important;
   }
 
-  // Select Components
   .ant-select:not(.ant-select-customize-input) .ant-select-selector {
     background-color: var(--background) !important;
     border-color: var(--border) !important;
@@ -250,7 +242,6 @@ html.dark {
     }
   }
 
-  // Dropdowns and Menus
   .ant-dropdown .ant-dropdown-menu,
   .ant-dropdown-menu,
   .ant-select-dropdown {
@@ -362,7 +353,6 @@ html.dark {
     color: var(--primary) !important;
   }
 
-  // DatePicker, TimePicker, RangePicker
   .ant-picker {
     background-color: var(--background) !important;
     border-color: var(--border) !important;
@@ -499,7 +489,6 @@ html.dark {
     }
   }
 
-  // Buttons
   .ant-btn {
     border-color: var(--border);
   }
@@ -544,7 +533,6 @@ html.dark {
     opacity: 0.5 !important;
   }
 
-  // Radio & Checkbox
   .ant-radio-wrapper,
   .ant-checkbox-wrapper {
     color: var(--foreground) !important;
@@ -578,7 +566,6 @@ html.dark {
     color: var(--primary) !important;
   }
 
-  // Cards
   .ant-card {
     background: var(--background-card) !important;
     border-color: var(--border) !important;
@@ -616,7 +603,6 @@ html.dark {
     }
   }
 
-  // Tables
   .ant-table {
     background: var(--background-card) !important;
     color: var(--foreground) !important;
@@ -662,7 +648,6 @@ html.dark {
     background: var(--background-card) !important;
   }
 
-  // Pagination
   .ant-pagination {
     color: var(--foreground) !important;
   }
@@ -712,7 +697,6 @@ html.dark {
     color: var(--foreground) !important;
   }
 
-  // Modals & Drawers
   .ant-modal-content {
     background-color: var(--background-card) !important;
     border: 1px solid var(--border) !important;
@@ -785,7 +769,6 @@ html.dark {
     }
   }
 
-  // Tooltip & Popover & Popconfirm
   .ant-tooltip {
     .ant-tooltip-inner {
       background-color: #1e293b !important;
@@ -830,7 +813,6 @@ html.dark {
     color: var(--foreground) !important;
   }
 
-  // Notifications & Messages
   .ant-notification-notice {
     background-color: var(--background-card) !important;
     border: 1px solid var(--border) !important;
@@ -860,7 +842,6 @@ html.dark {
     color: var(--foreground) !important;
   }
 
-  // Descriptions
   .ant-descriptions-title {
     color: var(--foreground) !important;
   }
@@ -887,7 +868,6 @@ html.dark {
     border-right: 1px solid var(--border) !important;
   }
 
-  // Collapse
   .ant-collapse {
     background-color: var(--background-card) !important;
     border: 1px solid var(--border) !important;
@@ -908,7 +888,6 @@ html.dark {
     border-top: 1px solid var(--border) !important;
   }
 
-  // List
   .ant-list {
     color: var(--foreground) !important;
   }
@@ -934,7 +913,6 @@ html.dark {
     color: var(--muted-foreground) !important;
   }
 
-  // Tree
   .ant-tree {
     background: transparent !important;
     color: var(--foreground) !important;
@@ -953,7 +931,6 @@ html.dark {
     color: var(--primary) !important;
   }
 
-  // Statistics, Steps, Timelines, Badges, Tags, Alerts, Result, Breadcrumb, Divider, Empty, Spin
   .ant-statistic-title {
     color: var(--muted-foreground) !important;
   }
@@ -1094,7 +1071,6 @@ html.dark {
     color: var(--muted-foreground) !important;
   }
 
-  // Cascader
   .ant-cascader-dropdown {
     background-color: var(--background-card) !important;
     border: 1px solid var(--border) !important;
@@ -1136,7 +1112,6 @@ html.dark {
     }
   }
 
-  // FullCalendar in dark mode
   .fc {
     color: var(--foreground) !important;
 

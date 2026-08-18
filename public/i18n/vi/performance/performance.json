@@ -11,7 +11,7 @@
       "backToList": "Quay lại danh sách"
     },
     "competency": {
-      "entityName": "khung năng lực",
+      "entityName": "Khung năng lực",
       "code": "Mã",
       "name": "Tên",
       "description": "Mô tả",
@@ -22,7 +22,7 @@
       "deleteConfirm": "Xóa khung năng lực này?"
     },
     "reviewCycle": {
-      "entityName": "chu kỳ đánh giá",
+      "entityName": "Chu kỳ đánh giá",
       "code": "Mã",
       "name": "Tên",
       "periodFrom": "Từ ngày",
@@ -36,7 +36,7 @@
       "deleteConfirm": "Xóa chu kỳ đánh giá này?"
     },
     "kpiGoal": {
-      "entityName": "mục tiêu KPI",
+      "entityName": "Mục tiêu KPI",
       "cycle": "Chu kỳ đánh giá",
       "employee": "Nhân viên",
       "title": "Tiêu đề",
@@ -50,7 +50,7 @@
       "deleteConfirm": "Xóa mục tiêu KPI này?"
     },
     "kpiResult": {
-      "entityName": "kết quả KPI",
+      "entityName": "Kết quả KPI",
       "goal": "Mục tiêu KPI",
       "actualValue": "Giá trị thực tế",
       "score": "Điểm",
@@ -75,7 +75,7 @@
       "deptAvg": "Điểm TB theo phòng ban"
     },
     "review360": {
-      "entityName": "đánh giá 360",
+      "entityName": "Đánh giá 360",
       "cycle": "Chu kỳ đánh giá",
       "subject": "Nhân viên được đánh giá",
       "reviewer": "Người đánh giá",

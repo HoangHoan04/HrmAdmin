@@ -19,6 +19,11 @@ const getRelativePath = (p: string) => {
 
 const routes: Routes = [
   {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: getRelativePath(ROUTES_CONFIG.WORKFLOW.children.WORKFLOW_DASHBOARD.path),
+  },
+  {
     path: getRelativePath(ROUTES_CONFIG.WORKFLOW.children.WORKFLOW_DASHBOARD.path),
     component: WorkflowDashboardComponent,
   },

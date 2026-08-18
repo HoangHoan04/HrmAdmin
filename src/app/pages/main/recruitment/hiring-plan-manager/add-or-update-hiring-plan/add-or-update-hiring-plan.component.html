@@ -3,10 +3,6 @@
 >
   <nz-spin [nzSpinning]="loading">
     <form nz-form [formGroup]="validateForm" nzLayout="vertical" (ngSubmit)="submitForm()">
-      <p style="color: rgba(0, 0, 0, 0.45); margin-bottom: 16px">
-        {{ 'recruitment.plan.formHint' | translate }}
-      </p>
-
       <div nz-row [nzGutter]="16">
         <div nz-col nzXs="24" nzMd="8">
           <nz-form-item>

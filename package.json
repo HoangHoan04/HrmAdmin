@@ -32,6 +32,7 @@
     "@fullcalendar/daygrid": "6.1.17",
     "@fullcalendar/interaction": "6.1.17",
     "@fullcalendar/timegrid": "6.1.17",
+    "@microsoft/signalr": "^10.0.11",
     "@ngx-translate/core": "^18.0.0",
     "@ngx-translate/http-loader": "^18.0.0",
     "echarts": "^6.1.0",
@@ -40,6 +41,7 @@
     "ngx-echarts": "^21.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
+    "xlsx": "^0.18.5",
     "zone.js": "^0.16.2"
   },
   "devDependencies": {

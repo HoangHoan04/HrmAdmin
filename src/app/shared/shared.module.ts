@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzAlertModule } from 'ng-zorro-antd/alert';
+import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzCardModule } from 'ng-zorro-antd/card';
@@ -25,6 +26,9 @@ import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzPaginationModule } from 'ng-zorro-antd/pagination';
+import { NzPopoverModule } from 'ng-zorro-antd/popover';
+import { NzProgressModule } from 'ng-zorro-antd/progress';
+import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzSliderModule } from 'ng-zorro-antd/slider';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
@@ -39,6 +43,7 @@ import { NzTooltipModule } from 'ng-zorro-antd/tooltip';
 import { NzTreeModule } from 'ng-zorro-antd/tree';
 import { NzUploadModule } from 'ng-zorro-antd/upload';
 import { ActionLogComponent } from './components/action-log/action-log.component';
+import { ExcelImportModalComponent } from './components/excel-import-modal/excel-import-modal.component';
 import { FileUploadComponent } from './components/file-upload/file-upload.component';
 import { FilterCustomComponent } from './components/filter-custom/filter-custom.component';
 import { TableCustomComponent } from './components/table-custom/table-custom.component';
@@ -49,6 +54,7 @@ import { TableCustomComponent } from './components/table-custom/table-custom.com
     TableCustomComponent,
     ActionLogComponent,
     FileUploadComponent,
+    ExcelImportModalComponent,
   ],
   imports: [
     TranslatePipe,
@@ -61,6 +67,7 @@ import { TableCustomComponent } from './components/table-custom/table-custom.com
     NzDropDownModule,
     NzAvatarModule,
     NzAlertModule,
+    NzBadgeModule,
     NzBreadCrumbModule,
     NzMenuModule,
     NzCardModule,
@@ -77,6 +84,7 @@ import { TableCustomComponent } from './components/table-custom/table-custom.com
     NzTooltipModule,
     NzTableModule,
     NzModalModule,
+    NzPopoverModule,
     NzFormModule,
     NzGridModule,
     NzDatePickerModule,
@@ -91,12 +99,15 @@ import { TableCustomComponent } from './components/table-custom/table-custom.com
     NzCheckboxModule,
     NzTagModule,
     NzTreeModule,
+    NzProgressModule,
+    NzRadioModule,
   ],
   exports: [
     FilterCustomComponent,
     TableCustomComponent,
     ActionLogComponent,
     FileUploadComponent,
+    ExcelImportModalComponent,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
@@ -107,6 +118,7 @@ import { TableCustomComponent } from './components/table-custom/table-custom.com
     NzDropDownModule,
     NzAvatarModule,
     NzAlertModule,
+    NzBadgeModule,
     NzBreadCrumbModule,
     NzMenuModule,
     NzCardModule,
@@ -123,6 +135,7 @@ import { TableCustomComponent } from './components/table-custom/table-custom.com
     NzTooltipModule,
     NzTableModule,
     NzModalModule,
+    NzPopoverModule,
     NzFormModule,
     NzGridModule,
     NzDatePickerModule,
@@ -137,6 +150,8 @@ import { TableCustomComponent } from './components/table-custom/table-custom.com
     NzCheckboxModule,
     NzTagModule,
     NzTreeModule,
+    NzProgressModule,
+    NzRadioModule,
   ],
 })
 export class SharedModule {}

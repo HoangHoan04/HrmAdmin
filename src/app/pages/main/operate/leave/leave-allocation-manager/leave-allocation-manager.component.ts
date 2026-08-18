@@ -44,6 +44,7 @@ export class LeaveAllocationManagerComponent implements OnInit {
 
   employeeOptions: { label: string; value: string }[] = [];
   dayOffConfigOptions: { label: string; value: string }[] = [];
+  private rawDayOffConfigs: DayOffConfigSelectBoxDto[] = [];
 
   pagination: PaginationConfig = {
     current: enumData.PAGE.PAGE_INDEX,
@@ -147,6 +148,17 @@ export class LeaveAllocationManagerComponent implements OnInit {
       allocatedDays: [0, [Validators.required, Validators.min(0)]],
       note: [null],
     });
+
+    this.upsertForm.get('dayOffConfigId')?.valueChanges.subscribe((configId) => {
+      if (configId && !this.editingId) {
+        const found = this.rawDayOffConfigs.find((c) => c.id === configId);
+        if (found) {
+          this.upsertForm.patchValue({
+            allocatedDays: found.defaultDaysPerYear ?? 0,
+          });
+        }
+      }
+    });
   }
 
   ngOnInit(): void {
@@ -173,8 +185,11 @@ export class LeaveAllocationManagerComponent implements OnInit {
       .post<DayOffConfigSelectBoxDto[]>(this.apiService.DAY_OFF_CONFIG.SELECT_BOX, {})
       .subscribe({
         next: (items) => {
+          this.rawDayOffConfigs = items;
           this.dayOffConfigOptions = items.map((item) => ({
-            label: item.code ? `${item.code} - ${item.name}` : item.name,
+            label: item.code
+              ? `${item.code} - ${item.name} (${item.defaultDaysPerYear ?? 0} ngày/năm)`
+              : `${item.name} (${item.defaultDaysPerYear ?? 0} ngày/năm)`,
             value: item.id,
           }));
           const field = this.filterFields.find((f) => f.key === 'dayOffConfigId');
@@ -263,6 +278,7 @@ export class LeaveAllocationManagerComponent implements OnInit {
     this.upsertForm.get('employeeId')?.enable();
     this.upsertForm.get('dayOffConfigId')?.enable();
     this.upsertForm.get('year')?.enable();
+    this.upsertForm.get('allocatedDays')?.disable();
     this.upsertVisible = true;
   }
 
@@ -278,6 +294,7 @@ export class LeaveAllocationManagerComponent implements OnInit {
     this.upsertForm.get('employeeId')?.disable();
     this.upsertForm.get('dayOffConfigId')?.disable();
     this.upsertForm.get('year')?.disable();
+    this.upsertForm.get('allocatedDays')?.enable();
     this.upsertVisible = true;
   }
 

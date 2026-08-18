@@ -1,6 +1,6 @@
 {
   "adjustment": {
-    "entityName": "payroll adjustment",
+    "entityName": "Payroll Adjustment",
     "deductionTab": "Deduction",
     "additionTab": "Addition",
     "employee": "Employee",

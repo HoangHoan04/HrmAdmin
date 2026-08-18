@@ -488,8 +488,8 @@ export const ROUTES_CONFIG = {
     children: {
       TIME_ATTENDANCE: {
         key: 'TIME_ATTENDANCE',
-        label: 'routes.operate',
-        translationKey: 'routes.operate',
+        label: 'routes.timeAttendance',
+        translationKey: 'routes.timeAttendance',
         icon: 'clock-circle',
         path: '/operate-manager/time-attendance',
         permission: PERMISSION_CODES.OPERATE_VIEW,
@@ -1814,6 +1814,14 @@ export const ROUTES_CONFIG = {
           },
         },
       },
+      NOTIFICATION_CENTER: {
+        key: 'NOTIFICATION_CENTER',
+        label: 'routes.notificationCenter',
+        translationKey: 'routes.notificationCenter',
+        icon: 'bell',
+        path: '/system-settings/notification-center',
+        permission: PERMISSION_CODES.SYSTEM_SETTINGS_VIEW,
+      },
       NOTIFICATION_TEMPLATE: {
         key: 'NOTIFICATION_TEMPLATE',
         label: 'routes.notificationTemplate',
@@ -2067,6 +2075,20 @@ export function getRouteByPath(path: string): RouteConfig | undefined {
 
   traverse(routes);
   return bestMatch;
+}
+
+export function getFirstNavigableRoute(route: RouteConfig): RouteConfig {
+  if (!route.children || Object.keys(route.children).length === 0) {
+    return route;
+  }
+  const childKeys = Object.keys(route.children);
+  for (const k of childKeys) {
+    const child = route.children[k];
+    if (child && child.isShow !== false) {
+      return getFirstNavigableRoute(child);
+    }
+  }
+  return childKeys.length > 0 ? getFirstNavigableRoute(route.children[childKeys[0]]) : route;
 }
 
 export function getRouteByKey(key: string): RouteConfig | undefined {

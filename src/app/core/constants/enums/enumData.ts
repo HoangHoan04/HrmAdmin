@@ -233,65 +233,55 @@ export const enumData = {
     DECEMBER: { code: 'DECEMBER', labelKey: 'enums.month.december', value: 11 },
   },
 
-  // Trình độ nhấn viên
   EMPLOYEE_LEVEL: {
-    // Thực tập sinh
     INTERNSHIP: {
       code: 'INTERNSHIP',
       labelKey: 'enums.employeeLevel.internship',
       value: 'INTERNSHIP',
       color: '#8c8c8c',
     },
-    // Mới vào nghề
     FRESHER: {
       code: 'FRESHER',
       labelKey: 'enums.employeeLevel.fresher',
       value: 'FRESHER',
       color: '#52c41a',
     },
-    // Trình độ nhân viên
     JUNIOR: {
       code: 'JUNIOR',
       labelKey: 'enums.employeeLevel.junior',
       value: 'JUNIOR',
       color: '#1890ff',
     },
-    // Trình độ nhân viên trung cấp
     MIDDLE: {
       code: 'MIDDLE',
       labelKey: 'enums.employeeLevel.middle',
       value: 'MIDDLE',
       color: '#faad14',
     },
-    // Trình độ nhân viên cao cấp
     SENIOR: {
       code: 'SENIOR',
       labelKey: 'enums.employeeLevel.senior',
       value: 'SENIOR',
       color: '#f5222d',
     },
-    // Trình độ trưởng nhóm
     LEADER: {
       code: 'LEADER',
       labelKey: 'enums.employeeLevel.leader',
       value: 'LEADER',
       color: '#722ed1',
     },
-    // Trình độ quản lý
     MANAGER: {
       code: 'MANAGER',
       labelKey: 'enums.employeeLevel.manager',
       value: 'MANAGER',
       color: '#eb2f96',
     },
-    // Trình độ giám đốc
     DIRECTOR: {
       code: 'DIRECTOR',
       labelKey: 'enums.employeeLevel.director',
       value: 'DIRECTOR',
       color: '#13c2c2',
     },
-    // Trình độ điều hành
     EXECUTIVE: {
       code: 'EXECUTIVE',
       labelKey: 'enums.employeeLevel.executive',
@@ -300,37 +290,31 @@ export const enumData = {
     },
   },
 
-  // Hình thức làm việc
   WORKING_MODE: {
-    // Làm việc tại văn phòng
     ON_SITE: {
       code: 'ON_SITE',
       labelKey: 'enums.workingMode.onSite',
       value: 'ON_SITE',
       color: '#1890ff',
     },
-    // Làm việc từ xa
     REMOTE: {
       code: 'REMOTE',
       labelKey: 'enums.workingMode.remote',
       value: 'REMOTE',
       color: '#52c41a',
     },
-    // Làm việc kết hợp
     HYBRID: {
       code: 'HYBRID',
       labelKey: 'enums.workingMode.hybrid',
       value: 'HYBRID',
       color: '#faad14',
     },
-    // Làm việc linh hoạt
     FLEXIBLE: {
       code: 'FLEXIBLE',
       labelKey: 'enums.workingMode.flexible',
       value: 'FLEXIBLE',
       color: '#722ed1',
     },
-    // Đi công tác
     BUSINESS_TRIP: {
       code: 'BUSINESS_TRIP',
       labelKey: 'enums.workingMode.businessTrip',
@@ -339,51 +323,43 @@ export const enumData = {
     },
   },
 
-  // Trạng thái làm việc
   WORK_STATUS: {
-    // Đang làm việc
     WORKING: {
       code: 'WORKING',
       labelKey: 'enums.workStatus.working',
       value: 'WORKING',
       color: '#52c41a',
     },
-    // Đang thử việc
     PROBATION: {
       code: 'PROBATION',
       labelKey: 'enums.workStatus.probation',
       value: 'PROBATION',
       color: '#1890ff',
     },
-    // Nhân viên chính thức
     OFFICIAL: {
       code: 'OFFICIAL',
       labelKey: 'enums.workStatus.official',
       value: 'OFFICIAL',
       color: '#13c2c2',
     },
-    // Nghỉ phép (nghỉ có thời hạn: thai sản, nghỉ dài ngày, nghỉ không lương tạm thời...)
     ON_LEAVE: {
       code: 'ON_LEAVE',
       labelKey: 'enums.workStatus.onLeave',
       value: 'ON_LEAVE',
       color: '#faad14',
     },
-    // Bị đình chỉ/cách việc tạm thời
     SUSPENDED: {
       code: 'SUSPENDED',
       labelKey: 'enums.workStatus.suspended',
       value: 'SUSPENDED',
       color: '#722ed1',
     },
-    // Nghỉ việc
     RESIGNED: {
       code: 'RESIGNED',
       labelKey: 'enums.workStatus.resigned',
       value: 'RESIGNED',
       color: '#f5222d',
     },
-    // Đã nghỉ hưu
     RETIRED: {
       code: 'RETIRED',
       labelKey: 'enums.workStatus.retired',
@@ -1311,7 +1287,6 @@ export const enumData = {
   },
 
   ASSET_TICKET_STATUS: {
-    // Mới tạo
     NEW: {
       code: 'NEW',
       labelKey: 'enums.assetTicketStatus.new',

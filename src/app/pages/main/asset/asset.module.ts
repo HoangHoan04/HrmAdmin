@@ -17,6 +17,11 @@ const getRelativePath = (p: string) => {
 
 const routes: Routes = [
   {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: getRelativePath(ROUTES_CONFIG.ASSET.children.ASSET_TYPE.path),
+  },
+  {
     path: getRelativePath(ROUTES_CONFIG.ASSET.children.ASSET_TYPE.path),
     component: AssetTypeManagerComponent,
   },

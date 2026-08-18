@@ -67,18 +67,44 @@ export interface TableAction {
   label?: string;
   icon?: string;
   severity?: 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'danger' | 'default';
-  onClick?: () => void;
-  loading?: boolean;
+  onClick?: () => void | Promise<any> | import('rxjs').Observable<any>;
+  loading?: boolean | (() => boolean);
   disabled?: boolean;
   visible?: boolean | (() => boolean);
   subActions?: TableAction[];
   acceptFiles?: string;
-  onFileSelect?: (file: File) => void;
+  onFileSelect?: (file: File) => void | Promise<any> | import('rxjs').Observable<any>;
+  importUrl?: string | (() => string);
+  templateUrl?: string | (() => string);
+  exportUrl?: string | (() => string);
+  getPayload?: () => any;
+  fallbackFileName?: string;
+  entityName?: string;
+  onSuccess?: (result?: any) => void;
   __open?: boolean;
 }
 
+export interface UploadExcelOptions {
+  templateUrl?: string | (() => string);
+  importUrl?: string | (() => string);
+  entityName?: string;
+  onDownloadTemplate?: () => void | Promise<any> | import('rxjs').Observable<any>;
+  onUploadFile?: (file: File) => void | Promise<any> | import('rxjs').Observable<any>;
+  onSuccess?: (result?: any) => void;
+  acceptFiles?: string;
+  loading?: boolean | (() => boolean);
+}
+
+export interface ExportExcelOptions {
+  exportUrl?: string | (() => string);
+  getPayload?: () => any;
+  fallbackFileName?: string;
+  onClick?: () => void | Promise<any> | import('rxjs').Observable<any>;
+  loading?: boolean | (() => boolean);
+}
+
 export const CommonActions = {
-  create: (onClick?: () => void): TableAction => ({
+  create: (onClick?: () => void | Promise<any> | import('rxjs').Observable<any>): TableAction => ({
     key: 'create',
     label: 'common.actions.create',
     icon: 'plus-circle',
@@ -86,7 +112,7 @@ export const CommonActions = {
     onClick,
   }),
 
-  update: (onClick?: () => void): TableAction => ({
+  update: (onClick?: () => void | Promise<any> | import('rxjs').Observable<any>): TableAction => ({
     key: 'update',
     label: 'common.actions.update',
     icon: 'edit',
@@ -94,7 +120,7 @@ export const CommonActions = {
     onClick,
   }),
 
-  delete: (onClick?: () => void): TableAction => ({
+  delete: (onClick?: () => void | Promise<any> | import('rxjs').Observable<any>): TableAction => ({
     key: 'delete',
     label: 'common.actions.delete',
     icon: 'delete',
@@ -102,7 +128,7 @@ export const CommonActions = {
     onClick,
   }),
 
-  refresh: (onClick?: () => void): TableAction => ({
+  refresh: (onClick?: () => void | Promise<any> | import('rxjs').Observable<any>): TableAction => ({
     key: 'refresh',
     label: 'common.actions.refresh',
     icon: 'reload',
@@ -111,46 +137,107 @@ export const CommonActions = {
   }),
 
   uploadExcel: (
-    onDownloadTemplate?: () => void,
-    onUploadFile?: (file: File) => void,
+    onDownloadOrOptions?:
+      (() => void | Promise<any> | import('rxjs').Observable<any>) | UploadExcelOptions,
+    onUploadFile?: (file: File) => void | Promise<any> | import('rxjs').Observable<any>,
+  ): TableAction => {
+    if (onDownloadOrOptions && typeof onDownloadOrOptions === 'object') {
+      const opts = onDownloadOrOptions as UploadExcelOptions;
+      return {
+        key: 'upload',
+        label: 'common.actions.uploadExcel',
+        icon: 'file-excel',
+        severity: 'primary',
+        acceptFiles: opts.acceptFiles,
+        importUrl: opts.importUrl,
+        templateUrl: opts.templateUrl,
+        entityName: opts.entityName,
+        onSuccess: opts.onSuccess,
+        onFileSelect: opts.onUploadFile,
+        subActions: [
+          {
+            key: 'download-template',
+            label: 'common.actions.downloadTemplate',
+            icon: 'download',
+            onClick: opts.onDownloadTemplate,
+          },
+          {
+            key: 'upload-file',
+            label: 'common.actions.uploadFile',
+            icon: 'upload',
+          },
+        ],
+      };
+    }
+
+    return {
+      key: 'upload',
+      label: 'common.actions.uploadExcel',
+      icon: 'file-excel',
+      severity: 'primary',
+      onFileSelect: onUploadFile,
+      subActions: [
+        {
+          key: 'download-template',
+          label: 'common.actions.downloadTemplate',
+          icon: 'download',
+          onClick: onDownloadOrOptions,
+        },
+        {
+          key: 'upload-file',
+          label: 'common.actions.uploadFile',
+          icon: 'upload',
+        },
+      ],
+    };
+  },
+
+  exportExcel: (
+    onClickOrOptions?:
+      (() => void | Promise<any> | import('rxjs').Observable<any>) | ExportExcelOptions,
+    loading?: boolean | (() => boolean),
+  ): TableAction => {
+    if (onClickOrOptions && typeof onClickOrOptions === 'object') {
+      const opts = onClickOrOptions as ExportExcelOptions;
+      return {
+        key: 'export-excel',
+        label: 'common.actions.exportExcel',
+        icon: 'file-excel',
+        severity: 'primary',
+        exportUrl: opts.exportUrl,
+        getPayload: opts.getPayload,
+        fallbackFileName: opts.fallbackFileName,
+        loading: opts.loading,
+        onClick: opts.onClick,
+      };
+    }
+
+    return {
+      key: 'export-excel',
+      label: 'common.actions.exportExcel',
+      icon: 'file-excel',
+      severity: 'primary',
+      loading,
+      onClick: onClickOrOptions,
+    };
+  },
+
+  exportPdf: (
+    onClick?: () => void | Promise<any> | import('rxjs').Observable<any>,
+    loading?: boolean,
   ): TableAction => ({
-    key: 'upload',
-    label: 'common.actions.uploadExcel',
-    icon: 'file-excel',
-    severity: 'primary',
-    onFileSelect: onUploadFile,
-    subActions: [
-      {
-        key: 'download-template',
-        label: 'common.actions.downloadTemplate',
-        icon: 'download',
-        onClick: onDownloadTemplate,
-      },
-      {
-        key: 'upload-file',
-        label: 'common.actions.uploadFile',
-        icon: 'upload',
-      },
-    ],
-  }),
-
-  exportExcel: (onClick?: () => void): TableAction => ({
-    key: 'export-excel',
-    label: 'common.actions.exportExcel',
-    icon: 'file-excel',
-    severity: 'primary',
-    onClick,
-  }),
-
-  exportPdf: (onClick?: () => void): TableAction => ({
     key: 'export-pdf',
     label: 'common.actions.exportPdf',
     icon: 'file-pdf',
     severity: 'danger',
+    loading,
     onClick,
   }),
 
-  save: (onClick?: () => void, loading?: boolean): TableAction => ({
+  save: (
+    onClick?: () => void | Promise<any> | import('rxjs').Observable<any>,
+    loading?: boolean,
+  ): TableAction => ({
     key: 'save',
     label: 'common.actions.save',
     icon: 'save',
@@ -159,7 +246,7 @@ export const CommonActions = {
     onClick,
   }),
 
-  cancel: (onClick?: () => void): TableAction => ({
+  cancel: (onClick?: () => void | Promise<any> | import('rxjs').Observable<any>): TableAction => ({
     key: 'cancel',
     label: 'common.actions.cancel',
     icon: 'close',
@@ -167,7 +254,7 @@ export const CommonActions = {
     onClick,
   }),
 
-  view: (onClick?: () => void): TableAction => ({
+  view: (onClick?: () => void | Promise<any> | import('rxjs').Observable<any>): TableAction => ({
     key: 'view',
     label: 'common.actions.view',
     icon: 'eye',

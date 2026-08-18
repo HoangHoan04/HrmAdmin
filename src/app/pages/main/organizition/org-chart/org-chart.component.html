@@ -1,74 +1,557 @@
-<nz-card [nzTitle]="titleTemplate" [nzExtra]="extraTemplate" [nzLoading]="loading || reparenting">
-  <div class="org-chart-toolbar" nz-row [nzGutter]="16">
-    <div nz-col [nzXs]="24" [nzMd]="10" [nzLg]="8">
-      <label class="field-label">{{ 'organization.orgChart.company' | translate }}</label>
-      <nz-select
-        class="w-full"
-        [ngModel]="companyId"
-        (ngModelChange)="onCompanyChange($event)"
-        [nzPlaceHolder]="'organization.orgChart.selectCompany' | translate"
-        nzAllowClear
-        nzShowSearch
-      >
-        @for (c of companies; track c.id) {
-          <nz-option [nzValue]="c.id" [nzLabel]="c.code ? c.code + ' - ' + c.name : c.name"></nz-option>
-        }
-      </nz-select>
+<div class="org-chart-page" #chartContainer [class.fullscreen-active]="isFullscreen">
+  <!-- Top Control Bar -->
+  <div class="org-chart-header-card" *ngIf="!isFullscreen">
+    <div class="header-top-row">
+      <div class="header-title-wrap">
+        <div class="title-icon-box">
+          <i nz-icon nzType="apartment" nzTheme="outline"></i>
+        </div>
+        <div>
+          <h2 class="main-title">{{ 'organization.orgChart.title' | translate }}</h2>
+          <p class="subtitle">{{ 'organization.orgChart.subtitle' | translate }}</p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <!-- Segmented View Mode Toggle Buttons -->
+        <div class="view-mode-segmented">
+          <button
+            type="button"
+            class="segmented-btn"
+            [class.active]="viewMode === 'TREE'"
+            (click)="setViewMode('TREE')"
+          >
+            <i nz-icon nzType="cluster"></i>
+            <span>{{ 'organization.orgChart.viewTree' | translate }}</span>
+          </button>
+          <button
+            type="button"
+            class="segmented-btn"
+            [class.active]="viewMode === 'LIST'"
+            (click)="setViewMode('LIST')"
+          >
+            <i nz-icon nzType="unordered-list"></i>
+            <span>{{ 'organization.orgChart.viewList' | translate }}</span>
+          </button>
+        </div>
+
+        <!-- Fullscreen Button -->
+        <button
+          nz-button
+          nzType="default"
+          class="btn-action-icon"
+          (click)="toggleFullscreen()"
+          nz-tooltip
+          [nzTooltipTitle]="'organization.orgChart.fullscreen' | translate"
+        >
+          <i nz-icon nzType="fullscreen"></i>
+        </button>
+
+        <!-- Refresh Button -->
+        <button
+          nz-button
+          nzType="default"
+          class="btn-action-icon"
+          [disabled]="!companyId || loading"
+          (click)="loadTree()"
+          nz-tooltip
+          [nzTooltipTitle]="'common.actions.refresh' | translate"
+        >
+          <i nz-icon nzType="reload" [nzSpin]="loading"></i>
+        </button>
+      </div>
     </div>
-    <div nz-col [nzXs]="24" [nzMd]="8" [nzLg]="6" class="include-parts">
-      <label nz-checkbox [ngModel]="includeParts" (ngModelChange)="onIncludePartsChange($event)">
-        {{ 'organization.orgChart.includeParts' | translate }}
-      </label>
+
+    <!-- Filters and Search Toolbar -->
+    <div class="filter-toolbar-row" nz-row [nzGutter]="[16, 12]">
+      <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8" [nzLg]="7">
+        <label class="field-label">{{ 'organization.orgChart.company' | translate }}</label>
+        <nz-select
+          class="w-full"
+          [ngModel]="companyId"
+          (ngModelChange)="onCompanyChange($event)"
+          [nzPlaceHolder]="'organization.orgChart.selectCompany' | translate"
+          nzAllowClear
+          nzShowSearch
+        >
+          @for (c of companies; track c.id) {
+            <nz-option [nzValue]="c.id" [nzLabel]="c.code ? c.code + ' - ' + c.name : c.name"></nz-option>
+          }
+        </nz-select>
+      </div>
+
+      <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8" [nzLg]="8">
+        <label class="field-label">{{ 'organization.orgChart.search' | translate }}</label>
+        <nz-input-group [nzPrefix]="searchPrefix" [nzSuffix]="searchSuffix" class="w-full">
+          <input
+            type="text"
+            nz-input
+            [ngModel]="searchText"
+            (ngModelChange)="onSearchChange($event)"
+            [placeholder]="'organization.orgChart.searchPlaceholder' | translate"
+          />
+        </nz-input-group>
+        <ng-template #searchPrefix>
+          <i nz-icon nzType="search" class="text-secondary"></i>
+        </ng-template>
+        <ng-template #searchSuffix>
+          @if (searchText) {
+            <i
+              nz-icon
+              nzType="close-circle"
+              class="cursor-pointer text-secondary"
+              (click)="onSearchChange('')"
+            ></i>
+          }
+        </ng-template>
+      </div>
+
+      <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="8" [nzLg]="9" class="filter-extra-col">
+        <label nz-checkbox [ngModel]="includeParts" (ngModelChange)="onIncludePartsChange($event)">
+          <span class="checkbox-text">{{ 'organization.orgChart.includeParts' | translate }}</span>
+        </label>
+
+        <!-- Legend Pills -->
+        <div class="legend-pills">
+          <span class="legend-item company"><span class="dot"></span> {{ 'organization.orgChart.nodeType.company' | translate }}</span>
+          <span class="legend-item branch"><span class="dot"></span> {{ 'organization.orgChart.nodeType.branch' | translate }}</span>
+          <span class="legend-item department"><span class="dot"></span> {{ 'organization.orgChart.nodeType.department' | translate }}</span>
+          @if (includeParts) {
+            <span class="legend-item part"><span class="dot"></span> {{ 'organization.orgChart.nodeType.part' | translate }}</span>
+          }
+        </div>
+      </div>
     </div>
   </div>
 
-  @if (!companyId) {
-    <nz-empty [nzNotFoundContent]="'organization.orgChart.selectCompanyHint' | translate"></nz-empty>
-  } @else if (!loading && treeNodes.length === 0) {
-    <nz-empty [nzNotFoundContent]="'organization.orgChart.empty' | translate"></nz-empty>
-  } @else {
-    <div class="org-chart-tree">
-      <nz-tree
-        [nzData]="treeNodes"
-        [nzDraggable]="canManage()"
-        [nzBeforeDrop]="beforeDrop"
-        [nzBlockNode]="true"
-        [nzShowLine]="true"
-        [nzTreeTemplate]="nodeTpl"
-      ></nz-tree>
+  <!-- Fullscreen Top Floating Bar -->
+  <div class="fullscreen-top-bar" *ngIf="isFullscreen">
+    <div class="fullscreen-title">
+      <i nz-icon nzType="apartment" class="mr-2"></i>
+      <span>{{ 'organization.orgChart.title' | translate }}</span>
+      @if (rootNode) {
+        <span class="company-tag">{{ rootNode.name }}</span>
+      }
     </div>
+
+    <div class="fullscreen-center-search">
+      <nz-input-group [nzPrefix]="fsSearchPrefix" [nzSuffix]="fsSearchSuffix" nzSize="small">
+        <input
+          type="text"
+          nz-input
+          [ngModel]="searchText"
+          (ngModelChange)="onSearchChange($event)"
+          [placeholder]="'organization.orgChart.searchPlaceholder' | translate"
+        />
+      </nz-input-group>
+      <ng-template #fsSearchPrefix><i nz-icon nzType="search"></i></ng-template>
+      <ng-template #fsSearchSuffix>
+        <i *ngIf="searchText" nz-icon nzType="close-circle" class="cursor-pointer" (click)="onSearchChange('')"></i>
+      </ng-template>
+    </div>
+
+    <div class="fullscreen-actions">
+      <div class="view-mode-segmented compact">
+        <button
+          type="button"
+          class="segmented-btn"
+          [class.active]="viewMode === 'TREE'"
+          (click)="setViewMode('TREE')"
+        >
+          <i nz-icon nzType="cluster"></i>
+          <span>{{ 'organization.orgChart.viewTree' | translate }}</span>
+        </button>
+        <button
+          type="button"
+          class="segmented-btn"
+          [class.active]="viewMode === 'LIST'"
+          (click)="setViewMode('LIST')"
+        >
+          <i nz-icon nzType="unordered-list"></i>
+          <span>{{ 'organization.orgChart.viewList' | translate }}</span>
+        </button>
+      </div>
+
+      <button
+        nz-button
+        nzType="primary"
+        nzDanger
+        nzSize="small"
+        class="btn-exit-fs"
+        (click)="toggleFullscreen()"
+      >
+        <i nz-icon nzType="fullscreen-exit"></i>
+        <span>{{ 'organization.orgChart.exitFullscreen' | translate }} (Esc)</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Content Area -->
+  <div class="org-chart-main-card" [class.is-fs]="isFullscreen">
+    @if (!companyId) {
+      <div class="empty-state-wrap">
+        <nz-empty
+          [nzNotFoundImage]="'simple'"
+          [nzNotFoundContent]="'organization.orgChart.selectCompanyHint' | translate"
+        ></nz-empty>
+      </div>
+    } @else if (loading) {
+      <div class="loading-state-wrap">
+        <nz-spin nzSimple nzSize="large"></nz-spin>
+        <p class="loading-text">{{ 'organization.orgChart.loading' | translate }}</p>
+      </div>
+    } @else if (!rootNode) {
+      <div class="empty-state-wrap">
+        <nz-empty [nzNotFoundContent]="'organization.orgChart.empty' | translate"></nz-empty>
+      </div>
+    } @else {
+      <!-- 1. FAMILY TREE VIEW -->
+      @if (viewMode === 'TREE') {
+        <div class="family-tree-container" [class.is-fs]="isFullscreen">
+          <!-- Floating Controls Bar -->
+          <div class="floating-controls-bar">
+            <button
+              nz-button
+              nzType="default"
+              nzSize="small"
+              (click)="zoomIn()"
+              nz-tooltip
+              [nzTooltipTitle]="'organization.orgChart.zoomIn' | translate"
+            >
+              <i nz-icon nzType="zoom-in"></i>
+            </button>
+            <span class="zoom-indicator">{{ (zoom * 100).toFixed(0) }}%</span>
+            <button
+              nz-button
+              nzType="default"
+              nzSize="small"
+              (click)="zoomOut()"
+              nz-tooltip
+              [nzTooltipTitle]="'organization.orgChart.zoomOut' | translate"
+            >
+              <i nz-icon nzType="zoom-out"></i>
+            </button>
+            <button
+              nz-button
+              nzType="default"
+              nzSize="small"
+              (click)="resetZoom()"
+              nz-tooltip
+              [nzTooltipTitle]="'organization.orgChart.resetZoom' | translate"
+            >
+              <i nz-icon nzType="redo"></i>
+            </button>
+            <button
+              nz-button
+              nzType="default"
+              nzSize="small"
+              (click)="fitScreen()"
+              nz-tooltip
+              [nzTooltipTitle]="'organization.orgChart.fitScreen' | translate"
+            >
+              <i nz-icon nzType="column-width"></i>
+            </button>
+            <button
+              nz-button
+              nzType="default"
+              nzSize="small"
+              (click)="centerRoot()"
+              nz-tooltip
+              [nzTooltipTitle]="'organization.orgChart.centerRoot' | translate"
+            >
+              <i nz-icon nzType="aim"></i>
+            </button>
+
+            <nz-divider nzType="vertical" class="m-0"></nz-divider>
+
+            <button
+              nz-button
+              nzType="default"
+              nzSize="small"
+              (click)="expandAll()"
+              nz-tooltip
+              [nzTooltipTitle]="'organization.orgChart.expandAll' | translate"
+            >
+              <i nz-icon nzType="plus-square"></i>
+              <span class="btn-label">{{ 'organization.orgChart.expandAll' | translate }}</span>
+            </button>
+            <button
+              nz-button
+              nzType="default"
+              nzSize="small"
+              (click)="collapseAll()"
+              nz-tooltip
+              [nzTooltipTitle]="'organization.orgChart.collapseAll' | translate"
+            >
+              <i nz-icon nzType="minus-square"></i>
+              <span class="btn-label">{{ 'organization.orgChart.collapseAll' | translate }}</span>
+            </button>
+
+            <nz-divider nzType="vertical" class="m-0"></nz-divider>
+
+            <button
+              nz-button
+              nzType="default"
+              nzSize="small"
+              (click)="toggleFullscreen()"
+              nz-tooltip
+              [nzTooltipTitle]="isFullscreen ? ('organization.orgChart.exitFullscreen' | translate) : ('organization.orgChart.fullscreen' | translate)"
+            >
+              <i nz-icon [nzType]="isFullscreen ? 'fullscreen-exit' : 'fullscreen'"></i>
+            </button>
+          </div>
+
+          <!-- Tree Viewport with Pan & Zoom -->
+          <div
+            #chartViewport
+            class="chart-viewport"
+            (mousedown)="onMouseDown($event)"
+            [class.is-panning]="isPanning"
+          >
+            <div
+              class="chart-canvas"
+              [style.transform]="'scale(' + zoom + ')'"
+              [style.transformOrigin]="'top center'"
+            >
+              <div class="family-tree">
+                <ul>
+                  <li>
+                    <ng-container
+                      *ngTemplateOutlet="familyTreeTpl; context: { node: rootNode }"
+                    ></ng-container>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      } @else {
+        <!-- 2. LIST TREE VIEW -->
+        <div class="list-tree-container">
+          <nz-tree
+            [nzData]="treeNodes"
+            [nzDraggable]="canManage()"
+            [nzBeforeDrop]="beforeDrop"
+            [nzBlockNode]="true"
+            [nzShowLine]="true"
+            [nzTreeTemplate]="listNodeTpl"
+          ></nz-tree>
+        </div>
+      }
+    }
+  </div>
+</div>
+
+<!-- ==========================================
+     RECURSIVE FAMILY TREE NODE TEMPLATE
+=========================================== -->
+<ng-template #familyTreeTpl let-node="node">
+  <div
+    class="node-card-wrapper"
+    [class.has-children]="node.children && node.children.length > 0"
+    [class.is-collapsed]="node.collapsed"
+  >
+    <!-- Card Element -->
+    <div
+      class="org-card"
+      [class.company-type]="node.nodeType === 'COMPANY'"
+      [class.branch-type]="node.nodeType === 'BRANCH'"
+      [class.dept-type]="node.nodeType === 'DEPARTMENT'"
+      [class.part-type]="node.nodeType === 'PART'"
+      [class.highlighted]="node.highlighted"
+      (click)="openDetail(node, $event)"
+    >
+      <!-- Top Color Stripe -->
+      <div class="card-stripe" [style.background]="nodeTypeColor(node.nodeType)"></div>
+
+      <div class="card-inner">
+        <!-- Header: Icon, Type Badge & Code -->
+        <div class="card-header">
+          <div class="type-badge" [style.color]="nodeTypeColor(node.nodeType)" [style.background]="nodeTypeBadgeBg(node.nodeType)">
+            <i nz-icon [nzType]="nodeTypeIcon(node.nodeType)" class="mr-1"></i>
+            {{ nodeTypeLabel(node.nodeType) }}
+          </div>
+          <span class="code-badge">{{ node.code }}</span>
+        </div>
+
+        <!-- Node Name / Title -->
+        <h4 class="node-name" [title]="node.name">
+          {{ node.name }}
+        </h4>
+
+        <!-- Manager Row -->
+        <div class="meta-row manager-row">
+          <i nz-icon nzType="user" class="meta-icon"></i>
+          <span class="meta-label">{{ node.managerName || ('organization.orgChart.noManager' | translate) }}</span>
+        </div>
+
+        <!-- Metrics Row -->
+        <div class="card-footer-metrics">
+          <div class="metric-pill" nz-tooltip [nzTooltipTitle]="'organization.orgChart.employeeCount' | translate">
+            <i nz-icon nzType="team"></i>
+            <span>{{ node.employeeCount ?? 0 }}</span>
+          </div>
+
+          @if (node.children && node.children.length > 0) {
+            <div class="metric-pill children-count" nz-tooltip [nzTooltipTitle]="'organization.orgChart.directUnits' | translate">
+              <i nz-icon nzType="branches"></i>
+              <span>{{ node.children.length }}</span>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Collapse / Expand Toggle Button -->
+      @if (node.children && node.children.length > 0) {
+        <button
+          type="button"
+          class="collapse-toggle-btn"
+          [class.is-collapsed]="node.collapsed"
+          (click)="toggleNode(node, $event)"
+          [nz-tooltip]="node.collapsed ? ('organization.orgChart.expandAll' | translate) : ('organization.orgChart.collapseAll' | translate)"
+        >
+          @if (node.collapsed) {
+            <span class="collapsed-count">+{{ node.children.length }}</span>
+          } @else {
+            <i nz-icon nzType="minus"></i>
+          }
+        </button>
+      }
+    </div>
+  </div>
+
+  <!-- Recursive Sub-tree -->
+  @if (node.children && node.children.length > 0 && !node.collapsed) {
+    <ul>
+      @for (child of node.children; track child.id) {
+        <li>
+          <ng-container
+            *ngTemplateOutlet="familyTreeTpl; context: { node: child }"
+          ></ng-container>
+        </li>
+      }
+    </ul>
   }
-</nz-card>
-
-<ng-template #titleTemplate>
-  <span class="card-title">
-    <i nz-icon nzType="apartment"></i>
-    {{ 'organization.orgChart.title' | translate }}
-  </span>
 </ng-template>
 
-<ng-template #extraTemplate>
-  <button nz-button nzType="default" [disabled]="!companyId || loading" (click)="loadTree()">
-    <i nz-icon nzType="reload"></i>
-    {{ 'common.actions.refresh' | translate }}
-  </button>
-</ng-template>
-
-<ng-template #nodeTpl let-node>
-  <span class="org-node">
+<!-- ==========================================
+     LIST VIEW NODE TEMPLATE
+=========================================== -->
+<ng-template #listNodeTpl let-node>
+  <span class="list-org-node" (click)="openDetail(node.origin, $event)">
     <nz-tag [nzColor]="nodeTypeColor(node.origin.nodeType)">
+      <i nz-icon [nzType]="nodeTypeIcon(node.origin.nodeType)" class="mr-1"></i>
       {{ nodeTypeLabel(node.origin.nodeType) }}
     </nz-tag>
-    <span class="org-node__title">{{ node.title }}</span>
+    <span class="list-node-title">{{ node.title }}</span>
     @if (node.origin.employeeCount != null) {
       <nz-tag nzColor="default">
-        {{ 'organization.orgChart.employeeCount' | translate }}: {{ node.origin.employeeCount }}
+        <i nz-icon nzType="team" class="mr-1"></i>
+        {{ node.origin.employeeCount }} {{ 'organization.orgChart.employeeCount' | translate }}
       </nz-tag>
     }
     @if (node.origin.managerName) {
       <nz-tag nzColor="gold">
-        {{ 'organization.orgChart.manager' | translate }}: {{ node.origin.managerName }}
+        <i nz-icon nzType="user" class="mr-1"></i>
+        {{ node.origin.managerName }}
       </nz-tag>
     }
+  </span>
+</ng-template>
+
+<!-- ==========================================
+     NODE DETAIL SIDE DRAWER
+=========================================== -->
+<nz-drawer
+  [nzVisible]="drawerVisible"
+  [nzWidth]="420"
+  [nzTitle]="drawerTitleTpl"
+  (nzOnClose)="closeDetail()"
+  [nzClosable]="true"
+>
+  <ng-container *nzDrawerContent>
+    @if (selectedNode) {
+      <div class="drawer-detail-content">
+        <!-- Header Banner -->
+        <div class="drawer-header-card" [style.borderLeftColor]="nodeTypeColor(selectedNode.nodeType)">
+          <div class="drawer-type-badge" [style.color]="nodeTypeColor(selectedNode.nodeType)" [style.background]="nodeTypeBadgeBg(selectedNode.nodeType)">
+            <i nz-icon [nzType]="nodeTypeIcon(selectedNode.nodeType)" class="mr-1"></i>
+            {{ nodeTypeLabel(selectedNode.nodeType) }}
+          </div>
+          <h3 class="drawer-node-name">{{ selectedNode.name }}</h3>
+          <span class="drawer-node-code">{{ selectedNode.code }}</span>
+        </div>
+
+        <nz-divider class="my-3"></nz-divider>
+
+        <!-- Descriptions Table -->
+        <nz-descriptions [nzColumn]="1" nzBordered [nzSize]="'small'">
+          <nz-descriptions-item [nzTitle]="'organization.orgChart.nodeCode' | translate">
+            <strong>{{ selectedNode.code }}</strong>
+          </nz-descriptions-item>
+
+          <nz-descriptions-item [nzTitle]="'organization.orgChart.nodeName' | translate">
+            {{ selectedNode.name }}
+          </nz-descriptions-item>
+
+          <nz-descriptions-item [nzTitle]="'organization.orgChart.nodeTypeLabel' | translate">
+            <nz-tag [nzColor]="nodeTypeColor(selectedNode.nodeType)">
+              {{ nodeTypeLabel(selectedNode.nodeType) }}
+            </nz-tag>
+          </nz-descriptions-item>
+
+          <nz-descriptions-item [nzTitle]="'organization.orgChart.parentUnit' | translate">
+            {{ selectedNode.parentName || '—' }}
+          </nz-descriptions-item>
+
+          <nz-descriptions-item [nzTitle]="'organization.orgChart.manager' | translate">
+            <span [class.text-muted]="!selectedNode.managerName">
+              {{ selectedNode.managerName || ('organization.orgChart.noManager' | translate) }}
+            </span>
+          </nz-descriptions-item>
+
+          <nz-descriptions-item [nzTitle]="'organization.orgChart.employeeCount' | translate">
+            <span class="member-highlight">{{ selectedNode.employeeCount ?? 0 }}</span> {{ 'organization.orgChart.employeeCount' | translate }}
+          </nz-descriptions-item>
+
+          <nz-descriptions-item [nzTitle]="'organization.orgChart.totalMembers' | translate">
+            <strong>{{ getTotalEmployeeCount(selectedNode) }}</strong> {{ 'organization.orgChart.employeeCount' | translate }}
+          </nz-descriptions-item>
+        </nz-descriptions>
+
+        <!-- Direct Sub-units List -->
+        @if (selectedNode.children && selectedNode.children.length > 0) {
+          <div class="drawer-children-section mt-4">
+            <h4 class="section-heading">
+              <i nz-icon nzType="branches" class="mr-1"></i>
+              {{ 'organization.orgChart.directUnits' | translate }} ({{ selectedNode.children.length }})
+            </h4>
+
+            <div class="children-list">
+              @for (child of selectedNode.children; track child.id) {
+                <div class="child-item-card" (click)="openDetail(child)">
+                  <div class="child-type-indicator" [style.background]="nodeTypeColor(child.nodeType)"></div>
+                  <div class="child-info">
+                    <span class="child-name">{{ child.name }}</span>
+                    <span class="child-code">{{ child.code }}</span>
+                  </div>
+                  <div class="child-meta">
+                    <nz-tag nzColor="default">{{ child.employeeCount ?? 0 }} <i nz-icon nzType="team"></i></nz-tag>
+                    <i nz-icon nzType="right" class="text-secondary"></i>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </ng-container>
+</nz-drawer>
+
+<ng-template #drawerTitleTpl>
+  <span class="drawer-title">
+    <i nz-icon nzType="idcard" class="mr-2"></i>
+    {{ 'organization.orgChart.nodeDetails' | translate }}
   </span>
 </ng-template>

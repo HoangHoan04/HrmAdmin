@@ -11,7 +11,7 @@
       "backToList": "Back to list"
     },
     "violationType": {
-      "entityName": "violation type",
+      "entityName": "Violation Type",
       "code": "Code",
       "name": "Name",
       "description": "Description",
@@ -24,7 +24,7 @@
       "deleteConfirm": "Delete this violation type?"
     },
     "violation": {
-      "entityName": "disciplinary violation",
+      "entityName": "Disciplinary Violation",
       "code": "Code",
       "violationType": "Violation type",
       "employee": "Employee",

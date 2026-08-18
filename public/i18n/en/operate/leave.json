@@ -1,6 +1,6 @@
 {
   "leave": {
-    "entityName": "leave request",
+    "entityName": "Leave Request",
     "title": "Leave request management",
     "employee": "Employee",
     "employeeCode": "Employee code",
@@ -45,7 +45,7 @@
     "validationDateRange": "Please select leave date range"
   },
   "leaveAllocation": {
-    "entityName": "leave allocation",
+    "entityName": "Leave Allocation",
     "title": "Leave allocation management",
     "employee": "Employee",
     "employeeCode": "Employee code",
@@ -93,7 +93,7 @@
     "holidayDate": "Holiday date"
   },
   "leaveBalanceReport": {
-    "entityName": "leave balance report",
+    "entityName": "Leave Balance Report",
     "title": "Leave balance / expiry report",
     "employee": "Employee",
     "branch": "Branch",

@@ -1,7 +1,7 @@
 {
   "humanResource": {
     "employee": {
-      "entityName": "nhân viên",
+      "entityName": "Nhân viên",
       "title": "Quản lý nhân viên",
       "code": "Mã nhân viên",
       "firstName": "Họ",

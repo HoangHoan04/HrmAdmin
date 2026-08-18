@@ -10,6 +10,7 @@ import { IpAllowlistManagerComponent } from './ip-allowlist-manager/ip-allowlist
 import { AddOrUpdateLegalRateComponent } from './legal-rate-manager/add-or-update-legal-rate/add-or-update-legal-rate.component';
 import { LegalRateManagerComponent } from './legal-rate-manager/legal-rate-manager.component';
 import { AddOrUpdateNotificationTemplateComponent } from './notification-template-manager/add-or-update-notification-template/add-or-update-notification-template.component';
+import { NotificationCenterComponent } from './notification-center/notification-center.component';
 import { NotificationTemplateManagerComponent } from './notification-template-manager/notification-template-manager.component';
 import { RetentionManagerComponent } from './retention-manager/retention-manager.component';
 import { SecuritySettingsComponent } from './security-settings/security-settings.component';
@@ -24,6 +25,15 @@ const getRelativePath = (p: string) => {
 };
 
 const routes: Routes = [
+  {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: getRelativePath(ROUTES_CONFIG.SETTING_SYSTEM.children.NOTIFICATION_CENTER.path),
+  },
+  {
+    path: getRelativePath(ROUTES_CONFIG.SETTING_SYSTEM.children.NOTIFICATION_CENTER.path),
+    component: NotificationCenterComponent,
+  },
   {
     path: getRelativePath(ROUTES_CONFIG.SETTING_SYSTEM.children.ACTION_LOG.path),
     component: ActionLogManagerComponent,
@@ -131,6 +141,7 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [
+    NotificationCenterComponent,
     ActionLogManagerComponent,
     LegalRateManagerComponent,
     AddOrUpdateLegalRateComponent,

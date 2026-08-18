@@ -32,6 +32,27 @@ const getRelativePath = (p: string) => {
 
 const routes: Routes = [
   {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: getRelativePath(
+      ROUTES_CONFIG.OPERATE_MANAGER.children.TIME_ATTENDANCE.children.TIMEKEEPING_STANDARD.path,
+    ),
+  },
+  {
+    path: 'time-attendance',
+    pathMatch: 'full',
+    redirectTo: getRelativePath(
+      ROUTES_CONFIG.OPERATE_MANAGER.children.TIME_ATTENDANCE.children.TIMEKEEPING_STANDARD.path,
+    ),
+  },
+  {
+    path: 'leave',
+    pathMatch: 'full',
+    redirectTo: getRelativePath(
+      ROUTES_CONFIG.OPERATE_MANAGER.children.LEAVE_MANAGER.children.DAY_OFF_CONFIG.path,
+    ),
+  },
+  {
     path: getRelativePath(
       ROUTES_CONFIG.OPERATE_MANAGER.children.LEAVE_MANAGER.children.DAY_OFF_CONFIG.path,
     ),

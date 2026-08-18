@@ -10,7 +10,7 @@
       "backToList": "Quay lại danh sách"
     },
     "course": {
-      "entityName": "khóa đào tạo",
+      "entityName": "Khóa đào tạo",
       "code": "Mã",
       "name": "Tên khóa",
       "provider": "Đơn vị đào tạo",
@@ -34,7 +34,7 @@
       "completionPercent": "% hoàn thành"
     },
     "material": {
-      "entityName": "tài liệu khóa học",
+      "entityName": "Tài liệu khóa học",
       "course": "Khóa học",
       "name": "Tên tài liệu",
       "fileUrl": "Đường dẫn file",
@@ -46,7 +46,7 @@
       "deleteConfirm": "Xóa tài liệu này?"
     },
     "quiz": {
-      "entityName": "câu hỏi trắc nghiệm",
+      "entityName": "Câu hỏi trắc nghiệm",
       "course": "Khóa học",
       "question": "Câu hỏi",
       "optionA": "Đáp án A",
@@ -61,7 +61,7 @@
       "deleteConfirm": "Xóa câu hỏi này?"
     },
     "enrollment": {
-      "entityName": "ghi danh đào tạo",
+      "entityName": "Ghi danh đào tạo",
       "course": "Khóa đào tạo",
       "employee": "Nhân viên",
       "enrolledAt": "Ngày ghi danh",
@@ -74,7 +74,7 @@
       "deleteConfirm": "Xóa ghi danh này?"
     },
     "result": {
-      "entityName": "kết quả đào tạo",
+      "entityName": "Kết quả đào tạo",
       "enrollment": "Ghi danh",
       "score": "Điểm",
       "grade": "Xếp loại",

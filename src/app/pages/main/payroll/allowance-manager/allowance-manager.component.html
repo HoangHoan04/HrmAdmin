@@ -23,16 +23,15 @@
   (refresh)="loadData()"
 ></app-table-custom>
 
-<nz-modal
+<nz-drawer
   [nzVisible]="modalVisible"
+  [nzWidth]="600"
+  [nzPlacement]="'right'"
   [nzTitle]="modalTitle | translate"
-  [nzOkText]="'common.actions.save' | translate"
-  [nzCancelText]="'common.actions.cancel' | translate"
-  [nzOkLoading]="submitting"
-  (nzOnCancel)="closeModal()"
-  (nzOnOk)="submitModal()"
+  [nzFooter]="drawerFooter"
+  (nzOnClose)="closeModal()"
 >
-  <ng-container *nzModalContent>
+  <ng-container *nzDrawerContent>
     <form nz-form [formGroup]="form" nzLayout="vertical">
       <nz-form-item>
         <nz-form-label nzRequired>{{ 'allowance.code' | translate }}</nz-form-label>
@@ -91,4 +90,15 @@
       </nz-form-item>
     </form>
   </ng-container>
-</nz-modal>
+
+  <ng-template #drawerFooter>
+    <div style="display: flex; justify-content: flex-end; gap: 8px">
+      <button nz-button nzType="default" (click)="closeModal()" [disabled]="submitting">
+        {{ 'common.actions.cancel' | translate }}
+      </button>
+      <button nz-button nzType="primary" (click)="submitModal()" [nzLoading]="submitting">
+        {{ 'common.actions.save' | translate }}
+      </button>
+    </div>
+  </ng-template>
+</nz-drawer>

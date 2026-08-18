@@ -33,6 +33,11 @@ const getRelativePath = (p: string) => {
 
 const routes: Routes = [
   {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: getRelativePath(ROUTES_CONFIG.ORGANIZATION.children.ORG_CHART.path),
+  },
+  {
     path: getRelativePath(ROUTES_CONFIG.ORGANIZATION.children.ORG_CHART.path),
     component: OrgChartComponent,
   },

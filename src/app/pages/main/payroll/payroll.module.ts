@@ -19,6 +19,11 @@ const getRelativePath = (p: string) => {
 
 const routes: Routes = [
   {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: getRelativePath(ROUTES_CONFIG.PAYROLL.children.PAYROLL_RUN_MANAGER.path),
+  },
+  {
     path: getRelativePath(ROUTES_CONFIG.PAYROLL.children.PAYROLL_RUN_MANAGER.path),
     component: SalaryManagerComponent,
   },

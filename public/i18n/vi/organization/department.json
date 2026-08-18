@@ -1,7 +1,7 @@
 {
   "organization": {
     "department": {
-      "entityName": "phòng ban",
+      "entityName": "Phòng ban",
       "title": "Quản lý phòng ban",
       "code": "Mã phòng ban",
       "name": "Tên phòng ban",

@@ -9,6 +9,11 @@ import {
   SimpleChanges,
   TemplateRef,
 } from '@angular/core';
+import { NzMessageService } from 'ng-zorro-antd/message';
+import { ApiService } from '@/app/core/services/api.service';
+import { I18nMessageService } from '@/app/core/services/i18n-message.service';
+import { downloadBlob, extractFileName } from '@/app/core/utils/file.util';
+import { ExcelImportService } from '../../services/excel-import.service';
 import {
   PaginationConfig,
   RowAction,
@@ -57,20 +62,142 @@ export class TableCustomComponent implements OnInit, OnChanges, OnDestroy {
   @Output() refresh = new EventEmitter<void>();
   @Output() rowClick = new EventEmitter<any>();
 
+  constructor(
+    private excelImportService: ExcelImportService,
+    private apiService: ApiService,
+    private message: NzMessageService,
+    private i18n: I18nMessageService,
+  ) {}
+
+  isToolbarActionLoading(act: TableAction): boolean {
+    if (typeof act.loading === 'function') {
+      return act.loading();
+    }
+    return !!act.loading;
+  }
+
+  isAnySubActionLoading(act: TableAction): boolean {
+    return !!act.subActions?.some((s) => this.isToolbarActionLoading(s));
+  }
+
   handleActionClick(act: TableAction, parent?: TableAction): void {
-    if (act.key === 'upload-file' && parent?.onFileSelect) {
+    if (act.disabled || this.isToolbarActionLoading(act)) return;
+
+    const impUrl = parent?.importUrl
+      ? typeof parent.importUrl === 'function'
+        ? parent.importUrl()
+        : parent.importUrl
+      : undefined;
+
+    const tplUrl = parent?.templateUrl
+      ? typeof parent.templateUrl === 'function'
+        ? parent.templateUrl()
+        : parent.templateUrl
+      : undefined;
+
+    const expUrl = act.exportUrl
+      ? typeof act.exportUrl === 'function'
+        ? act.exportUrl()
+        : act.exportUrl
+      : undefined;
+
+    if (act.key === 'upload-file' && (parent?.onFileSelect || impUrl)) {
       const input = document.createElement('input');
       input.type = 'file';
-      input.accept = parent.acceptFiles || '.xlsx,.xls,.csv';
+      input.accept = parent?.acceptFiles || '.xlsx,.xls,.csv';
       input.onchange = (e: any) => {
         const file = e.target.files?.[0];
-        if (file && parent.onFileSelect) {
-          parent.onFileSelect(file);
+        if (file) {
+          if (impUrl) {
+            this.excelImportService.openImportModal({
+              file,
+              importUrl: impUrl,
+              entityName: parent?.entityName,
+              onSuccess: parent?.onSuccess || (() => this.refresh.emit()),
+            });
+          } else if (parent?.onFileSelect) {
+            const res = parent.onFileSelect(file);
+            if (res instanceof Promise) {
+              act.loading = true;
+              res.finally(() => (act.loading = false));
+            } else if (res && typeof (res as any).subscribe === 'function') {
+              act.loading = true;
+              (res as any).subscribe({
+                complete: () => (act.loading = false),
+                error: () => (act.loading = false),
+              });
+            }
+          }
         }
       };
       input.click();
+    } else if (act.key === 'download-template' && tplUrl) {
+      act.loading = true;
+      this.apiService.postBlob(tplUrl).subscribe({
+        next: (response) => {
+          act.loading = false;
+          const blob = response.body;
+          if (!blob) {
+            this.message.error(this.i18n.excelTemplateFailed());
+            return;
+          }
+          const fileName = extractFileName(
+            response.headers.get('content-disposition'),
+            'Mau_Import.xlsx',
+          );
+          downloadBlob(blob, fileName);
+          this.message.success(this.i18n.excelTemplateSuccess());
+        },
+        error: () => {
+          act.loading = false;
+          this.message.error(this.i18n.excelTemplateFailed());
+        },
+      });
+    } else if (act.key === 'export-excel' && expUrl) {
+      const payload = act.getPayload ? act.getPayload() : {};
+      act.loading = true;
+      this.apiService.postBlob(expUrl, payload).subscribe({
+        next: (response) => {
+          act.loading = false;
+          const blob = response.body;
+          if (!blob) {
+            this.message.error(this.i18n.excelExportFailed());
+            return;
+          }
+          const fileName = extractFileName(
+            response.headers.get('content-disposition'),
+            act.fallbackFileName || `Export_${new Date().getTime()}.xlsx`,
+          );
+          downloadBlob(blob, fileName);
+          this.message.success(this.i18n.excelExportSuccess());
+        },
+        error: () => {
+          act.loading = false;
+          this.message.error(this.i18n.excelExportFailed());
+        },
+      });
     } else if (act.onClick) {
-      act.onClick();
+      act.loading = true;
+      try {
+        const result = act.onClick();
+        if (result instanceof Promise) {
+          result.finally(() => (act.loading = false));
+        } else if (result && typeof (result as any).subscribe === 'function') {
+          (result as any).subscribe({
+            complete: () => (act.loading = false),
+            error: () => (act.loading = false),
+          });
+        } else {
+          setTimeout(() => {
+            if (typeof act.loading !== 'function') {
+              act.loading = false;
+            }
+          }, 300);
+        }
+      } catch (err) {
+        act.loading = false;
+        throw err;
+      }
     }
   }
 
@@ -334,6 +461,39 @@ export class TableCustomComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
+  getBadgeColorStyle(color: string | undefined | null): Record<string, string> {
+    if (!color) return {};
+    const textCol = color.trim();
+    const bgCol = this.hexToRgba(textCol, 0.12);
+    const borderCol = this.hexToRgba(textCol, 0.3);
+    return {
+      color: textCol,
+      'background-color': bgCol,
+      'border-color': borderCol,
+    };
+  }
+
+  private hexToRgba(hex: string, alpha: number): string {
+    if (!hex) return '';
+    let c = hex.trim();
+    if (c.startsWith('#')) {
+      c = c.substring(1);
+    }
+    if (c.length === 3) {
+      c = c
+        .split('')
+        .map((char) => char + char)
+        .join('');
+    }
+    if (c.length === 6) {
+      const r = parseInt(c.substring(0, 2), 16);
+      const g = parseInt(c.substring(2, 4), 16);
+      const b = parseInt(c.substring(4, 6), 16);
+      return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+    }
+    return hex;
+  }
+
   isToolbarActionVisible(action: TableAction): boolean {
     return action.visible === undefined
       ? true
@@ -402,14 +562,5 @@ export class TableCustomComponent implements OnInit, OnChanges, OnDestroy {
   getRowIndex(rowIndex: number): number {
     if (!this.pagination) return rowIndex + 1;
     return (this.pagination.current - 1) * this.pagination.pageSize + rowIndex + 1;
-  }
-
-  getBadgeColorStyle(hex: string): Record<string, string> {
-    const normalized = hex.startsWith('#') ? hex : `#${hex}`;
-    return {
-      'background-color': `${normalized}1A`,
-      color: normalized,
-      'border-color': `${normalized}33`,
-    };
   }
 }

@@ -1,6 +1,6 @@
 {
   "reviewRenewal": {
-    "entityName": "renewal review",
+    "entityName": "Renewal Review",
     "title": "Contract Renewal Review Management",
     "contractCode": "Contract No.",
     "contractId": "Contract",

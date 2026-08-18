@@ -1,6 +1,6 @@
 {
   "allowance": {
-    "entityName": "allowance",
+    "entityName": "Allowance",
     "code": "Code",
     "name": "Name",
     "description": "Description",

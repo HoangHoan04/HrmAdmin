@@ -17,4 +17,7 @@ export interface DayOffConfig extends BaseDto {
 
 export type DayOffConfigSelectBoxDto = SelectBoxDto & {
   companyId?: string | null;
+  requireAttachment?: boolean;
+  deductBalance?: boolean;
+  defaultDaysPerYear?: number;
 };
