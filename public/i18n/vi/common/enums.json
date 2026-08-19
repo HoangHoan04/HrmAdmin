@@ -355,11 +355,15 @@
       "available": "Sẵn sàng",
       "assigned": "Đã cấp phát",
       "maintenance": "Bảo trì",
-      "retired": "Ngừng sử dụng"
+      "retired": "Ngừng sử dụng",
+      "lost": "Thất lạc",
+      "disposed": "Đã thanh lý"
     },
     "assetTicketType": {
       "issue": "Cấp phát",
-      "return": "Thu hồi"
+      "return": "Thu hồi",
+      "repair": "Bảo trì",
+      "transfer": "Điều chuyển"
     },
     "assetTicketStatus": {
       "draft": "Nháp",

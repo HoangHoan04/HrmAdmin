@@ -201,6 +201,40 @@
           ></app-table-custom>
         </div>
       </nz-tab>
+
+      <nz-tab [nzTitle]="'humanResource.employee.tabAssets' | translate">
+        <div class="tab-content">
+          <h4 style="margin-bottom: 12px; font-weight: 600">
+            <i nz-icon nzType="laptop" style="margin-right: 6px"></i>
+            {{ 'asset.employee.currentHolding' | translate }}
+          </h4>
+          <app-table-custom
+            [id]="'employee-detail-holding-assets'"
+            [data]="holdingAssets"
+            [columns]="holdingAssetColumns"
+            [loading]="assetsLoading"
+            [stripedRows]="true"
+            [showIndexList]="true"
+            [toolbar]="{ show: false }"
+            [emptyText]="'asset.employee.noHoldingAssets' | translate"
+          ></app-table-custom>
+
+          <h4 style="margin-top: 24px; margin-bottom: 12px; font-weight: 600">
+            <i nz-icon nzType="history" style="margin-right: 6px"></i>
+            {{ 'asset.employee.pastHistory' | translate }}
+          </h4>
+          <app-table-custom
+            [id]="'employee-detail-asset-histories'"
+            [data]="assetHistories"
+            [columns]="assetHistoryColumns"
+            [loading]="assetsLoading"
+            [stripedRows]="true"
+            [showIndexList]="true"
+            [toolbar]="{ show: false }"
+            [emptyText]="'asset.employee.noPastAssets' | translate"
+          ></app-table-custom>
+        </div>
+      </nz-tab>
     </nz-tabs>
   }
 </nz-card>

@@ -98,6 +98,32 @@
         </div>
         <div nz-col nzXs="24" nzMd="8">
           <nz-form-item>
+            <nz-form-label>{{ 'asset.inventory.warrantyExpiryDate' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-date-picker formControlName="warrantyExpiryDate" style="width: 100%"></nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'asset.inventory.vendor' | translate }}</nz-form-label>
+            <nz-form-control><input nz-input formControlName="vendor" /></nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'asset.inventory.model' | translate }}</nz-form-label>
+            <nz-form-control><input nz-input formControlName="model" /></nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'asset.inventory.location' | translate }}</nz-form-label>
+            <nz-form-control><input nz-input formControlName="location" /></nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
             <nz-form-label nzRequired>{{ 'asset.inventory.status' | translate }}</nz-form-label>
             <nz-form-control>
               <nz-select formControlName="status" style="width: 100%">

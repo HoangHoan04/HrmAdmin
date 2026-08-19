@@ -4,6 +4,7 @@ import { AssetTicket, PagedResult } from '@/app/core/models';
 import { ApiService, I18nMessageService } from '@/app/core/services';
 import { PermissionService } from '@/app/core/services/permission.service';
 import { StaticTranslateService } from '@/app/core/services/static-translate.service';
+import { downloadBlob, extractFileName } from '@/app/core/utils/file.util';
 import {
   CommonFilterActions,
   FilterAction,
@@ -33,6 +34,8 @@ export class AssetTicketManagerComponent implements OnInit {
   private readonly ENTITY_KEY = 'asset.ticket.entityName';
   data: AssetTicket[] = [];
   loading = false;
+  excelLoading = false;
+
   pagination: PaginationConfig = {
     current: enumData.PAGE.PAGE_INDEX,
     pageSize: enumData.PAGE.PAGE_SIZE,
@@ -80,10 +83,12 @@ export class AssetTicketManagerComponent implements OnInit {
       placeholder: 'asset.common.filterStatus',
       col: 8,
       allowClear: true,
-      options: Object.values(enumData.ASSET_TICKET_STATUS).map((x) => ({
-        label: x.labelKey,
-        value: x.value,
-      })),
+      options: Object.values(enumData.ASSET_TICKET_STATUS)
+        .filter((x, idx, self) => self.findIndex((s) => s.value === x.value) === idx)
+        .map((x) => ({
+          label: x.labelKey,
+          value: x.value,
+        })),
     },
   ];
   filterActions: FilterAction[] = [
@@ -93,9 +98,22 @@ export class AssetTicketManagerComponent implements OnInit {
   columns: TableColumn[] = [
     { field: 'code', header: 'asset.ticket.code', type: 'text', sortable: true },
     { field: 'assetName', header: 'asset.ticket.asset', type: 'text' },
-    { field: 'employeeName', header: 'asset.ticket.employee', type: 'text' },
+    {
+      field: 'ticketType',
+      header: 'asset.ticket.ticketType',
+      type: 'text',
+      render: (val: string) => {
+        const meta = Object.values(enumData.ASSET_TICKET_TYPE).find((x) => x.value === val);
+        return meta ? StaticTranslateService.instant(meta.labelKey) : val;
+      },
+    },
+    {
+      field: 'employeeName',
+      header: 'asset.ticket.employee',
+      type: 'text',
+      render: (val: any) => val || '—',
+    },
     { field: 'companyName', header: 'asset.common.company', type: 'text' },
-    { field: 'ticketType', header: 'asset.ticket.ticketType', type: 'text' },
     { field: 'ticketAt', header: 'asset.ticket.ticketAt', type: 'date' },
     {
       field: 'status',
@@ -128,7 +146,26 @@ export class AssetTicketManagerComponent implements OnInit {
     this.toolbarActions = [
       {
         ...CommonActions.create(() => this.openCreate()),
-        visible: () => this.permissionSvc.has(PERMISSION_CODES.ASSET_TICKET_MANAGE),
+        visible: () =>
+          this.permissionSvc.has(PERMISSION_CODES.ASSET_TICKET_CREATE) ||
+          this.permissionSvc.has(PERMISSION_CODES.ASSET_TICKET_MANAGE),
+      },
+      {
+        ...CommonActions.uploadExcel({
+          templateUrl: () => this.apiService.ASSET_TICKET.EXCEL_TEMPLATE,
+          importUrl: () => this.apiService.ASSET_TICKET.EXCEL_IMPORT,
+          entityName: this.ENTITY_KEY,
+          onSuccess: () => this.loadData(),
+        }),
+        visible: () =>
+          this.permissionSvc.has(PERMISSION_CODES.ASSET_TICKET_IMPORT_EXCEL) ||
+          this.permissionSvc.has(PERMISSION_CODES.ASSET_TICKET_MANAGE),
+      },
+      {
+        ...CommonActions.exportExcel(() => this.exportExcel()),
+        visible: () =>
+          this.permissionSvc.has(PERMISSION_CODES.ASSET_TICKET_EXPORT_EXCEL) ||
+          this.permissionSvc.has(PERMISSION_CODES.ASSET_TICKET_MANAGE),
       },
     ];
     this.rowActions = [
@@ -138,8 +175,9 @@ export class AssetTicketManagerComponent implements OnInit {
         tooltip: 'table.action.edit',
         severity: 'info',
         visible: (r) =>
-          r.status === enumData.ASSET_TICKET_STATUS.NEW.value &&
-          this.permissionSvc.has(PERMISSION_CODES.ASSET_TICKET_MANAGE),
+          (r.status === 'DRAFT' || r.status === 'NEW') &&
+          (this.permissionSvc.has(PERMISSION_CODES.ASSET_TICKET_UPDATE) ||
+            this.permissionSvc.has(PERMISSION_CODES.ASSET_TICKET_MANAGE)),
         onClick: (r) => this.openEdit(r),
       },
       {
@@ -148,16 +186,30 @@ export class AssetTicketManagerComponent implements OnInit {
         tooltip: 'table.action.complete',
         severity: 'success',
         visible: (r) =>
-          r.status === enumData.ASSET_TICKET_STATUS.NEW.value &&
-          this.permissionSvc.has(PERMISSION_CODES.ASSET_TICKET_MANAGE),
+          (r.status === 'DRAFT' || r.status === 'NEW') &&
+          (this.permissionSvc.has(PERMISSION_CODES.ASSET_TICKET_COMPLETE) ||
+            this.permissionSvc.has(PERMISSION_CODES.ASSET_TICKET_MANAGE)),
         onClick: (r) => this.complete(r),
+      },
+      {
+        key: 'cancel',
+        icon: 'close-circle',
+        tooltip: 'common.actions.cancel',
+        severity: 'warning',
+        visible: (r) =>
+          r.status !== 'CANCELLED' &&
+          (this.permissionSvc.has(PERMISSION_CODES.ASSET_TICKET_CANCEL) ||
+            this.permissionSvc.has(PERMISSION_CODES.ASSET_TICKET_MANAGE)),
+        onClick: (r) => this.cancel(r),
       },
       {
         key: 'delete',
         icon: 'delete',
         tooltip: 'table.action.delete',
         severity: 'danger',
-        visible: () => this.permissionSvc.has(PERMISSION_CODES.ASSET_TICKET_MANAGE),
+        visible: (r) =>
+          r.status !== 'DONE' &&
+          this.permissionSvc.has(PERMISSION_CODES.ASSET_TICKET_MANAGE),
         onClick: (r) => this.delete(r),
       },
     ];
@@ -189,6 +241,38 @@ export class AssetTicketManagerComponent implements OnInit {
           this.message.error(this.i18n.loadListFailed(this.ENTITY_KEY, err.error));
           this.loading = false;
           this.cdr.markForCheck();
+        },
+      });
+  }
+
+  exportExcel(): void {
+    this.excelLoading = true;
+    const payload = {
+      search: (this.filters['searchText'] || '').trim() || undefined,
+      ticketType: this.filters['ticketType'] || undefined,
+      status: this.filters['status'] || undefined,
+    };
+
+    this.apiService
+      .postBlob(this.apiService.ASSET_TICKET.EXCEL_EXPORT, payload)
+      .subscribe({
+        next: (response: any) => {
+          this.excelLoading = false;
+          const blob = response.body;
+          if (!blob) {
+            this.message.error(this.i18n.excelExportFailed());
+            return;
+          }
+          const fileName = extractFileName(
+            response.headers.get('content-disposition'),
+            `Danh_Sach_Phieu_Tai_San_${new Date().getTime()}.xlsx`,
+          );
+          downloadBlob(blob, fileName);
+          this.message.success(this.i18n.excelExportSuccess());
+        },
+        error: () => {
+          this.excelLoading = false;
+          this.message.error(this.i18n.excelExportFailed());
         },
       });
   }
@@ -233,6 +317,32 @@ export class AssetTicketManagerComponent implements OnInit {
         new Promise<void>((resolve, reject) => {
           this.apiService
             .post<boolean>(this.apiService.ASSET_TICKET.COMPLETE, { id: item.id })
+            .subscribe({
+              next: (ok) => {
+                if (ok) {
+                  this.message.success(this.i18n.instant('common.messages.saveSuccess'));
+                  this.loadData();
+                  resolve();
+                } else {
+                  this.message.error(this.i18n.genericError());
+                  reject();
+                }
+              },
+              error: (err: any) => {
+                this.message.error(this.i18n.genericError(err.error));
+                reject();
+              },
+            });
+        }),
+    });
+  }
+  cancel(item: AssetTicket): void {
+    this.modal.confirm({
+      nzTitle: this.i18n.instant('asset.ticket.cancelConfirm'),
+      nzOnOk: () =>
+        new Promise<void>((resolve, reject) => {
+          this.apiService
+            .post<boolean>(this.apiService.ASSET_TICKET.CANCEL, { id: item.id })
             .subscribe({
               next: (ok) => {
                 if (ok) {

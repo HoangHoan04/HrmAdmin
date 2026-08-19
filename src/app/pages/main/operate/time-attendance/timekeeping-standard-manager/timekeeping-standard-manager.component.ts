@@ -3,6 +3,7 @@ import { enumData } from '@/app/core/constants/enums';
 import { CompanySelectBoxDto, PagedResult, TimeKeepingStandard } from '@/app/core/models';
 import { ApiService, I18nMessageService, PermissionService } from '@/app/core/services';
 import { StaticTranslateService } from '@/app/core/services/static-translate.service';
+import { downloadBlob, extractFileName } from '@/app/core/utils/file.util';
 import {
   CommonFilterActions,
   FilterAction,
@@ -21,6 +22,7 @@ import { ActionConfirmService } from '@/app/shared/services/action-confirm.servi
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { tap } from 'rxjs/internal/operators/tap';
 
 @Component({
   standalone: false,
@@ -33,6 +35,7 @@ export class TimekeepingStandardManagerComponent implements OnInit {
 
   data: (TimeKeepingStandard & { status?: boolean })[] = [];
   loading = false;
+  excelLoading = false;
 
   pagination: PaginationConfig = {
     current: enumData.PAGE.PAGE_INDEX,
@@ -48,6 +51,23 @@ export class TimekeepingStandardManagerComponent implements OnInit {
     {
       ...CommonActions.create(() => this.openCreate()),
       visible: () => this.permissionSvc.has(PERMISSION_CODES.OPERATE_TIMEKEEPING_STANDARD_CREATE),
+    },
+    {
+      ...CommonActions.uploadExcel({
+        templateUrl: () => this.apiService.TIMEKEEPING_STANDARD.EXCEL_TEMPLATE,
+        importUrl: () => this.apiService.TIMEKEEPING_STANDARD.EXCEL_IMPORT,
+        entityName: this.ENTITY_KEY,
+        onSuccess: () => this.loadData(),
+      }),
+      visible: () =>
+        this.permissionSvc.has(PERMISSION_CODES.OPERATE_TIMEKEEPING_STANDARD_IMPORT_EXCEL) ||
+        this.permissionSvc.has(PERMISSION_CODES.OPERATE_TIMEKEEPING_STANDARD_CREATE),
+    },
+    {
+      ...CommonActions.exportExcel(() => this.exportExcel()),
+      visible: () =>
+        this.permissionSvc.has(PERMISSION_CODES.OPERATE_TIMEKEEPING_STANDARD_EXPORT_EXCEL) ||
+        this.permissionSvc.has(PERMISSION_CODES.OPERATE_TIMEKEEPING_STANDARD_VIEW),
     },
   ];
 
@@ -336,6 +356,41 @@ export class TimekeepingStandardManagerComponent implements OnInit {
         error: (err: any) =>
           this.message.error(this.i18n.deactivateError(this.ENTITY_KEY, err.error)),
       });
+  }
+
+  exportExcel() {
+    this.excelLoading = true;
+    const payload: Record<string, any> = {
+      code: (this.filters['code'] || '').trim() || undefined,
+      name: (this.filters['name'] || '').trim() || undefined,
+    };
+    if (this.filters['companyId']) payload['companyId'] = this.filters['companyId'];
+    if (this.filters['isDeleted'] !== null && this.filters['isDeleted'] !== undefined) {
+      payload['isDeleted'] = this.filters['isDeleted'];
+    }
+
+    return this.apiService.postBlob(this.apiService.TIMEKEEPING_STANDARD.EXCEL_EXPORT, payload).pipe(
+      tap({
+        next: (response) => {
+          this.excelLoading = false;
+          const blob = response.body;
+          if (!blob) {
+            this.message.error(this.i18n.excelExportFailed());
+            return;
+          }
+          const fileName = extractFileName(
+            response.headers.get('content-disposition'),
+            `Danh_Sach_Chuan_Cham_Cong_${new Date().getTime()}.xlsx`,
+          );
+          downloadBlob(blob, fileName);
+          this.message.success(this.i18n.excelExportSuccess());
+        },
+        error: () => {
+          this.excelLoading = false;
+          this.message.error(this.i18n.excelExportFailed());
+        },
+      }),
+    );
   }
 
   private syncFilterActionsLoading(): void {

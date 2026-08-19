@@ -360,11 +360,15 @@
       "available": "Available",
       "assigned": "Assigned",
       "maintenance": "Maintenance",
-      "retired": "Retired"
+      "retired": "Retired",
+      "lost": "Lost",
+      "disposed": "Disposed"
     },
     "assetTicketType": {
       "issue": "Issue",
-      "return": "Return"
+      "return": "Return",
+      "repair": "Repair",
+      "transfer": "Transfer"
     },
     "assetTicketStatus": {
       "draft": "Draft",

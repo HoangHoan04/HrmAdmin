@@ -4,6 +4,7 @@ import { AssetType, PagedResult } from '@/app/core/models';
 import { ApiService, I18nMessageService } from '@/app/core/services';
 import { PermissionService } from '@/app/core/services/permission.service';
 import { StaticTranslateService } from '@/app/core/services/static-translate.service';
+import { downloadBlob, extractFileName } from '@/app/core/utils/file.util';
 import {
   CommonFilterActions,
   FilterAction,
@@ -33,6 +34,7 @@ export class AssetTypeManagerComponent implements OnInit {
   private readonly ENTITY_KEY = 'asset.type.entityName';
   data: AssetType[] = [];
   loading = false;
+  excelLoading = false;
 
   pagination: PaginationConfig = {
     current: enumData.PAGE.PAGE_INDEX,
@@ -86,6 +88,13 @@ export class AssetTypeManagerComponent implements OnInit {
     { field: 'name', header: 'asset.type.name', type: 'text', sortable: true },
     { field: 'companyName', header: 'asset.common.company', type: 'text' },
     {
+      field: 'isSerialRequired',
+      header: 'asset.type.isSerialRequired',
+      type: 'boolean',
+      renderBoolean: (val: boolean) => (val !== false ? 'Có' : 'Không'),
+    },
+    { field: 'maxPerEmployee', header: 'asset.type.maxPerEmployee', type: 'text' },
+    {
       field: 'isActive',
       header: 'asset.common.status',
       type: 'boolean',
@@ -111,7 +120,26 @@ export class AssetTypeManagerComponent implements OnInit {
     this.toolbarActions = [
       {
         ...CommonActions.create(() => this.openCreate()),
-        visible: () => this.permissionSvc.has(PERMISSION_CODES.ASSET_TYPE_MANAGE),
+        visible: () =>
+          this.permissionSvc.has(PERMISSION_CODES.ASSET_TYPE_CREATE) ||
+          this.permissionSvc.has(PERMISSION_CODES.ASSET_TYPE_MANAGE),
+      },
+      {
+        ...CommonActions.uploadExcel({
+          templateUrl: () => this.apiService.ASSET_TYPE.EXCEL_TEMPLATE,
+          importUrl: () => this.apiService.ASSET_TYPE.EXCEL_IMPORT,
+          entityName: this.ENTITY_KEY,
+          onSuccess: () => this.loadData(),
+        }),
+        visible: () =>
+          this.permissionSvc.has(PERMISSION_CODES.ASSET_TYPE_IMPORT_EXCEL) ||
+          this.permissionSvc.has(PERMISSION_CODES.ASSET_TYPE_MANAGE),
+      },
+      {
+        ...CommonActions.exportExcel(() => this.exportExcel()),
+        visible: () =>
+          this.permissionSvc.has(PERMISSION_CODES.ASSET_TYPE_EXPORT_EXCEL) ||
+          this.permissionSvc.has(PERMISSION_CODES.ASSET_TYPE_MANAGE),
       },
     ];
     this.rowActions = [
@@ -120,7 +148,9 @@ export class AssetTypeManagerComponent implements OnInit {
         icon: 'edit',
         tooltip: 'common.actions.update',
         severity: 'info',
-        visible: () => this.permissionSvc.has(PERMISSION_CODES.ASSET_TYPE_MANAGE),
+        visible: () =>
+          this.permissionSvc.has(PERMISSION_CODES.ASSET_TYPE_UPDATE) ||
+          this.permissionSvc.has(PERMISSION_CODES.ASSET_TYPE_MANAGE),
         onClick: (r) => this.openEdit(r),
       },
       {
@@ -143,7 +173,7 @@ export class AssetTypeManagerComponent implements OnInit {
       pageSize: this.pagination.pageSize,
       sortField: this.sortField,
       sortOrder: this.sortOrder,
-      searchText: (this.filters['searchText'] || '').trim() || undefined,
+      search: (this.filters['searchText'] || '').trim() || undefined,
     };
     if (this.filters['isActive'] !== null && this.filters['isActive'] !== undefined) {
       payload['isActive'] = this.filters['isActive'];
@@ -161,6 +191,37 @@ export class AssetTypeManagerComponent implements OnInit {
           this.message.error(this.i18n.loadListFailed(this.ENTITY_KEY, err.error));
           this.loading = false;
           this.cdr.markForCheck();
+        },
+      });
+  }
+
+  exportExcel(): void {
+    this.excelLoading = true;
+    const payload = {
+      search: (this.filters['searchText'] || '').trim() || undefined,
+      isActive: this.filters['isActive'] !== null ? this.filters['isActive'] : undefined,
+    };
+
+    this.apiService
+      .postBlob(this.apiService.ASSET_TYPE.EXCEL_EXPORT, payload)
+      .subscribe({
+        next: (response: any) => {
+          this.excelLoading = false;
+          const blob = response.body;
+          if (!blob) {
+            this.message.error(this.i18n.excelExportFailed());
+            return;
+          }
+          const fileName = extractFileName(
+            response.headers.get('content-disposition'),
+            `Danh_Sach_Loai_Tai_San_${new Date().getTime()}.xlsx`,
+          );
+          downloadBlob(blob, fileName);
+          this.message.success(this.i18n.excelExportSuccess());
+        },
+        error: () => {
+          this.excelLoading = false;
+          this.message.error(this.i18n.excelExportFailed());
         },
       });
   }

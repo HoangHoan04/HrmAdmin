@@ -8,6 +8,7 @@ import {
 } from '@/app/core/models';
 import { ApiService, I18nMessageService, PermissionService } from '@/app/core/services';
 import { StaticTranslateService } from '@/app/core/services/static-translate.service';
+import { downloadBlob, extractFileName } from '@/app/core/utils/file.util';
 import {
   CommonFilterActions,
   FilterAction,
@@ -26,6 +27,7 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { tap } from 'rxjs/internal/operators/tap';
 
 @Component({
   standalone: false,
@@ -39,6 +41,7 @@ export class WorkPatternManagerComponent implements OnInit {
   data: EmployeeWorkPattern[] = [];
   loading = false;
   submitting = false;
+  excelLoading = false;
 
   upsertVisible = false;
   bulkVisible = false;
@@ -69,6 +72,23 @@ export class WorkPatternManagerComponent implements OnInit {
       severity: 'default',
       visible: () => this.permissionSvc.has(PERMISSION_CODES.OPERATE_WORK_PATTERN_CREATE),
       onClick: () => this.openBulk(),
+    },
+    {
+      ...CommonActions.uploadExcel({
+        templateUrl: () => this.apiService.EMPLOYEE_WORK_PATTERN.EXCEL_TEMPLATE,
+        importUrl: () => this.apiService.EMPLOYEE_WORK_PATTERN.EXCEL_IMPORT,
+        entityName: this.ENTITY_KEY,
+        onSuccess: () => this.loadData(),
+      }),
+      visible: () =>
+        this.permissionSvc.has(PERMISSION_CODES.OPERATE_WORK_PATTERN_IMPORT_EXCEL) ||
+        this.permissionSvc.has(PERMISSION_CODES.OPERATE_WORK_PATTERN_CREATE),
+    },
+    {
+      ...CommonActions.exportExcel(() => this.exportExcel()),
+      visible: () =>
+        this.permissionSvc.has(PERMISSION_CODES.OPERATE_WORK_PATTERN_EXPORT_EXCEL) ||
+        this.permissionSvc.has(PERMISSION_CODES.OPERATE_WORK_PATTERN_VIEW),
     },
   ];
 
@@ -492,5 +512,38 @@ export class WorkPatternManagerComponent implements OnInit {
             });
         }),
     });
+  }
+
+  exportExcel() {
+    this.excelLoading = true;
+    const payload: Record<string, any> = {};
+    if (this.filters['employeeId']) payload['employeeId'] = this.filters['employeeId'];
+    if (this.filters['shiftMasterId']) payload['shiftMasterId'] = this.filters['shiftMasterId'];
+    if (this.filters['isActive'] !== null && this.filters['isActive'] !== undefined) {
+      payload['isActive'] = this.filters['isActive'];
+    }
+
+    return this.apiService.postBlob(this.apiService.EMPLOYEE_WORK_PATTERN.EXCEL_EXPORT, payload).pipe(
+      tap({
+        next: (response) => {
+          this.excelLoading = false;
+          const blob = response.body;
+          if (!blob) {
+            this.message.error(this.i18n.excelExportFailed());
+            return;
+          }
+          const fileName = extractFileName(
+            response.headers.get('content-disposition'),
+            `Danh_Sach_Mau_Phan_Ca_${new Date().getTime()}.xlsx`,
+          );
+          downloadBlob(blob, fileName);
+          this.message.success(this.i18n.excelExportSuccess());
+        },
+        error: () => {
+          this.excelLoading = false;
+          this.message.error(this.i18n.excelExportFailed());
+        },
+      }),
+    );
   }
 }

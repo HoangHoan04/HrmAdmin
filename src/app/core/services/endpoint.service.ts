@@ -158,6 +158,8 @@ export class EndpointService {
     CHANGE_TIMELINE: `${this.baseUrl}/employee/change-timeline`,
     SET_LIFECYCLE_STATUS: `${this.baseUrl}/employee/set-lifecycle-status`,
     BULK_CHANGE_MANAGER: `${this.baseUrl}/employee/bulk-change-manager`,
+    ASSETS: `${this.baseUrl}/employee/assets`,
+    ASSET_CLEARANCE: `${this.baseUrl}/employee/asset-clearance`,
   };
 
   TIMEKEEPING_STANDARD = {
@@ -168,6 +170,9 @@ export class EndpointService {
     ACTIVATE: `${this.baseUrl}/timekeeping-standard/activate`,
     DEACTIVATE: `${this.baseUrl}/timekeeping-standard/deactivate`,
     SELECT_BOX: `${this.baseUrl}/timekeeping-standard/select-box`,
+    EXCEL_TEMPLATE: `${this.baseUrl}/timekeeping-standard/excel/template`,
+    EXCEL_EXPORT: `${this.baseUrl}/timekeeping-standard/excel/export`,
+    EXCEL_IMPORT: `${this.baseUrl}/timekeeping-standard/excel/import`,
   };
 
   SHIFT_MASTER = {
@@ -178,6 +183,9 @@ export class EndpointService {
     ACTIVATE: `${this.baseUrl}/shift-master/activate`,
     DEACTIVATE: `${this.baseUrl}/shift-master/deactivate`,
     SELECT_BOX: `${this.baseUrl}/shift-master/select-box`,
+    EXCEL_TEMPLATE: `${this.baseUrl}/shift-master/excel/template`,
+    EXCEL_EXPORT: `${this.baseUrl}/shift-master/excel/export`,
+    EXCEL_IMPORT: `${this.baseUrl}/shift-master/excel/import`,
   };
 
   WORK_SCHEDULE = {
@@ -188,6 +196,9 @@ export class EndpointService {
     DEACTIVATE: `${this.baseUrl}/work-schedule/deactivate`,
     BULK_CREATE: `${this.baseUrl}/work-schedule/bulk-create`,
     COPY_WEEK: `${this.baseUrl}/work-schedule/copy-week`,
+    EXCEL_TEMPLATE: `${this.baseUrl}/work-schedule/excel/template`,
+    EXCEL_EXPORT: `${this.baseUrl}/work-schedule/excel/export`,
+    EXCEL_IMPORT: `${this.baseUrl}/work-schedule/excel/import`,
   };
 
   EMPLOYEE_WORK_PATTERN = {
@@ -195,6 +206,9 @@ export class EndpointService {
     UPSERT: `${this.baseUrl}/employee-work-pattern/upsert`,
     BULK_UPSERT: `${this.baseUrl}/employee-work-pattern/bulk-upsert`,
     DEACTIVATE: `${this.baseUrl}/employee-work-pattern/deactivate`,
+    EXCEL_TEMPLATE: `${this.baseUrl}/employee-work-pattern/excel/template`,
+    EXCEL_EXPORT: `${this.baseUrl}/employee-work-pattern/excel/export`,
+    EXCEL_IMPORT: `${this.baseUrl}/employee-work-pattern/excel/import`,
   };
 
   TIMEKEEPING = {
@@ -235,6 +249,9 @@ export class EndpointService {
     ACTIVATE: `${this.baseUrl}/day-off-config/activate`,
     DEACTIVATE: `${this.baseUrl}/day-off-config/deactivate`,
     SELECT_BOX: `${this.baseUrl}/day-off-config/select-box`,
+    EXCEL_TEMPLATE: `${this.baseUrl}/day-off-config/excel/template`,
+    EXCEL_EXPORT: `${this.baseUrl}/day-off-config/excel/export`,
+    EXCEL_IMPORT: `${this.baseUrl}/day-off-config/excel/import`,
   };
 
   PUBLIC_HOLIDAY = {
@@ -244,6 +261,9 @@ export class EndpointService {
     UPDATE: `${this.baseUrl}/public-holiday/update`,
     ACTIVATE: `${this.baseUrl}/public-holiday/activate`,
     DEACTIVATE: `${this.baseUrl}/public-holiday/deactivate`,
+    EXCEL_TEMPLATE: `${this.baseUrl}/public-holiday/excel/template`,
+    EXCEL_EXPORT: `${this.baseUrl}/public-holiday/excel/export`,
+    EXCEL_IMPORT: `${this.baseUrl}/public-holiday/excel/import`,
   };
 
   REGISTER_DAY_OFF = {
@@ -271,6 +291,9 @@ export class EndpointService {
     ACTIVATE: `${this.baseUrl}/contract-type/activate`,
     DEACTIVATE: `${this.baseUrl}/contract-type/deactivate`,
     SELECT_BOX: `${this.baseUrl}/contract-type/select-box`,
+    EXCEL_TEMPLATE: `${this.baseUrl}/contract-type/excel/template`,
+    EXCEL_IMPORT: `${this.baseUrl}/contract-type/excel/import`,
+    EXCEL_EXPORT: `${this.baseUrl}/contract-type/excel/export`,
   };
 
   CONTRACT = {
@@ -307,6 +330,9 @@ export class EndpointService {
     CANCEL: `${this.baseUrl}/transfer-employee/cancel`,
     HISTORY: `${this.baseUrl}/transfer-employee/history`,
     EMPLOYEE_ORG_SNAPSHOT: `${this.baseUrl}/transfer-employee/employee-org-snapshot`,
+    EXCEL_TEMPLATE: `${this.baseUrl}/transfer-employee/excel/template`,
+    EXCEL_EXPORT: `${this.baseUrl}/transfer-employee/excel/export`,
+    EXCEL_IMPORT: `${this.baseUrl}/transfer-employee/excel/import`,
   };
 
   SALARY = {
@@ -485,6 +511,9 @@ export class EndpointService {
     CREATE: `${this.baseUrl}/asset-type/create`,
     UPDATE: `${this.baseUrl}/asset-type/update`,
     DELETE: `${this.baseUrl}/asset-type/delete`,
+    EXCEL_TEMPLATE: `${this.baseUrl}/asset-type/excel/template`,
+    EXCEL_EXPORT: `${this.baseUrl}/asset-type/excel/export`,
+    EXCEL_IMPORT: `${this.baseUrl}/asset-type/excel/import`,
   };
 
   ASSET = {
@@ -493,6 +522,10 @@ export class EndpointService {
     CREATE: `${this.baseUrl}/asset/create`,
     UPDATE: `${this.baseUrl}/asset/update`,
     DELETE: `${this.baseUrl}/asset/delete`,
+    SELECT_BOX: `${this.baseUrl}/asset/select-box`,
+    EXCEL_TEMPLATE: `${this.baseUrl}/asset/excel/template`,
+    EXCEL_EXPORT: `${this.baseUrl}/asset/excel/export`,
+    EXCEL_IMPORT: `${this.baseUrl}/asset/excel/import`,
   };
 
   ASSET_TICKET = {
@@ -502,6 +535,10 @@ export class EndpointService {
     UPDATE: `${this.baseUrl}/asset-ticket/update`,
     DELETE: `${this.baseUrl}/asset-ticket/delete`,
     COMPLETE: `${this.baseUrl}/asset-ticket/complete`,
+    CANCEL: `${this.baseUrl}/asset-ticket/cancel`,
+    EXCEL_TEMPLATE: `${this.baseUrl}/asset-ticket/excel/template`,
+    EXCEL_EXPORT: `${this.baseUrl}/asset-ticket/excel/export`,
+    EXCEL_IMPORT: `${this.baseUrl}/asset-ticket/excel/import`,
   };
 
   PERFORMANCE_CYCLE = {

@@ -3,6 +3,7 @@ import { enumData } from '@/app/core/constants/enums';
 import { CompanySelectBoxDto, PagedResult, PublicHoliday } from '@/app/core/models';
 import { ApiService, I18nMessageService, PermissionService } from '@/app/core/services';
 import { StaticTranslateService } from '@/app/core/services/static-translate.service';
+import { downloadBlob, extractFileName } from '@/app/core/utils/file.util';
 import {
   CommonFilterActions,
   FilterAction,
@@ -21,6 +22,7 @@ import { ActionConfirmService } from '@/app/shared/services/action-confirm.servi
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { tap } from 'rxjs/internal/operators/tap';
 
 @Component({
   standalone: false,
@@ -33,6 +35,7 @@ export class PublicHolidayManagerComponent implements OnInit {
 
   data: (PublicHoliday & { status?: boolean })[] = [];
   loading = false;
+  excelLoading = false;
 
   pagination: PaginationConfig = {
     current: enumData.PAGE.PAGE_INDEX,
@@ -48,6 +51,23 @@ export class PublicHolidayManagerComponent implements OnInit {
     {
       ...CommonActions.create(() => this.openCreate()),
       visible: () => this.permissionSvc.has(PERMISSION_CODES.OPERATE_PUBLIC_HOLIDAY_CREATE),
+    },
+    {
+      ...CommonActions.uploadExcel({
+        templateUrl: () => this.apiService.PUBLIC_HOLIDAY.EXCEL_TEMPLATE,
+        importUrl: () => this.apiService.PUBLIC_HOLIDAY.EXCEL_IMPORT,
+        entityName: this.ENTITY_KEY,
+        onSuccess: () => this.loadData(),
+      }),
+      visible: () =>
+        this.permissionSvc.has(PERMISSION_CODES.OPERATE_PUBLIC_HOLIDAY_IMPORT_EXCEL) ||
+        this.permissionSvc.has(PERMISSION_CODES.OPERATE_PUBLIC_HOLIDAY_CREATE),
+    },
+    {
+      ...CommonActions.exportExcel(() => this.exportExcel()),
+      visible: () =>
+        this.permissionSvc.has(PERMISSION_CODES.OPERATE_PUBLIC_HOLIDAY_EXPORT_EXCEL) ||
+        this.permissionSvc.has(PERMISSION_CODES.OPERATE_PUBLIC_HOLIDAY_VIEW),
     },
   ];
 
@@ -322,6 +342,41 @@ export class PublicHolidayManagerComponent implements OnInit {
         error: (err: any) =>
           this.message.error(this.i18n.deactivateError(this.ENTITY_KEY, err.error)),
       });
+  }
+
+  exportExcel() {
+    this.excelLoading = true;
+    const payload: Record<string, any> = {
+      code: (this.filters['code'] || '').trim() || undefined,
+      name: (this.filters['name'] || '').trim() || undefined,
+    };
+    if (this.filters['companyId']) payload['companyId'] = this.filters['companyId'];
+    if (this.filters['isDeleted'] !== null && this.filters['isDeleted'] !== undefined) {
+      payload['isDeleted'] = this.filters['isDeleted'];
+    }
+
+    return this.apiService.postBlob(this.apiService.PUBLIC_HOLIDAY.EXCEL_EXPORT, payload).pipe(
+      tap({
+        next: (response) => {
+          this.excelLoading = false;
+          const blob = response.body;
+          if (!blob) {
+            this.message.error(this.i18n.excelExportFailed());
+            return;
+          }
+          const fileName = extractFileName(
+            response.headers.get('content-disposition'),
+            `Danh_Sach_Ngay_Nghi_Le_${new Date().getTime()}.xlsx`,
+          );
+          downloadBlob(blob, fileName);
+          this.message.success(this.i18n.excelExportSuccess());
+        },
+        error: () => {
+          this.excelLoading = false;
+          this.message.error(this.i18n.excelExportFailed());
+        },
+      }),
+    );
   }
 
   private syncFilterActionsLoading(): void {

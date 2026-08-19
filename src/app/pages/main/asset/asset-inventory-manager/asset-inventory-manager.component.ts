@@ -4,6 +4,7 @@ import { Asset, PagedResult } from '@/app/core/models';
 import { ApiService, I18nMessageService } from '@/app/core/services';
 import { PermissionService } from '@/app/core/services/permission.service';
 import { StaticTranslateService } from '@/app/core/services/static-translate.service';
+import { downloadBlob, extractFileName } from '@/app/core/utils/file.util';
 import {
   CommonFilterActions,
   FilterAction,
@@ -33,6 +34,7 @@ export class AssetInventoryManagerComponent implements OnInit {
   private readonly ENTITY_KEY = 'asset.inventory.entityName';
   data: Asset[] = [];
   loading = false;
+  excelLoading = false;
 
   pagination: PaginationConfig = {
     current: enumData.PAGE.PAGE_INDEX,
@@ -109,6 +111,12 @@ export class AssetInventoryManagerComponent implements OnInit {
       type: 'text',
     },
     {
+      field: 'currentHolderEmployeeName',
+      header: 'asset.inventory.currentHolder',
+      type: 'text',
+      render: (val: any) => val || '—',
+    },
+    {
       field: 'status',
       header: 'asset.inventory.status',
       type: 'badge',
@@ -139,7 +147,26 @@ export class AssetInventoryManagerComponent implements OnInit {
     this.toolbarActions = [
       {
         ...CommonActions.create(() => this.openCreate()),
-        visible: () => this.permissionSvc.has(PERMISSION_CODES.ASSET_INVENTORY_CREATE),
+        visible: () =>
+          this.permissionSvc.has(PERMISSION_CODES.ASSET_INVENTORY_CREATE) ||
+          this.permissionSvc.has(PERMISSION_CODES.ASSET_INVENTORY_MANAGE),
+      },
+      {
+        ...CommonActions.uploadExcel({
+          templateUrl: () => this.apiService.ASSET.EXCEL_TEMPLATE,
+          importUrl: () => this.apiService.ASSET.EXCEL_IMPORT,
+          entityName: this.ENTITY_KEY,
+          onSuccess: () => this.loadData(),
+        }),
+        visible: () =>
+          this.permissionSvc.has(PERMISSION_CODES.ASSET_INVENTORY_IMPORT_EXCEL) ||
+          this.permissionSvc.has(PERMISSION_CODES.ASSET_INVENTORY_MANAGE),
+      },
+      {
+        ...CommonActions.exportExcel(() => this.exportExcel()),
+        visible: () =>
+          this.permissionSvc.has(PERMISSION_CODES.ASSET_INVENTORY_EXPORT_EXCEL) ||
+          this.permissionSvc.has(PERMISSION_CODES.ASSET_INVENTORY_MANAGE),
       },
     ];
     this.rowActions = [
@@ -148,7 +175,9 @@ export class AssetInventoryManagerComponent implements OnInit {
         icon: 'eye',
         tooltip: 'table.action.viewDetail',
         severity: 'secondary',
-        visible: () => this.permissionSvc.has(PERMISSION_CODES.ASSET_INVENTORY_VIEW),
+        visible: () =>
+          this.permissionSvc.has(PERMISSION_CODES.ASSET_INVENTORY_VIEW) ||
+          this.permissionSvc.has(PERMISSION_CODES.ASSET_INVENTORY_MANAGE),
         onClick: (r) => this.openDetail(r),
       },
       {
@@ -156,7 +185,9 @@ export class AssetInventoryManagerComponent implements OnInit {
         icon: 'edit',
         tooltip: 'table.action.edit',
         severity: 'info',
-        visible: () => this.permissionSvc.has(PERMISSION_CODES.ASSET_INVENTORY_UPDATE),
+        visible: () =>
+          this.permissionSvc.has(PERMISSION_CODES.ASSET_INVENTORY_UPDATE) ||
+          this.permissionSvc.has(PERMISSION_CODES.ASSET_INVENTORY_MANAGE),
         onClick: (r) => this.openEdit(r),
       },
       {
@@ -179,7 +210,7 @@ export class AssetInventoryManagerComponent implements OnInit {
       pageSize: this.pagination.pageSize,
       sortField: this.sortField,
       sortOrder: this.sortOrder,
-      searchText: (this.filters['searchText'] || '').trim() || undefined,
+      search: (this.filters['searchText'] || '').trim() || undefined,
       status: this.filters['status'] || undefined,
     };
     this.apiService.post<PagedResult<Asset>>(this.apiService.ASSET.PAGINATION, payload).subscribe({
@@ -193,6 +224,35 @@ export class AssetInventoryManagerComponent implements OnInit {
         this.message.error(this.i18n.loadListFailed(this.ENTITY_KEY, err.error));
         this.loading = false;
         this.cdr.markForCheck();
+      },
+    });
+  }
+
+  exportExcel(): void {
+    this.excelLoading = true;
+    const payload = {
+      search: (this.filters['searchText'] || '').trim() || undefined,
+      status: this.filters['status'] || undefined,
+    };
+
+    this.apiService.postBlob(this.apiService.ASSET.EXCEL_EXPORT, payload).subscribe({
+      next: (response: any) => {
+        this.excelLoading = false;
+        const blob = response.body;
+        if (!blob) {
+          this.message.error(this.i18n.excelExportFailed());
+          return;
+        }
+        const fileName = extractFileName(
+          response.headers.get('content-disposition'),
+          `Danh_Sach_Tai_San_${new Date().getTime()}.xlsx`,
+        );
+        downloadBlob(blob, fileName);
+        this.message.success(this.i18n.excelExportSuccess());
+      },
+      error: () => {
+        this.excelLoading = false;
+        this.message.error(this.i18n.excelExportFailed());
       },
     });
   }

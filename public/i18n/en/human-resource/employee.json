@@ -107,6 +107,7 @@
       "tabFiles": "Files",
       "tabSalaryHistories": "Salary Histories",
       "tabTransfers": "Transfer History",
+      "tabAssets": "Assigned Assets",
       "noTransfers": "No transfer history yet.",
       "addDependent": "Add Dependent",
       "editDependent": "Edit Dependent",

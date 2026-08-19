@@ -4,6 +4,7 @@ import { toUtcDateIso } from '@/app/core/constants/helpers';
 import { EmployeeSelectBoxDto, PagedResult, TransferEmployee } from '@/app/core/models';
 import { ApiService, I18nMessageService, PermissionService } from '@/app/core/services';
 import { StaticTranslateService } from '@/app/core/services/static-translate.service';
+import { downloadBlob, extractFileName } from '@/app/core/utils/file.util';
 import {
   CommonFilterActions,
   FilterAction,
@@ -22,6 +23,7 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { tap } from 'rxjs/internal/operators/tap';
 
 type TransferRow = TransferEmployee & {
   statusLabel?: string;
@@ -39,6 +41,7 @@ export class TransferManagerComponent implements OnInit {
 
   data: TransferRow[] = [];
   loading = false;
+  excelLoading = false;
   enumData = enumData;
 
   pagination: PaginationConfig = {
@@ -55,6 +58,23 @@ export class TransferManagerComponent implements OnInit {
     {
       ...CommonActions.create(() => this.openCreate()),
       visible: () => this.permissionSvc.has(PERMISSION_CODES.HR_TRANSFER_CREATE),
+    },
+    {
+      ...CommonActions.uploadExcel({
+        templateUrl: () => this.apiService.TRANSFER_EMPLOYEE.EXCEL_TEMPLATE,
+        importUrl: () => this.apiService.TRANSFER_EMPLOYEE.EXCEL_IMPORT,
+        entityName: this.ENTITY_KEY,
+        onSuccess: () => this.loadData(),
+      }),
+      visible: () =>
+        this.permissionSvc.has(PERMISSION_CODES.HR_TRANSFER_IMPORT_EXCEL) ||
+        this.permissionSvc.has(PERMISSION_CODES.HR_TRANSFER_CREATE),
+    },
+    {
+      ...CommonActions.exportExcel(() => this.exportExcel()),
+      visible: () =>
+        this.permissionSvc.has(PERMISSION_CODES.HR_TRANSFER_EXPORT_EXCEL) ||
+        this.permissionSvc.has(PERMISSION_CODES.HR_TRANSFER_VIEW),
     },
   ];
 
@@ -80,7 +100,7 @@ export class TransferManagerComponent implements OnInit {
       label: 'transfer.code',
       type: 'input',
       placeholder: 'transfer.searchCode',
-      col: 6,
+      col: 8,
       allowClear: true,
     },
     {
@@ -88,7 +108,7 @@ export class TransferManagerComponent implements OnInit {
       label: 'transfer.employeeName',
       type: 'select',
       placeholder: 'transfer.filterEmployee',
-      col: 6,
+      col: 8,
       allowClear: true,
       options: [],
     },
@@ -97,7 +117,7 @@ export class TransferManagerComponent implements OnInit {
       label: 'transfer.transferType',
       type: 'select',
       placeholder: 'transfer.filterTransferType',
-      col: 6,
+      col: 8,
       allowClear: true,
       options: Object.values(enumData.TRANSFER_TYPE).map((item) => ({
         label: item.labelKey,
@@ -109,7 +129,7 @@ export class TransferManagerComponent implements OnInit {
       label: 'transfer.status',
       type: 'select',
       placeholder: 'transfer.filterStatus',
-      col: 6,
+      col: 8,
       allowClear: true,
       options: Object.values(enumData.TRANSFER_STATUS).map((item) => ({
         label: item.labelKey,
@@ -449,6 +469,43 @@ export class TransferManagerComponent implements OnInit {
           error: (err: any) => this.message.error(this.i18n.genericError(err.error)),
         });
     });
+  }
+
+  exportExcel() {
+    this.excelLoading = true;
+    const payload: Record<string, any> = {
+      code: (this.filters['code'] || '').trim() || undefined,
+      employeeId: this.filters['employeeId'] || undefined,
+      transferType: this.filters['transferType'] || undefined,
+      status: this.filters['status'] || undefined,
+    };
+    if (this.filters['dateRange']?.length === 2) {
+      payload['effectiveDateFrom'] = toUtcDateIso(this.filters['dateRange'][0]);
+      payload['effectiveDateTo'] = toUtcDateIso(this.filters['dateRange'][1]);
+    }
+
+    return this.apiService.postBlob(this.apiService.TRANSFER_EMPLOYEE.EXCEL_EXPORT, payload).pipe(
+      tap({
+        next: (response) => {
+          this.excelLoading = false;
+          const blob = response.body;
+          if (!blob) {
+            this.message.error(this.i18n.excelExportFailed());
+            return;
+          }
+          const fileName = extractFileName(
+            response.headers.get('content-disposition'),
+            `Danh_Sach_Dieu_Chuyen_Nhan_Su_${new Date().getTime()}.xlsx`,
+          );
+          downloadBlob(blob, fileName);
+          this.message.success(this.i18n.excelExportSuccess());
+        },
+        error: () => {
+          this.excelLoading = false;
+          this.message.error(this.i18n.excelExportFailed());
+        },
+      }),
+    );
   }
 
   private promptNote(titleKey: string): Promise<string | undefined> {

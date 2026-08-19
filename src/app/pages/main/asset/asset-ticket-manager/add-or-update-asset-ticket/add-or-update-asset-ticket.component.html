@@ -14,13 +14,25 @@
         </div>
         <div nz-col nzXs="24" nzMd="8">
           <nz-form-item>
+            <nz-form-label nzRequired>{{ 'asset.ticket.ticketType' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-select formControlName="ticketType" style="width: 100%">
+                @for (o of ticketTypeOptions; track o.value) {
+                  <nz-option [nzValue]="o.value" [nzLabel]="o.labelKey | translate"></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
             <nz-form-label nzRequired>{{ 'asset.ticket.asset' | translate }}</nz-form-label>
             <nz-form-control>
               <nz-select formControlName="assetId" style="width: 100%" nzShowSearch>
                 @for (a of assets; track a.id) {
                   <nz-option
                     [nzValue]="a.id"
-                    [nzLabel]="a.code ? a.code + ' - ' + a.name : a.name"
+                    [nzLabel]="a.code ? a.code + ' - ' + a.name + ' [' + a.status + ']' : a.name"
                   ></nz-option>
                 }
               </nz-select>
@@ -44,7 +56,24 @@
         </div>
         <div nz-col nzXs="24" nzMd="8">
           <nz-form-item>
-            <nz-form-label nzRequired>{{ 'asset.ticket.employee' | translate }}</nz-form-label>
+            <nz-form-label>{{ 'asset.common.branch' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-select formControlName="branchId" nzAllowClear style="width: 100%" nzShowSearch>
+                @for (b of branches; track b.id) {
+                  <nz-option
+                    [nzValue]="b.id"
+                    [nzLabel]="b.code ? b.code + ' - ' + b.name : b.name"
+                  ></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label nzRequired>
+              {{ (validateForm.get('ticketType')?.value === 'TRANSFER' ? 'asset.ticket.fromEmployee' : 'asset.ticket.employee') | translate }}
+            </nz-form-label>
             <nz-form-control>
               <nz-select formControlName="employeeId" style="width: 100%" nzShowSearch>
                 @for (e of employees; track e.id) {
@@ -57,16 +86,50 @@
             </nz-form-control>
           </nz-form-item>
         </div>
+        @if (validateForm.get('ticketType')?.value === 'TRANSFER') {
+          <div nz-col nzXs="24" nzMd="8">
+            <nz-form-item>
+              <nz-form-label nzRequired>{{ 'asset.ticket.toEmployee' | translate }}</nz-form-label>
+              <nz-form-control>
+                <nz-select formControlName="toEmployeeId" style="width: 100%" nzShowSearch>
+                  @for (e of employees; track e.id) {
+                    <nz-option
+                      [nzValue]="e.id"
+                      [nzLabel]="e.code ? e.code + ' - ' + e.name : e.name"
+                    ></nz-option>
+                  }
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        }
         <div nz-col nzXs="24" nzMd="8">
           <nz-form-item>
-            <nz-form-label nzRequired>{{ 'asset.ticket.ticketType' | translate }}</nz-form-label>
+            <nz-form-label nzRequired>{{ 'asset.ticket.ticketAt' | translate }}</nz-form-label>
             <nz-form-control>
-              <nz-select formControlName="ticketType" style="width: 100%">
-                @for (o of ticketTypeOptions; track o.value) {
-                  <nz-option [nzValue]="o.value" [nzLabel]="o.labelKey | translate"></nz-option>
-                }
-              </nz-select>
+              <nz-date-picker
+                formControlName="ticketAt"
+                style="width: 100%"
+                nzShowTime
+              ></nz-date-picker>
             </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'asset.ticket.returnExpectedDate' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-date-picker
+                formControlName="returnExpectedDate"
+                style="width: 100%"
+              ></nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'asset.ticket.condition' | translate }}</nz-form-label>
+            <nz-form-control><input nz-input formControlName="condition" /></nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col nzXs="24" nzMd="8">
@@ -78,18 +141,6 @@
                   <nz-option [nzValue]="o.value" [nzLabel]="o.labelKey | translate"></nz-option>
                 }
               </nz-select>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col nzXs="24" nzMd="8">
-          <nz-form-item>
-            <nz-form-label nzRequired>{{ 'asset.ticket.ticketAt' | translate }}</nz-form-label>
-            <nz-form-control>
-              <nz-date-picker
-                formControlName="ticketAt"
-                style="width: 100%"
-                nzShowTime
-              ></nz-date-picker>
             </nz-form-control>
           </nz-form-item>
         </div>

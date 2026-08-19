@@ -1279,55 +1279,58 @@ export const enumData = {
       value: 'RETIRED',
       color: '#f5222d',
     },
+    LOST: {
+      code: 'LOST',
+      labelKey: 'enums.assetStatus.lost',
+      value: 'LOST',
+      color: '#ff4d4f',
+    },
+    DISPOSED: {
+      code: 'DISPOSED',
+      labelKey: 'enums.assetStatus.disposed',
+      value: 'DISPOSED',
+      color: '#8c8c8c',
+    },
   },
 
   ASSET_TICKET_TYPE: {
     ISSUE: { code: 'ISSUE', labelKey: 'enums.assetTicketType.issue', value: 'ISSUE' },
     RETURN: { code: 'RETURN', labelKey: 'enums.assetTicketType.return', value: 'RETURN' },
+    REPAIR: { code: 'REPAIR', labelKey: 'enums.assetTicketType.repair', value: 'REPAIR' },
+    TRANSFER: { code: 'TRANSFER', labelKey: 'enums.assetTicketType.transfer', value: 'TRANSFER' },
   },
 
   ASSET_TICKET_STATUS: {
-    NEW: {
-      code: 'NEW',
-      labelKey: 'enums.assetTicketStatus.new',
-      value: 'NEW',
-      color: '#8c8c8c',
-    },
-    WAIT_APPROVAL: {
-      code: 'WAIT_APPROVAL',
-      labelKey: 'enums.assetTicketStatus.waitApproval',
-      value: 'WAIT_APPROVAL',
+    DRAFT: {
+      code: 'DRAFT',
+      labelKey: 'enums.assetTicketStatus.draft',
+      value: 'DRAFT',
       color: '#faad14',
     },
-    APPROVED: {
-      code: 'APPROVED',
-      labelKey: 'enums.assetTicketStatus.approved',
-      value: 'APPROVED',
+    DONE: {
+      code: 'DONE',
+      labelKey: 'enums.assetTicketStatus.done',
+      value: 'DONE',
       color: '#52c41a',
-    },
-    REJECTED: {
-      code: 'REJECTED',
-      labelKey: 'enums.assetTicketStatus.rejected',
-      value: 'REJECTED',
-      color: '#f5222d',
-    },
-    IN_PROGRESS: {
-      code: 'IN_PROGRESS',
-      labelKey: 'enums.assetTicketStatus.inProgress',
-      value: 'IN_PROGRESS',
-      color: '#1890ff',
-    },
-    COMPLETED: {
-      code: 'COMPLETED',
-      labelKey: 'enums.assetTicketStatus.completed',
-      value: 'COMPLETED',
-      color: '#13c2c2',
     },
     CANCELLED: {
       code: 'CANCELLED',
       labelKey: 'enums.assetTicketStatus.cancelled',
       value: 'CANCELLED',
       color: '#f5222d',
+    },
+    // Backwards compatibility aliases
+    NEW: {
+      code: 'DRAFT',
+      labelKey: 'enums.assetTicketStatus.draft',
+      value: 'DRAFT',
+      color: '#faad14',
+    },
+    COMPLETED: {
+      code: 'DONE',
+      labelKey: 'enums.assetTicketStatus.done',
+      value: 'DONE',
+      color: '#52c41a',
     },
   },
 

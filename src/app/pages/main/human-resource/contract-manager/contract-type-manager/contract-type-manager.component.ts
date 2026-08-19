@@ -3,6 +3,7 @@ import { enumData } from '@/app/core/constants/enums';
 import { CompanySelectBoxDto, ContractType, PagedResult } from '@/app/core/models';
 import { ApiService, I18nMessageService, PermissionService } from '@/app/core/services';
 import { StaticTranslateService } from '@/app/core/services/static-translate.service';
+import { downloadBlob, extractFileName } from '@/app/core/utils/file.util';
 import {
   CommonFilterActions,
   FilterAction,
@@ -21,6 +22,7 @@ import { ActionConfirmService } from '@/app/shared/services/action-confirm.servi
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { tap } from 'rxjs/internal/operators/tap';
 
 @Component({
   standalone: false,
@@ -33,6 +35,9 @@ export class ContractTypeManagerComponent implements OnInit {
 
   data: ContractType[] = [];
   loading = false;
+  excelLoading = false;
+  companies: CompanySelectBoxDto[] = [];
+  selectedCompanyCode: string | null = null;
 
   pagination: PaginationConfig = {
     current: enumData.PAGE.PAGE_INDEX,
@@ -43,11 +48,28 @@ export class ContractTypeManagerComponent implements OnInit {
 
   sortField = enumData.PAGE.SORT_FIELD.CREATED_AT;
   sortOrder = enumData.PAGE.SORT_ORDER.DESC;
-  toolbar: ToolbarConfig = { show: true };
+
+  toolbar: ToolbarConfig = {
+    show: true,
+  };
+
   toolbarActions: TableAction[] = [
     {
       ...CommonActions.create(() => this.openCreate()),
       visible: () => this.permissionSvc.has(PERMISSION_CODES.HR_CONTRACT_TYPE_CREATE),
+    },
+    {
+      ...CommonActions.uploadExcel({
+        templateUrl: () => this.apiService.CONTRACT_TYPE.EXCEL_TEMPLATE,
+        importUrl: () => this.apiService.CONTRACT_TYPE.EXCEL_IMPORT,
+        entityName: this.ENTITY_KEY,
+        onSuccess: () => this.loadData(),
+      }),
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.HR_CONTRACT_TYPE_IMPORT_EXCEL),
+    },
+    {
+      ...CommonActions.exportExcel(() => this.exportExcel()),
+      visible: () => this.permissionSvc.has(PERMISSION_CODES.HR_CONTRACT_TYPE_EXPORT_EXCEL),
     },
   ];
 
@@ -294,6 +316,40 @@ export class ContractTypeManagerComponent implements OnInit {
         error: (err: any) =>
           this.message.error(this.i18n.activateError(this.ENTITY_KEY, err.error)),
       });
+  }
+
+  exportExcel() {
+    this.excelLoading = true;
+    const payload: Record<string, any> = {
+      code: (this.filters['code'] || '').trim() || undefined,
+      name: (this.filters['name'] || '').trim() || undefined,
+    };
+    if (this.filters['isDeleted'] !== null && this.filters['isDeleted'] !== undefined) {
+      payload['isDeleted'] = this.filters['isDeleted'];
+    }
+
+    return this.apiService.postBlob(this.apiService.CONTRACT_TYPE.EXCEL_EXPORT, payload).pipe(
+      tap({
+        next: (response) => {
+          this.excelLoading = false;
+          const blob = response.body;
+          if (!blob) {
+            this.message.error(this.i18n.excelExportFailed());
+            return;
+          }
+          const fileName = extractFileName(
+            response.headers.get('content-disposition'),
+            `Danh_Sach_Loai_Hop_Dong_${new Date().getTime()}.xlsx`,
+          );
+          downloadBlob(blob, fileName);
+          this.message.success(this.i18n.excelExportSuccess());
+        },
+        error: () => {
+          this.excelLoading = false;
+          this.message.error(this.i18n.excelExportFailed());
+        },
+      }),
+    );
   }
 
   async deactivate(item: ContractType): Promise<void> {

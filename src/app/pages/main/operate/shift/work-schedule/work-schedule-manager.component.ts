@@ -9,6 +9,7 @@ import {
   WorkSchedule,
 } from '@/app/core/models';
 import { ApiService, I18nMessageService, PermissionService } from '@/app/core/services';
+import { downloadBlob, extractFileName } from '@/app/core/utils/file.util';
 import {
   CommonFilterActions,
   FilterAction,
@@ -28,6 +29,7 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { tap } from 'rxjs/internal/operators/tap';
 
 interface BulkWorkScheduleResult {
   created: number;
@@ -48,6 +50,7 @@ export class WorkScheduleManagerComponent implements OnInit {
   loading = false;
   bulkSubmitting = false;
   copySubmitting = false;
+  excelLoading = false;
 
   bulkVisible = false;
   copyVisible = false;
@@ -88,6 +91,23 @@ export class WorkScheduleManagerComponent implements OnInit {
       severity: 'info',
       visible: () => this.permissionSvc.has(PERMISSION_CODES.OPERATE_WORK_SCHEDULE_CREATE),
       onClick: () => this.openCopyWeek(),
+    },
+    {
+      ...CommonActions.uploadExcel({
+        templateUrl: () => this.apiService.WORK_SCHEDULE.EXCEL_TEMPLATE,
+        importUrl: () => this.apiService.WORK_SCHEDULE.EXCEL_IMPORT,
+        entityName: this.ENTITY_KEY,
+        onSuccess: () => this.loadData(),
+      }),
+      visible: () =>
+        this.permissionSvc.has(PERMISSION_CODES.OPERATE_WORK_SCHEDULE_IMPORT_EXCEL) ||
+        this.permissionSvc.has(PERMISSION_CODES.OPERATE_WORK_SCHEDULE_CREATE),
+    },
+    {
+      ...CommonActions.exportExcel(() => this.exportExcel()),
+      visible: () =>
+        this.permissionSvc.has(PERMISSION_CODES.OPERATE_WORK_SCHEDULE_EXPORT_EXCEL) ||
+        this.permissionSvc.has(PERMISSION_CODES.OPERATE_WORK_SCHEDULE_VIEW),
     },
   ];
 
@@ -474,6 +494,41 @@ export class WorkScheduleManagerComponent implements OnInit {
         error: (err: any) =>
           this.message.error(this.i18n.deactivateError(this.ENTITY_KEY, err.error)),
       });
+  }
+
+  exportExcel() {
+    this.excelLoading = true;
+    const payload: Record<string, any> = {};
+    if (this.filters['employeeId']) payload['employeeId'] = this.filters['employeeId'];
+    if (this.filters['shiftMasterId']) payload['shiftMasterId'] = this.filters['shiftMasterId'];
+    if (this.filters['branchId']) payload['branchId'] = this.filters['branchId'];
+    if (this.filters['dateRange'] && this.filters['dateRange'].length === 2) {
+      payload['fromDate'] = toDateOnly(this.filters['dateRange'][0]);
+      payload['toDate'] = toDateOnly(this.filters['dateRange'][1]);
+    }
+
+    return this.apiService.postBlob(this.apiService.WORK_SCHEDULE.EXCEL_EXPORT, payload).pipe(
+      tap({
+        next: (response) => {
+          this.excelLoading = false;
+          const blob = response.body;
+          if (!blob) {
+            this.message.error(this.i18n.excelExportFailed());
+            return;
+          }
+          const fileName = extractFileName(
+            response.headers.get('content-disposition'),
+            `Danh_Sach_Lich_Lam_Viec_${new Date().getTime()}.xlsx`,
+          );
+          downloadBlob(blob, fileName);
+          this.message.success(this.i18n.excelExportSuccess());
+        },
+        error: () => {
+          this.excelLoading = false;
+          this.message.error(this.i18n.excelExportFailed());
+        },
+      }),
+    );
   }
 
   private syncFilterActionsLoading(): void {

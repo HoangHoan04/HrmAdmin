@@ -3,6 +3,7 @@ import { enumData } from '@/app/core/constants/enums';
 import {
   Asset,
   AssetTicket,
+  BranchSelectBoxDto,
   CompanySelectBoxDto,
   EmployeeSelectBoxDto,
   PagedResult,
@@ -26,10 +27,13 @@ export class AddOrUpdateAssetTicketComponent implements OnInit {
   submitting = false;
   validateForm!: FormGroup;
   companies: CompanySelectBoxDto[] = [];
+  branches: BranchSelectBoxDto[] = [];
   employees: EmployeeSelectBoxDto[] = [];
   assets: Asset[] = [];
   ticketTypeOptions = Object.values(enumData.ASSET_TICKET_TYPE);
-  statusOptions = Object.values(enumData.ASSET_TICKET_STATUS);
+  statusOptions = Object.values(enumData.ASSET_TICKET_STATUS).filter(
+    (x, idx, self) => self.findIndex((s) => s.value === x.value) === idx,
+  );
 
   constructor(
     private readonly fb: FormBuilder,
@@ -45,10 +49,14 @@ export class AddOrUpdateAssetTicketComponent implements OnInit {
       code: ['', [Validators.required, Validators.maxLength(50)]],
       assetId: [null, [Validators.required]],
       employeeId: [null, [Validators.required]],
+      toEmployeeId: [null],
       companyId: [null, [Validators.required]],
+      branchId: [null],
       ticketType: ['ISSUE', [Validators.required]],
       status: ['DRAFT', [Validators.required]],
       ticketAt: [new Date(), [Validators.required]],
+      returnExpectedDate: [null],
+      condition: [''],
       note: [''],
     });
     this.id = this.route.snapshot.paramMap.get('id');
@@ -63,11 +71,26 @@ export class AddOrUpdateAssetTicketComponent implements OnInit {
     this.apiService
       .post<PagedResult<Asset>>(this.apiService.ASSET.PAGINATION, {
         pageIndex: 1,
-        pageSize: 200,
+        pageSize: 500,
       })
       .subscribe({ next: (res) => (this.assets = res.items) });
 
+    this.validateForm.get('companyId')?.valueChanges.subscribe((companyId) => {
+      this.loadBranches(companyId);
+      this.validateForm.patchValue({ branchId: null });
+    });
+
     if (this.isEdit && this.id) this.loadDetail(this.id);
+  }
+
+  loadBranches(companyId: string | null): void {
+    if (!companyId) {
+      this.branches = [];
+      return;
+    }
+    this.apiService
+      .post<BranchSelectBoxDto[]>(this.apiService.BRANCH.LOAD_BY_COMPANY, { companyId })
+      .subscribe({ next: (res) => (this.branches = res) });
   }
 
   loadDetail(id: string): void {
@@ -77,7 +100,9 @@ export class AddOrUpdateAssetTicketComponent implements OnInit {
         this.validateForm.patchValue({
           ...item,
           ticketAt: item.ticketAt ? new Date(item.ticketAt) : null,
+          returnExpectedDate: item.returnExpectedDate ? new Date(item.returnExpectedDate) : null,
         });
+        if (item.companyId) this.loadBranches(item.companyId);
         this.loading = false;
       },
       error: (err: any) => {

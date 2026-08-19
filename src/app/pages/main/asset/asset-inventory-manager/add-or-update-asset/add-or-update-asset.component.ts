@@ -50,6 +50,10 @@ export class AddOrUpdateAssetComponent implements OnInit {
       serialNumber: [''],
       purchaseDate: [null],
       purchaseCost: [null],
+      warrantyExpiryDate: [null],
+      vendor: [''],
+      model: [''],
+      location: [''],
       status: ['AVAILABLE', [Validators.required]],
       note: [''],
     });
@@ -94,6 +98,7 @@ export class AddOrUpdateAssetComponent implements OnInit {
         this.validateForm.patchValue({
           ...item,
           purchaseDate: item.purchaseDate ? new Date(item.purchaseDate) : null,
+          warrantyExpiryDate: item.warrantyExpiryDate ? new Date(item.warrantyExpiryDate) : null,
         });
         if (item.companyId) this.loadBranches(item.companyId);
         this.loading = false;

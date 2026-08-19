@@ -6,6 +6,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { ROUTES_CONFIG } from '../../../../../core/constants/common/routes.config';
 import { enumData } from '../../../../../core/constants/enums/enumData';
 import {
+  AssetAssignment,
   Employee,
   EmployeeCertificate,
   EmployeeChangeTimelineItem,
@@ -13,6 +14,7 @@ import {
   EmployeeEducation,
   EmployeeFile,
   EmployeeSalaryHistory,
+  EmployeeAssetSummary,
   TransferEmployee,
 } from '../../../../../core/models';
 import { ApiService } from '../../../../../core/services/api.service';
@@ -47,6 +49,10 @@ export class EmployeeDetailComponent implements OnInit {
 
   changeTimeline: EmployeeChangeTimelineItem[] = [];
   changeTimelineLoading = false;
+
+  holdingAssets: AssetAssignment[] = [];
+  assetHistories: AssetAssignment[] = [];
+  assetsLoading = false;
 
   workStatusOptions = Object.values(enumData.WORK_STATUS);
 
@@ -98,6 +104,27 @@ export class EmployeeDetailComponent implements OnInit {
     { field: 'startDate', header: 'humanResource.employee.education.startDate', type: 'date' },
     { field: 'endDate', header: 'humanResource.employee.education.endDate', type: 'date' },
     { field: 'gpa', header: 'humanResource.employee.education.gpa', type: 'text' },
+  ];
+
+  holdingAssetColumns: TableColumn[] = [
+    { field: 'assetCode', header: 'asset.inventory.code', type: 'text' },
+    { field: 'assetName', header: 'asset.inventory.name', type: 'text' },
+    { field: 'serialNumber', header: 'asset.inventory.serialNumber', type: 'text' },
+    { field: 'assetTypeName', header: 'asset.inventory.assetType', type: 'text' },
+    { field: 'issuedAt', header: 'asset.ticket.ticketAt', type: 'date' },
+    { field: 'conditionOnIssue', header: 'asset.ticket.condition', type: 'text' },
+    { field: 'note', header: 'asset.inventory.note', type: 'text' },
+  ];
+
+  assetHistoryColumns: TableColumn[] = [
+    { field: 'assetCode', header: 'asset.inventory.code', type: 'text' },
+    { field: 'assetName', header: 'asset.inventory.name', type: 'text' },
+    { field: 'serialNumber', header: 'asset.inventory.serialNumber', type: 'text' },
+    { field: 'assetTypeName', header: 'asset.inventory.assetType', type: 'text' },
+    { field: 'issuedAt', header: 'asset.ticket.ticketAt', type: 'date' },
+    { field: 'returnedAt', header: 'asset.ticket.returnDate', type: 'date' },
+    { field: 'conditionOnReturn', header: 'asset.ticket.conditionOnReturn', type: 'text' },
+    { field: 'note', header: 'asset.inventory.note', type: 'text' },
   ];
 
   certificateColumns: TableColumn[] = [
@@ -305,6 +332,7 @@ export class EmployeeDetailComponent implements OnInit {
         this.loading = false;
         this.loadTransferHistory(id);
         this.loadChangeTimeline(id);
+        this.loadAssets(id);
         this.cdr.detectChanges();
       },
       error: (err: any) => {
@@ -332,6 +360,26 @@ export class EmployeeDetailComponent implements OnInit {
         error: () => {
           this.changeTimeline = [];
           this.changeTimelineLoading = false;
+          this.cdr.detectChanges();
+        },
+      });
+  }
+
+  loadAssets(employeeId: string): void {
+    this.assetsLoading = true;
+    this.apiService
+      .post<EmployeeAssetSummary>(this.apiService.EMPLOYEE.ASSETS, { employeeId })
+      .subscribe({
+        next: (summary) => {
+          this.holdingAssets = summary?.currentHoldingAssets || [];
+          this.assetHistories = summary?.pastAssetHistories || [];
+          this.assetsLoading = false;
+          this.cdr.detectChanges();
+        },
+        error: () => {
+          this.holdingAssets = [];
+          this.assetHistories = [];
+          this.assetsLoading = false;
           this.cdr.detectChanges();
         },
       });
