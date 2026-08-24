@@ -32,7 +32,8 @@
             <nz-form-label>{{ 'contractType.companyName' | translate }}</nz-form-label>
             <nz-form-control>
               <nz-select
-                formControlName="companyId"
+                formControlName="companyIds"
+                nzMode="multiple"
                 nzAllowClear
                 [nzPlaceHolder]="'contractType.filterCompany' | translate"
               >

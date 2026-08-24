@@ -135,7 +135,12 @@ export class ContractTypeManagerComponent implements OnInit {
   columns: TableColumn[] = [
     { field: 'code', header: 'contractType.code', type: 'text', sortable: true },
     { field: 'name', header: 'contractType.name', type: 'text', sortable: true },
-    { field: 'companyName', header: 'contractType.companyName', type: 'text' },
+    {
+      field: 'companyName',
+      header: 'contractType.companyName',
+      type: 'text',
+      render: (value: any) => value || 'Dùng chung hệ thống',
+    },
     {
       field: 'defaultDurationMonths',
       header: 'contractType.defaultDurationMonths',

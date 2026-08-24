@@ -44,7 +44,7 @@ export class AddOrUpdateContractTypeComponent implements OnInit {
       code: ['', [Validators.required, Validators.maxLength(50)]],
       name: ['', [Validators.required, Validators.maxLength(255)]],
       description: [''],
-      companyId: [null],
+      companyIds: [[]],
       isProbation: [false],
       isUnlimited: [false],
       defaultDurationMonths: [null],
@@ -66,11 +66,18 @@ export class AddOrUpdateContractTypeComponent implements OnInit {
     this.loading = true;
     this.apiService.post<ContractType>(this.apiService.CONTRACT_TYPE.DETAIL, { id }).subscribe({
       next: (item) => {
+        const companyIds =
+          item.companyIds && item.companyIds.length > 0
+            ? item.companyIds
+            : item.companyId
+              ? [item.companyId]
+              : [];
+
         this.validateForm.patchValue({
           code: item.code,
           name: item.name,
           description: item.description,
-          companyId: item.companyId,
+          companyIds: companyIds,
           isProbation: item.isProbation ?? false,
           isUnlimited: item.isUnlimited ?? false,
           defaultDurationMonths: item.defaultDurationMonths,
@@ -107,11 +114,13 @@ export class AddOrUpdateContractTypeComponent implements OnInit {
 
     this.submitting = true;
     const value = this.validateForm.getRawValue();
+    const companyIds: string[] = value.companyIds || [];
     const payload = {
       code: value.code,
       name: value.name,
       description: value.description || null,
-      companyId: value.companyId || null,
+      companyId: companyIds.length > 0 ? companyIds[0] : null,
+      companyIds: companyIds,
       isProbation: value.isProbation,
       isUnlimited: value.isUnlimited,
       defaultDurationMonths: value.isUnlimited ? null : value.defaultDurationMonths,

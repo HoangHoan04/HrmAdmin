@@ -6,6 +6,8 @@ export interface ContractType extends BaseDto {
   description?: string;
   companyId?: string | null;
   companyName?: string;
+  companyIds?: string[];
+  companyNames?: string[];
   isProbation: boolean;
   isUnlimited: boolean;
   defaultDurationMonths?: number | null;
@@ -17,6 +19,7 @@ export interface ContractType extends BaseDto {
 
 export type ContractTypeSelectBoxDto = SelectBoxDto & {
   companyId?: string | null;
+  companyIds?: string[];
   isProbation?: boolean;
   isUnlimited?: boolean;
   defaultDurationMonths?: number | null;
