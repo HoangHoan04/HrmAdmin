@@ -11,6 +11,8 @@ export class AuthService {
   private readonly KEY_TOKEN = 'auth_token';
   private readonly KEY_REFRESH_TOKEN = 'auth_refresh_token';
   private readonly KEY_TEMP_2FA = 'auth_2fa_temp';
+  private readonly KEY_ROLE = 'auth_role';
+  private readonly KEY_USER_ID = 'auth_user_id';
 
   constructor(
     private readonly apiService: ApiService,
@@ -29,6 +31,14 @@ export class AuthService {
     return sessionStorage.getItem(this.KEY_EMAIL);
   }
 
+  get currentRole(): string | null {
+    return sessionStorage.getItem(this.KEY_ROLE);
+  }
+
+  get currentUserId(): string | null {
+    return sessionStorage.getItem(this.KEY_USER_ID);
+  }
+
   get token(): string | null {
     return sessionStorage.getItem(this.KEY_TOKEN);
   }
@@ -41,15 +51,25 @@ export class AuthService {
     return sessionStorage.getItem(this.KEY_TEMP_2FA);
   }
 
-  login(username: string, password: string): Observable<any> {
+  login(identifier: string, password: string, code2fa?: string): Observable<any> {
+    const payload = {
+      email: identifier,
+      password,
+      code2fa: code2fa || null,
+    };
     return this.apiService
-      .post<any>(this.apiService.AUTH.LOGIN, { username, password })
+      .post<any>(this.apiService.AUTH.LOGIN, payload)
       .pipe(tap((res) => this.applyLoginResponse(res)));
   }
 
   verifyTwoFactor(tempToken: string, code: string): Observable<any> {
+    const payload = {
+      email: this.currentEmail || '',
+      password: '',
+      code2fa: code,
+    };
     return this.apiService
-      .post<any>(this.apiService.AUTH.TWO_FA_VERIFY, { tempToken, code })
+      .post<any>(this.apiService.AUTH.LOGIN, payload)
       .pipe(tap((res) => this.applyLoginResponse(res)));
   }
 
@@ -70,18 +90,27 @@ export class AuthService {
   }
 
   listSessions(body: { includeRevoked?: boolean; allUsers?: boolean } = {}): Observable<any> {
-    return this.apiService.post<any>(this.apiService.AUTH.SESSIONS_LIST, body);
+    return this.apiService.get<any>(this.apiService.AUTH.SESSIONS_LIST);
   }
 
   revokeSession(id: string): Observable<any> {
-    return this.apiService.post<any>(this.apiService.AUTH.SESSIONS_REVOKE, { id });
+    return this.apiService.delete<any>(`${this.apiService.AUTH.SESSIONS_REVOKE}/${id}`);
   }
 
   logout(): void {
+    const rfToken = this.refreshToken;
+    if (rfToken) {
+      this.apiService.post<any>(this.apiService.AUTH.LOGOUT, { refreshToken: rfToken }).subscribe({
+        next: () => {},
+        error: () => {},
+      });
+    }
     sessionStorage.removeItem(this.KEY_TOKEN);
     sessionStorage.removeItem(this.KEY_REFRESH_TOKEN);
     sessionStorage.removeItem(this.KEY_USER);
     sessionStorage.removeItem(this.KEY_EMAIL);
+    sessionStorage.removeItem(this.KEY_ROLE);
+    sessionStorage.removeItem(this.KEY_USER_ID);
     sessionStorage.removeItem(this.KEY_TEMP_2FA);
     this.permissionService.clear();
   }
@@ -89,18 +118,24 @@ export class AuthService {
   refreshTokens(refreshToken: string): Observable<any> {
     return this.apiService.post<any>(this.apiService.AUTH.REFRESH, { refreshToken }).pipe(
       tap((res) => {
-        if (res && res.token) {
-          sessionStorage.setItem(this.KEY_TOKEN, res.token);
-          sessionStorage.setItem(this.KEY_REFRESH_TOKEN, res.refreshToken);
-          if (res.username) sessionStorage.setItem(this.KEY_USER, res.username);
-          if (res.email) sessionStorage.setItem(this.KEY_EMAIL, res.email);
-          if (Array.isArray(res.roles) || Array.isArray(res.permissions) || res.type) {
+        const token = res?.accessToken || res?.token;
+        const newRefreshToken = res?.refreshToken || refreshToken;
+        if (token) {
+          sessionStorage.setItem(this.KEY_TOKEN, token);
+          sessionStorage.setItem(this.KEY_REFRESH_TOKEN, newRefreshToken);
+          const user = res.user;
+          if (user) {
+            const userName = user.fullName || user.email || res.username;
+            if (userName) sessionStorage.setItem(this.KEY_USER, userName);
+            if (user.email) sessionStorage.setItem(this.KEY_EMAIL, user.email);
+            if (user.role) sessionStorage.setItem(this.KEY_ROLE, user.role);
+            if (user.id) sessionStorage.setItem(this.KEY_USER_ID, user.id);
+
+            const roles = user.role ? [user.role] : (Array.isArray(res.roles) ? res.roles : []);
             this.permissionService.setAuthContext({
-              roles: Array.isArray(res.roles) ? res.roles : this.permissionService.roles,
-              permissions: Array.isArray(res.permissions)
-                ? res.permissions
-                : this.permissionService.permissions,
-              type: res.type ?? this.permissionService.userType,
+              roles,
+              permissions: Array.isArray(res.permissions) ? res.permissions : [],
+              type: user.role ?? res.type ?? this.permissionService.userType,
             });
           }
         }
@@ -117,24 +152,25 @@ export class AuthService {
   }
 
   resetPasswordWithOtp(body: any): Observable<any> {
-    return this.apiService.post<any>(this.apiService.AUTH.RESET_PASSWORD_WITH_OTP, body);
+    return this.apiService.post<any>(this.apiService.AUTH.RESET_PASSWORD, body);
   }
 
   getInfoUser(): Observable<any> {
     return this.apiService.get<any>(this.apiService.AUTH.ME).pipe(
       tap((user) => {
         if (!user) return;
-        if (user.username) sessionStorage.setItem(this.KEY_USER, user.username);
+        const userName = user.fullName || user.email || user.username;
+        if (userName) sessionStorage.setItem(this.KEY_USER, userName);
         if (user.email) sessionStorage.setItem(this.KEY_EMAIL, user.email);
-        if (Array.isArray(user.roles) || Array.isArray(user.permissions) || user.type) {
-          this.permissionService.setAuthContext({
-            roles: Array.isArray(user.roles) ? user.roles : this.permissionService.roles,
-            permissions: Array.isArray(user.permissions)
-              ? user.permissions
-              : this.permissionService.permissions,
-            type: user.type ?? this.permissionService.userType,
-          });
-        }
+        if (user.role) sessionStorage.setItem(this.KEY_ROLE, user.role);
+        if (user.id) sessionStorage.setItem(this.KEY_USER_ID, user.id);
+
+        const roles = user.role ? [user.role] : (Array.isArray(user.roles) ? user.roles : []);
+        this.permissionService.setAuthContext({
+          roles,
+          permissions: Array.isArray(user.permissions) ? user.permissions : [],
+          type: user.role ?? user.type ?? this.permissionService.userType,
+        });
       }),
     );
   }
@@ -146,16 +182,28 @@ export class AuthService {
       if (res.username) sessionStorage.setItem(this.KEY_USER, res.username);
       return;
     }
-    if (res.token) {
+    const token = res.accessToken || res.token;
+    if (token) {
       sessionStorage.removeItem(this.KEY_TEMP_2FA);
-      sessionStorage.setItem(this.KEY_TOKEN, res.token);
-      sessionStorage.setItem(this.KEY_REFRESH_TOKEN, res.refreshToken);
-      sessionStorage.setItem(this.KEY_USER, res.username);
-      if (res.email) sessionStorage.setItem(this.KEY_EMAIL, res.email);
+      sessionStorage.setItem(this.KEY_TOKEN, token);
+      if (res.refreshToken) sessionStorage.setItem(this.KEY_REFRESH_TOKEN, res.refreshToken);
+
+      const user = res.user;
+      const userName = user?.fullName || user?.email || res.username;
+      const userEmail = user?.email || res.email;
+      const userRole = user?.role || res.role;
+      const userId = user?.id || res.userId;
+
+      if (userName) sessionStorage.setItem(this.KEY_USER, userName);
+      if (userEmail) sessionStorage.setItem(this.KEY_EMAIL, userEmail);
+      if (userRole) sessionStorage.setItem(this.KEY_ROLE, userRole);
+      if (userId) sessionStorage.setItem(this.KEY_USER_ID, userId);
+
+      const roles = userRole ? [userRole] : (Array.isArray(res.roles) ? res.roles : []);
       this.permissionService.setAuthContext({
-        roles: Array.isArray(res.roles) ? res.roles : [],
+        roles,
         permissions: Array.isArray(res.permissions) ? res.permissions : [],
-        type: res.type ?? null,
+        type: userRole ?? res.type ?? null,
       });
     }
   }

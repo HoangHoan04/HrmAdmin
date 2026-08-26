@@ -118,19 +118,6 @@ export interface ZaloOaConfig extends BaseDto {
   note?: string;
 }
 
-export interface IntegrationAdapterStatus {
-  code: string;
-  name: string;
-  enabled: boolean;
-  configured: boolean;
-  detail?: string;
-}
-
-export interface IntegrationStatusResult {
-  adapters: IntegrationAdapterStatus[];
-  checkedAt: string;
-}
-
 export interface PunchImportResult {
   totalRows: number;
   imported: number;

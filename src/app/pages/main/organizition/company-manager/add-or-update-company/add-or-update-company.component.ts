@@ -6,7 +6,9 @@ import { ROUTES_CONFIG } from '../../../../../core/constants/common/routes.confi
 import {
   Company,
   CompanySelectBoxDto,
+  ProvinceDto,
   TimeKeepingStandardSelectBoxDto,
+  WardDto,
 } from '../../../../../core/models';
 import { ApiService } from '../../../../../core/services/api.service';
 import { I18nMessageService } from '../../../../../core/services/i18n-message.service';
@@ -26,6 +28,13 @@ export class AddOrUpdateCompanyComponent implements OnInit {
   parentCompanies: CompanySelectBoxDto[] = [];
   timeKeepingStandards: TimeKeepingStandardSelectBoxDto[] = [];
 
+  provinces: ProvinceDto[] = [];
+  wards: WardDto[] = [];
+  loadingProvinces = false;
+  loadingWards = false;
+  selectedProvinceCode: string | null = null;
+  pendingWardValue: string | null = null;
+
   constructor(
     private readonly fb: FormBuilder,
     private readonly route: ActivatedRoute,
@@ -39,6 +48,7 @@ export class AddOrUpdateCompanyComponent implements OnInit {
     this.initForm();
     this.id = this.route.snapshot.paramMap.get('id');
     this.isEdit = !!this.id;
+    this.loadProvinces();
     this.loadParentCompanies();
     this.loadTimeKeepingStandards();
 
@@ -68,7 +78,6 @@ export class AddOrUpdateCompanyComponent implements OnInit {
       fax: ['', [Validators.maxLength(50)]],
       country: ['', [Validators.maxLength(100)]],
       city: ['', [Validators.maxLength(100)]],
-      district: ['', [Validators.maxLength(100)]],
       ward: ['', [Validators.maxLength(100)]],
       businessRegistrationCode: ['', [Validators.maxLength(50)]],
       foundedDate: [null],
@@ -90,6 +99,28 @@ export class AddOrUpdateCompanyComponent implements OnInit {
       saturdayPolicy: ['Work'],
       latitude: [null],
       longitude: [null],
+    });
+  }
+
+  loadProvinces(): void {
+    this.loadingProvinces = true;
+    this.apiService.get<ProvinceDto[]>(this.apiService.ADMINISTRATIVE.PROVINCES).subscribe({
+      next: (items) => {
+        this.provinces = (items || []).filter((p) => p.isActive);
+        this.loadingProvinces = false;
+
+        const currentCity = this.validateForm.get('city')?.value;
+        if (currentCity) {
+          this.syncSelectedProvince(
+            currentCity,
+            this.pendingWardValue || this.validateForm.get('ward')?.value,
+          );
+        }
+      },
+      error: () => {
+        this.provinces = [];
+        this.loadingProvinces = false;
+      },
     });
   }
 
@@ -124,6 +155,7 @@ export class AddOrUpdateCompanyComponent implements OnInit {
     this.loading = true;
     this.apiService.post<Company>(this.apiService.COMPANY.DETAIL, { id }).subscribe({
       next: (company) => {
+        this.pendingWardValue = company.ward || null;
         this.validateForm.patchValue({
           id: company.id,
           code: company.code,
@@ -142,9 +174,8 @@ export class AddOrUpdateCompanyComponent implements OnInit {
           email: company.email,
           website: company.website,
           fax: company.fax,
-          country: company.country,
+          country: company.country || 'Việt Nam',
           city: company.city,
-          district: company.district,
           ward: company.ward,
           businessRegistrationCode: company.businessRegistrationCode,
           foundedDate: company.foundedDate ? new Date(company.foundedDate) : null,
@@ -167,6 +198,10 @@ export class AddOrUpdateCompanyComponent implements OnInit {
           latitude: company.latitude ?? null,
           longitude: company.longitude ?? null,
         });
+
+        if (company.city && this.provinces.length > 0) {
+          this.syncSelectedProvince(company.city, company.ward);
+        }
         this.loading = false;
       },
       error: (err: any) => {
@@ -174,6 +209,84 @@ export class AddOrUpdateCompanyComponent implements OnInit {
         this.goBack();
       },
     });
+  }
+
+  onProvinceChange(cityValue: string | null): void {
+    if (!cityValue) {
+      this.selectedProvinceCode = null;
+      this.wards = [];
+      this.validateForm.patchValue({ ward: '' });
+      return;
+    }
+
+    const matchedProvince = this.findProvince(cityValue);
+    if (matchedProvince) {
+      if (this.selectedProvinceCode !== matchedProvince.code) {
+        this.selectedProvinceCode = matchedProvince.code;
+        this.loadWards(matchedProvince.code);
+        this.validateForm.patchValue({ ward: '' });
+      }
+    } else {
+      this.selectedProvinceCode = null;
+      this.wards = [];
+      this.validateForm.patchValue({ ward: '' });
+    }
+  }
+
+  loadWards(provinceCode: string, initialWardValue?: string | null): void {
+    this.loadingWards = true;
+    this.apiService
+      .get<WardDto[]>(this.apiService.ADMINISTRATIVE.PROVINCE_WARDS(provinceCode))
+      .subscribe({
+        next: (items) => {
+          this.wards = (items || []).filter((w) => w.isActive);
+          this.loadingWards = false;
+
+          const targetWard = initialWardValue || this.pendingWardValue;
+          if (targetWard) {
+            const matchedWard = this.findWard(targetWard);
+            if (matchedWard) {
+              this.validateForm.patchValue({ ward: matchedWard.fullName });
+            }
+            this.pendingWardValue = null;
+          }
+        },
+        error: () => {
+          this.wards = [];
+          this.loadingWards = false;
+        },
+      });
+  }
+
+  private findProvince(val: string): ProvinceDto | undefined {
+    if (!val) return undefined;
+    const v = val.trim().toLowerCase();
+    return this.provinces.find(
+      (p) =>
+        p.fullName.toLowerCase() === v ||
+        p.name.toLowerCase() === v ||
+        p.code.toLowerCase() === v,
+    );
+  }
+
+  private findWard(val: string): WardDto | undefined {
+    if (!val) return undefined;
+    const v = val.trim().toLowerCase();
+    return this.wards.find(
+      (w) =>
+        w.fullName.toLowerCase() === v ||
+        w.name.toLowerCase() === v ||
+        w.code.toLowerCase() === v,
+    );
+  }
+
+  private syncSelectedProvince(cityName: string, wardName?: string | null): void {
+    const prov = this.findProvince(cityName);
+    if (prov) {
+      this.selectedProvinceCode = prov.code;
+      this.validateForm.patchValue({ city: prov.fullName }, { emitEvent: false });
+      this.loadWards(prov.code, wardName);
+    }
   }
 
   goBack(): void {

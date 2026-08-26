@@ -102,19 +102,45 @@
         <div nz-col nzXs="24" nzMd="8">
           <nz-form-item>
             <nz-form-label>{{ 'organization.company.city' | translate }}</nz-form-label>
-            <nz-form-control><input nz-input formControlName="city" /></nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col nzXs="24" nzMd="8">
-          <nz-form-item>
-            <nz-form-label>{{ 'organization.company.district' | translate }}</nz-form-label>
-            <nz-form-control><input nz-input formControlName="district" /></nz-form-control>
+            <nz-form-control>
+              <nz-select
+                formControlName="city"
+                nzShowSearch
+                nzAllowClear
+                [nzLoading]="loadingProvinces"
+                [nzPlaceHolder]="'organization.company.selectCity' | translate"
+                (ngModelChange)="onProvinceChange($event)"
+              >
+                @for (p of provinces; track p.code) {
+                  <nz-option
+                    [nzValue]="p.fullName"
+                    [nzLabel]="p.fullName + ' (' + p.code + ')'"
+                  ></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col nzXs="24" nzMd="8">
           <nz-form-item>
             <nz-form-label>{{ 'organization.company.ward' | translate }}</nz-form-label>
-            <nz-form-control><input nz-input formControlName="ward" /></nz-form-control>
+            <nz-form-control>
+              <nz-select
+                formControlName="ward"
+                nzShowSearch
+                nzAllowClear
+                [nzLoading]="loadingWards"
+                [nzDisabled]="!selectedProvinceCode"
+                [nzPlaceHolder]="'organization.company.selectWard' | translate"
+              >
+                @for (w of wards; track w.code) {
+                  <nz-option
+                    [nzValue]="w.fullName"
+                    [nzLabel]="w.fullName + ' (' + w.code + ')'"
+                  ></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col nzXs="24" nzMd="8">

@@ -90,7 +90,6 @@ export class CompanyDetailComponent implements OnInit {
     { key: 'address', label: 'organization.company.address' },
     { key: 'country', label: 'organization.company.country' },
     { key: 'city', label: 'organization.company.city' },
-    { key: 'district', label: 'organization.company.district' },
     { key: 'ward', label: 'organization.company.ward' },
     { key: 'companyType', label: 'organization.company.companyType' },
     { key: 'industry', label: 'organization.company.industry' },

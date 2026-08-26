@@ -1,4 +1,5 @@
 export * from './action-log.models';
+export * from './administrative.models';
 export * from './asset';
 export * from './common.models';
 export * from './discipline';

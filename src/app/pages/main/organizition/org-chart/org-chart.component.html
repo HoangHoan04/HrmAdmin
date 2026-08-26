@@ -1,20 +1,157 @@
 <div class="org-chart-page" #chartContainer [class.fullscreen-active]="isFullscreen">
   <!-- Top Control Bar -->
-  <div class="org-chart-header-card" *ngIf="!isFullscreen">
-    <div class="header-top-row">
-      <div class="header-title-wrap">
-        <div class="title-icon-box">
-          <i nz-icon nzType="apartment" nzTheme="outline"></i>
+  @if (!isFullscreen) {
+    <div class="org-chart-header-card">
+      <div class="header-top-row">
+        <div class="header-title-wrap">
+          <div class="title-icon-box">
+            <i nz-icon nzType="apartment" nzTheme="outline"></i>
+          </div>
+          <div>
+            <h2 class="main-title">{{ 'organization.orgChart.title' | translate }}</h2>
+            <p class="subtitle">{{ 'organization.orgChart.subtitle' | translate }}</p>
+          </div>
         </div>
-        <div>
-          <h2 class="main-title">{{ 'organization.orgChart.title' | translate }}</h2>
-          <p class="subtitle">{{ 'organization.orgChart.subtitle' | translate }}</p>
+
+        <div class="header-actions">
+          <!-- Segmented View Mode Toggle Buttons -->
+          <div class="view-mode-segmented">
+            <button
+              type="button"
+              class="segmented-btn"
+              [class.active]="viewMode === 'TREE'"
+              (click)="setViewMode('TREE')"
+            >
+              <i nz-icon nzType="cluster"></i>
+              <span>{{ 'organization.orgChart.viewTree' | translate }}</span>
+            </button>
+            <button
+              type="button"
+              class="segmented-btn"
+              [class.active]="viewMode === 'LIST'"
+              (click)="setViewMode('LIST')"
+            >
+              <i nz-icon nzType="unordered-list"></i>
+              <span>{{ 'organization.orgChart.viewList' | translate }}</span>
+            </button>
+          </div>
+
+          <!-- Fullscreen Button -->
+          <button
+            nz-button
+            nzType="default"
+            class="btn-action-icon"
+            (click)="toggleFullscreen()"
+            nz-tooltip
+            [nzTooltipTitle]="'organization.orgChart.fullscreen' | translate"
+          >
+            <i nz-icon nzType="fullscreen"></i>
+          </button>
+
+          <!-- Refresh Button -->
+          <button
+            nz-button
+            nzType="default"
+            class="btn-action-icon"
+            [disabled]="!companyId || loading"
+            (click)="loadTree()"
+            nz-tooltip
+            [nzTooltipTitle]="'common.actions.refresh' | translate"
+          >
+            <i nz-icon nzType="reload" [nzSpin]="loading"></i>
+          </button>
         </div>
       </div>
 
-      <div class="header-actions">
-        <!-- Segmented View Mode Toggle Buttons -->
-        <div class="view-mode-segmented">
+      <!-- Filters and Search Toolbar -->
+      <div class="filter-toolbar-row" nz-row [nzGutter]="[16, 12]">
+        <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8" [nzLg]="7">
+          <label class="field-label">{{ 'organization.orgChart.company' | translate }}</label>
+          <nz-select
+            class="w-full"
+            [ngModel]="companyId"
+            (ngModelChange)="onCompanyChange($event)"
+            [nzPlaceHolder]="'organization.orgChart.selectCompany' | translate"
+            nzAllowClear
+            nzShowSearch
+          >
+            @for (c of companies; track c.id) {
+              <nz-option [nzValue]="c.id" [nzLabel]="c.code ? c.code + ' - ' + c.name : c.name"></nz-option>
+            }
+          </nz-select>
+        </div>
+
+        <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8" [nzLg]="8">
+          <label class="field-label">{{ 'organization.orgChart.search' | translate }}</label>
+          <nz-input-wrapper class="w-full">
+            <span nz-icon nzInputPrefix nzType="search" class="text-secondary"></span>
+            <input
+              type="text"
+              nz-input
+              [ngModel]="searchText"
+              (ngModelChange)="onSearchChange($event)"
+              [placeholder]="'organization.orgChart.searchPlaceholder' | translate"
+            />
+            @if (searchText) {
+              <span
+                nz-icon
+                nzInputSuffix
+                nzType="close-circle"
+                class="cursor-pointer text-secondary"
+                (click)="onSearchChange('')"
+              ></span>
+            }
+          </nz-input-wrapper>
+        </div>
+
+        <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="8" [nzLg]="9" class="filter-extra-col">
+          <label nz-checkbox [ngModel]="includeParts" (ngModelChange)="onIncludePartsChange($event)">
+            <span class="checkbox-text">{{ 'organization.orgChart.includeParts' | translate }}</span>
+          </label>
+
+          <!-- Legend Pills -->
+          <div class="legend-pills">
+            <span class="legend-item company"><span class="dot"></span> {{ 'organization.orgChart.nodeType.company' | translate }}</span>
+            <span class="legend-item branch"><span class="dot"></span> {{ 'organization.orgChart.nodeType.branch' | translate }}</span>
+            <span class="legend-item department"><span class="dot"></span> {{ 'organization.orgChart.nodeType.department' | translate }}</span>
+            @if (includeParts) {
+              <span class="legend-item part"><span class="dot"></span> {{ 'organization.orgChart.nodeType.part' | translate }}</span>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Fullscreen Top Floating Bar -->
+  @if (isFullscreen) {
+    <div class="fullscreen-top-bar">
+      <div class="fullscreen-title">
+        <i nz-icon nzType="apartment" class="mr-2"></i>
+        <span>{{ 'organization.orgChart.title' | translate }}</span>
+        @if (rootNode) {
+          <span class="company-tag">{{ rootNode.name }}</span>
+        }
+      </div>
+
+      <div class="fullscreen-center-search">
+        <nz-input-wrapper nzSize="small">
+          <span nz-icon nzInputPrefix nzType="search"></span>
+          <input
+            type="text"
+            nz-input
+            [ngModel]="searchText"
+            (ngModelChange)="onSearchChange($event)"
+            [placeholder]="'organization.orgChart.searchPlaceholder' | translate"
+          />
+          @if (searchText) {
+            <span nz-icon nzInputSuffix nzType="close-circle" class="cursor-pointer" (click)="onSearchChange('')"></span>
+          }
+        </nz-input-wrapper>
+      </div>
+
+      <div class="fullscreen-actions">
+        <div class="view-mode-segmented compact">
           <button
             type="button"
             class="segmented-btn"
@@ -35,156 +172,20 @@
           </button>
         </div>
 
-        <!-- Fullscreen Button -->
         <button
           nz-button
-          nzType="default"
-          class="btn-action-icon"
+          nzType="primary"
+          nzDanger
+          nzSize="small"
+          class="btn-exit-fs"
           (click)="toggleFullscreen()"
-          nz-tooltip
-          [nzTooltipTitle]="'organization.orgChart.fullscreen' | translate"
         >
-          <i nz-icon nzType="fullscreen"></i>
-        </button>
-
-        <!-- Refresh Button -->
-        <button
-          nz-button
-          nzType="default"
-          class="btn-action-icon"
-          [disabled]="!companyId || loading"
-          (click)="loadTree()"
-          nz-tooltip
-          [nzTooltipTitle]="'common.actions.refresh' | translate"
-        >
-          <i nz-icon nzType="reload" [nzSpin]="loading"></i>
+          <i nz-icon nzType="fullscreen-exit"></i>
+          <span>{{ 'organization.orgChart.exitFullscreen' | translate }} (Esc)</span>
         </button>
       </div>
     </div>
-
-    <!-- Filters and Search Toolbar -->
-    <div class="filter-toolbar-row" nz-row [nzGutter]="[16, 12]">
-      <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8" [nzLg]="7">
-        <label class="field-label">{{ 'organization.orgChart.company' | translate }}</label>
-        <nz-select
-          class="w-full"
-          [ngModel]="companyId"
-          (ngModelChange)="onCompanyChange($event)"
-          [nzPlaceHolder]="'organization.orgChart.selectCompany' | translate"
-          nzAllowClear
-          nzShowSearch
-        >
-          @for (c of companies; track c.id) {
-            <nz-option [nzValue]="c.id" [nzLabel]="c.code ? c.code + ' - ' + c.name : c.name"></nz-option>
-          }
-        </nz-select>
-      </div>
-
-      <div nz-col [nzXs]="24" [nzSm]="12" [nzMd]="8" [nzLg]="8">
-        <label class="field-label">{{ 'organization.orgChart.search' | translate }}</label>
-        <nz-input-group [nzPrefix]="searchPrefix" [nzSuffix]="searchSuffix" class="w-full">
-          <input
-            type="text"
-            nz-input
-            [ngModel]="searchText"
-            (ngModelChange)="onSearchChange($event)"
-            [placeholder]="'organization.orgChart.searchPlaceholder' | translate"
-          />
-        </nz-input-group>
-        <ng-template #searchPrefix>
-          <i nz-icon nzType="search" class="text-secondary"></i>
-        </ng-template>
-        <ng-template #searchSuffix>
-          @if (searchText) {
-            <i
-              nz-icon
-              nzType="close-circle"
-              class="cursor-pointer text-secondary"
-              (click)="onSearchChange('')"
-            ></i>
-          }
-        </ng-template>
-      </div>
-
-      <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="8" [nzLg]="9" class="filter-extra-col">
-        <label nz-checkbox [ngModel]="includeParts" (ngModelChange)="onIncludePartsChange($event)">
-          <span class="checkbox-text">{{ 'organization.orgChart.includeParts' | translate }}</span>
-        </label>
-
-        <!-- Legend Pills -->
-        <div class="legend-pills">
-          <span class="legend-item company"><span class="dot"></span> {{ 'organization.orgChart.nodeType.company' | translate }}</span>
-          <span class="legend-item branch"><span class="dot"></span> {{ 'organization.orgChart.nodeType.branch' | translate }}</span>
-          <span class="legend-item department"><span class="dot"></span> {{ 'organization.orgChart.nodeType.department' | translate }}</span>
-          @if (includeParts) {
-            <span class="legend-item part"><span class="dot"></span> {{ 'organization.orgChart.nodeType.part' | translate }}</span>
-          }
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Fullscreen Top Floating Bar -->
-  <div class="fullscreen-top-bar" *ngIf="isFullscreen">
-    <div class="fullscreen-title">
-      <i nz-icon nzType="apartment" class="mr-2"></i>
-      <span>{{ 'organization.orgChart.title' | translate }}</span>
-      @if (rootNode) {
-        <span class="company-tag">{{ rootNode.name }}</span>
-      }
-    </div>
-
-    <div class="fullscreen-center-search">
-      <nz-input-group [nzPrefix]="fsSearchPrefix" [nzSuffix]="fsSearchSuffix" nzSize="small">
-        <input
-          type="text"
-          nz-input
-          [ngModel]="searchText"
-          (ngModelChange)="onSearchChange($event)"
-          [placeholder]="'organization.orgChart.searchPlaceholder' | translate"
-        />
-      </nz-input-group>
-      <ng-template #fsSearchPrefix><i nz-icon nzType="search"></i></ng-template>
-      <ng-template #fsSearchSuffix>
-        <i *ngIf="searchText" nz-icon nzType="close-circle" class="cursor-pointer" (click)="onSearchChange('')"></i>
-      </ng-template>
-    </div>
-
-    <div class="fullscreen-actions">
-      <div class="view-mode-segmented compact">
-        <button
-          type="button"
-          class="segmented-btn"
-          [class.active]="viewMode === 'TREE'"
-          (click)="setViewMode('TREE')"
-        >
-          <i nz-icon nzType="cluster"></i>
-          <span>{{ 'organization.orgChart.viewTree' | translate }}</span>
-        </button>
-        <button
-          type="button"
-          class="segmented-btn"
-          [class.active]="viewMode === 'LIST'"
-          (click)="setViewMode('LIST')"
-        >
-          <i nz-icon nzType="unordered-list"></i>
-          <span>{{ 'organization.orgChart.viewList' | translate }}</span>
-        </button>
-      </div>
-
-      <button
-        nz-button
-        nzType="primary"
-        nzDanger
-        nzSize="small"
-        class="btn-exit-fs"
-        (click)="toggleFullscreen()"
-      >
-        <i nz-icon nzType="fullscreen-exit"></i>
-        <span>{{ 'organization.orgChart.exitFullscreen' | translate }} (Esc)</span>
-      </button>
-    </div>
-  </div>
+  }
 
   <!-- Main Content Area -->
   <div class="org-chart-main-card" [class.is-fs]="isFullscreen">

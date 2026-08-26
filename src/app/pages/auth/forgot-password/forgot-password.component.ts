@@ -21,6 +21,7 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
   showConfirmPassword = false;
   loading = false;
   error = '';
+  resetToken = '';
   otpTimer = 60;
   private otpInterval: ReturnType<typeof setInterval> | null = null;
 
@@ -63,8 +64,11 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
     }
     this.loading = true;
     this.authService.forgotPassword(this.email).subscribe({
-      next: () => {
+      next: (res: any) => {
         this.loading = false;
+        if (res && res.resetToken) {
+          this.resetToken = res.resetToken;
+        }
         this.step = 2;
         setTimeout(() => this.focusBox(0), 0);
         this.startTimer();
@@ -128,8 +132,11 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
     this.otpTimer = 60;
     this.loading = true;
     this.authService.forgotPassword(this.email).subscribe({
-      next: () => {
+      next: (res: any) => {
         this.loading = false;
+        if (res && res.resetToken) {
+          this.resetToken = res.resetToken;
+        }
         this.startTimer();
         setTimeout(() => this.focusBox(0), 0);
       },
@@ -156,9 +163,9 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.authService
       .resetPasswordWithOtp({
-        email: this.email,
-        otp: this.otpValue,
+        resetToken: this.resetToken || this.otpValue,
         newPassword: this.newPassword,
+        confirmNewPassword: this.confirmPassword,
       })
       .subscribe({
         next: () => {

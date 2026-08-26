@@ -227,12 +227,6 @@
     "editWorkflowDefinition": "Cập nhật định nghĩa quy trình",
     "workflowFormTemplates": "Mẫu biểu mẫu",
     "addWorkflowFormTemplate": "Thêm mẫu biểu mẫu",
-    "editWorkflowFormTemplate": "Cập nhật mẫu biểu mẫu",
-    "integrations": "Tích hợp",
-    "integrationsHub": "Trạng thái tích hợp",
-    "smsConfig": "Cổng SMS",
-    "zaloConfig": "Zalo OA",
-    "punchImport": "Import punch CSV",
-    "payrollExports": "Xuất file lương"
+    "editWorkflowFormTemplate": "Cập nhật mẫu biểu mẫu"
   }
 }

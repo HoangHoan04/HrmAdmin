@@ -1,27 +1,28 @@
-<div class="filter-custom-container" *ngIf="config?.show !== false">
-  <div class="filter-header" [class.collapsible]="collapsible" (click)="toggleOpen()">
-    <div class="filter-header-left">
-      <span nz-icon nzType="filter" nzTheme="outline" class="filter-header-icon"></span>
-      <span class="filter-title">{{ title | translate }}</span>
-      <ng-container *ngIf="headerLeftContent">
-        <ng-container *ngTemplateOutlet="headerLeftContent"></ng-container>
-      </ng-container>
-    </div>
+@if (config?.show !== false) {
+  <div class="filter-custom-container">
+    <div class="filter-header" [class.collapsible]="collapsible" (click)="toggleOpen()">
+      <div class="filter-header-left">
+        <span nz-icon nzType="filter" nzTheme="outline" class="filter-header-icon"></span>
+        <span class="filter-title">{{ title | translate }}</span>
+        @if (headerLeftContent) {
+          <ng-container *ngTemplateOutlet="headerLeftContent"></ng-container>
+        }
+      </div>
 
-    <div class="filter-header-right">
-      <ng-container *ngIf="headerRightContent">
-        <ng-container *ngTemplateOutlet="headerRightContent"></ng-container>
-      </ng-container>
-      @if (collapsible) {
-        <span
-          nz-icon
-          [nzType]="open ? 'up' : 'down'"
-          nzTheme="outline"
-          class="filter-toggle-icon"
-        ></span>
-      }
+      <div class="filter-header-right">
+        @if (headerRightContent) {
+          <ng-container *ngTemplateOutlet="headerRightContent"></ng-container>
+        }
+        @if (collapsible) {
+          <span
+            nz-icon
+            [nzType]="open ? 'up' : 'down'"
+            nzTheme="outline"
+            class="filter-toggle-icon"
+          ></span>
+        }
+      </div>
     </div>
-  </div>
 
   @if (open) {
     <div class="filter-body">
@@ -189,3 +190,4 @@
     </div>
   }
 </div>
+}

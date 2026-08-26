@@ -1319,7 +1319,6 @@ export const enumData = {
       value: 'CANCELLED',
       color: '#f5222d',
     },
-    // Backwards compatibility aliases
     NEW: {
       code: 'DRAFT',
       labelKey: 'enums.assetTicketStatus.draft',

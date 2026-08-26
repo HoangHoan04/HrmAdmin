@@ -8,7 +8,9 @@ import {
   BranchSelectBoxDto,
   CompanySelectBoxDto,
   EmployeeSelectBoxDto,
+  ProvinceDto,
   TimeKeepingStandardSelectBoxDto,
+  WardDto,
 } from '../../../../../core/models';
 import { ApiService } from '../../../../../core/services/api.service';
 import { I18nMessageService } from '../../../../../core/services/i18n-message.service';
@@ -31,6 +33,13 @@ export class AddOrUpdateBranchComponent implements OnInit {
   employees: EmployeeSelectBoxDto[] = [];
   private companyCodeFromRoute: string | null = null;
 
+  provinces: ProvinceDto[] = [];
+  wards: WardDto[] = [];
+  loadingProvinces = false;
+  loadingWards = false;
+  selectedProvinceCode: string | null = null;
+  pendingWardValue: string | null = null;
+
   constructor(
     private readonly fb: FormBuilder,
     private readonly route: ActivatedRoute,
@@ -46,6 +55,7 @@ export class AddOrUpdateBranchComponent implements OnInit {
     this.isEdit = !!this.id;
     this.companyCodeFromRoute = this.route.snapshot.queryParamMap.get('companyCode');
 
+    this.loadProvinces();
     this.loadCompanies();
     this.loadEmployees();
 
@@ -58,6 +68,9 @@ export class AddOrUpdateBranchComponent implements OnInit {
     this.validateForm = this.fb.group({
       code: ['', [Validators.required, Validators.maxLength(50)]],
       name: ['', [Validators.required, Validators.maxLength(255)]],
+      country: ['Việt Nam', [Validators.maxLength(100)]],
+      city: ['', [Validators.maxLength(100)]],
+      ward: ['', [Validators.maxLength(100)]],
       address: ['', [Validators.maxLength(500)]],
       ipAddress: ['', [Validators.maxLength(100)]],
       companyId: [null, [Validators.required]],
@@ -149,13 +162,39 @@ export class AddOrUpdateBranchComponent implements OnInit {
       });
   }
 
+  loadProvinces(): void {
+    this.loadingProvinces = true;
+    this.apiService.get<ProvinceDto[]>(this.apiService.ADMINISTRATIVE.PROVINCES).subscribe({
+      next: (items) => {
+        this.provinces = (items || []).filter((p) => p.isActive);
+        this.loadingProvinces = false;
+
+        const currentCity = this.validateForm.get('city')?.value;
+        if (currentCity) {
+          this.syncSelectedProvince(
+            currentCity,
+            this.pendingWardValue || this.validateForm.get('ward')?.value,
+          );
+        }
+      },
+      error: () => {
+        this.provinces = [];
+        this.loadingProvinces = false;
+      },
+    });
+  }
+
   loadBranchDetail(id: string): void {
     this.loading = true;
     this.apiService.post<Branch>(this.apiService.BRANCH.DETAIL, { id }).subscribe({
       next: (branch) => {
+        this.pendingWardValue = branch.ward || null;
         this.validateForm.patchValue({
           code: branch.code,
           name: branch.name,
+          country: branch.country || 'Việt Nam',
+          city: branch.city,
+          ward: branch.ward,
           address: branch.address,
           ipAddress: branch.ipAddress,
           companyId: branch.companyId,
@@ -172,6 +211,11 @@ export class AddOrUpdateBranchComponent implements OnInit {
           timeKeepingStandardId: branch.timeKeepingStandardId ?? null,
           isActive: branch.isActive ?? true,
         });
+
+        if (branch.city && this.provinces.length > 0) {
+          this.syncSelectedProvince(branch.city, branch.ward);
+        }
+
         this.loadParentBranches(branch.companyId ?? null, id);
         this.loadTimeKeepingStandards(branch.companyId ?? null);
         this.loading = false;
@@ -181,6 +225,84 @@ export class AddOrUpdateBranchComponent implements OnInit {
         this.goBack();
       },
     });
+  }
+
+  onProvinceChange(cityValue: string | null): void {
+    if (!cityValue) {
+      this.selectedProvinceCode = null;
+      this.wards = [];
+      this.validateForm.patchValue({ ward: '' });
+      return;
+    }
+
+    const matchedProvince = this.findProvince(cityValue);
+    if (matchedProvince) {
+      if (this.selectedProvinceCode !== matchedProvince.code) {
+        this.selectedProvinceCode = matchedProvince.code;
+        this.loadWards(matchedProvince.code);
+        this.validateForm.patchValue({ ward: '' });
+      }
+    } else {
+      this.selectedProvinceCode = null;
+      this.wards = [];
+      this.validateForm.patchValue({ ward: '' });
+    }
+  }
+
+  loadWards(provinceCode: string, initialWardValue?: string | null): void {
+    this.loadingWards = true;
+    this.apiService
+      .get<WardDto[]>(this.apiService.ADMINISTRATIVE.PROVINCE_WARDS(provinceCode))
+      .subscribe({
+        next: (items) => {
+          this.wards = (items || []).filter((w) => w.isActive);
+          this.loadingWards = false;
+
+          const targetWard = initialWardValue || this.pendingWardValue;
+          if (targetWard) {
+            const matchedWard = this.findWard(targetWard);
+            if (matchedWard) {
+              this.validateForm.patchValue({ ward: matchedWard.fullName });
+            }
+            this.pendingWardValue = null;
+          }
+        },
+        error: () => {
+          this.wards = [];
+          this.loadingWards = false;
+        },
+      });
+  }
+
+  private findProvince(val: string): ProvinceDto | undefined {
+    if (!val) return undefined;
+    const v = val.trim().toLowerCase();
+    return this.provinces.find(
+      (p) =>
+        p.fullName.toLowerCase() === v ||
+        p.name.toLowerCase() === v ||
+        p.code.toLowerCase() === v,
+    );
+  }
+
+  private findWard(val: string): WardDto | undefined {
+    if (!val) return undefined;
+    const v = val.trim().toLowerCase();
+    return this.wards.find(
+      (w) =>
+        w.fullName.toLowerCase() === v ||
+        w.name.toLowerCase() === v ||
+        w.code.toLowerCase() === v,
+    );
+  }
+
+  private syncSelectedProvince(cityName: string, wardName?: string | null): void {
+    const prov = this.findProvince(cityName);
+    if (prov) {
+      this.selectedProvinceCode = prov.code;
+      this.validateForm.patchValue({ city: prov.fullName }, { emitEvent: false });
+      this.loadWards(prov.code, wardName);
+    }
   }
 
   goBack(): void {

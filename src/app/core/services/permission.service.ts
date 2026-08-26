@@ -85,9 +85,12 @@ export class PermissionService {
   }
 
   isAdmin(): boolean {
-    const type = (this.userType || '').toUpperCase();
-    if (type === 'ADMIN') return true;
-    return this.roles.some((r) => (r || '').toUpperCase() === 'ADMIN');
+    const type = (this.userType || '').toUpperCase().replace(/[\s_-]/g, '');
+    if (type === 'ADMIN' || type === 'SUPERADMIN' || type === 'ADMINISTRATOR' || type === 'OWNER') return true;
+    return this.roles.some((r) => {
+      const upper = (r || '').toUpperCase().replace(/[\s_-]/g, '');
+      return upper === 'ADMIN' || upper === 'SUPERADMIN' || upper === 'ADMINISTRATOR' || upper === 'OWNER';
+    });
   }
 
   private readJsonArray(key: string): string[] {

@@ -48,8 +48,10 @@ export class ChangePasswordComponent {
     this.loading = true;
     this.authService
       .changePassword({
+        currentPassword: this.oldPassword,
         oldPassword: this.oldPassword,
         newPassword: this.newPassword,
+        confirmNewPassword: this.confirmPassword,
       })
       .subscribe({
         next: () => {

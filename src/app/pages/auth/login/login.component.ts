@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
+import { environment } from '../../../../environments/environment';
 import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
@@ -9,101 +9,48 @@ import { AuthService } from '../../../core/services/auth.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent {
-  username = '';
-  password = '';
-  loading = false;
-  error = '';
-  isModalVisible = false;
-  rememberMe = false;
-  passwordVisible = false;
-  requiresTwoFactor = false;
-  twoFactorCode = '';
-  tempToken = '';
+export class LoginComponent implements OnInit, OnDestroy {
+  ssoLoginUrl = environment.ssoLoginUrl || 'http://localhost:4300/auth/login';
+  clientId = environment.clientId || 'hrm-app';
+  redirectUri = `${window.location.origin}/auth/callback`;
+  redirecting = false;
+  autoRedirectSeconds = 3;
+  autoRedirectActive = false;
+  private timer: any;
 
   constructor(
-    private router: Router,
-    private auth: AuthService,
-    private readonly translate: TranslateService,
+    private readonly router: Router,
+    private readonly auth: AuthService,
   ) {}
 
-  openContactModal(): void {
-    this.isModalVisible = true;
-  }
-
-  closeContactModal(): void {
-    this.isModalVisible = false;
-  }
-
-  onLogin(): void {
-    this.error = '';
-    if (this.requiresTwoFactor) {
-      this.submitTwoFactor();
+  ngOnInit(): void {
+    if (this.auth.isLoggedIn) {
+      this.router.navigateByUrl('/');
       return;
     }
-    if (!this.username || !this.password) {
-      this.error = this.translate.instant('common.messages.loginRequired');
-      return;
-    }
-    this.loading = true;
-    this.auth.login(this.username, this.password).subscribe({
-      next: (res) => {
-        this.loading = false;
-        if (res && res.requiresTwoFactor) {
-          this.requiresTwoFactor = true;
-          this.tempToken = res.tempToken || this.auth.twoFactorTempToken || '';
-          return;
-        }
-        if (res && res.mustChangePassword) {
-          this.router.navigateByUrl('/auth/change-password');
-        } else {
-          this.router.navigateByUrl('/');
-        }
-      },
-      error: (err) => {
-        this.loading = false;
-        this.error =
-          typeof err.error === 'string'
-            ? err.error
-            : this.translate.instant('common.messages.invalidCredentials');
-      },
-    });
   }
 
-  submitTwoFactor(): void {
-    if (!this.twoFactorCode || this.twoFactorCode.trim().length !== 6) {
-      this.error = this.translate.instant('auth.twoFactorCodeRequired');
-      return;
+  ngOnDestroy(): void {
+    if (this.timer) {
+      clearInterval(this.timer);
     }
-    const token = this.tempToken || this.auth.twoFactorTempToken || '';
-    if (!token) {
-      this.error = this.translate.instant('auth.twoFactorExpired');
-      this.requiresTwoFactor = false;
-      return;
-    }
-    this.loading = true;
-    this.auth.verifyTwoFactor(token, this.twoFactorCode.trim()).subscribe({
-      next: (res) => {
-        this.loading = false;
-        if (res && res.mustChangePassword) {
-          this.router.navigateByUrl('/auth/change-password');
-        } else {
-          this.router.navigateByUrl('/');
-        }
-      },
-      error: (err) => {
-        this.loading = false;
-        this.error =
-          typeof err.error === 'string'
-            ? err.error
-            : this.translate.instant('auth.twoFactorInvalid');
-      },
-    });
   }
 
-  backToPassword(): void {
-    this.requiresTwoFactor = false;
-    this.twoFactorCode = '';
-    this.error = '';
+  redirectToSso(): void {
+    this.redirecting = true;
+    if (this.timer) {
+      clearInterval(this.timer);
+    }
+
+    try {
+      const targetUrl = new URL(this.ssoLoginUrl);
+      targetUrl.searchParams.set('returnUrl', this.redirectUri);
+      targetUrl.searchParams.set('redirectUri', this.redirectUri);
+      targetUrl.searchParams.set('clientId', this.clientId);
+      window.location.href = targetUrl.toString();
+    } catch {
+      const fallbackUrl = `${this.ssoLoginUrl}?returnUrl=${encodeURIComponent(this.redirectUri)}&clientId=${encodeURIComponent(this.clientId)}`;
+      window.location.href = fallbackUrl;
+    }
   }
 }

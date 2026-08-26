@@ -1,477 +1,120 @@
-.login-welcome {
-  margin-bottom: 32px;
-
-  .login-title {
-    font-size: 28px;
-    font-weight: 800;
-    color: var(--foreground, #1e293b);
-    margin-bottom: 8px;
-    letter-spacing: -0.5px;
-  }
-
-  .login-subtitle {
-    font-size: 15px;
-    color: var(--muted-foreground, #64748b);
-    margin: 0;
-  }
-}
-
-.login-form {
+.sso-gateway-container {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
+  padding: 8px 0;
 
-  .login-alert {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background-color: #fff1f0;
-    border: 1px solid #ffa39e;
-    padding: 12px 16px;
-    border-radius: 8px;
-    color: #ff4d4f;
-    font-size: 14px;
-    animation: fadeIn 0.3s ease;
-  }
-
-  .login-field {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-
-    .login-label {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--foreground, #1e293b);
-    }
-
-    .login-input-wrap {
-      width: 100%;
-
-      input[nz-input] {
-        height: 44px;
-        border-radius: 8px;
-        border-color: var(--border, #e2e8f0);
-        background-color: var(--background, #fff);
-        color: var(--foreground, #1f2937);
-        transition: all 0.2s ease;
-
-        &:focus,
-        &.ant-input-focused {
-          border-color: var(--primary, #3b82f6);
-        }
-      }
-
-      [nzInputPrefix] {
-        color: var(--muted-foreground, #64748b);
-        margin-right: 8px;
-        font-size: 16px;
-      }
-    }
-
-    .login-eye {
-      background: none;
-      border: none;
-      padding: 0;
-      margin: 0 4px;
-      cursor: pointer;
-      color: var(--muted-foreground, #64748b);
-      transition: color 0.2s;
-      display: flex;
-      align-items: center;
-
-      &:hover {
-        color: var(--primary, #3b82f6);
-      }
-
-      &:focus {
-        outline: none;
-      }
-    }
-  }
-
-  .login-options {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 14px;
-
-    .login-remember {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      cursor: pointer;
-      user-select: none;
-      color: var(--foreground, #1e293b);
-
-      .login-checkbox {
-        width: 18px;
-        height: 18px;
-        border: 2px solid var(--border, #e2e8f0);
-        border-radius: 4px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 10px;
-        color: transparent;
-        transition: all 0.2s;
-      }
-
-      &.checked {
-        .login-checkbox {
-          border-color: #3b82f6;
-          background-color: #3b82f6;
-          color: #ffffff;
-        }
-      }
-
-      &:hover .login-checkbox {
-        border-color: #3b82f6;
-      }
-    }
-
-    .login-forgot {
-      color: #3b82f6;
-      text-decoration: none;
-      font-weight: 500;
-
-      &:hover {
-        text-decoration: underline;
-      }
-    }
-  }
-
-  .login-btn {
-    height: 44px;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    margin-top: 10px;
-    background-color: #3b82f6;
-    border-color: #3b82f6;
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-    transition: all 0.2s;
-
-    &:hover,
-    &:focus {
-      background-color: rgba(59, 130, 246, 0.8);
-      border-color: rgba(59, 130, 246, 0.8);
-      transform: translateY(-1px);
-      box-shadow: 0 6px 16px rgba(59, 130, 246, 0.25);
-    }
-
-    &:active {
-      transform: translateY(0);
-    }
-  }
-
-  .login-footer-text {
+  .gateway-header {
     text-align: center;
-    font-size: 14px;
-    color: #64748b;
-    margin-top: 8px;
 
-    .create-account-link {
-      color: #3b82f6;
-      font-weight: 600;
-      cursor: pointer;
-      text-decoration: none;
-
-      &:hover {
-        text-decoration: underline;
-      }
-    }
-  }
-}
-
-::ng-deep .hr-contact-modal {
-  .nz-modal-content {
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow:
-      0 20px 25px -5px rgba(30, 41, 59, 0.05),
-      0 10px 10px -5px rgba(30, 41, 59, 0.02);
-  }
-
-  .nz-modal-header {
-    border-bottom: 1px solid var(--border);
-    padding: 20px 24px;
-    background-color: var(--background-card);
-  }
-
-  .nz-modal-body {
-    padding: 24px;
-    background-color: var(--background-card);
-  }
-
-  .nz-modal-footer {
-    border-top: 1px solid var(--border);
-    padding: 16px 24px;
-    background-color: var(--background-card);
-  }
-}
-
-.modal-custom-header {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-
-  .header-icon-wrap {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 44px;
-    height: 44px;
-    background-color: var(--primary-muted);
-    color: var(--primary);
-    border-radius: 12px;
-    font-size: 22px;
-  }
-
-  .header-text-wrap {
-    h3 {
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--foreground);
-      margin: 0 0 2px 0;
+    .gateway-logo-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+      color: #ffffff;
+      font-size: 28px;
+      margin-bottom: 16px;
+      box-shadow: 0 10px 20px -5px rgba(59, 130, 246, 0.4);
     }
 
-    p {
-      font-size: 13px;
-      color: var(--muted-foreground);
+    .gateway-title {
+      font-size: 26px;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 0 0 6px 0;
+      letter-spacing: -0.5px;
+    }
+
+    .gateway-subtitle {
+      font-size: 14px;
+      color: #64748b;
       margin: 0;
     }
   }
-}
 
-.modal-intro-text {
-  color: var(--foreground);
-  font-size: 14px;
-  line-height: 1.6;
-  margin-bottom: 20px;
-}
+  
 
-.hr-list-container {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-bottom: 20px;
-}
-
-.hr-member-card {
-  display: flex;
-  gap: 16px;
-  background-color: var(--background-card);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 16px;
-  transition: all 0.25s ease;
-
-  &:hover {
-    border-color: var(--primary);
-    background-color: var(--background-card);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(59, 130, 246, 0.2);
-  }
-
-  .hr-avatar-col {
-    .hr-avatar-mock {
+  .gateway-actions {
+    .sso-login-btn {
+      height: 48px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+      border: none;
+      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
+      transition: all 0.25s ease;
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 48px;
-      height: 48px;
-      background-color: rgba(59, 130, 246, 0.1);
-      color: #3b82f6;
-      border-radius: 50%;
-      font-size: 20px;
-    }
-  }
+      gap: 8px;
 
-  .hr-info-col {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 22px rgba(37, 99, 235, 0.45);
+        background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+      }
 
-    .hr-name {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--foreground);
-      margin: 0;
-    }
-
-    .hr-badge {
-      align-self: flex-start;
-      font-size: 11px;
-      font-weight: 500;
-      color: #3b82f6;
-      background-color: rgba(59, 130, 246, 0.1);
-      padding: 2px 8px;
-      border-radius: 4px;
-      margin-bottom: 6px;
-    }
-
-    .hr-meta-list {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-
-      .meta-item {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-size: 13.5px;
-
-        .meta-icon {
-          color: var(--muted-foreground);
-          font-size: 14px;
-        }
-
-        .meta-link {
-          color: #3b82f6;
-          text-decoration: none;
-          font-weight: 500;
-
-          &:hover {
-            text-decoration: underline;
-          }
-        }
-
-        .meta-text {
-          color: var(--foreground);
-
-          .text-muted {
-            color: var(--muted-foreground);
-            margin-left: 4px;
-          }
-        }
+      &:active {
+        transform: translateY(0);
       }
     }
   }
-}
 
-.hr-working-hours {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background-color: rgba(59, 130, 246, 0.1);
-  border: 1px solid rgba(59, 130, 246, 0.2);
-  border-radius: 8px;
-  padding: 12px 16px;
-
-  .hours-icon {
-    color: #3b82f6;
-    font-size: 16px;
-  }
-
-  .hours-text {
-    font-size: 13.5px;
-    color: rgba(59, 130, 246, 0.8);
-  }
-}
-
-.modal-close-btn {
-  height: 38px;
-  padding: 0 20px;
-  border-radius: 8px;
-  font-weight: 500;
-  background-color: #3b82f6 !important;
-  border-color: #3b82f6 !important;
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-  transition: all 0.2s ease;
-
-  &:hover {
-    background-color: rgba(59, 130, 246, 0.8) !important;
-    border-color: rgba(59, 130, 246, 0.8) !important;
-    opacity: 1;
-  }
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-4px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
+  .gateway-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #94a3b8;
+    text-align: center;
   }
 }
 
 :host-context(.dark) {
-  .login-welcome {
-    .login-title {
-      color: #f1f5f9;
-    }
-
-    .login-subtitle {
-      color: #94a3b8;
-    }
-  }
-
-  .login-form {
-    .login-alert {
-      background-color: rgba(127, 29, 29, 0.3);
-      border-color: rgba(220, 38, 38, 0.3);
-      color: #fca5a5;
-    }
-
-    .login-field {
-      .login-label {
-        color: #e2e8f0;
+  .sso-gateway-container {
+    .gateway-header {
+      .gateway-title {
+        color: #f8fafc;
       }
-
-      .login-eye {
+      .gateway-subtitle {
         color: #94a3b8;
+      }
+    }
 
-        &:hover {
+    .sso-info-card {
+      background: #1e293b;
+      border-color: #334155;
+
+      .sso-description {
+        color: #cbd5e1;
+        strong {
           color: #f1f5f9;
-          background: rgba(51, 65, 85, 0.5);
+        }
+      }
+
+      .app-meta-box {
+        background: #0f172a;
+        border-color: #334155;
+
+        .meta-row {
+          .meta-key {
+            color: #94a3b8;
+          }
+          .meta-val {
+            color: #e2e8f0;
+            &.mono {
+              background: #1e293b;
+              color: #cbd5e1;
+            }
+          }
         }
       }
     }
-
-    .login-options {
-      .login-remember {
-        color: #e2e8f0;
-
-        .login-checkbox {
-          border-color: #334155;
-          background: rgba(30, 41, 59, 0.5);
-        }
-
-        &.checked .login-checkbox {
-          border-color: #3b82f6;
-          background-color: #3b82f6;
-          color: #ffffff;
-        }
-      }
-    }
-
-    .login-footer-text {
-      color: #94a3b8;
-    }
-  }
-}
-
-.password-wrap {
-  position: relative;
-
-  .login-input-wrap {
-    padding-right: 36px;
-  }
-
-  .password-toggle-icon {
-    position: absolute;
-    top: 50%;
-    right: 12px;
-    transform: translateY(-50%);
-    cursor: pointer;
   }
 }

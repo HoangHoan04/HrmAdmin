@@ -135,6 +135,61 @@
 
         <div nz-col nzXs="24" nzMd="8">
           <nz-form-item>
+            <nz-form-label>{{ 'organization.branch.country' | translate }}</nz-form-label>
+            <nz-form-control>
+              <input nz-input formControlName="country" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'organization.branch.city' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-select
+                formControlName="city"
+                nzShowSearch
+                nzAllowClear
+                [nzLoading]="loadingProvinces"
+                [nzPlaceHolder]="'organization.branch.selectCity' | translate"
+                (ngModelChange)="onProvinceChange($event)"
+              >
+                @for (p of provinces; track p.code) {
+                  <nz-option
+                    [nzValue]="p.fullName"
+                    [nzLabel]="p.fullName + ' (' + p.code + ')'"
+                  ></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
+            <nz-form-label>{{ 'organization.branch.ward' | translate }}</nz-form-label>
+            <nz-form-control>
+              <nz-select
+                formControlName="ward"
+                nzShowSearch
+                nzAllowClear
+                [nzLoading]="loadingWards"
+                [nzDisabled]="!selectedProvinceCode"
+                [nzPlaceHolder]="'organization.branch.selectWard' | translate"
+              >
+                @for (w of wards; track w.code) {
+                  <nz-option
+                    [nzValue]="w.fullName"
+                    [nzLabel]="w.fullName + ' (' + w.code + ')'"
+                  ></nz-option>
+                }
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div nz-col nzXs="24" nzMd="8">
+          <nz-form-item>
             <nz-form-label>{{ 'organization.branch.address' | translate }}</nz-form-label>
             <nz-form-control>
               <input

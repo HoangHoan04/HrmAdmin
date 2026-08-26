@@ -63,11 +63,6 @@ const routes: Routes = [
     loadChildren: () => import('./workflow/workflow.module').then((m) => m.WorkflowModule),
   },
   {
-    path: getPath(ROUTES_CONFIG.INTEGRATIONS.path),
-    loadChildren: () =>
-      import('./integrations/integrations.module').then((m) => m.IntegrationsModule),
-  },
-  {
     path: getPath(ROUTES_CONFIG.ROLE_MANAGER.path),
     loadChildren: () =>
       import('./role-manager/role-manager.module').then((m) => m.RoleManagerModule),

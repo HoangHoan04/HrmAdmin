@@ -14,7 +14,6 @@ export interface Branch extends BaseDto {
   address?: string;
   country?: string;
   city?: string;
-  district?: string;
   ward?: string;
   latitude?: number | null;
   longitude?: number | null;

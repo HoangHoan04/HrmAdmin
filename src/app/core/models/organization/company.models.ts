@@ -20,7 +20,6 @@ export interface Company extends BaseDto {
   fax?: string;
   country?: string;
   city?: string;
-  district?: string;
   ward?: string;
   businessRegistrationCode?: string;
   foundedDate?: string | null;

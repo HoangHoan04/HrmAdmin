@@ -6,11 +6,13 @@ import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { SharedModule } from '../../shared/shared.module';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { LayoutWidgetsModule } from '../../layout/admin-layout/layout-widgets.module';
 import { AuthLayoutComponent } from '../../layout/auth-layout/auth-layout.component';
+import { ChangePasswordComponent } from './change-password/change-password.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { LoginComponent } from './login/login.component';
-import { ChangePasswordComponent } from './change-password/change-password.component';
+import { SsoCallbackComponent } from './sso-callback/sso-callback.component';
 
 const routes: Routes = [
   {
@@ -19,6 +21,8 @@ const routes: Routes = [
     children: [
       { path: '', redirectTo: 'login', pathMatch: 'full' },
       { path: 'login', component: LoginComponent },
+      { path: 'callback', component: SsoCallbackComponent },
+      { path: 'sso/callback', component: SsoCallbackComponent },
       { path: 'forgot-password', component: ForgotPasswordComponent },
       { path: 'reset-password', component: ForgotPasswordComponent },
       { path: 'change-password', component: ChangePasswordComponent },
@@ -32,6 +36,7 @@ const routes: Routes = [
     ForgotPasswordComponent,
     AuthLayoutComponent,
     ChangePasswordComponent,
+    SsoCallbackComponent,
   ],
   imports: [
     FormsModule,
@@ -42,6 +47,7 @@ const routes: Routes = [
     NzCheckboxModule,
     NzIconModule,
     NzInputModule,
+    NzSpinModule,
     RouterModule.forChild(routes),
   ],
 })

@@ -1,4 +1,4 @@
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { EndpointService } from './endpoint.service';
@@ -14,6 +14,9 @@ export class ApiService {
 
   get AUTH() {
     return this.endpoints.AUTH;
+  }
+  get ADMINISTRATIVE() {
+    return this.endpoints.ADMINISTRATIVE;
   }
   get COMPANY() {
     return this.endpoints.COMPANY;
@@ -110,9 +113,6 @@ export class ApiService {
   }
   get USER_ROLE() {
     return this.endpoints.USER_ROLE;
-  }
-  get USER() {
-    return this.endpoints.USER;
   }
   get HEADCOUNT() {
     return this.endpoints.HEADCOUNT;
@@ -213,26 +213,8 @@ export class ApiService {
   get LEGAL_RATE_CONFIG() {
     return this.endpoints.LEGAL_RATE_CONFIG;
   }
-  get NOTIFICATION_TEMPLATE() {
-    return this.endpoints.NOTIFICATION_TEMPLATE;
-  }
-  get API_CLIENT_KEY() {
-    return this.endpoints.API_CLIENT_KEY;
-  }
-  get WEBHOOK_SUBSCRIPTION() {
-    return this.endpoints.WEBHOOK_SUBSCRIPTION;
-  }
   get SYSTEM_RETENTION() {
     return this.endpoints.SYSTEM_RETENTION;
-  }
-  get SMS_GATEWAY_CONFIG() {
-    return this.endpoints.SMS_GATEWAY_CONFIG;
-  }
-  get ZALO_OA_CONFIG() {
-    return this.endpoints.ZALO_OA_CONFIG;
-  }
-  get INTEGRATIONS() {
-    return this.endpoints.INTEGRATIONS;
   }
   get TIMEKEEPING_PUNCH() {
     return this.endpoints.TIMEKEEPING_PUNCH;
@@ -247,8 +229,23 @@ export class ApiService {
     return this.endpoints.UPLOAD_FILE;
   }
 
-  get<T>(url: string): Observable<T> {
-    return this.http.get<T>(url);
+  get<T>(url: string, params?: Record<string, any>): Observable<T> {
+    if (!params) {
+      return this.http.get<T>(url);
+    }
+    let httpParams = new HttpParams();
+    Object.entries(params).forEach(([key, value]) => {
+      if (
+        value !== undefined &&
+        value !== null &&
+        value !== '' &&
+        value !== 'undefined' &&
+        value !== 'null'
+      ) {
+        httpParams = httpParams.set(key, String(value));
+      }
+    });
+    return this.http.get<T>(url, { params: httpParams });
   }
 
   getText(url: string): Observable<string> {

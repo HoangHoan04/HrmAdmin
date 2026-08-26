@@ -6,24 +6,37 @@ import { environment } from '../../../environments/environment';
 })
 export class EndpointService {
   private readonly baseUrl = environment.apiUrl;
+  private readonly authApiUrl = environment.authApiUrl || 'http://localhost:5000/api';
 
   AUTH = {
-    LOGIN: `${this.baseUrl}/admin/auth/login`,
-    REFRESH: `${this.baseUrl}/admin/auth/refresh`,
-    CHANGE_PASSWORD: `${this.baseUrl}/admin/auth/change-password`,
-    FORGOT_PASSWORD: `${this.baseUrl}/admin/auth/forgot-password`,
-    RESET_PASSWORD_WITH_OTP: `${this.baseUrl}/admin/auth/reset-password-with-otp`,
-    ME: `${this.baseUrl}/admin/auth/me`,
-    PROFILE: `${this.baseUrl}/admin/auth/profile`,
-    TWO_FA_SETUP: `${this.baseUrl}/admin/auth/2fa/setup`,
-    TWO_FA_ENABLE: `${this.baseUrl}/admin/auth/2fa/enable`,
-    TWO_FA_DISABLE: `${this.baseUrl}/admin/auth/2fa/disable`,
-    TWO_FA_VERIFY: `${this.baseUrl}/admin/auth/2fa/verify`,
-    SSO_STATUS: `${this.baseUrl}/admin/auth/sso/status`,
-    SSO_START: (provider: string) => `${this.baseUrl}/admin/auth/sso/${provider}/start`,
-    SSO_CALLBACK: (provider: string) => `${this.baseUrl}/admin/auth/sso/${provider}/callback`,
-    SESSIONS_LIST: `${this.baseUrl}/admin/auth/sessions/list`,
-    SESSIONS_REVOKE: `${this.baseUrl}/admin/auth/sessions/revoke`,
+    LOGIN: `${this.authApiUrl}/auth/login`,
+    REFRESH: `${this.authApiUrl}/auth/refresh`,
+    LOGOUT: `${this.authApiUrl}/auth/logout`,
+    CHANGE_PASSWORD: `${this.authApiUrl}/auth/change-password`,
+    FORGOT_PASSWORD: `${this.authApiUrl}/auth/forgot-password`,
+    RESET_PASSWORD_WITH_OTP: `${this.authApiUrl}/auth/reset-password`,
+    RESET_PASSWORD: `${this.authApiUrl}/auth/reset-password`,
+    ME: `${this.authApiUrl}/auth/me`,
+    PROFILE: `${this.authApiUrl}/auth/profile`,
+    TWO_FA_SETUP: `${this.authApiUrl}/auth/2fa/setup`,
+    TWO_FA_ENABLE: `${this.authApiUrl}/auth/2fa/enable`,
+    TWO_FA_DISABLE: `${this.authApiUrl}/auth/2fa/disable`,
+    TWO_FA_VERIFY: `${this.authApiUrl}/auth/login`,
+    SSO_STATUS: `${this.authApiUrl}/auth/sso/status`,
+    SSO_START: (provider: string) => `${this.authApiUrl}/auth/sso/${provider}/start`,
+    SSO_CALLBACK: (provider: string) => `${this.authApiUrl}/auth/sso/${provider}/callback`,
+    SESSIONS_LIST: `${this.authApiUrl}/auth/sessions`,
+    SESSIONS_REVOKE: `${this.authApiUrl}/auth/sessions`,
+  };
+
+  ADMINISTRATIVE = {
+    PROVINCES: `${this.authApiUrl}/administrative/provinces`,
+    PROVINCE_DETAIL: (code: string) => `${this.authApiUrl}/administrative/provinces/${code}`,
+    PROVINCE_WARDS: (code: string) => `${this.authApiUrl}/administrative/provinces/${code}/wards`,
+    WARDS: `${this.authApiUrl}/administrative/wards`,
+    WARD_DETAIL: (code: string) => `${this.authApiUrl}/administrative/wards/${code}`,
+    TREE: `${this.authApiUrl}/administrative/tree`,
+    SEARCH: `${this.authApiUrl}/administrative/search`,
   };
 
   COMPANY = {
@@ -405,15 +418,6 @@ export class EndpointService {
     SET_BY_EMPLOYEE: `${this.baseUrl}/user-role/set-by-employee`,
   };
 
-  USER = {
-    PAGINATION: `${this.baseUrl}/user/pagination`,
-    DETAIL: `${this.baseUrl}/user/detail`,
-    CREATE: `${this.baseUrl}/user/create`,
-    UPDATE: `${this.baseUrl}/user/update`,
-    RESET_PASSWORD: `${this.baseUrl}/user/reset-password`,
-    DELETE: `${this.baseUrl}/user/delete`,
-  };
-
   HEADCOUNT = {
     TREE: `${this.baseUrl}/headcount/tree`,
     UPSERT_ROW: `${this.baseUrl}/headcount/upsert-row`,
@@ -687,55 +691,9 @@ export class EndpointService {
     DELETE: `${this.baseUrl}/legal-rate-config/delete`,
   };
 
-  NOTIFICATION_TEMPLATE = {
-    PAGINATION: `${this.baseUrl}/notification-template/pagination`,
-    DETAIL: `${this.baseUrl}/notification-template/detail`,
-    CREATE: `${this.baseUrl}/notification-template/create`,
-    UPDATE: `${this.baseUrl}/notification-template/update`,
-    DELETE: `${this.baseUrl}/notification-template/delete`,
-  };
-
-  API_CLIENT_KEY = {
-    PAGINATION: `${this.baseUrl}/api-client-key/pagination`,
-    DETAIL: `${this.baseUrl}/api-client-key/detail`,
-    CREATE: `${this.baseUrl}/api-client-key/create`,
-    UPDATE: `${this.baseUrl}/api-client-key/update`,
-    DELETE: `${this.baseUrl}/api-client-key/delete`,
-  };
-
-  WEBHOOK_SUBSCRIPTION = {
-    PAGINATION: `${this.baseUrl}/webhook-subscription/pagination`,
-    DETAIL: `${this.baseUrl}/webhook-subscription/detail`,
-    CREATE: `${this.baseUrl}/webhook-subscription/create`,
-    UPDATE: `${this.baseUrl}/webhook-subscription/update`,
-    DELETE: `${this.baseUrl}/webhook-subscription/delete`,
-  };
-
   SYSTEM_RETENTION = {
     DETAIL: `${this.baseUrl}/system-retention/detail`,
     UPDATE: `${this.baseUrl}/system-retention/update`,
-  };
-
-  SMS_GATEWAY_CONFIG = {
-    PAGINATION: `${this.baseUrl}/sms-gateway-config/pagination`,
-    DETAIL: `${this.baseUrl}/sms-gateway-config/detail`,
-    CREATE: `${this.baseUrl}/sms-gateway-config/create`,
-    UPDATE: `${this.baseUrl}/sms-gateway-config/update`,
-    DELETE: `${this.baseUrl}/sms-gateway-config/delete`,
-    SEND_TEST: `${this.baseUrl}/sms-gateway-config/send-test`,
-  };
-
-  ZALO_OA_CONFIG = {
-    PAGINATION: `${this.baseUrl}/zalo-oa-config/pagination`,
-    DETAIL: `${this.baseUrl}/zalo-oa-config/detail`,
-    CREATE: `${this.baseUrl}/zalo-oa-config/create`,
-    UPDATE: `${this.baseUrl}/zalo-oa-config/update`,
-    DELETE: `${this.baseUrl}/zalo-oa-config/delete`,
-  };
-
-  INTEGRATIONS = {
-    STATUS: `${this.baseUrl}/integrations/status`,
-    ZALO_SEND_TEST: `${this.baseUrl}/integrations/zalo/send-test`,
   };
 
   IP_ALLOWLIST = {

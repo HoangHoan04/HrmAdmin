@@ -227,12 +227,6 @@
     "editWorkflowDefinition": "Edit Workflow Definition",
     "workflowFormTemplates": "Form Templates",
     "addWorkflowFormTemplate": "Add Form Template",
-    "editWorkflowFormTemplate": "Edit Form Template",
-    "integrations": "Integrations",
-    "integrationsHub": "Integration status",
-    "smsConfig": "SMS gateway",
-    "zaloConfig": "Zalo OA",
-    "punchImport": "Punch CSV import",
-    "payrollExports": "Payroll exports"
+    "editWorkflowFormTemplate": "Edit Form Template"
   }
 }

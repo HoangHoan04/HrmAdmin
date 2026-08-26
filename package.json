@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "prestart": "node scripts/generate-i18n-manifest.js",
-    "start": "ng serve --open",
+    "start": "ng serve --port 4200 --open",
     "prebuild": "node scripts/generate-i18n-manifest.js",
     "build": "ng build",
     "prewatch": "node scripts/generate-i18n-manifest.js",

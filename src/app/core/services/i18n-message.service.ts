@@ -148,6 +148,10 @@ export class I18nMessageService {
     return this.instant('common.messages.updateSuccess');
   }
 
+  deleteSuccess(): string {
+    return this.instant('common.messages.deleteSuccess');
+  }
+
   genericError(serverMessage?: unknown): string {
     return this.resolveServerMessage(serverMessage) || this.instant('common.messages.genericError');
   }
