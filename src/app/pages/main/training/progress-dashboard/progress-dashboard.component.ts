@@ -1,3 +1,4 @@
+import { enumData } from '@/app/core/constants/enums/enumData';
 import { TrainingProgress } from '@/app/core/models';
 import { ApiService, I18nMessageService } from '@/app/core/services';
 import {
@@ -18,9 +19,9 @@ export class ProgressDashboardComponent implements OnInit {
   data: TrainingProgress[] = [];
   loading = false;
   pagination: PaginationConfig = {
-    current: 1,
-    pageSize: 50,
-    total: 0,
+    current: enumData.PAGE.PAGE_INDEX,
+    pageSize: enumData.PAGE.PAGE_SIZE,
+    total: enumData.PAGE.TOTAL,
     showTotal: true,
   };
   toolbar: ToolbarConfig = { show: true, showRefreshButton: true };

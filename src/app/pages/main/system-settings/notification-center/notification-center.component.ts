@@ -1,3 +1,4 @@
+import { enumData } from '@/app/core/constants/enums/enumData';
 import {
   BroadcastNotificationPayload,
   NotificationItem,
@@ -35,9 +36,9 @@ export class NotificationCenterComponent implements OnInit {
   selectedTabIndex = 0;
 
   pagination: PaginationConfig = {
-    current: 1,
-    pageSize: 10,
-    total: 0,
+    current: enumData.PAGE.PAGE_INDEX,
+    pageSize: enumData.PAGE.PAGE_SIZE,
+    total: enumData.PAGE.TOTAL,
     showTotal: true,
   };
 

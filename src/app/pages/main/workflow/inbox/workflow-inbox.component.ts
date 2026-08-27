@@ -1,4 +1,5 @@
 import { PERMISSION_CODES } from '@/app/core/constants/common';
+import { enumData } from '@/app/core/constants/enums/enumData';
 import { WorkflowInboxItem } from '@/app/core/models';
 import { ApiService, I18nMessageService } from '@/app/core/services';
 import { PermissionService } from '@/app/core/services/permission.service';
@@ -23,9 +24,9 @@ export class WorkflowInboxComponent implements OnInit {
   data: WorkflowInboxItem[] = [];
   loading = false;
   pagination: PaginationConfig = {
-    current: 1,
-    pageSize: 50,
-    total: 0,
+    current: enumData.PAGE.PAGE_INDEX,
+    pageSize: enumData.PAGE.PAGE_SIZE,
+    total: enumData.PAGE.TOTAL,
     showTotal: true,
   };
   toolbar: ToolbarConfig = { show: true };
@@ -102,7 +103,10 @@ export class WorkflowInboxComponent implements OnInit {
     this.promptNote('workflow.inbox.approveConfirm', false).then((note) => {
       if (note === undefined) return;
       this.apiService
-        .post<boolean>(this.apiService.WORKFLOW.ADVANCE, { taskId: item.taskId, note: note || null })
+        .post<boolean>(this.apiService.WORKFLOW.ADVANCE, {
+          taskId: item.taskId,
+          note: note || null,
+        })
         .subscribe({
           next: (ok) => {
             if (ok) {

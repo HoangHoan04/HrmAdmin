@@ -6,7 +6,7 @@ import { environment } from '../../../environments/environment';
 })
 export class EndpointService {
   private readonly baseUrl = environment.apiUrl;
-  private readonly authApiUrl = environment.authApiUrl || 'http://localhost:5000/api';
+  private readonly authApiUrl = environment.authApiUrl || 'http://localhost:8000/api';
 
   AUTH = {
     LOGIN: `${this.authApiUrl}/auth/login`,
