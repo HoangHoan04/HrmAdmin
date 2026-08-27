@@ -2,7 +2,6 @@
   <nz-spin [nzSpinning]="loading">
     <form nz-form [formGroup]="validateForm" nzLayout="vertical" (ngSubmit)="submitForm()">
       <div nz-row [nzGutter]="24">
-        <!-- Mã  -->
         <div nz-col nzXs="24" nzMd="8">
           <nz-form-item>
             <nz-form-label [nzRequired]="true">{{ 'dayOffConfig.code' | translate }}</nz-form-label>
@@ -15,7 +14,6 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <!-- Tên -->
         <div nz-col nzXs="24" nzMd="8">
           <nz-form-item>
             <nz-form-label [nzRequired]="true">{{ 'dayOffConfig.name' | translate }}</nz-form-label>
@@ -29,7 +27,6 @@
           </nz-form-item>
         </div>
 
-        <!-- Công ty -->
         <div nz-col nzXs="24" nzMd="8">
           <nz-form-item>
             <nz-form-label>{{ 'dayOffConfig.companyName' | translate }}</nz-form-label>
@@ -52,7 +49,6 @@
       </div>
 
       <div nz-row [nzGutter]="24">
-        <!-- Số ngày nghỉ mặc định mỗi năm -->
         <div nz-col nzXs="24" nzMd="8">
           <nz-form-item>
             <nz-form-label>{{ 'dayOffConfig.defaultDayPerYear' | translate }}</nz-form-label>
@@ -65,7 +61,6 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <!-- Có được tính lương không -->
         <div nz-col nzXs="24" nzMd="8">
           <nz-form-item>
             <nz-form-label>{{ 'dayOffConfig.isPaid' | translate }}</nz-form-label>

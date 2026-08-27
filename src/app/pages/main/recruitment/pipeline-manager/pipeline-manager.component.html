@@ -36,7 +36,6 @@
   </nz-steps>
 
   <nz-spin [nzSpinning]="loading">
-    <!-- STEP 0: Org -->
     @if (currentStep === 0) {
       <nz-card class="step-card">
         <p class="muted">{{ 'recruitment.pipeline.orgHint' | translate }}</p>
@@ -88,7 +87,6 @@
       </nz-card>
     }
 
-    <!-- STEP 1: Plan -->
     @if (currentStep === 1) {
       <nz-card class="step-card">
         <p class="muted">{{ 'recruitment.pipeline.pickOpenPlan' | translate }}</p>
@@ -122,7 +120,6 @@
       </nz-card>
     }
 
-    <!-- STEP 2: Candidate -->
     @if (currentStep === 2 && selectedPlan) {
       <nz-card [nzTitle]="selectedPlan.code" class="step-card">
         <div class="toolbar-row">
@@ -204,7 +201,6 @@
       </nz-card>
     }
 
-    <!-- STEP 3: Interview (candidate locked) -->
     @if (currentStep === 3 && selectedCandidate) {
       <nz-card class="step-card">
         <div class="selected-banner">
@@ -310,7 +306,6 @@
       </nz-card>
     }
 
-    <!-- STEP 4: Interviewers (scoped to org) -->
     @if (currentStep === 4) {
       <nz-card class="step-card">
         <p class="muted">
@@ -389,7 +384,6 @@
       </nz-card>
     }
 
-    <!-- STEP 5: Waitlist -->
     @if (currentStep === 5 && selectedPlan) {
       <nz-card class="step-card">
         <nz-table [nzData]="waitlist" nzSize="middle" [nzFrontPagination]="true">

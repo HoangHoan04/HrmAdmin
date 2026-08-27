@@ -1,5 +1,4 @@
 <div class="excel-import-modal-container">
-  <!-- Header Info -->
   <div class="file-summary-card">
     <div class="file-summary-left">
       <div class="file-icon-wrap">
@@ -18,7 +17,6 @@
       </div>
     </div>
 
-    <!-- Sheet Switcher if multiple sheets -->
     @if (sheetNames.length > 1) {
       <div class="file-summary-right">
         <span class="sheet-label">Trang tính:</span>
@@ -37,14 +35,12 @@
     }
   </div>
 
-  <!-- Parsing State -->
   @if (parsing) {
     <div class="state-loading-wrap">
       <nz-spin nzSimple nzTip="Đang phân tích cấu trúc file Excel..."></nz-spin>
     </div>
   }
 
-  <!-- Parse Error State -->
   @if (!parsing && parseError) {
     <div class="state-error-wrap">
       <nz-alert
@@ -56,9 +52,7 @@
     </div>
   }
 
-  <!-- Main Content: Preview & Progress -->
   @if (!parsing && !parseError) {
-    <!-- Progress Bar (Shown during or after import) -->
     @if (importing || importCompleted) {
       <div class="import-progress-section">
         <div class="progress-header">
@@ -89,7 +83,6 @@
       </div>
     }
 
-    <!-- Import Result Summary -->
     @if (importCompleted && importResult) {
       <div class="import-result-section">
         <div class="result-stats-row">
@@ -107,7 +100,6 @@
           </div>
         </div>
 
-        <!-- Errors Box -->
         @if (importResult.errors.length) {
           <div class="errors-box">
             <div class="errors-box-header">
@@ -132,7 +124,6 @@
       </div>
     }
 
-    <!-- Data Preview Table with TableCustomComponent (Visible before import or if no errors) -->
     @if (!importCompleted) {
       <div class="preview-section">
         <div class="preview-header">
@@ -143,9 +134,7 @@
               {{ totalRows }} dòng)</span
             >
           </div>
-          <div class="preview-note">
-            * Dòng đầu tiên trong file được nhận dạng làm tiêu đề cột
-          </div>
+          <div class="preview-note">* Dòng đầu tiên trong file được nhận dạng làm tiêu đề cột</div>
         </div>
 
         <div class="table-preview-wrapper">
@@ -165,14 +154,8 @@
     }
   }
 
-  <!-- Modal Footer Actions -->
   <div class="modal-footer-actions">
-    <button
-      nz-button
-      nzType="default"
-      (click)="closeModal()"
-      [disabled]="importing"
-    >
+    <button nz-button nzType="default" (click)="closeModal()" [disabled]="importing">
       {{ importCompleted ? 'Đóng' : 'Hủy bỏ' }}
     </button>
 
