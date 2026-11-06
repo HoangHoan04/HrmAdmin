@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { TwoFactorSetup } from '../models/system/settings.models';
 import { ApiService } from './api.service';
 import { PermissionService } from './permission.service';
 
@@ -62,31 +63,16 @@ export class AuthService {
       .pipe(tap((res) => this.applyLoginResponse(res)));
   }
 
-  verifyTwoFactor(tempToken: string, code: string): Observable<any> {
-    const payload = {
-      email: this.currentEmail || '',
-      password: '',
-      code2fa: code,
-    };
-    return this.apiService
-      .post<any>(this.apiService.AUTH.LOGIN, payload)
-      .pipe(tap((res) => this.applyLoginResponse(res)));
-  }
-
-  setupTwoFactor(): Observable<any> {
-    return this.apiService.post<any>(this.apiService.AUTH.TWO_FA_SETUP, {});
+  setupTwoFactor(): Observable<TwoFactorSetup> {
+    return this.apiService.post<TwoFactorSetup>(this.apiService.AUTH.TWO_FA_SETUP, {});
   }
 
   enableTwoFactor(code: string): Observable<any> {
     return this.apiService.post<any>(this.apiService.AUTH.TWO_FA_ENABLE, { code });
   }
 
-  disableTwoFactor(code: string, password?: string): Observable<any> {
+  disableTwoFactor(code: string, password: string): Observable<any> {
     return this.apiService.post<any>(this.apiService.AUTH.TWO_FA_DISABLE, { code, password });
-  }
-
-  getSsoStatus(): Observable<any> {
-    return this.apiService.get<any>(this.apiService.AUTH.SSO_STATUS);
   }
 
   listSessions(body: { includeRevoked?: boolean; allUsers?: boolean } = {}): Observable<any> {
@@ -151,7 +137,16 @@ export class AuthService {
     return this.apiService.post<any>(this.apiService.AUTH.FORGOT_PASSWORD, { email });
   }
 
-  resetPasswordWithOtp(body: any): Observable<any> {
+  verifyResetOtp(email: string, otp: string): Observable<any> {
+    return this.apiService.post<any>(this.apiService.AUTH.VERIFY_RESET_OTP, { email, otp });
+  }
+
+  resetPasswordWithOtp(body: {
+    email: string;
+    otp: string;
+    newPassword: string;
+    confirmNewPassword: string;
+  }): Observable<any> {
     return this.apiService.post<any>(this.apiService.AUTH.RESET_PASSWORD, body);
   }
 

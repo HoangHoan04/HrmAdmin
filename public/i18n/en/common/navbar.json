@@ -9,6 +9,18 @@
     "changeTheme": "Change theme",
     "changePassword": "Change password",
     "changePasswordTitle": "Change Account Password",
-    "changeLanguage": "Change language"
+    "changeLanguage": "Change language",
+    "twoFactor": "Two-factor authentication",
+    "twoFactorOn": "On",
+    "twoFactorTitle": "Two-factor authentication (2FA)",
+    "twoFactorIntro": "Add an extra layer of security: once enabled, every sign-in also requires a 6-digit code from Google Authenticator / Microsoft Authenticator.",
+    "twoFactorStart": "Start setup",
+    "twoFactorScan": "Scan the QR code with your Authenticator app, then enter the 6-digit code it shows to confirm.",
+    "twoFactorManualKey": "Or enter this key manually:",
+    "twoFactorEnable": "Confirm and enable",
+    "twoFactorDisableIntro": "Two-factor authentication is on. To turn it off, enter your current password and a 6-digit code from your Authenticator app.",
+    "twoFactorDisable": "Disable two-factor authentication",
+    "twoFactorEnabledMsg": "Two-factor authentication enabled.",
+    "twoFactorDisabledMsg": "Two-factor authentication disabled."
   }
 }

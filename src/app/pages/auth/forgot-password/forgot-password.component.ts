@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { NzMessageService } from 'ng-zorro-antd/message';
 import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
@@ -21,20 +22,34 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
   showConfirmPassword = false;
   loading = false;
   error = '';
-  resetToken = '';
-  otpTimer = 60;
+  info = '';
+  /** Thời gian hiệu lực OTP (giây) — khớp với backend (5 phút) */
+  otpTimer = 300;
+  /** Thời gian chờ trước khi được gửi lại mã (giây) */
+  resendCooldown = 0;
   private otpInterval: ReturnType<typeof setInterval> | null = null;
+
+  private static readonly OTP_LIFETIME = 300;
+  private static readonly RESEND_COOLDOWN = 60;
 
   constructor(
     private router: Router,
+    private route: ActivatedRoute,
     private authService: AuthService,
     private readonly translate: TranslateService,
+    private readonly message: NzMessageService,
   ) {}
 
   ngOnInit(): void {
     const path = this.router.url.split('?')[0];
-    if (path === '/auth/reset-password') {
+    const email = this.route.snapshot.queryParamMap.get('email');
+    if (email) {
+      this.email = email;
+    }
+    // /auth/reset-password?email=... → vào thẳng bước nhập OTP
+    if (path === '/auth/reset-password' && this.email) {
       this.step = 2;
+      this.startTimer();
     }
   }
 
@@ -62,13 +77,13 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
       this.error = this.translate.instant('auth.emailRequired');
       return;
     }
+    this.email = this.email.trim();
     this.loading = true;
     this.authService.forgotPassword(this.email).subscribe({
       next: (res: any) => {
         this.loading = false;
-        if (res && res.resetToken) {
-          this.resetToken = res.resetToken;
-        }
+        this.info = res?.message || '';
+        this.otp = ['', '', '', '', '', ''];
         this.step = 2;
         setTimeout(() => this.focusBox(0), 0);
         this.startTimer();
@@ -123,20 +138,36 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
       this.error = this.translate.instant('auth.otpRequired');
       return;
     }
-    this.step = 3;
-    this.clearTimer();
+    if (this.isOtpExpired) {
+      this.error = this.translate.instant('auth.otpExpired');
+      return;
+    }
+    this.loading = true;
+    this.authService.verifyResetOtp(this.email, this.otpValue).subscribe({
+      next: () => {
+        this.loading = false;
+        this.step = 3;
+        this.clearTimer();
+      },
+      error: (err) => {
+        this.loading = false;
+        this.error =
+          typeof err.error === 'string'
+            ? err.error
+            : err.error?.message || this.translate.instant('auth.requestFailed');
+      },
+    });
   }
 
   resendOtp(): void {
+    if (this.resendCooldown > 0) return;
+    this.error = '';
     this.otp = ['', '', '', '', '', ''];
-    this.otpTimer = 60;
     this.loading = true;
     this.authService.forgotPassword(this.email).subscribe({
       next: (res: any) => {
         this.loading = false;
-        if (res && res.resetToken) {
-          this.resetToken = res.resetToken;
-        }
+        this.info = res?.message || '';
         this.startTimer();
         setTimeout(() => this.focusBox(0), 0);
       },
@@ -163,13 +194,15 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.authService
       .resetPasswordWithOtp({
-        resetToken: this.resetToken || this.otpValue,
+        email: this.email,
+        otp: this.otpValue,
         newPassword: this.newPassword,
         confirmNewPassword: this.confirmPassword,
       })
       .subscribe({
-        next: () => {
+        next: (res: any) => {
           this.loading = false;
+          this.message.success(res?.message || this.translate.instant('auth.passwordUpdateSuccess'));
           this.router.navigateByUrl('/auth/login');
         },
         error: (err) => {
@@ -201,7 +234,12 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
 
   private startTimer(): void {
     this.clearTimer();
+    this.otpTimer = ForgotPasswordComponent.OTP_LIFETIME;
+    this.resendCooldown = ForgotPasswordComponent.RESEND_COOLDOWN;
     this.otpInterval = setInterval(() => {
+      if (this.resendCooldown > 0) {
+        this.resendCooldown--;
+      }
       if (this.otpTimer > 0) {
         this.otpTimer--;
       } else {

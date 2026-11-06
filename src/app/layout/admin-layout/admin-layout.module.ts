@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { NzQRCodeModule } from 'ng-zorro-antd/qr-code';
 import { SharedModule } from '../../shared/shared.module';
 import { AdminLayoutComponent } from './admin-layout.component';
 import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
@@ -25,6 +26,6 @@ import { TabsBarComponent } from './tabs-bar/tabs-bar.component';
     SidebarComponent,
     TabsBarComponent,
   ],
-  imports: [SharedModule, LayoutWidgetsModule],
+  imports: [SharedModule, LayoutWidgetsModule, NzQRCodeModule],
 })
 export class AdminLayoutModule {}

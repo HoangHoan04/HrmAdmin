@@ -9,6 +9,18 @@
     "changeTheme": "Đổi giao diện",
     "changePassword": "Đổi mật khẩu",
     "changePasswordTitle": "Đổi mật khẩu tài khoản",
-    "changeLanguage": "Đổi ngôn ngữ"
+    "changeLanguage": "Đổi ngôn ngữ",
+    "twoFactor": "Xác thực 2 bước",
+    "twoFactorOn": "Bật",
+    "twoFactorTitle": "Xác thực 2 bước (2FA)",
+    "twoFactorIntro": "Tăng bảo mật tài khoản: sau khi bật, mỗi lần đăng nhập bạn cần nhập thêm mã 6 số từ ứng dụng Google Authenticator / Microsoft Authenticator.",
+    "twoFactorStart": "Bắt đầu thiết lập",
+    "twoFactorScan": "Quét mã QR bằng ứng dụng Authenticator, sau đó nhập mã 6 số hiển thị trong ứng dụng để xác nhận.",
+    "twoFactorManualKey": "Hoặc nhập khóa thủ công:",
+    "twoFactorEnable": "Xác nhận và bật",
+    "twoFactorDisableIntro": "Xác thực 2 bước đang bật. Để tắt, nhập mật khẩu hiện tại và mã 6 số từ ứng dụng Authenticator.",
+    "twoFactorDisable": "Tắt xác thực 2 bước",
+    "twoFactorEnabledMsg": "Đã bật xác thực 2 bước.",
+    "twoFactorDisabledMsg": "Đã tắt xác thực 2 bước."
   }
 }

@@ -37,6 +37,13 @@
           <span nz-icon nzType="key" nzTheme="outline"></span>
           {{ 'navbar.changePassword' | translate }}
         </li>
+        <li nz-menu-item (click)="openTwoFactorModal()">
+          <span nz-icon nzType="safety-certificate" nzTheme="outline"></span>
+          {{ 'navbar.twoFactor' | translate }}
+          @if (twoFactorEnabled) {
+            <nz-tag nzColor="success" style="margin-left: 6px">{{ 'navbar.twoFactorOn' | translate }}</nz-tag>
+          }
+        </li>
         <li nz-menu-divider></li>
         <li nz-menu-item class="text-danger" (click)="logout()">
           <span nz-icon nzType="logout" nzTheme="outline"></span> {{ 'navbar.logout' | translate }}
@@ -102,5 +109,93 @@
         />
       </div>
     </div>
+  </ng-container>
+</nz-modal>
+
+<nz-modal
+  [(nzVisible)]="twoFactorVisible"
+  [nzTitle]="'navbar.twoFactorTitle' | translate"
+  [nzFooter]="null"
+  (nzOnCancel)="closeTwoFactorModal()"
+  nzWidth="480px"
+  [nzCentered]="true"
+>
+  <ng-container *nzModalContent>
+    @if (twoFactorError) {
+      <nz-alert
+        nzType="error"
+        nzShowIcon
+        [nzMessage]="twoFactorError"
+        style="margin-bottom: 16px"
+      ></nz-alert>
+    }
+
+    @if (!twoFactorEnabled) {
+      @if (!twoFactorSetup) {
+        <!-- Chưa bật: giới thiệu + nút bắt đầu -->
+        <p>{{ 'navbar.twoFactorIntro' | translate }}</p>
+        <button
+          nz-button
+          nzType="primary"
+          nzBlock
+          [nzLoading]="twoFactorLoading"
+          (click)="startTwoFactorSetup()"
+        >
+          <span nz-icon nzType="qrcode"></span>
+          {{ 'navbar.twoFactorStart' | translate }}
+        </button>
+      } @else {
+        <!-- Quét QR + nhập mã xác nhận -->
+        <p>{{ 'navbar.twoFactorScan' | translate }}</p>
+        <div style="display: flex; justify-content: center; margin: 12px 0">
+          <nz-qrcode [nzValue]="twoFactorSetup.otpAuthUri" [nzSize]="200"></nz-qrcode>
+        </div>
+        <p style="text-align: center; margin-bottom: 4px">
+          <small>{{ 'navbar.twoFactorManualKey' | translate }}</small>
+        </p>
+        <p style="text-align: center; font-family: monospace; word-break: break-all; user-select: all">
+          {{ twoFactorSetup.secret }}
+        </p>
+        <form (ngSubmit)="confirmEnableTwoFactor()" style="display: flex; flex-direction: column; gap: 12px">
+          <input
+            nz-input
+            name="twoFactorCode"
+            [(ngModel)]="twoFactorCode"
+            maxlength="6"
+            inputmode="numeric"
+            autocomplete="one-time-code"
+            [placeholder]="'auth.twoFactorCodePlaceholder' | translate"
+          />
+          <button nz-button nzType="primary" nzBlock [nzLoading]="twoFactorLoading">
+            {{ 'navbar.twoFactorEnable' | translate }}
+          </button>
+        </form>
+      }
+    } @else {
+      <!-- Đang bật: tắt cần mật khẩu + mã -->
+      <p>{{ 'navbar.twoFactorDisableIntro' | translate }}</p>
+      <form (ngSubmit)="confirmDisableTwoFactor()" style="display: flex; flex-direction: column; gap: 12px">
+        <input
+          nz-input
+          type="password"
+          name="twoFactorPassword"
+          [(ngModel)]="twoFactorPassword"
+          autocomplete="current-password"
+          [placeholder]="'auth.passwordPlaceholder' | translate"
+        />
+        <input
+          nz-input
+          name="twoFactorCode"
+          [(ngModel)]="twoFactorCode"
+          maxlength="6"
+          inputmode="numeric"
+          autocomplete="one-time-code"
+          [placeholder]="'auth.twoFactorCodePlaceholder' | translate"
+        />
+        <button nz-button nzType="primary" nzDanger nzBlock [nzLoading]="twoFactorLoading">
+          {{ 'navbar.twoFactorDisable' | translate }}
+        </button>
+      </form>
+    }
   </ng-container>
 </nz-modal>

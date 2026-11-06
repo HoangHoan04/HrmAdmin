@@ -4,6 +4,7 @@ import {
   DashboardSettings,
   SidebarService,
 } from '@/app/core/services';
+import { TwoFactorSetup } from '@/app/core/models/system/settings.models';
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
@@ -33,6 +34,15 @@ export class NavbarComponent implements OnInit, OnDestroy {
   showOldPassword = false;
   showNewPassword = false;
   showConfirmPassword = false;
+
+  // Xác thực 2 bước (TOTP)
+  twoFactorEnabled = false;
+  twoFactorVisible = false;
+  twoFactorLoading = false;
+  twoFactorError = '';
+  twoFactorSetup: TwoFactorSetup | null = null;
+  twoFactorCode = '';
+  twoFactorPassword = '';
 
   constructor(
     private sidebarService: SidebarService,
@@ -73,6 +83,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
           if (user) {
             this.username = user.username;
             this.email = user.email;
+            this.twoFactorEnabled = !!user.twoFactorEnabled;
             this.avatarText = this.username ? this.username.substring(0, 2).toUpperCase() : 'US';
           } else {
             this.username = this.auth.currentUser || 'User';
@@ -133,8 +144,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
     this.auth
       .changePassword({
-        oldPassword: this.oldPassword,
+        currentPassword: this.oldPassword,
         newPassword: this.newPassword,
+        confirmNewPassword: this.confirmPassword,
       })
       .subscribe({
         next: () => {
@@ -152,6 +164,84 @@ export class NavbarComponent implements OnInit, OnDestroy {
           this.cdr.detectChanges();
         },
       });
+  }
+
+  openTwoFactorModal(): void {
+    this.twoFactorError = '';
+    this.twoFactorSetup = null;
+    this.twoFactorCode = '';
+    this.twoFactorPassword = '';
+    this.twoFactorVisible = true;
+    this.cdr.detectChanges();
+  }
+
+  closeTwoFactorModal(): void {
+    this.twoFactorVisible = false;
+    this.twoFactorSetup = null;
+    this.cdr.detectChanges();
+  }
+
+  /** Bước 1 khi bật: sinh secret + mã QR */
+  startTwoFactorSetup(): void {
+    this.twoFactorError = '';
+    this.twoFactorLoading = true;
+    this.auth.setupTwoFactor().subscribe({
+      next: (res) => {
+        this.twoFactorLoading = false;
+        this.twoFactorSetup = res;
+        this.cdr.detectChanges();
+      },
+      error: (err) => this.handleTwoFactorError(err),
+    });
+  }
+
+  /** Bước 2 khi bật: xác nhận mã 6 số từ ứng dụng Authenticator */
+  confirmEnableTwoFactor(): void {
+    if (!/^\d{6}$/.test(this.twoFactorCode.trim())) {
+      this.twoFactorError = this.translate.instant('auth.twoFactorCodeRequired');
+      return;
+    }
+    this.twoFactorError = '';
+    this.twoFactorLoading = true;
+    this.auth.enableTwoFactor(this.twoFactorCode.trim()).subscribe({
+      next: (res) => {
+        this.twoFactorLoading = false;
+        this.twoFactorEnabled = true;
+        this.twoFactorVisible = false;
+        this.twoFactorSetup = null;
+        this.message.success(res?.message || this.translate.instant('navbar.twoFactorEnabledMsg'));
+        this.cdr.detectChanges();
+      },
+      error: (err) => this.handleTwoFactorError(err),
+    });
+  }
+
+  confirmDisableTwoFactor(): void {
+    if (!this.twoFactorPassword || !/^\d{6}$/.test(this.twoFactorCode.trim())) {
+      this.twoFactorError = this.translate.instant('auth.fillAllFields');
+      return;
+    }
+    this.twoFactorError = '';
+    this.twoFactorLoading = true;
+    this.auth.disableTwoFactor(this.twoFactorCode.trim(), this.twoFactorPassword).subscribe({
+      next: (res) => {
+        this.twoFactorLoading = false;
+        this.twoFactorEnabled = false;
+        this.twoFactorVisible = false;
+        this.message.success(res?.message || this.translate.instant('navbar.twoFactorDisabledMsg'));
+        this.cdr.detectChanges();
+      },
+      error: (err) => this.handleTwoFactorError(err),
+    });
+  }
+
+  private handleTwoFactorError(err: any): void {
+    this.twoFactorLoading = false;
+    this.twoFactorError =
+      typeof err?.error === 'string'
+        ? err.error
+        : err?.error?.message || this.translate.instant('auth.requestFailed');
+    this.cdr.detectChanges();
   }
 
   ngOnDestroy(): void {

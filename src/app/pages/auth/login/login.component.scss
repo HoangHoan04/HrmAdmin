@@ -1,62 +1,203 @@
-.sso-gateway-container {
+.login-container {
   display: flex;
   flex-direction: column;
-  gap: 24px;
-  padding: 8px 0;
+  gap: 20px;
+  width: 100%;
+}
 
-  .gateway-header {
-    text-align: center;
+.login-header {
+  text-align: center;
+  margin-bottom: 4px;
 
-    .gateway-logo-badge {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 56px;
-      height: 56px;
-      border-radius: 16px;
-      background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    color: #ffffff;
+    font-size: 26px;
+    margin-bottom: 12px;
+    box-shadow: 0 8px 18px -4px rgba(37, 99, 235, 0.4);
+  }
+
+  .header-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 4px 0;
+    letter-spacing: -0.4px;
+  }
+
+  .header-subtitle {
+    font-size: 13.5px;
+    color: #64748b;
+    margin: 0 0 14px 0;
+  }
+
+  .quick-fill-banner {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    background: rgba(37, 99, 235, 0.06);
+    border: 1px dashed rgba(37, 99, 235, 0.35);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+
+    &:hover {
+      background: rgba(37, 99, 235, 0.12);
+      border-color: #2563eb;
+      transform: translateY(-1px);
+    }
+
+    .badge-role {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      background: #2563eb;
       color: #ffffff;
-      font-size: 28px;
-      margin-bottom: 16px;
-      box-shadow: 0 10px 20px -5px rgba(59, 130, 246, 0.4);
+      padding: 2px 7px;
+      border-radius: 10px;
     }
 
-    .gateway-title {
-      font-size: 26px;
-      font-weight: 800;
-      color: #0f172a;
-      margin: 0 0 6px 0;
-      letter-spacing: -0.5px;
+    .badge-cred {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 12px;
+      font-weight: 600;
+      color: #1e40af;
     }
 
-    .gateway-subtitle {
-      font-size: 14px;
-      color: #64748b;
-      margin: 0;
+    .fill-icon {
+      font-size: 13px;
+      color: #f59e0b;
+    }
+  }
+}
+
+.alert-wrapper {
+  animation: fadeInDown 0.25s ease-out;
+
+  ::ng-deep .ant-alert {
+    border-radius: 10px;
+    font-size: 13px;
+  }
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  .form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    .field-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: #334155;
+    }
+
+    .custom-input-group {
+      border-radius: 10px;
+      transition: all 0.2s ease;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+
+      &:focus-within,
+      &.ant-input-affix-wrapper-focused {
+        border-color: #2563eb;
+        background: #ffffff;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+      }
+
+      input {
+        background: transparent;
+        height: 42px;
+        font-size: 14px;
+        color: #0f172a;
+
+        &::placeholder {
+          color: #94a3b8;
+          font-size: 13.5px;
+        }
+      }
+
+      .input-icon {
+        color: #94a3b8;
+        font-size: 16px;
+        margin-right: 6px;
+      }
+
+      .input-icon-action {
+        color: #94a3b8;
+        font-size: 16px;
+        cursor: pointer;
+        padding: 4px;
+        border-radius: 4px;
+        transition: color 0.15s ease;
+
+        &:hover {
+          color: #2563eb;
+        }
+      }
     }
   }
 
-  
+  .form-options {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 13px;
+    margin-top: -2px;
 
-  .gateway-actions {
-    .sso-login-btn {
-      height: 48px;
+    .remember-checkbox {
+      color: #475569;
+      font-weight: 500;
+      font-size: 13px;
+    }
+
+    .forgot-link {
+      color: #2563eb;
+      font-weight: 600;
+      text-decoration: none;
+      transition: color 0.15s ease;
+
+      &:hover {
+        color: #1d4ed8;
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .form-action {
+    margin-top: 4px;
+
+    .login-submit-btn {
+      height: 46px;
       border-radius: 10px;
       font-size: 15px;
       font-weight: 600;
       background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
       border: none;
-      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
-      transition: all 0.25s ease;
+      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.32);
+      transition: all 0.2s ease;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
 
       &:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 22px rgba(37, 99, 235, 0.45);
         background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+        box-shadow: 0 8px 20px rgba(37, 99, 235, 0.42);
+        transform: translateY(-1px);
       }
 
       &:active {
@@ -64,57 +205,249 @@
       }
     }
   }
+}
 
-  .gateway-footer {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    font-size: 12px;
-    color: #94a3b8;
-    text-align: center;
+.login-footer {
+  text-align: center;
+  font-size: 13px;
+  color: #64748b;
+  margin-top: 4px;
+
+  .footer-link-btn {
+    background: none;
+    border: none;
+    color: #2563eb;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0 0 0 6px;
+    transition: color 0.15s ease;
+
+    &:hover {
+      color: #1d4ed8;
+      text-decoration: underline;
+    }
   }
 }
 
-:host-context(.dark) {
-  .sso-gateway-container {
-    .gateway-header {
-      .gateway-title {
-        color: #f8fafc;
-      }
-      .gateway-subtitle {
-        color: #94a3b8;
+// 2FA View Styles
+.two-fa-view {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+
+  .two-fa-header {
+    text-align: center;
+
+    .two-fa-icon-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: #ffffff;
+      font-size: 26px;
+      margin-bottom: 12px;
+      box-shadow: 0 8px 18px -4px rgba(16, 185, 129, 0.4);
+    }
+  }
+
+  .two-fa-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    .two-fa-input-group {
+      .two-fa-input {
+        text-align: center;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 22px;
+        letter-spacing: 6px;
+        font-weight: 700;
       }
     }
 
-    .sso-info-card {
-      background: #1e293b;
-      border-color: #334155;
+    .two-fa-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
 
-      .sso-description {
-        color: #cbd5e1;
-        strong {
-          color: #f1f5f9;
-        }
+      .cancel-btn {
+        height: 44px;
+        border-radius: 10px;
+        font-weight: 600;
+      }
+    }
+  }
+}
+
+// Modal Content Styles
+.modal-custom-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #0f172a;
+
+  .modal-title-icon {
+    color: #2563eb;
+    font-size: 18px;
+  }
+}
+
+.support-modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 8px 0;
+
+  .modal-notice-text {
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: #475569;
+    margin: 0;
+  }
+
+  .contact-details-box {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    .contact-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+
+      .contact-label {
+        color: #64748b;
+        font-weight: 500;
       }
 
-      .app-meta-box {
-        background: #0f172a;
+      .contact-value {
+        color: #1e293b;
+        font-weight: 600;
+
+        &.highlight {
+          color: #2563eb;
+        }
+      }
+    }
+  }
+
+  .modal-actions {
+    margin-top: 4px;
+
+    .modal-close-btn {
+      height: 42px;
+      border-radius: 8px;
+      font-weight: 600;
+    }
+  }
+}
+
+// Dark Mode Support
+:host-context(.dark) {
+  .login-header {
+    .header-title {
+      color: #f8fafc;
+    }
+    .header-subtitle {
+      color: #94a3b8;
+    }
+    .quick-fill-banner {
+      background: rgba(59, 130, 246, 0.15);
+      border-color: rgba(59, 130, 246, 0.4);
+
+      .badge-cred {
+        color: #93c5fd;
+      }
+    }
+  }
+
+  .login-form {
+    .form-field {
+      .field-label {
+        color: #cbd5e1;
+      }
+      .custom-input-group {
+        background: #1e293b;
         border-color: #334155;
 
-        .meta-row {
-          .meta-key {
-            color: #94a3b8;
-          }
-          .meta-val {
-            color: #e2e8f0;
-            &.mono {
-              background: #1e293b;
-              color: #cbd5e1;
-            }
+        &:focus-within,
+        &.ant-input-affix-wrapper-focused {
+          border-color: #3b82f6;
+          background: #0f172a;
+          box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+
+        input {
+          color: #f8fafc;
+          &::placeholder {
+            color: #64748b;
           }
         }
       }
     }
+
+    .form-options {
+      .remember-checkbox {
+        color: #94a3b8;
+      }
+      .forgot-link {
+        color: #60a5fa;
+        &:hover {
+          color: #93c5fd;
+        }
+      }
+    }
+  }
+
+  .login-footer {
+    color: #94a3b8;
+    .footer-link-btn {
+      color: #60a5fa;
+      &:hover {
+        color: #93c5fd;
+      }
+    }
+  }
+
+  .support-modal-content {
+    .modal-notice-text {
+      color: #cbd5e1;
+    }
+    .contact-details-box {
+      background: #0f172a;
+      border-color: #334155;
+      .contact-row {
+        .contact-label {
+          color: #94a3b8;
+        }
+        .contact-value {
+          color: #f1f5f9;
+          &.highlight {
+            color: #60a5fa;
+          }
+        }
+      }
+    }
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

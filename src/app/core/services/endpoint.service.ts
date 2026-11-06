@@ -6,7 +6,8 @@ import { environment } from '../../../environments/environment';
 })
 export class EndpointService {
   private readonly baseUrl = environment.apiUrl;
-  private readonly authApiUrl = environment.authApiUrl || 'http://localhost:8000/api';
+  // Đăng nhập trực tiếp tại HrmApi (không qua cổng Auth riêng)
+  private readonly authApiUrl = environment.apiUrl;
 
   AUTH = {
     LOGIN: `${this.authApiUrl}/auth/login`,
@@ -14,17 +15,13 @@ export class EndpointService {
     LOGOUT: `${this.authApiUrl}/auth/logout`,
     CHANGE_PASSWORD: `${this.authApiUrl}/auth/change-password`,
     FORGOT_PASSWORD: `${this.authApiUrl}/auth/forgot-password`,
-    RESET_PASSWORD_WITH_OTP: `${this.authApiUrl}/auth/reset-password`,
+    VERIFY_RESET_OTP: `${this.authApiUrl}/auth/verify-reset-otp`,
     RESET_PASSWORD: `${this.authApiUrl}/auth/reset-password`,
     ME: `${this.authApiUrl}/auth/me`,
     PROFILE: `${this.authApiUrl}/auth/profile`,
     TWO_FA_SETUP: `${this.authApiUrl}/auth/2fa/setup`,
     TWO_FA_ENABLE: `${this.authApiUrl}/auth/2fa/enable`,
     TWO_FA_DISABLE: `${this.authApiUrl}/auth/2fa/disable`,
-    TWO_FA_VERIFY: `${this.authApiUrl}/auth/login`,
-    SSO_STATUS: `${this.authApiUrl}/auth/sso/status`,
-    SSO_START: (provider: string) => `${this.authApiUrl}/auth/sso/${provider}/start`,
-    SSO_CALLBACK: (provider: string) => `${this.authApiUrl}/auth/sso/${provider}/callback`,
     SESSIONS_LIST: `${this.authApiUrl}/auth/sessions`,
     SESSIONS_REVOKE: `${this.authApiUrl}/auth/sessions`,
   };
