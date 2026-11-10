@@ -150,13 +150,25 @@ export class EmployeeManagerComponent implements OnInit, OnDestroy {
     },
   ];
 
-  filters: Record<string, any> = {
-    code: '',
-    fullName: '',
-    phone: '',
-    status: null,
-    isDeleted: null,
-  };
+  filters: Record<string, any> = EmployeeManagerComponent.defaultFilters();
+
+  private static defaultFilters(): Record<string, any> {
+    return {
+      code: '',
+      fullName: '',
+      phone: '',
+      status: null,
+      isDeleted: null,
+      companyId: null,
+      branchId: null,
+      departmentId: null,
+      partId: null,
+      positionMasterId: null,
+    };
+  }
+
+  /** Bộ đếm để bỏ qua response cũ khi người dùng đổi lựa chọn liên tục. */
+  private readonly filterOptionRequestSeq: Record<string, number> = {};
 
   filterConfig: FilterConfig = {
     show: true,
@@ -172,7 +184,7 @@ export class EmployeeManagerComponent implements OnInit, OnDestroy {
       label: 'humanResource.employee.code',
       type: 'input',
       placeholder: 'humanResource.employee.searchCode',
-      col: 8,
+      col: 6,
       allowClear: true,
     },
     {
@@ -180,7 +192,7 @@ export class EmployeeManagerComponent implements OnInit, OnDestroy {
       label: 'humanResource.employee.fullName',
       type: 'input',
       placeholder: 'humanResource.employee.searchFullName',
-      col: 8,
+      col: 6,
       allowClear: true,
     },
     {
@@ -188,7 +200,7 @@ export class EmployeeManagerComponent implements OnInit, OnDestroy {
       label: 'humanResource.employee.phone',
       type: 'input',
       placeholder: 'humanResource.employee.searchPhone',
-      col: 8,
+      col: 6,
       allowClear: true,
     },
     {
@@ -196,7 +208,7 @@ export class EmployeeManagerComponent implements OnInit, OnDestroy {
       label: 'humanResource.employee.status',
       type: 'select',
       placeholder: 'humanResource.employee.filterStatus',
-      col: 8,
+      col: 6,
       allowClear: true,
       options: Object.values(enumData.WORK_STATUS).map((s) => ({
         label: s.labelKey,
@@ -204,11 +216,62 @@ export class EmployeeManagerComponent implements OnInit, OnDestroy {
       })),
     },
     {
+      key: 'companyId',
+      label: 'humanResource.employee.filterCompany',
+      type: 'select',
+      placeholder: 'humanResource.employee.filterCompanyPlaceholder',
+      col: 6,
+      allowClear: true,
+      showSearch: true,
+      options: [],
+    },
+    {
+      key: 'branchId',
+      label: 'humanResource.employee.filterBranch',
+      type: 'select',
+      placeholder: 'humanResource.employee.filterBranchPlaceholder',
+      col: 6,
+      allowClear: true,
+      showSearch: true,
+      options: [],
+    },
+    {
+      key: 'departmentId',
+      label: 'humanResource.employee.filterDepartment',
+      type: 'select',
+      placeholder: 'humanResource.employee.filterDepartmentPlaceholder',
+      col: 6,
+      allowClear: true,
+      showSearch: true,
+      options: [],
+    },
+    {
+      key: 'partId',
+      label: 'humanResource.employee.filterPart',
+      type: 'select',
+      placeholder: 'humanResource.employee.filterPartNeedDepartment',
+      col: 6,
+      allowClear: true,
+      showSearch: true,
+      disabled: true,
+      options: [],
+    },
+    {
+      key: 'positionMasterId',
+      label: 'humanResource.employee.filterPosition',
+      type: 'select',
+      placeholder: 'humanResource.employee.filterPositionPlaceholder',
+      col: 6,
+      allowClear: true,
+      showSearch: true,
+      options: [],
+    },
+    {
       key: 'isDeleted',
       label: 'humanResource.employee.recordStatus',
       type: 'select',
       placeholder: 'humanResource.employee.filterRecordStatus',
-      col: 8,
+      col: 6,
       allowClear: true,
       options: Object.values(enumData.STATUS_FILTER_IS_DELETED)
         .filter((s) => s.value !== null)
@@ -235,9 +298,7 @@ export class EmployeeManagerComponent implements OnInit, OnDestroy {
         if (!value) return '-';
         const meta = Object.values(enumData.WORK_STATUS).find(
           (x) =>
-            x.value === value ||
-            x.code === value ||
-            x.value?.toLowerCase() === value.toLowerCase(),
+            x.value === value || x.code === value || x.value?.toLowerCase() === value.toLowerCase(),
         );
         return meta ? StaticTranslateService.instant(meta.labelKey) : value;
       },
@@ -245,9 +306,7 @@ export class EmployeeManagerComponent implements OnInit, OnDestroy {
         if (!value) return '#8c8c8c';
         const meta = Object.values(enumData.WORK_STATUS).find(
           (x) =>
-            x.value === value ||
-            x.code === value ||
-            x.value?.toLowerCase() === value.toLowerCase(),
+            x.value === value || x.code === value || x.value?.toLowerCase() === value.toLowerCase(),
         );
         return meta?.color || '#8c8c8c';
       },
@@ -328,7 +387,127 @@ export class EmployeeManagerComponent implements OnInit, OnDestroy {
     this.initBulkForms();
     this.loadEmployeeOptions();
     this.loadCompanies();
+    this.loadFilterOrgOptions();
     this.loadData();
+  }
+
+  // ---------------------------------------------------------------------------
+  // Bộ lọc theo tổ chức (công ty → chi nhánh → phòng ban → bộ phận, chức vụ)
+  // ---------------------------------------------------------------------------
+
+  private loadFilterOrgOptions(): void {
+    this.fetchFilterOptions('companyId', this.apiService.COMPANY.SELECT_BOX, {});
+    this.fetchFilterOptions('branchId', this.apiService.BRANCH.SELECT_BOX, {});
+    this.fetchFilterOptions('departmentId', this.apiService.DEPARTMENT.SELECT_BOX, {});
+    this.fetchFilterOptions('positionMasterId', this.apiService.POSITION_MASTER.SELECT_BOX, {});
+    this.setPartFilterOptions(null);
+  }
+
+  private getFilterField(key: string): FilterField | undefined {
+    return this.filterFields.find((f) => f.key === key);
+  }
+
+  private fetchFilterOptions(key: string, url: string, body: Record<string, any>): void {
+    const field = this.getFilterField(key);
+    if (!field) return;
+
+    const seq = (this.filterOptionRequestSeq[key] || 0) + 1;
+    this.filterOptionRequestSeq[key] = seq;
+
+    this.apiService.post<SelectBoxDto[]>(url, body).subscribe({
+      next: (res) => {
+        if (this.filterOptionRequestSeq[key] !== seq) return;
+        field.options = (res || []).map((x) => ({
+          label: x.code ? `${x.code} - ${x.name}` : x.name,
+          value: x.id,
+        }));
+        this.cdr.markForCheck();
+      },
+      error: () => {
+        if (this.filterOptionRequestSeq[key] !== seq) return;
+        field.options = [];
+        this.cdr.markForCheck();
+      },
+    });
+  }
+
+  private loadFilterBranches(companyId: string | null): void {
+    if (companyId) {
+      this.fetchFilterOptions('branchId', this.apiService.BRANCH.LOAD_BY_COMPANY, { companyId });
+    } else {
+      this.fetchFilterOptions('branchId', this.apiService.BRANCH.SELECT_BOX, {});
+    }
+  }
+
+  private loadFilterDepartments(companyId: string | null, branchId: string | null): void {
+    if (branchId) {
+      this.fetchFilterOptions('departmentId', this.apiService.DEPARTMENT.LOAD_BY_BRANCH, {
+        branchId,
+      });
+    } else if (companyId) {
+      this.fetchFilterOptions('departmentId', this.apiService.DEPARTMENT.LOAD_BY_COMPANY, {
+        companyId,
+      });
+    } else {
+      this.fetchFilterOptions('departmentId', this.apiService.DEPARTMENT.SELECT_BOX, {});
+    }
+  }
+
+  /** Bộ phận thuộc từng phòng ban, nên chỉ mở khi đã chọn phòng ban. */
+  private setPartFilterOptions(departmentId: string | null): void {
+    const field = this.getFilterField('partId');
+    if (!field) return;
+
+    if (!departmentId) {
+      this.filterOptionRequestSeq['partId'] = (this.filterOptionRequestSeq['partId'] || 0) + 1;
+      field.options = [];
+      field.disabled = true;
+      field.placeholder = 'humanResource.employee.filterPartNeedDepartment';
+      return;
+    }
+
+    field.disabled = false;
+    field.placeholder = 'humanResource.employee.filterPartPlaceholder';
+    this.fetchFilterOptions('partId', this.apiService.PART.LOAD_BY_DEPARTMENT, { departmentId });
+  }
+
+  /** Khi đổi cấp trên thì xoá lựa chọn cấp dưới và nạp lại danh sách tương ứng. */
+  private applyOrgFilterCascade(
+    prev: Record<string, any>,
+    next: Record<string, any>,
+  ): Record<string, any> {
+    if (next['companyId'] !== prev['companyId']) {
+      next = { ...next, branchId: null, departmentId: null, partId: null };
+      this.loadFilterBranches(next['companyId'] || null);
+      this.loadFilterDepartments(next['companyId'] || null, null);
+      this.setPartFilterOptions(null);
+    } else if (next['branchId'] !== prev['branchId']) {
+      next = { ...next, departmentId: null, partId: null };
+      this.loadFilterDepartments(next['companyId'] || null, next['branchId'] || null);
+      this.setPartFilterOptions(null);
+    } else if (next['departmentId'] !== prev['departmentId']) {
+      next = { ...next, partId: null };
+      this.setPartFilterOptions(next['departmentId'] || null);
+    }
+    return next;
+  }
+
+  private buildFilterPayload(): Record<string, any> {
+    const payload: Record<string, any> = {
+      code: (this.filters['code'] || '').trim() || undefined,
+      fullName: (this.filters['fullName'] || '').trim() || undefined,
+      phone: (this.filters['phone'] || '').trim() || undefined,
+      status: this.filters['status'] || undefined,
+      companyId: this.filters['companyId'] || undefined,
+      branchId: this.filters['branchId'] || undefined,
+      departmentId: this.filters['departmentId'] || undefined,
+      partId: this.filters['partId'] || undefined,
+      positionMasterId: this.filters['positionMasterId'] || undefined,
+    };
+    if (this.filters['isDeleted'] !== null && this.filters['isDeleted'] !== undefined) {
+      payload['isDeleted'] = this.filters['isDeleted'];
+    }
+    return payload;
   }
 
   ngOnDestroy(): void {
@@ -496,15 +675,8 @@ export class EmployeeManagerComponent implements OnInit, OnDestroy {
             ? enumData.PAGE.SORT_FIELD.STATUS
             : this.sortField,
       sortOrder: this.sortOrder,
-      code: (this.filters['code'] || '').trim() || undefined,
-      fullName: (this.filters['fullName'] || '').trim() || undefined,
-      phone: (this.filters['phone'] || '').trim() || undefined,
-      status: this.filters['status'] || undefined,
+      ...this.buildFilterPayload(),
     };
-
-    if (this.filters['isDeleted'] !== null && this.filters['isDeleted'] !== undefined) {
-      payload['isDeleted'] = this.filters['isDeleted'];
-    }
 
     this.apiService
       .post<PagedResult<Employee>>(this.apiService.EMPLOYEE.PAGINATION, payload)
@@ -526,7 +698,7 @@ export class EmployeeManagerComponent implements OnInit, OnDestroy {
   }
 
   onFiltersChange(filters: Record<string, any>): void {
-    this.filters = filters;
+    this.filters = this.applyOrgFilterCascade(this.filters, filters);
   }
 
   onFilterSearch(): void {
@@ -535,7 +707,15 @@ export class EmployeeManagerComponent implements OnInit, OnDestroy {
   }
 
   onFilterClear(): void {
-    this.filters = { code: '', fullName: '', phone: '', status: null, isDeleted: null };
+    const hadOrgSelection = ['companyId', 'branchId', 'departmentId'].some(
+      (k) => !!this.filters[k],
+    );
+    this.filters = EmployeeManagerComponent.defaultFilters();
+    if (hadOrgSelection) {
+      this.loadFilterBranches(null);
+      this.loadFilterDepartments(null, null);
+    }
+    this.setPartFilterOptions(null);
     this.pagination.current = 1;
     this.loadData();
   }
@@ -831,15 +1011,7 @@ export class EmployeeManagerComponent implements OnInit, OnDestroy {
 
   exportExcel() {
     this.excelLoading = true;
-    const payload: Record<string, any> = {
-      code: (this.filters['code'] || '').trim() || undefined,
-      fullName: (this.filters['fullName'] || '').trim() || undefined,
-      phone: (this.filters['phone'] || '').trim() || undefined,
-      status: this.filters['status'] || undefined,
-    };
-    if (this.filters['isDeleted'] !== null && this.filters['isDeleted'] !== undefined) {
-      payload['isDeleted'] = this.filters['isDeleted'];
-    }
+    const payload = this.buildFilterPayload();
 
     return this.apiService.postBlob(this.apiService.EMPLOYEE.EXCEL_EXPORT, payload).pipe(
       tap({

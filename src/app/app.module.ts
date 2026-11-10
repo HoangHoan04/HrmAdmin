@@ -6,7 +6,7 @@ import {
   withInterceptorsFromDi,
 } from '@angular/common/http';
 import vi from '@angular/common/locales/vi';
-import { APP_INITIALIZER, Injector, NgModule } from '@angular/core';
+import { APP_INITIALIZER, Injector, NgModule, provideZoneChangeDetection } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { IconDefinition } from '@ant-design/icons-angular';
 import * as AllIcons from '@ant-design/icons-angular/icons';
@@ -81,6 +81,10 @@ export function initStaticTranslateFactory(injector: Injector) {
   declarations: [AppComponent],
   imports: [BrowserModule, SharedModule, AdminLayoutModule, OtherModule, AppRoutingModule],
   providers: [
+    // Angular 21 mặc định chạy zoneless kể cả với bootstrapModule. Ứng dụng này viết theo kiểu dựa vào
+    // zone.js (gán state trong callback HTTP / setTimeout), nên phải bật lại zone để giao diện tự cập nhật.
+    // Thiếu dòng này: lỗi NG0100 ở nhiều trang + có lúc UI không cập nhật cho tới khi người dùng thao tác.
+    provideZoneChangeDetection({ eventCoalescing: true }),
     { provide: NZ_I18N, useValue: vi_VN },
     { provide: NZ_ICONS, useValue: antDesignIcons },
     provideHttpClient(withInterceptorsFromDi()),

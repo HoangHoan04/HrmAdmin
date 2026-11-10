@@ -68,7 +68,7 @@
       "excelImportSuccess": "Successfully imported {{count}} records!",
       "excelImportSuccessEntity": "Successfully imported {{count}} {{entity}}!",
       "loginRequired": "Please enter username and password.",
-      "invalidCredentials": "Invalid username or password.",
+      "invalidCredentials": "Invalid company email or password.",
       "deactivateContentLong": "Are you sure you want to deactivate {{entity}} \"{{name}}\"? Data will be kept in the system.",
       "activateAction": "Activate",
       "deactivateAction": "Deactivate",

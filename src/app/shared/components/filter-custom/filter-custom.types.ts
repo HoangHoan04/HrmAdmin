@@ -30,6 +30,8 @@ export interface FilterField {
   col?: number;
   colClassName?: string;
   allowClear?: boolean;
+  /** Cho phép gõ để tìm trong danh sách (select / multiSelect). Mặc định bật; đặt false để tắt. */
+  showSearch?: boolean;
   defaultValue?: any;
   body?: TemplateRef<any>;
   style?: Record<string, any>;

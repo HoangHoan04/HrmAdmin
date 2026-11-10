@@ -68,7 +68,7 @@
       "excelImportSuccess": "Import Excel thành công {{count}} bản ghi!",
       "excelImportSuccessEntity": "Import Excel thành công {{count}} {{entity}}!",
       "loginRequired": "Vui lòng nhập tài khoản và mật khẩu.",
-      "invalidCredentials": "Tài khoản hoặc mật khẩu không đúng.",
+      "invalidCredentials": "Email công ty hoặc mật khẩu không đúng.",
       "deactivateContentLong": "Bạn có chắc chắn muốn ngưng hoạt động {{entity}} \"{{name}}\"? Dữ liệu sẽ được giữ lại trong hệ thống.",
       "activateAction": "Kích hoạt",
       "deactivateAction": "Ngưng hoạt động",

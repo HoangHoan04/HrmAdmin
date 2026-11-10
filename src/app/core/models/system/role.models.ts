@@ -138,8 +138,37 @@ export interface UserRoleDto {
   roleId: string;
   roleCode?: string;
   roleName?: string;
+  isSystem?: boolean;
   effectiveFrom?: string | null;
   effectiveTo?: string | null;
+  /** EMPLOYEE = gán theo nhân viên (sửa được); USER = gán trực tiếp cho tài khoản. */
+  source?: 'EMPLOYEE' | 'USER';
+}
+
+export interface EmployeeAccountInfoDto {
+  userId: string;
+  username: string;
+  type?: string | null;
+  isActive: boolean;
+  isLocked: boolean;
+  mustChangePassword: boolean;
+  lastLoginAt?: string | null;
+}
+
+export interface EmployeeAccessSummaryDto {
+  employeeId: string;
+  code: string;
+  fullName: string;
+  avatarUrl?: string | null;
+  companyEmail?: string | null;
+  status?: string | null;
+  companyName?: string | null;
+  branchName?: string | null;
+  departmentName?: string | null;
+  positionName?: string | null;
+  account?: EmployeeAccountInfoDto | null;
+  roles: UserRoleDto[];
+  usesDefaultEmployeeRole: boolean;
 }
 
 export interface SetUserRolesRequest {

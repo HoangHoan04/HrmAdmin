@@ -4,12 +4,16 @@ import {
   HttpHandler,
   HttpInterceptor,
   HttpRequest,
+  HttpResponse,
 } from '@angular/common/http';
 import { Injectable, Injector } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { NetworkErrorToastService } from '../services/network-error-toast.service';
 import { isHttpNetworkError } from '../utils/http-network-error';
+
+/** API danh sách tra cứu cho ô chọn (dropdown). */
+const LOOKUP_URL_PATTERN = /\/(select-box|load-by-[a-z-]+)(\?|$)/i;
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
@@ -22,6 +26,17 @@ export class ErrorInterceptor implements HttpInterceptor {
 
     return next.handle(req).pipe(
       catchError((error: unknown) => {
+        // Không có quyền tải danh sách cho ô chọn -> hiển thị ô chọn rỗng thay vì làm vỡ cả trang.
+        // Server vẫn từ chối (không lộ dữ liệu); nhiều màn hình gọi các API này mà không tự bắt lỗi.
+        if (
+          error instanceof HttpErrorResponse &&
+          error.status === 403 &&
+          LOOKUP_URL_PATTERN.test(req.url)
+        ) {
+          console.warn(`[Lookup] Không có quyền tải danh sách: ${req.url}`);
+          return of(new HttpResponse({ status: 200, body: [], url: req.url }));
+        }
+
         if (isHttpNetworkError(error)) {
           const networkToast = this.injector.get(NetworkErrorToastService);
           const message = networkToast.notify();

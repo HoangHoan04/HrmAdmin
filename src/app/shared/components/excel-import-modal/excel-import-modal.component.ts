@@ -173,10 +173,19 @@ export class ExcelImportModalComponent implements OnInit, OnDestroy {
       return;
     }
 
+    // Header luôn là dòng 1 của sheet (giống API). Đọc từ ô A1 và giữ dòng trống để
+    // chỉ số mảng khớp với số dòng thật trong Excel.
+    const ref = worksheet['!ref'];
+    const range = ref ? XLSX.utils.decode_range(ref) : null;
+    if (range) {
+      range.s.r = 0;
+      range.s.c = 0;
+    }
     const jsonData: any[][] = XLSX.utils.sheet_to_json(worksheet, {
       header: 1,
       defval: '',
-      blankrows: false,
+      blankrows: true,
+      ...(range ? { range } : {}),
     });
 
     if (jsonData.length === 0) {
@@ -194,14 +203,15 @@ export class ExcelImportModalComponent implements OnInit, OnDestroy {
         : `Cột ${idx + 1}`,
     );
 
-    const dataRows = jsonData.slice(1).filter((row: any[]) => {
-      return row.some(
-        (cell: any) => cell !== undefined && cell !== null && String(cell).trim() !== '',
+    const dataRows = jsonData
+      .map((row: any[], idx: number) => ({ row: row || [], rowNum: idx + 1 }))
+      .slice(1)
+      .filter(({ row }) =>
+        row.some((cell: any) => cell !== undefined && cell !== null && String(cell).trim() !== ''),
       );
-    });
 
-    this.rows = dataRows.map((row: any[], rowIdx: number) => {
-      const rowObj: Record<string, any> = { __rowNum: rowIdx + 2 };
+    this.rows = dataRows.map(({ row, rowNum }) => {
+      const rowObj: Record<string, any> = { __rowNum: rowNum };
       this.headers.forEach((header, colIdx) => {
         let val = row[colIdx];
         if (val instanceof Date) {

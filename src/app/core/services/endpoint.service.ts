@@ -413,6 +413,7 @@ export class EndpointService {
     BY_EMPLOYEE: `${this.baseUrl}/user-role/by-employee`,
     SET: `${this.baseUrl}/user-role/set`,
     SET_BY_EMPLOYEE: `${this.baseUrl}/user-role/set-by-employee`,
+    EMPLOYEE_SUMMARY: `${this.baseUrl}/user-role/employee-summary`,
   };
 
   HEADCOUNT = {

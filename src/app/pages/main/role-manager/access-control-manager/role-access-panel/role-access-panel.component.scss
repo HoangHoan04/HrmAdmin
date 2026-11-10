@@ -1,0 +1,408 @@
+// Trang phân quyền theo vai trò — dùng biến theme của dự án nên tự hỗ trợ sáng / tối.
+
+.rap {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+// ---------------------------------------------------------------- Toolbar
+.rap-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--background-card, #fff);
+  border: 1px solid var(--border, #f0f0f0);
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+}
+
+.rap-toolbar-main {
+  display: flex;
+  align-items: flex-end;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.rap-role-select {
+  flex: 0 1 380px;
+  min-width: 240px;
+
+  nz-select {
+    width: 100%;
+  }
+}
+
+.rap-label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted-foreground, #595959);
+}
+
+.rap-role-meta {
+  flex: 1 1 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.rap-role-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  color: var(--foreground, #262626);
+
+  [nz-icon] {
+    color: var(--primary, #1677ff);
+  }
+
+  nz-tag {
+    margin: 0;
+  }
+}
+
+.rap-role-progress {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  color: var(--muted-foreground, #8c8c8c);
+  font-variant-numeric: tabular-nums;
+
+  nz-progress {
+    flex: 1;
+    max-width: 320px;
+  }
+
+  ::ng-deep .ant-progress {
+    margin: 0;
+  }
+}
+
+.rap-toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding-top: 12px;
+  border-top: 1px dashed var(--border, #f0f0f0);
+}
+
+.rap-search {
+  width: 280px;
+  max-width: 100%;
+}
+
+.rap-search-clear {
+  cursor: pointer;
+  color: var(--muted-foreground, #bfbfbf);
+
+  &:hover {
+    color: var(--foreground, #595959);
+  }
+}
+
+.rap-spacer {
+  flex: 1;
+}
+
+.rap-hint {
+  font-size: 13px;
+  color: var(--muted-foreground, #8c8c8c);
+}
+
+.rap-unsaved {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #d46b08;
+}
+
+.rap-unsaved-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #fa8c16;
+  box-shadow: 0 0 0 3px rgba(250, 140, 22, 0.18);
+}
+
+// ---------------------------------------------------------------- Help / empty
+.rap-scope-help {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding: 10px 14px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--muted-foreground, #595959);
+  background: var(--muted, #f6f8fb);
+  border: 1px solid var(--border, #eef0f3);
+  border-radius: 10px;
+
+  [nz-icon] {
+    margin-top: 3px;
+    color: var(--primary, #1677ff);
+  }
+}
+
+.rap-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 64px 16px;
+  color: var(--muted-foreground, #8c8c8c);
+  text-align: center;
+  background: var(--background-card, #fff);
+  border: 1px dashed var(--border, #e5e7eb);
+  border-radius: 12px;
+}
+
+.rap-empty-icon {
+  font-size: 36px;
+  color: var(--muted-foreground, #bfbfbf);
+}
+
+// ---------------------------------------------------------------- Module block
+.rap-module {
+  margin-bottom: 12px;
+  background: var(--background-card, #fff);
+  border: 1px solid var(--border, #f0f0f0);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.rap-module-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  cursor: pointer;
+  user-select: none;
+  background: var(--muted, #fafbfc);
+  border-bottom: 1px solid var(--border, #f0f0f0);
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background: var(--accent, #f3f6fa);
+  }
+
+  .is-collapsed & {
+    border-bottom-color: transparent;
+  }
+}
+
+.rap-caret {
+  font-size: 12px;
+  color: var(--muted-foreground, #8c8c8c);
+}
+
+.rap-module-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  font-size: 18px;
+  color: var(--primary, #1677ff);
+  background: rgba(22, 119, 255, 0.1);
+  border-radius: 10px;
+}
+
+.rap-module-title {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.rap-module-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--foreground, #1f2937);
+}
+
+.rap-module-sub {
+  margin-top: 2px;
+  font-size: 12px;
+  color: var(--muted-foreground, #8c8c8c);
+  font-variant-numeric: tabular-nums;
+}
+
+.rap-module-progress {
+  width: 140px;
+  flex-shrink: 0;
+
+  ::ng-deep .ant-progress {
+    margin: 0;
+  }
+}
+
+.rap-module-check {
+  flex-shrink: 0;
+  margin: 0 !important;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--foreground, #262626);
+}
+
+// ---------------------------------------------------------------- Table
+.rap-table {
+  display: flex;
+  flex-direction: column;
+}
+
+.rap-row {
+  display: grid;
+  grid-template-columns: minmax(200px, 260px) 1fr 200px;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border, #f3f4f6);
+  transition: background-color 0.15s ease;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:not(.rap-row-head):hover {
+    background: var(--muted, #fafafa);
+  }
+
+  &.is-active {
+    box-shadow: inset 3px 0 0 var(--primary, #1677ff);
+  }
+}
+
+.rap-row-head {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--muted-foreground, #8c8c8c);
+  background: var(--background-card, #fff);
+}
+
+.rap-cell-page {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+
+  label {
+    margin: 0 !important;
+    min-width: 0;
+  }
+}
+
+.rap-page-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--foreground, #262626);
+}
+
+.rap-page-count {
+  margin-left: auto;
+  padding: 0 8px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 20px;
+  color: var(--muted-foreground, #8c8c8c);
+  background: var(--muted, #f5f5f5);
+  border-radius: 10px;
+  font-variant-numeric: tabular-nums;
+}
+
+.rap-cell-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  min-width: 0;
+}
+
+.rap-chip {
+  margin: 0 !important;
+  padding: 3px 10px 3px 8px;
+  font-size: 13px;
+  color: var(--foreground, #434343);
+  background: var(--background-card, #fff);
+  border: 1px solid var(--border, #e5e7eb);
+  border-radius: 999px;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+
+  &:hover {
+    border-color: var(--primary, #1677ff);
+  }
+
+  &.is-checked {
+    color: var(--primary, #0958d9);
+    background: rgba(22, 119, 255, 0.08);
+    border-color: rgba(22, 119, 255, 0.45);
+    font-weight: 500;
+  }
+}
+
+.rap-cell-scope {
+  min-width: 0;
+}
+
+.rap-scope-select {
+  width: 100%;
+}
+
+.rap-muted {
+  font-size: 12px;
+  color: var(--muted-foreground, #bfbfbf);
+}
+
+// ---------------------------------------------------------------- Responsive
+@media (max-width: 992px) {
+  .rap-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .rap-row-head {
+    display: none;
+  }
+
+  .rap-module-progress {
+    display: none;
+  }
+}
+
+@media (max-width: 576px) {
+  .rap-toolbar {
+    position: static;
+  }
+
+  .rap-search,
+  .rap-role-select {
+    width: 100%;
+    flex-basis: 100%;
+  }
+
+  .rap-spacer {
+    display: none;
+  }
+
+  .rap-module-check {
+    font-size: 0; // chỉ giữ ô tick trên màn hẹp
+  }
+}

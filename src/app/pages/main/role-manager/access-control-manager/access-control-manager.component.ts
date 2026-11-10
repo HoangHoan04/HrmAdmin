@@ -11,6 +11,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class AccessControlManagerComponent implements OnInit {
   activeTabKey: 'role' | 'employee' = 'role';
   initialRoleId: string | null = null;
+  initialEmployeeId: string | null = null;
 
   constructor(
     private readonly router: Router,
@@ -23,6 +24,7 @@ export class AccessControlManagerComponent implements OnInit {
       const tab = params.get('tab');
       this.activeTabKey = tab === 'employee' ? 'employee' : 'role';
       this.initialRoleId = params.get('roleId');
+      this.initialEmployeeId = params.get('employeeId');
       this.cdr.markForCheck();
     });
   }

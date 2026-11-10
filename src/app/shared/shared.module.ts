@@ -47,6 +47,10 @@ import { ExcelImportModalComponent } from './components/excel-import-modal/excel
 import { FileUploadComponent } from './components/file-upload/file-upload.component';
 import { FilterCustomComponent } from './components/filter-custom/filter-custom.component';
 import { TableCustomComponent } from './components/table-custom/table-custom.component';
+import {
+  SelectSearchDefaultDirective,
+  SelectVietnameseFilterDirective,
+} from './directives/select-search.directive';
 
 @NgModule({
   declarations: [
@@ -55,6 +59,8 @@ import { TableCustomComponent } from './components/table-custom/table-custom.com
     ActionLogComponent,
     FileUploadComponent,
     ExcelImportModalComponent,
+    SelectSearchDefaultDirective,
+    SelectVietnameseFilterDirective,
   ],
   imports: [
     TranslatePipe,
@@ -108,6 +114,8 @@ import { TableCustomComponent } from './components/table-custom/table-custom.com
     ActionLogComponent,
     FileUploadComponent,
     ExcelImportModalComponent,
+    SelectSearchDefaultDirective,
+    SelectVietnameseFilterDirective,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,

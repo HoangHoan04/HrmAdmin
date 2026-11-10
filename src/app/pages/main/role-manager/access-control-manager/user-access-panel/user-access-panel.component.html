@@ -1,70 +1,318 @@
-<section class="access-pane access-pane-single">
-  <div class="access-pane-header">
-    <h3 class="access-pane-title">{{ 'role.assignRolesTitle' | translate }}</h3>
-  </div>
-
-  <div class="access-pane-body">
-    <nz-form-item>
-      <nz-form-label nzRequired>{{ 'role.selectEmployee' | translate }}</nz-form-label>
-      <nz-form-control>
+<section class="uap">
+  <div class="uap-layout">
+    <!-- ======================= Cột trái: nhân viên ======================= -->
+    <aside class="uap-side">
+      <div class="uap-card">
+        <label class="uap-label">{{ 'role.uap.pickEmployee' | translate }}</label>
         <nz-select
+          class="uap-employee-select"
           [ngModel]="selectedEmployeeId"
           (ngModelChange)="onEmployeeSelected($event)"
-          [nzPlaceHolder]="'role.selectEmployeePlaceholder' | translate"
+          [nzPlaceHolder]="'role.uap.pickPlaceholder' | translate"
           [nzLoading]="employeesLoading"
-          nzShowSearch
           nzAllowClear
-          style="width: 100%; max-width: 480px"
         >
           @for (emp of employees; track emp.id) {
             <nz-option
               [nzValue]="emp.id"
-              [nzLabel]="(emp.code || '') + ' - ' + emp.name"
+              [nzLabel]="(emp.code ? emp.code + ' - ' : '') + emp.name"
             ></nz-option>
           }
         </nz-select>
-      </nz-form-control>
-    </nz-form-item>
-
-    @if (!selectedEmployeeId) {
-      <div class="access-empty">
-        <span class="access-empty-icon" nz-icon nzType="team"></span>
-        <div>{{ 'role.selectEmployeeHint' | translate }}</div>
       </div>
-    } @else {
-      <nz-spin [nzSpinning]="detailLoading">
-        @if (selectedEmployee) {
-          <p class="access-selected-meta">
-            <strong>{{ selectedEmployee.code }} - {{ selectedEmployee.name }}</strong>
-          </p>
-        }
 
-        <div class="section-label">{{ 'role.assignRoles' | translate }}</div>
+      @if (selectedEmployeeId) {
+        <nz-spin [nzSpinning]="summaryLoading">
+          <div class="uap-card uap-profile">
+            @if (summary) {
+              <div class="uap-profile-head">
+                @if (summary.avatarUrl) {
+                  <img class="uap-avatar" [src]="summary.avatarUrl" [alt]="summary.fullName" />
+                } @else {
+                  <div class="uap-avatar uap-avatar-text">{{ initials }}</div>
+                }
+                <div class="uap-profile-name">
+                  <div class="uap-name">{{ summary.fullName }}</div>
+                  <div class="uap-tags">
+                    <nz-tag>{{ summary.code }}</nz-tag>
+                    @if (statusMeta; as st) {
+                      <nz-tag [nzColor]="st.color">{{ st.labelKey | translate }}</nz-tag>
+                    }
+                  </div>
+                </div>
+              </div>
 
-        @for (role of roleOptions; track role.id) {
-          <div class="access-list-item" style="cursor: default">
-            <label
-              nz-checkbox
-              [ngModel]="isRoleChecked(role.id)"
-              (ngModelChange)="onRoleCheck(role.id, $event)"
-              [name]="'urole-' + role.id"
-            >
-              <span class="access-list-item-title" style="font-weight: 650">
-                {{ role.name }}
-              </span>
-              <span class="perm-code">{{ role.code }}</span>
-            </label>
+              <dl class="uap-info">
+                <div class="uap-info-row">
+                  <dt>
+                    <span nz-icon nzType="mail"></span>{{ 'role.uap.loginEmail' | translate }}
+                  </dt>
+                  <dd>{{ summary.account?.username || summary.companyEmail || '—' }}</dd>
+                </div>
+                <div class="uap-info-row">
+                  <dt><span nz-icon nzType="bank"></span>{{ 'role.uap.company' | translate }}</dt>
+                  <dd>{{ summary.companyName || '—' }}</dd>
+                </div>
+                <div class="uap-info-row">
+                  <dt>
+                    <span nz-icon nzType="environment"></span>{{ 'role.uap.branch' | translate }}
+                  </dt>
+                  <dd>{{ summary.branchName || '—' }}</dd>
+                </div>
+                <div class="uap-info-row">
+                  <dt>
+                    <span nz-icon nzType="apartment"></span>{{ 'role.uap.department' | translate }}
+                  </dt>
+                  <dd>{{ summary.departmentName || '—' }}</dd>
+                </div>
+                <div class="uap-info-row">
+                  <dt>
+                    <span nz-icon nzType="idcard"></span>{{ 'role.uap.position' | translate }}
+                  </dt>
+                  <dd>{{ summary.positionName || '—' }}</dd>
+                </div>
+              </dl>
+
+              <div class="uap-account">
+                <div class="uap-account-title">{{ 'role.uap.account' | translate }}</div>
+                @if (summary.account; as acc) {
+                  <div class="uap-account-status">
+                    @if (!acc.isActive) {
+                      <nz-badge
+                        nzStatus="error"
+                        [nzText]="'role.uap.accountDisabled' | translate"
+                      ></nz-badge>
+                    } @else if (acc.isLocked) {
+                      <nz-badge
+                        nzStatus="warning"
+                        [nzText]="'role.uap.accountLocked' | translate"
+                      ></nz-badge>
+                    } @else {
+                      <nz-badge
+                        nzStatus="success"
+                        [nzText]="'role.uap.accountActive' | translate"
+                      ></nz-badge>
+                    }
+                  </div>
+                  <div class="uap-account-meta">
+                    <span nz-icon nzType="clock-circle"></span>
+                    {{ 'role.uap.lastLogin' | translate }}:
+                    <strong>
+                      {{
+                        acc.lastLoginAt
+                          ? (acc.lastLoginAt | date: 'dd/MM/yyyy HH:mm')
+                          : ('role.uap.neverLoggedIn' | translate)
+                      }}
+                    </strong>
+                  </div>
+                  @if (acc.mustChangePassword) {
+                    <div class="uap-account-warn">
+                      <span nz-icon nzType="key"></span>
+                      {{ 'role.uap.mustChangePassword' | translate }}
+                    </div>
+                  }
+                } @else {
+                  <div class="uap-account-none">
+                    <nz-badge
+                      nzStatus="default"
+                      [nzText]="'role.uap.noAccount' | translate"
+                    ></nz-badge>
+                    <p>{{ 'role.uap.noAccountHint' | translate }}</p>
+                  </div>
+                }
+              </div>
+            }
           </div>
-        } @empty {
-          <p>{{ 'common.noData' | translate }}</p>
-        }
+        </nz-spin>
+      }
+    </aside>
 
-        <div class="access-actions">
-          <button nz-button nzType="primary" [nzLoading]="saving" (click)="saveEmployeeRoles()">
-            {{ 'common.actions.save' | translate }}
-          </button>
+    <!-- ======================= Cột phải: vai trò & quyền ======================= -->
+    <div class="uap-main">
+      @if (!selectedEmployeeId) {
+        <div class="uap-card uap-empty">
+          <span nz-icon nzType="user-switch" class="uap-empty-icon"></span>
+          <div class="uap-empty-title">{{ 'role.uap.emptyTitle' | translate }}</div>
+          <div class="uap-empty-desc">{{ 'role.uap.emptyDesc' | translate }}</div>
         </div>
-      </nz-spin>
-    }
+      } @else {
+        <!-- Vai trò -->
+        <div class="uap-card">
+          <div class="uap-section-head">
+            <div>
+              <div class="uap-section-title">
+                {{ 'role.uap.rolesTitle' | translate }}
+                <span class="uap-pill">{{
+                  'role.uap.selectedRoles' | translate: { count: selectedCount }
+                }}</span>
+              </div>
+              <div class="uap-section-hint">{{ 'role.uap.rolesHint' | translate }}</div>
+            </div>
+            <div class="uap-save-bar">
+              @if (isDirty) {
+                <span class="uap-unsaved">
+                  <span class="uap-unsaved-dot"></span>
+                  {{ 'role.unsavedChanges' | translate: { count: unsavedCount } }}
+                </span>
+                <button nz-button nzType="default" (click)="discardChanges()" [disabled]="saving">
+                  <span nz-icon nzType="undo"></span>
+                  {{ 'role.discardChanges' | translate }}
+                </button>
+              }
+              <button
+                nz-button
+                nzType="primary"
+                [disabled]="!isDirty"
+                [nzLoading]="saving"
+                (click)="saveEmployeeRoles()"
+              >
+                <span nz-icon nzType="save"></span>
+                {{ 'role.uap.save' | translate }}
+              </button>
+            </div>
+          </div>
+
+          @if (isAdminAccount) {
+            <div class="uap-notice uap-notice-info">
+              <span nz-icon nzType="crown"></span>
+              {{ 'role.uap.adminNotice' | translate }}
+            </div>
+          } @else if (showDefaultRoleNotice) {
+            <div class="uap-notice uap-notice-warn">
+              <span nz-icon nzType="info-circle"></span>
+              {{ 'role.uap.defaultRoleNotice' | translate }}
+            </div>
+          }
+
+          @if (roles.length > 6) {
+            <nz-input-group class="uap-role-search" [nzPrefix]="roleSearchIcon">
+              <input
+                nz-input
+                type="text"
+                [ngModel]="roleSearch"
+                (ngModelChange)="onRoleSearch($event)"
+                [placeholder]="'role.uap.searchRole' | translate"
+              />
+            </nz-input-group>
+            <ng-template #roleSearchIcon><span nz-icon nzType="search"></span></ng-template>
+          }
+
+          <nz-spin [nzSpinning]="rolesLoading || summaryLoading">
+            <div class="uap-role-grid">
+              @for (role of filteredRoles; track role.id) {
+                <div
+                  class="uap-role"
+                  role="checkbox"
+                  tabindex="0"
+                  [attr.aria-checked]="isRoleSelected(role)"
+                  [class.is-selected]="isRoleSelected(role)"
+                  [class.is-locked]="isRoleLocked(role)"
+                  (click)="toggleRole(role)"
+                  (keydown.space)="$event.preventDefault(); toggleRole(role)"
+                  (keydown.enter)="toggleRole(role)"
+                  [nz-tooltip]="
+                    isRoleLocked(role) ? ('role.uap.assignedByAccountHint' | translate) : null
+                  "
+                >
+                  <div class="uap-role-top">
+                    <span class="uap-role-check">
+                      @if (isRoleLocked(role)) {
+                        <span nz-icon nzType="lock"></span>
+                      } @else if (isRoleSelected(role)) {
+                        <span nz-icon nzType="check"></span>
+                      }
+                    </span>
+                    <div class="uap-role-name">{{ role.name }}</div>
+                    @if (role.isSystem) {
+                      <nz-tag nzColor="blue" class="uap-role-tag">{{
+                        'role.isSystem' | translate
+                      }}</nz-tag>
+                    }
+                  </div>
+                  <div class="uap-role-desc">
+                    {{ role.description || ('role.uap.roleNoDesc' | translate) }}
+                  </div>
+                  <div class="uap-role-foot">
+                    <span>
+                      <span nz-icon nzType="safety-certificate"></span>
+                      {{
+                        'role.uap.rolePermCount' | translate: { count: role.permissionCount || 0 }
+                      }}
+                    </span>
+                    @if (isRoleLocked(role)) {
+                      <nz-tag nzColor="gold">{{ 'role.uap.assignedByAccount' | translate }}</nz-tag>
+                    }
+                    <a class="uap-role-link" (click)="openRolePermissions(role, $event)">
+                      {{ 'role.uap.viewRolePermissions' | translate }}
+                      <span nz-icon nzType="arrow-right"></span>
+                    </a>
+                  </div>
+                </div>
+              } @empty {
+                <div class="uap-muted">{{ 'role.uap.noRoleMatch' | translate }}</div>
+              }
+            </div>
+          </nz-spin>
+        </div>
+
+        <!-- Quyền thực tế -->
+        @if (!isAdminAccount) {
+          <div class="uap-card">
+            <div class="uap-section-head">
+              <div>
+                <div class="uap-section-title">
+                  {{ 'role.uap.effectiveTitle' | translate }}
+                  <span class="uap-pill uap-pill-primary">
+                    {{
+                      'role.uap.effectiveSummary'
+                        | translate: { perms: effectivePermCount, pages: effectivePageCount }
+                    }}
+                  </span>
+                </div>
+                <div class="uap-section-hint">{{ 'role.uap.effectiveHint' | translate }}</div>
+              </div>
+            </div>
+
+            <nz-spin [nzSpinning]="effectiveLoading">
+              @for (eg of effectiveGroups; track eg.group.module) {
+                <div class="uap-eff-module">
+                  <div class="uap-eff-head" (click)="toggleEffective(eg.group.module)">
+                    <span
+                      nz-icon
+                      class="uap-eff-caret"
+                      [nzType]="isEffectiveExpanded(eg.group.module) ? 'down' : 'right'"
+                    ></span>
+                    <span class="uap-eff-icon"><span nz-icon [nzType]="eg.group.icon"></span></span>
+                    <span class="uap-eff-name">{{ eg.group.label }}</span>
+                    <span class="uap-eff-count">
+                      {{
+                        'role.uap.effectiveSummary'
+                          | translate: { perms: eg.count, pages: eg.items.length }
+                      }}
+                    </span>
+                  </div>
+                  @if (isEffectiveExpanded(eg.group.module)) {
+                    <div class="uap-eff-body">
+                      @for (ei of eg.items; track ei.item.key) {
+                        <div class="uap-eff-row">
+                          <div class="uap-eff-page">{{ ei.item.label }}</div>
+                          <div class="uap-eff-actions">
+                            @for (a of ei.actions; track a.code) {
+                              <span class="uap-eff-chip">{{ a.label }}</span>
+                            }
+                          </div>
+                        </div>
+                      }
+                    </div>
+                  }
+                </div>
+              } @empty {
+                <div class="uap-muted">{{ 'role.uap.effectiveEmpty' | translate }}</div>
+              }
+            </nz-spin>
+          </div>
+        }
+      }
+    </div>
   </div>
 </section>
